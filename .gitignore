@@ -1,0 +1,19 @@
+# Data (large raw + regenerable processed files — keep on disk, out of git)
+data/raw/
+data/processed/
+
+# Model artifacts (except the small best-params record)
+outputs/models/*
+!outputs/models/best_params.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Virtual environment
+.venv/
+
+# macOS
+.DS_Store

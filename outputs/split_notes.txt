@@ -1,0 +1,51 @@
+Honest Mistake — temporal split notes
+Generated: 2026-07-02 16:38:18
+Source: data/processed/loans_2014_2017.parquet
+
+======================================================================
+SPLIT (temporal — no shuffling)
+======================================================================
+  train (2014-2016):     891,742 rows  (84.04%)
+  test  (2017):          169,300 rows  (15.96%)
+
+======================================================================
+DEFAULT RATE — train vs test
+======================================================================
+  train:  20.77%
+  test:   23.12%
+  delta:  +2.35 pp
+  Note: a gap here is expected — vintage mix and borrower composition
+  shift over time. This is realistic deployment drift, not a data bug.
+
+======================================================================
+ISSUE-YEAR DISTRIBUTION (count / share / default rate)
+======================================================================
+  train:
+    2014:    223,102  (25.02% of train)  default rate 18.45%
+    2015:    375,545  (42.11% of train)  default rate 20.18%
+    2016:    293,095  (32.87% of train)  default rate 23.28%
+  test:
+    2017:    169,300  (100.00% of test)  default rate 23.12%
+
+======================================================================
+OUTPUT
+======================================================================
+  data/processed/train.parquet  (93.2 MB)
+  data/processed/test.parquet  (20.8 MB)
+
+No feature engineering / imputation / scaling performed — fit on train only, later.
+
+======================================================================
+KNOWN LIMITATION — resolution/survivorship bias in the 2017 test set
+======================================================================
+  The dataset ends Dec 2018, but 2017 vintages had not matured by then:
+  a 36-month loan issued mid-2017 could only be resolved that early by
+  prepaying in full or defaulting fast. Keeping only resolved loans
+  (Fully Paid / Charged Off) therefore overrepresents early payoffs and
+  early defaults in the 2017 test set. 2014-2015 vintages are fully
+  matured and unaffected; 2016 is mildly affected.
+  Consequence: the 23.12% test default rate is not the true 2017 vintage
+  rate, and test metrics should be read with this bias in mind.
+  TODO: carry this into the README limitations section.
+
+Notes saved to outputs/split_notes.txt

@@ -1,0 +1,45 @@
+Honest Mistake — build_dataset notes
+Generated: 2026-07-02 15:51:58
+Source: accepted_2007_to_2018Q4.csv (read-only)
+
+======================================================================
+ROW FUNNEL
+======================================================================
+  raw rows:                       2,260,701
+  after status filter:            1,345,310  (Fully Paid / Charged Off)
+  after issue-year filter:        1,061,042  (2014-2017)
+
+======================================================================
+FINAL DATASET
+======================================================================
+  shape:         1,061,042 rows x 111 columns
+  default rate:  21.14%  (224,354 defaults)
+  dropped:       41 columns (38 leakage, 3 other, 0 all-null)
+  output:        data/processed/loans_2014_2017.parquet (113.8 MB)
+  drop log:      outputs/leakage_drop_log.txt
+
+======================================================================
+TOP 20 MOST-MISSING COLUMNS (recomputed on filtered data)
+======================================================================
+   99.61%  sec_app_mths_since_last_major_derog
+   98.93%  sec_app_revol_util
+   98.91%  revol_bal_joint
+   98.91%  sec_app_fico_range_low
+   98.91%  sec_app_fico_range_high
+   98.91%  sec_app_collections_12_mths_ex_med
+   98.91%  sec_app_chargeoff_within_12_mths
+   98.91%  sec_app_num_rev_accts
+   98.91%  sec_app_open_act_il
+   98.91%  sec_app_open_acc
+   98.91%  sec_app_mort_acc
+   98.91%  sec_app_inq_last_6mths
+   98.91%  sec_app_earliest_cr_line
+   98.24%  dti_joint
+   98.24%  verification_status_joint
+   98.24%  annual_inc_joint
+   81.15%  mths_since_last_record
+   74.49%  mths_since_recent_bc_dlq
+   71.01%  mths_since_last_major_derog
+   64.30%  mths_since_recent_revol_delinq
+
+Notes saved to outputs/build_dataset_notes.txt

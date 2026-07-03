@@ -1,0 +1,57 @@
+Honest Mistake — dropped-column log
+Generated: 2026-07-02 15:52:21
+
+======================================================================
+LEAKAGE DROPS (38 columns — post-loan info)
+======================================================================
+  total_pymnt                                 cumulative payments received over the loan's life; unknowable at decision time
+  total_pymnt_inv                             cumulative payments received over the loan's life; unknowable at decision time
+  total_rec_prncp                             totals received (principal/interest/fees) after origination
+  total_rec_int                               totals received (principal/interest/fees) after origination
+  total_rec_late_fee                          totals received (principal/interest/fees) after origination
+  recoveries                                  money recovered after charge-off — implies the default already happened
+  collection_recovery_fee                     fee charged on post-charge-off collections
+  last_pymnt_d                                describes the most recent payment made during the loan
+  last_pymnt_amnt                             describes the most recent payment made during the loan
+  next_pymnt_d                                scheduled future payment — only exists for loans already in repayment
+  last_fico_range_high                        FICO score refreshed during the loan, not the score at application
+  last_fico_range_low                         FICO score refreshed during the loan, not the score at application
+  out_prncp                                   outstanding principal is the loan's current state, not origination info
+  out_prncp_inv                               outstanding principal is the loan's current state, not origination info
+  settlement_status                           debt-settlement details — recorded only after the borrower is in distress
+  settlement_date                             debt-settlement details — recorded only after the borrower is in distress
+  settlement_amount                           debt-settlement details — recorded only after the borrower is in distress
+  settlement_percentage                       debt-settlement details — recorded only after the borrower is in distress
+  settlement_term                             debt-settlement details — recorded only after the borrower is in distress
+  hardship_flag                               hardship-plan fields — recorded only after the borrower is in distress
+  hardship_type                               hardship-plan fields — recorded only after the borrower is in distress
+  hardship_reason                             hardship-plan fields — recorded only after the borrower is in distress
+  hardship_status                             hardship-plan fields — recorded only after the borrower is in distress
+  hardship_amount                             hardship-plan fields — recorded only after the borrower is in distress
+  hardship_start_date                         hardship-plan fields — recorded only after the borrower is in distress
+  hardship_end_date                           hardship-plan fields — recorded only after the borrower is in distress
+  hardship_length                             hardship-plan fields — recorded only after the borrower is in distress
+  hardship_dpd                                hardship-plan fields — recorded only after the borrower is in distress
+  hardship_loan_status                        hardship-plan fields — recorded only after the borrower is in distress
+  hardship_payoff_balance_amount              hardship-plan fields — recorded only after the borrower is in distress
+  hardship_last_payment_amount                hardship-plan fields — recorded only after the borrower is in distress
+  debt_settlement_flag                        settlement flag/date — recorded only after the borrower is in distress
+  debt_settlement_flag_date                   settlement flag/date — recorded only after the borrower is in distress
+  last_credit_pull_d                          date of the most recent credit pull during the loan — post-origination
+  payment_plan_start_date                     hardship-family field that doesn't match the hardship_* prefix
+  deferral_term                               hardship-plan field — recorded only after the borrower is in distress
+  pymnt_plan                                  payment-plan flag set during the loan — post-origination
+  orig_projected_additional_accrued_interest  hardship-family, projected interest under a payment plan — post-origination info
+
+======================================================================
+OTHER DROPS (3 columns)
+======================================================================
+  member_id                                   fully null in the raw file
+  desc                                        free-text description discontinued by Lending Club (~100% null)
+  loan_status                                 source of the is_default label — keeping it among features would be trivially leaky
+
+======================================================================
+100%-NULL IN FILTERED DATA (0 columns)
+======================================================================
+
+Total dropped: 41 columns (38 leakage, 3 other, 0 all-null)

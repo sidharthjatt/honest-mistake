@@ -1,0 +1,95 @@
+Honest Mistake — audit notes (tuned XGBoost)
+Generated: 2026-07-03 00:08:24
+Test set: 169,300 rows, overall ROC-AUC 0.7296
+
+======================================================================
+SHAP — TreeExplainer on 30,000 sampled test rows (seed 42)
+======================================================================
+  SHAP values are in log-odds space (XGBoost margin output).
+  figures: shap_beeswarm_top20.png, shap_bar_top20.png
+
+  Top 20 by mean |SHAP|:
+     1. term                                0.1894
+     2. sub_grade                           0.1828
+     3. grade                               0.1566
+     4. dti                                 0.1349
+     5. int_rate                            0.0915
+     6. acc_open_past_24mths                0.0830
+     7. home_ownership_RENT                 0.0645   <-- one-hot dummy
+     8. fico_range_low                      0.0643
+     9. loan_amnt                           0.0607
+    10. annual_inc                          0.0565
+    11. mo_sin_old_rev_tl_op                0.0561
+    12. mort_acc                            0.0551
+    13. funded_amnt_inv                     0.0529
+    14. emp_length_was_missing              0.0504   <-- was_missing flag
+    15. total_bc_limit                      0.0465
+    16. avg_cur_bal                         0.0454
+    17. total_rev_hi_lim                    0.0439
+    18. mths_since_recent_inq               0.0405
+    19. home_ownership_MORTGAGE             0.0397   <-- one-hot dummy
+    20. total_il_high_credit_limit          0.0379
+
+======================================================================
+SANITY CHECK — who is carrying the model?
+======================================================================
+  Expected core features in top 10: 8/10 slots
+    present: ['grade', 'sub_grade', 'int_rate', 'term', 'dti', 'fico_range_low', 'annual_inc', 'loan_amnt']
+
+  ****************************************************************
+  ** AUDIT FINDINGS — unexpected features with high attribution **
+  ****************************************************************
+    - rank 7: 'home_ownership_RENT' is a one-hot dummy (mean |SHAP| 0.0645) — the model is leaning on a data-collection artifact, not borrower behavior
+    - rank 14: 'emp_length_was_missing' (was_missing flag) in top 20 (mean |SHAP| 0.0504) — worth watching, below top-10 severity
+    - rank 19: 'home_ownership_MORTGAGE' (one-hot dummy) in top 20 (mean |SHAP| 0.0397) — worth watching, below top-10 severity
+
+======================================================================
+LOCAL EXPLANATIONS — 3 cases (probas inflated by class weighting;
+======================================================================
+'borderline' means score space, not calibrated risk)
+  confident_correct: proba 0.937, actual is_default=1  -> shap_waterfall_confident_correct.png
+      term                                shap +0.376  (value 60)
+      emp_length_was_missing              shap +0.285  (value 1)
+      dti                                 shap +0.222  (value 27.08)
+  confident_wrong: proba 0.961, actual is_default=0  -> shap_waterfall_confident_wrong.png
+      term                                shap +0.378  (value 60)
+      sub_grade                           shap +0.312  (value 35)
+      mo_sin_old_rev_tl_op                shap +0.280  (value 13)
+  borderline: proba 0.500, actual is_default=1  -> shap_waterfall_borderline.png
+      term                                shap -0.183  (value 36)
+      credit_history_months               shap -0.166  (value 77)
+      dti                                 shap -0.164  (value 11.42)
+
+======================================================================
+SLICE AUCs (overall 0.7296; flag if > 0.03 below)
+======================================================================
+  By 2017 quarter (later quarters = less time to resolve —
+  survivorship bias from split_notes.txt applies most there):
+  2017 Q1                      n= 46,871  default 22.93%  AUC 0.7268
+  2017 Q2                      n= 44,487  default 23.80%  AUC 0.7282
+  2017 Q3                      n= 43,848  default 23.93%  AUC 0.7334
+  2017 Q4                      n= 34,094  default 21.48%  AUC 0.7290
+
+  By grade (NOTE: within-grade AUC is expected to be far below overall —
+  grade itself does much of the ranking; compare grades to each other):
+  grade A                      n= 26,887  default  6.87%  AUC 0.7057
+  grade B                      n= 46,997  default 15.72%  AUC 0.6570
+  grade C                      n= 54,913  default 26.23%  AUC 0.6543
+  grade D                      n= 24,517  default 34.68%  AUC 0.6466
+  grade E                      n= 10,210  default 41.11%  AUC 0.6554
+  grade F                      n=  3,649  default 47.41%  AUC 0.6468
+  grade G                      n=  2,127  default 50.82%  AUC 0.6291
+
+  Bureau was-missing cohort (open_acc_6m_was_missing):
+  bureau fields missing        n=0 — empty slice
+  bureau fields present        n=169,300  default 23.12%  AUC 0.7296
+    -> cohort is EMPTY in 2017: LC collected these fields for all test-era
+       loans. The 21 was_missing flag columns can never fire at test time —
+       they are train-era artifacts. Noted as an audit observation.
+
+======================================================================
+OUTPUT
+======================================================================
+  figures: shap_beeswarm_top20.png, shap_bar_top20.png,
+           shap_waterfall_{confident_correct,confident_wrong,borderline}.png
+Notes saved to outputs/audit_notes.txt

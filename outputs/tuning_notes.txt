@@ -1,0 +1,63 @@
+Honest Mistake — tuning notes
+Generated: 2026-07-02 23:45:15
+
+======================================================================
+TEMPORAL VALIDATION SPLIT (inside train — 2017 never touched)
+======================================================================
+  fit  (2014-2015):  598,647 rows, default rate 19.54%
+  val  (2016):       293,095 rows, default rate 23.28%
+  scale_pos_weight fixed for all trials (fit-years ratio): 4.118
+
+======================================================================
+OPTUNA STUDY — 50 trials, TPE(seed=42), maximize val ROC-AUC
+======================================================================
+  total study time: 17.2 min (20.6s / trial avg)
+  best trial: #21  val ROC-AUC 0.72732
+  best params:
+    max_depth          8
+    learning_rate      0.019401932550780664
+    n_estimators       900
+    min_child_weight   18
+    subsample          0.5018355498158009
+    colsample_bytree   0.6332395074528492
+    reg_alpha          1.1771575857193196e-07
+    reg_lambda         3.2156387427398095e-06
+    gamma              2.408216314133933e-05
+  full trial log: outputs/optuna_trials.csv
+
+======================================================================
+FINAL RETRAIN on full train (2014-2016)
+======================================================================
+  scale_pos_weight recomputed on full train: 3.815 (tuning used fit-years 4.118)
+  train time: 38.7s
+
+======================================================================
+METRICS — XGBoost TUNED (temporal 2017 test set)
+======================================================================
+  ROC-AUC:      0.7296
+  PR-AUC (AP):  0.4404
+  Brier score:  0.2173   (class weighting caveat still applies)
+  At threshold 0.5 (default threshold — untuned):
+      TN   80,192   FP   49,960
+      FN   11,129   TP   28,019
+    precision: 0.3593   recall: 0.7157   F1: 0.4784
+
+======================================================================
+COMPARISON — temporal 2017 test set
+======================================================================
+  model                   ROC-AUC   PR-AUC    Brier
+  LogReg (reference)       0.7136   0.4105   0.2259
+  XGBoost baseline         0.7181   0.4275   0.2139
+  XGBoost TUNED            0.7296   0.4404   0.2173
+
+  Generalization check: val(2016) AUC 0.7273 -> test(2017) AUC 0.7296  (gap -0.0023)
+  A positive gap is expected drift; a large one would suggest the
+  tuning overfit the 2016 vintage.
+
+======================================================================
+OUTPUT
+======================================================================
+  trials:      outputs/optuna_trials.csv
+  best params: outputs/models/best_params.json
+  model:       outputs/models/xgb_tuned.joblib
+Notes saved to outputs/tuning_notes.txt

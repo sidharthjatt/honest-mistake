@@ -1,0 +1,40 @@
+Honest Mistake — fairness ablation notes
+Generated: 2026-07-03 00:26:58
+Question: how much does the model rely on 'emp_length_was_missing'
+(the 'declined to state employment' marker) for its performance?
+
+======================================================================
+SETUP
+======================================================================
+  params: best_params.json (trial #21), scale_pos_weight 3.815 — identical to xgb_tuned
+  only difference: 'emp_length_was_missing' dropped (180 -> 179 features)
+  cohort size: flag=1 on 5.89% of train rows
+  retrain time: 37.0s
+
+======================================================================
+RESULTS — temporal 2017 test set
+======================================================================
+  model                           ROC-AUC   PR-AUC
+  tuned (with flag)                0.7296   0.4404
+  ablated (flag dropped)           0.7293   0.4395
+  delta (ablated - tuned)         -0.0003  -0.0009
+
+======================================================================
+CAVEAT
+======================================================================
+  This removes the EXPLICIT 'declined to state employment' marker only.
+  Rows that had missing emp_length keep their median-imputed value (6),
+  and correlated features may let the model partially reconstruct the
+  cohort. This is a remove-the-explicit-signal test, not full
+  information removal.
+
+======================================================================
+SUMMARY
+======================================================================
+  Dropping the flag costs +0.0003 ROC-AUC and +0.0009 PR-AUC on the 2017 test set.
+  The cost is negligible: the model's performance does not depend on
+  penalizing applicants for not stating employment length. Removing
+  the marker on fairness grounds would be essentially free.
+  (Ablated model not saved — experiment only.)
+
+Notes saved to outputs/fairness_ablation_notes.txt

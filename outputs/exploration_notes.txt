@@ -1,0 +1,254 @@
+Honest Mistake — data exploration notes
+Generated: 2026-07-02 12:12:33
+Source: accepted_2007_to_2018Q4.csv (1.68 GB, read-only)
+
+======================================================================
+1. COLUMNS & DTYPES (from first 5,000 rows)
+======================================================================
+Total columns: 151
+
+  id                                          int64
+  member_id                                   float64
+  loan_amnt                                   float64
+  funded_amnt                                 float64
+  funded_amnt_inv                             float64
+  term                                        str
+  int_rate                                    float64
+  installment                                 float64
+  grade                                       str
+  sub_grade                                   str
+  emp_title                                   str
+  emp_length                                  str
+  home_ownership                              str
+  annual_inc                                  float64
+  verification_status                         str
+  issue_d                                     str
+  loan_status                                 str
+  pymnt_plan                                  str
+  url                                         str
+  desc                                        str
+  purpose                                     str
+  title                                       str
+  zip_code                                    str
+  addr_state                                  str
+  dti                                         float64
+  delinq_2yrs                                 float64
+  earliest_cr_line                            str
+  fico_range_low                              float64
+  fico_range_high                             float64
+  inq_last_6mths                              float64
+  mths_since_last_delinq                      float64
+  mths_since_last_record                      float64
+  open_acc                                    float64
+  pub_rec                                     float64
+  revol_bal                                   float64
+  revol_util                                  float64
+  total_acc                                   float64
+  initial_list_status                         str
+  out_prncp                                   float64
+  out_prncp_inv                               float64
+  total_pymnt                                 float64
+  total_pymnt_inv                             float64
+  total_rec_prncp                             float64
+  total_rec_int                               float64
+  total_rec_late_fee                          float64
+  recoveries                                  float64
+  collection_recovery_fee                     float64
+  last_pymnt_d                                str
+  last_pymnt_amnt                             float64
+  next_pymnt_d                                str
+  last_credit_pull_d                          str
+  last_fico_range_high                        float64
+  last_fico_range_low                         float64
+  collections_12_mths_ex_med                  float64
+  mths_since_last_major_derog                 float64
+  policy_code                                 float64
+  application_type                            str
+  annual_inc_joint                            float64
+  dti_joint                                   float64
+  verification_status_joint                   str
+  acc_now_delinq                              float64
+  tot_coll_amt                                float64
+  tot_cur_bal                                 float64
+  open_acc_6m                                 float64
+  open_act_il                                 float64
+  open_il_12m                                 float64
+  open_il_24m                                 float64
+  mths_since_rcnt_il                          float64
+  total_bal_il                                float64
+  il_util                                     float64
+  open_rv_12m                                 float64
+  open_rv_24m                                 float64
+  max_bal_bc                                  float64
+  all_util                                    float64
+  total_rev_hi_lim                            float64
+  inq_fi                                      float64
+  total_cu_tl                                 float64
+  inq_last_12m                                float64
+  acc_open_past_24mths                        float64
+  avg_cur_bal                                 float64
+  bc_open_to_buy                              float64
+  bc_util                                     float64
+  chargeoff_within_12_mths                    float64
+  delinq_amnt                                 float64
+  mo_sin_old_il_acct                          float64
+  mo_sin_old_rev_tl_op                        float64
+  mo_sin_rcnt_rev_tl_op                       float64
+  mo_sin_rcnt_tl                              float64
+  mort_acc                                    float64
+  mths_since_recent_bc                        float64
+  mths_since_recent_bc_dlq                    float64
+  mths_since_recent_inq                       float64
+  mths_since_recent_revol_delinq              float64
+  num_accts_ever_120_pd                       float64
+  num_actv_bc_tl                              float64
+  num_actv_rev_tl                             float64
+  num_bc_sats                                 float64
+  num_bc_tl                                   float64
+  num_il_tl                                   float64
+  num_op_rev_tl                               float64
+  num_rev_accts                               float64
+  num_rev_tl_bal_gt_0                         float64
+  num_sats                                    float64
+  num_tl_120dpd_2m                            float64
+  num_tl_30dpd                                float64
+  num_tl_90g_dpd_24m                          float64
+  num_tl_op_past_12m                          float64
+  pct_tl_nvr_dlq                              float64
+  percent_bc_gt_75                            float64
+  pub_rec_bankruptcies                        float64
+  tax_liens                                   float64
+  tot_hi_cred_lim                             float64
+  total_bal_ex_mort                           float64
+  total_bc_limit                              float64
+  total_il_high_credit_limit                  float64
+  revol_bal_joint                             float64
+  sec_app_fico_range_low                      float64
+  sec_app_fico_range_high                     float64
+  sec_app_earliest_cr_line                    float64
+  sec_app_inq_last_6mths                      float64
+  sec_app_mort_acc                            float64
+  sec_app_open_acc                            float64
+  sec_app_revol_util                          float64
+  sec_app_open_act_il                         float64
+  sec_app_num_rev_accts                       float64
+  sec_app_chargeoff_within_12_mths            float64
+  sec_app_collections_12_mths_ex_med          float64
+  sec_app_mths_since_last_major_derog         float64
+  hardship_flag                               str
+  hardship_type                               str
+  hardship_reason                             str
+  hardship_status                             str
+  deferral_term                               float64
+  hardship_amount                             float64
+  hardship_start_date                         str
+  hardship_end_date                           str
+  payment_plan_start_date                     str
+  hardship_length                             float64
+  hardship_dpd                                float64
+  hardship_loan_status                        str
+  orig_projected_additional_accrued_interest  float64
+  hardship_payoff_balance_amount              float64
+  hardship_last_payment_amount                float64
+  disbursement_method                         str
+  debt_settlement_flag                        str
+  debt_settlement_flag_date                   str
+  settlement_status                           str
+  settlement_date                             str
+  settlement_amount                           float64
+  settlement_percentage                       float64
+  settlement_term                             float64
+
+======================================================================
+2. loan_status VALUE COUNTS (full file, chunked)
+======================================================================
+   1,076,751  (47.63%)  Fully Paid
+     878,317  (38.85%)  Current
+     268,559  (11.88%)  Charged Off
+      21,467  ( 0.95%)  Late (31-120 days)
+       8,436  ( 0.37%)  In Grace Period
+       4,349  ( 0.19%)  Late (16-30 days)
+       1,988  ( 0.09%)  Does not meet the credit policy. Status:Fully Paid
+         761  ( 0.03%)  Does not meet the credit policy. Status:Charged Off
+          40  ( 0.00%)  Default
+          33  ( 0.00%)  <missing>
+
+======================================================================
+3. issue_d RANGE (full file, chunked)
+======================================================================
+  min: Jun 2007
+  max: Dec 2018
+  (planned modeling window: 2014-2017)
+
+======================================================================
+4. TOTAL ROW COUNT (full file, chunked)
+======================================================================
+  2,260,701 rows
+
+======================================================================
+5. TOP 20 MOST-MISSING COLUMNS (estimate from 5,000-row sample)
+======================================================================
+  100.00%  sec_app_fico_range_low
+  100.00%  sec_app_inq_last_6mths
+  100.00%  sec_app_open_act_il
+  100.00%  sec_app_collections_12_mths_ex_med
+  100.00%  sec_app_mths_since_last_major_derog
+  100.00%  sec_app_revol_util
+  100.00%  sec_app_open_acc
+  100.00%  sec_app_chargeoff_within_12_mths
+  100.00%  sec_app_mort_acc
+  100.00%  sec_app_num_rev_accts
+  100.00%  revol_bal_joint
+  100.00%  member_id
+  100.00%  sec_app_fico_range_high
+  100.00%  sec_app_earliest_cr_line
+   99.98%  desc
+   99.42%  verification_status_joint
+   99.42%  dti_joint
+   99.42%  annual_inc_joint
+   99.32%  orig_projected_additional_accrued_interest
+   99.08%  deferral_term
+
+======================================================================
+6. LEAKAGE SUSPECTS (post-loan info)
+======================================================================
+Columns that describe what happened AFTER origination — they must
+be excluded from any model that predicts default at decision time.
+
+  total_pymnt                                 cumulative payments received over the loan's life; unknowable at decision time
+  total_pymnt_inv                             cumulative payments received over the loan's life; unknowable at decision time
+  total_rec_prncp                             totals received (principal/interest/fees) after origination
+  total_rec_int                               totals received (principal/interest/fees) after origination
+  total_rec_late_fee                          totals received (principal/interest/fees) after origination
+  recoveries                                  money recovered after charge-off — implies the default already happened
+  collection_recovery_fee                     fee charged on post-charge-off collections
+  last_pymnt_d                                describes the most recent payment made during the loan
+  last_pymnt_amnt                             describes the most recent payment made during the loan
+  next_pymnt_d                                scheduled future payment — only exists for loans already in repayment
+  last_fico_range_high                        FICO score refreshed during the loan, not the score at application
+  last_fico_range_low                         FICO score refreshed during the loan, not the score at application
+  out_prncp                                   outstanding principal is the loan's current state, not origination info
+  out_prncp_inv                               outstanding principal is the loan's current state, not origination info
+  settlement_status                           debt-settlement details — recorded only after the borrower is in distress
+  settlement_date                             debt-settlement details — recorded only after the borrower is in distress
+  settlement_amount                           debt-settlement details — recorded only after the borrower is in distress
+  settlement_percentage                       debt-settlement details — recorded only after the borrower is in distress
+  settlement_term                             debt-settlement details — recorded only after the borrower is in distress
+  hardship_flag                               hardship-plan fields — recorded only after the borrower is in distress
+  hardship_type                               hardship-plan fields — recorded only after the borrower is in distress
+  hardship_reason                             hardship-plan fields — recorded only after the borrower is in distress
+  hardship_status                             hardship-plan fields — recorded only after the borrower is in distress
+  hardship_amount                             hardship-plan fields — recorded only after the borrower is in distress
+  hardship_start_date                         hardship-plan fields — recorded only after the borrower is in distress
+  hardship_end_date                           hardship-plan fields — recorded only after the borrower is in distress
+  hardship_length                             hardship-plan fields — recorded only after the borrower is in distress
+  hardship_dpd                                hardship-plan fields — recorded only after the borrower is in distress
+  hardship_loan_status                        hardship-plan fields — recorded only after the borrower is in distress
+  hardship_payoff_balance_amount              hardship-plan fields — recorded only after the borrower is in distress
+  hardship_last_payment_amount                hardship-plan fields — recorded only after the borrower is in distress
+  debt_settlement_flag                        settlement flag/date — recorded only after the borrower is in distress
+  debt_settlement_flag_date                   settlement flag/date — recorded only after the borrower is in distress
+
+Total flagged: 33 of 151 columns
+
+Notes saved to outputs/exploration_notes.txt

@@ -1,0 +1,117 @@
+Honest Mistake — feature-prep notes
+Generated: 2026-07-02 17:19:29
+All statistics fit on TRAIN ONLY, applied to both splits.
+Loaded train (891742, 112), test (169300, 112)
+
+======================================================================
+ENGINEERED
+======================================================================
+  credit_history_months = issue_d - earliest_cr_line (months)
+    negative values: 0, unparseable: 0 (raw earliest_cr_line dropped)
+
+======================================================================
+DROPPED FROM X
+======================================================================
+  is_default                           target -> y_train / y_test
+  issue_d                              split bookkeeping (kept in train/test.parquet, not a feature)
+  issue_year                           split bookkeeping (kept in train/test.parquet, not a feature)
+  id                                   row identifier, unique per row
+  url                                  row identifier (loan URL), unique per row
+  emp_title                            free text, ~217k uniques
+  title                                free text, ~2k uniques — redundant with `purpose`
+  zip_code                             masked to 3 digits (e.g. 190xx), 937 uniques
+  earliest_cr_line                     replaced by engineered credit_history_months
+  annual_inc_joint                     joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  dti_joint                            joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  verification_status_joint            joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  revol_bal_joint                      joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  sec_app_fico_range_low               joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  sec_app_fico_range_high              joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  sec_app_earliest_cr_line             joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  sec_app_inq_last_6mths               joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  sec_app_mort_acc                     joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  sec_app_open_acc                     joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  sec_app_revol_util                   joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  sec_app_open_act_il                  joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  sec_app_num_rev_accts                joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  sec_app_chargeoff_within_12_mths     joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  sec_app_collections_12_mths_ex_med   joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  sec_app_mths_since_last_major_derog  joint/secondary-app field — 100% null in train (2014-2016), nothing to fit
+  policy_code                          zero variance in train (constant)
+  (26 columns dropped, incl. target/bookkeeping)
+
+======================================================================
+PARSED TO NUMERIC
+======================================================================
+  term        ' 36 months' -> 36 / 60
+  emp_length  '< 1 year' -> 0 ... '10+ years' -> 10 (missing -> flag + train median)
+  int_rate, revol_util: already numeric in parquet — verified, no conversion needed
+
+======================================================================
+ORDINAL ENCODING
+======================================================================
+  grade      A..G -> 1..7
+  sub_grade  A1..G5 -> 1..35 (both kept; redundancy is harmless for trees)
+
+======================================================================
+MISSING VALUES (numeric)
+======================================================================
+  A) sentinel 999 + was_missing flag — missing = event never happened:
+       mths_since_last_delinq  (48.2% missing in train)
+       mths_since_last_major_derog  (70.8% missing in train)
+       mths_since_last_record  (81.3% missing in train)
+       mths_since_rcnt_il  (65.9% missing in train)
+       mths_since_recent_bc  (1.0% missing in train)
+       mths_since_recent_bc_dlq  (74.1% missing in train)
+       mths_since_recent_inq  (9.7% missing in train)
+       mths_since_recent_revol_delinq  (63.9% missing in train)
+  B) train-median + was_missing flag — bureau fields LC collected only from ~Dec 2015
+     (missing = vintage, not borrower behavior; flag mildly encodes time — accepted):
+       open_acc_6m  (65.0% missing in train, median 1)
+       open_act_il  (65.0% missing in train, median 2)
+       open_il_12m  (65.0% missing in train, median 1)
+       open_il_24m  (65.0% missing in train, median 1)
+       total_bal_il  (65.0% missing in train, median 24152)
+       il_util  (69.5% missing in train, median 75)
+       open_rv_12m  (65.0% missing in train, median 1)
+       open_rv_24m  (65.0% missing in train, median 2)
+       max_bal_bc  (65.0% missing in train, median 4254)
+       all_util  (65.0% missing in train, median 61)
+       inq_fi  (65.0% missing in train, median 0)
+       total_cu_tl  (65.0% missing in train, median 0)
+       inq_last_12m  (65.0% missing in train, median 2)
+  C) emp_length: flag + train median (6)
+  D) all other numerics: train median, no flag:
+       dti  (0.00% missing in train, median 18.07)
+       inq_last_6mths  (0.00% missing in train, median 0)
+       revol_util  (0.05% missing in train, median 52.6)
+       avg_cur_bal  (0.00% missing in train, median 7220)
+       bc_open_to_buy  (1.03% missing in train, median 4473)
+       bc_util  (1.09% missing in train, median 64)
+       mo_sin_old_il_acct  (2.88% missing in train, median 130)
+       num_rev_accts  (0.00% missing in train, median 13)
+       num_tl_120dpd_2m  (4.43% missing in train, median 0)
+       percent_bc_gt_75  (1.07% missing in train, median 50)
+
+======================================================================
+ONE-HOT ENCODING (train categories; unseen test values -> all-zeros)
+======================================================================
+  home_ownership: 4 train categories  ** UNSEEN IN TEST -> all-zero rows: ['NONE']
+  verification_status: 3 train categories
+  purpose: 14 train categories
+  initial_list_status: 2 train categories
+  application_type: 2 train categories
+  disbursement_method: 2 train categories
+  addr_state: 51 train categories
+
+======================================================================
+OUTPUT
+======================================================================
+  X_train: 891,742 x 180
+  X_test:  169,300 x 180
+  y_train: 891,742  (default rate 20.77%)
+  y_test:  169,300  (default rate 23.12%)
+
+NO SCALING applied — first models are tree-based (XGBoost) and don't
+need it. If a linear/NN baseline is added later, fit a scaler on train.
+Notes saved to outputs/features_notes.txt

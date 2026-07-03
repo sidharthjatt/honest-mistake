@@ -1,0 +1,64 @@
+Honest Mistake — baseline notes
+Generated: 2026-07-02 18:12:33
+No tuning, no feature selection, no threshold optimization — this is the bar.
+Loaded X_train (891742, 180), X_test (169300, 180)
+scale_pos_weight (train neg/pos): 706,536/185,206 = 3.815
+
+======================================================================
+MODEL A — LogisticRegression (scaled, class_weight='balanced')
+======================================================================
+  StandardScaler lives INSIDE the pipeline -> fit on train only.
+  (Trees below get no scaler — they don't need one.)
+  train time: 9.0s
+  converged: yes (no convergence warnings)
+
+======================================================================
+METRICS — LogisticRegression (temporal 2017 test set)
+======================================================================
+  ROC-AUC:      0.7136
+  PR-AUC (AP):  0.4105   (prevalence baseline: 0.2312)
+  Brier score:  0.2259   (inflated by class weighting — see caveat)
+
+  At threshold 0.5 (default threshold — will tune later):
+    confusion matrix [rows=actual 0/1, cols=predicted 0/1]:
+      TN   79,436   FP   50,716
+      FN   11,727   TP   27,421
+    precision: 0.3509   recall: 0.7004   F1: 0.4676
+
+======================================================================
+MODEL B — XGBClassifier (defaults + agreed overrides)
+======================================================================
+  n_estimators=300, tree_method='hist', eval_metric='auc',
+  scale_pos_weight=3.815, random_state=42, n_jobs=-1
+  train time: 9.2s
+
+======================================================================
+METRICS — XGBoost (temporal 2017 test set)
+======================================================================
+  ROC-AUC:      0.7181
+  PR-AUC (AP):  0.4275   (prevalence baseline: 0.2312)
+  Brier score:  0.2139   (inflated by class weighting — see caveat)
+
+  At threshold 0.5 (default threshold — will tune later):
+    confusion matrix [rows=actual 0/1, cols=predicted 0/1]:
+      TN   83,895   FP   46,257
+      FN   12,828   TP   26,320
+    precision: 0.3626   recall: 0.6723   F1: 0.4712
+
+======================================================================
+CAVEAT — Brier scores are inflated by construction
+======================================================================
+  Both models use class weighting (class_weight='balanced' /
+  scale_pos_weight), which deliberately shifts predicted probabilities
+  upward to favor recall on the minority class. Brier score punishes
+  that distortion. Do NOT compare these Brier values against future
+  unweighted or calibrated models without re-reading this note.
+  Ranking metrics (ROC-AUC, PR-AUC) are unaffected by the weighting.
+
+======================================================================
+OUTPUT
+======================================================================
+  figure:  outputs/figures/roc_pr_curves.png
+  models:  outputs/models/baseline_logreg.joblib
+           outputs/models/baseline_xgb.joblib
+Notes saved to outputs/baseline_notes.txt
