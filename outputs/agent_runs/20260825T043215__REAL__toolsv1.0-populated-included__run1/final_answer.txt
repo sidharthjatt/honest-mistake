@@ -1,0 +1,11 @@
+========================================================================
+REAL RUN - LIVE API CALLS.
+========================================================================
+run          20260825T043215__REAL__toolsv1.0-populated-included__run1
+generated    2026-08-25T04:31:30
+config_id    toolsv1.0-populated-included
+termination  truncated  (usable: False)
+
+The runner did not parse or alter the text below.
+----- VERBATIM MODEL TEXT BELOW THIS LINE -----
+Let me check ablation results for the top features to understand how much the model depends on them, and investigate whether any of these could behave differently across vintages (e.g., LendingClub's grade/rate assignment methodology is known to shift over time).

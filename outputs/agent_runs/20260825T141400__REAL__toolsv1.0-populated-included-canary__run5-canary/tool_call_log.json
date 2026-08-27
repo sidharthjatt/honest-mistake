@@ -1,0 +1,123 @@
+{
+  "_MODE": "REAL RUN - LIVE API CALLS.",
+  "config_id": "toolsv1.0-populated-included-canary",
+  "calls": [
+    {
+      "seq": 1,
+      "tool": "get_shap_ranking",
+      "arguments": {
+        "top_n": 20
+      },
+      "ok": true,
+      "outcome": "returned=20"
+    },
+    {
+      "seq": 2,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "recoveries"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 3,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "recoveries"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 4,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "recoveries"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 5,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "recovery"
+      },
+      "ok": true,
+      "outcome": "match_count=1"
+    },
+    {
+      "seq": 6,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "charged off"
+      },
+      "ok": true,
+      "outcome": "match_count=3"
+    },
+    {
+      "seq": 7,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "payment"
+      },
+      "ok": true,
+      "outcome": "match_count=13"
+    },
+    {
+      "seq": 8,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "collection_recovery_fee"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 9,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "total_pymnt"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 10,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "last_pymnt_amnt"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 11,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "last_pymnt_d"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 12,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "next_pymnt_d"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 13,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "total_pymnt_inv"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    }
+  ]
+}

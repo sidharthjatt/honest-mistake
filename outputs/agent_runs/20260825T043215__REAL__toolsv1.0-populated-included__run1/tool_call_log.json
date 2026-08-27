@@ -1,0 +1,96 @@
+{
+  "_MODE": "REAL RUN - LIVE API CALLS.",
+  "config_id": "toolsv1.0-populated-included",
+  "calls": [
+    {
+      "seq": 1,
+      "tool": "get_shap_ranking",
+      "arguments": {
+        "top_n": 30
+      },
+      "ok": true,
+      "outcome": "returned=30"
+    },
+    {
+      "seq": 2,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "recover"
+      },
+      "ok": true,
+      "outcome": "match_count=2"
+    },
+    {
+      "seq": 3,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "pymnt"
+      },
+      "ok": true,
+      "outcome": "match_count=6"
+    },
+    {
+      "seq": 4,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "settlement"
+      },
+      "ok": true,
+      "outcome": "match_count=7"
+    },
+    {
+      "seq": 5,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "hardship"
+      },
+      "ok": true,
+      "outcome": "match_count=15"
+    },
+    {
+      "seq": 6,
+      "tool": "get_shap_ranking",
+      "arguments": {
+        "top_n": 180
+      },
+      "ok": true,
+      "outcome": "returned=180"
+    },
+    {
+      "seq": 7,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "loan_status"
+      },
+      "ok": true,
+      "outcome": "match_count=2"
+    },
+    {
+      "seq": 8,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "issue_d"
+      },
+      "ok": true,
+      "outcome": "match_count=1"
+    },
+    {
+      "seq": 9,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "term"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 10,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "funded_amnt_inv"
+      },
+      "ok": true,
+      "outcome": "found"
+    }
+  ]
+}

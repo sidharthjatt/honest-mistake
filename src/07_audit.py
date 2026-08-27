@@ -234,9 +234,19 @@ def main() -> None:
     slice_auc(tee, "bureau fields missing", y_arr, proba_full, miss_mask, overall_auc)
     slice_auc(tee, "bureau fields present", y_arr, proba_full, ~miss_mask, overall_auc)
     if miss_mask.sum() == 0:
+        # Counted from the matrix rather than asserted: an earlier version
+        # of this line hardcoded a figure that matched no grouping, and
+        # swept in flags that do fire in 2017.
+        wm_cols = [c for c in X_test.columns if c.endswith("_was_missing")]
+        dead = sorted(c for c in wm_cols if (X_test[c] == 0).all())
+        live = sorted(c for c in wm_cols if c not in dead)
         tee.line("    -> cohort is EMPTY in 2017: LC collected these fields for all test-era")
-        tee.line("       loans. The 21 was_missing flag columns can never fire at test time —")
-        tee.line("       they are train-era artifacts. Noted as an audit observation.")
+        tee.line(f"       loans. Of the {len(wm_cols)} was_missing flag columns, {len(dead)} are")
+        tee.line("       constant zero across the 2017 test set and can never fire there;")
+        tee.line("       those are train-era artifacts. Noted as an audit observation.")
+        tee.line(f"       The remaining {len(live)} do fire in 2017 and are NOT dead weight:")
+        for c in live:
+            tee.line(f"         {c:<44} {X_test[c].mean() * 100:6.3f}% of test rows")
 
     header(tee, "OUTPUT")
     tee.line("  figures: shap_beeswarm_top20.png, shap_bar_top20.png,")

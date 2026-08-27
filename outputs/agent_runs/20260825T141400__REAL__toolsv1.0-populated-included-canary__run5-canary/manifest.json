@@ -1,0 +1,37 @@
+{
+  "_MODE": "REAL RUN - LIVE API CALLS.",
+  "mode": "REAL",
+  "mock": false,
+  "network_calls_made": true,
+  "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+  "timestamp": "2026-08-25T14:12:55",
+  "finished": "2026-08-25T14:14:00",
+  "wall_seconds": 65.64,
+  "model": "claude-sonnet-5",
+  "sampling_parameters": "none sent - removed for this model family",
+  "max_tokens_per_turn": 12400,
+  "config_id": "toolsv1.0-populated-included-canary",
+  "artefact_variant": "canary",
+  "cache_dir": "agent_cache_canary",
+  "canary": true,
+  "n_features_stated_in_prompt": 181,
+  "tool_layer_version": "1.0",
+  "dictionary_populated_field": "included",
+  "termination": "completed",
+  "is_usable": true,
+  "last_stop_reason": "end_turn",
+  "turns": 6,
+  "tool_calls": 13,
+  "usage": {
+    "input": 31935,
+    "output": 4692,
+    "cache_creation": 0,
+    "cache_read": 0
+  },
+  "limits": {
+    "max_turns": 20,
+    "max_tool_calls": 70
+  },
+  "system_prompt_chars": 4268,
+  "ceilings_stated_in_prompt": true
+}

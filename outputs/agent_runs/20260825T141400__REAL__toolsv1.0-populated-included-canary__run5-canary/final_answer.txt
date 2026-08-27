@@ -1,0 +1,27 @@
+========================================================================
+REAL RUN - LIVE API CALLS.
+========================================================================
+run          20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary
+generated    2026-08-25T14:12:55
+config_id    toolsv1.0-populated-included-canary
+termination  completed  (usable: True)
+
+The runner did not parse or alter the text below.
+----- VERBATIM MODEL TEXT BELOW THIS LINE -----
+I have found strong, well-supported evidence of target leakage. Let me summarize the reasoning:
+
+**Key finding: `recoveries`**
+- The data dictionary states `recoveries` ("Gross amount recovered on the loan after it was charged off") is "set once the loan has been charged off and recovery activity begins" — i.e., it only takes a nonzero/meaningful value *after* the loan has already defaulted.
+- It is the single most influential feature in the model by a huge margin: mean|SHAP| = 2.21 (next highest is 0.26), accounting for 44.6% of all attribution in the model.
+- Ablation confirms causal reliance: retraining without it drops held-out ROC-AUC from 0.8730 to 0.7296 (Δ = ‑0.143) and PR-AUC by ‑0.361.
+- Because this value cannot exist at the time a real underwriting decision is made (before it's known whether the loan will default), the model is effectively being handed a strong proxy for the label itself. The reported 0.8730 test AUC is therefore not an estimate of how the model would perform in real deployment (predicting default risk before it occurs) — it mostly reflects the model's ability to read a post-outcome variable that encodes the outcome.
+- I checked other plausible leakage candidates from the same "post charge-off" family (`collection_recovery_fee`, `total_pymnt`, `total_pymnt_inv`, `last_pymnt_amnt`, `last_pymnt_d`, `next_pymnt_d`); none of these are actually read by the model (all return "not one of the model's features"), so `recoveries` appears to be the sole leakage channel among the 181 inputs.
+
+I'm confident this is sufficient to flag, and I don't have further budget-justified leads (other top features like `term`, `sub_grade`, `annual_inc`, `dti`, `grade`, `int_rate`, `loan_amnt` are all legitimately populated at origination per their descriptions, so they don't raise the same concern).
+
+=== AUDIT FINDINGS ===
+FLAG: recoveries
+REASON: This column is only populated after a loan has already been charged off, so it encodes post-default outcome information that would not exist at the time a real default-risk prediction must be made, making the held-out AUC an inflated, non-deployable estimate of forward performance.
+EVIDENCE: The data dictionary states recoveries is "set once the loan has been charged off and recovery activity begins," it has by far the largest SHAP contribution (mean_abs_shap 2.21, 44.6% of total attribution) of any of the 181 features, and removing it drops held-out ROC-AUC from 0.8730 to 0.7296 (delta -0.1434).
+CONFIDENCE: high
+=== END AUDIT FINDINGS ===

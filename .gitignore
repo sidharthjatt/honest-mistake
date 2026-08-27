@@ -2,9 +2,22 @@
 data/raw/
 data/processed/
 
-# Model artifacts (except the small best-params record)
+# Model artifacts (except the small best-params records, which carry the
+# tuned settings and the canary's before/after AUCs that answer_key reads)
 outputs/models/*
 !outputs/models/best_params.json
+!outputs/models/best_params_canary.json
+
+# Agent caches (regenerable) — the small evidence files are tracked, the
+# 30 MB per-row SHAP matrices are not. One rule per cache: a pattern
+# ending in agent_cache/ does not match agent_cache_canary/.
+outputs/agent_cache/*
+!outputs/agent_cache/shap_global.csv
+!outputs/agent_cache/ablation_cache.csv
+
+outputs/agent_cache_canary/*
+!outputs/agent_cache_canary/shap_global.csv
+!outputs/agent_cache_canary/ablation_cache.csv
 
 # Python
 __pycache__/
@@ -14,6 +27,9 @@ __pycache__/
 
 # Virtual environment
 .venv/
+
+# Secrets (.env.example is tracked)
+.env
 
 # macOS
 .DS_Store

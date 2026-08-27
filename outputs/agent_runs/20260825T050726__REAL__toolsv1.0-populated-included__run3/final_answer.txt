@@ -1,0 +1,21 @@
+========================================================================
+REAL RUN - LIVE API CALLS.
+========================================================================
+run          20260825T050726__REAL__toolsv1.0-populated-included__run3
+generated    2026-08-25T05:02:11
+config_id    toolsv1.0-populated-included
+termination  completed  (usable: True)
+
+The runner did not parse or alter the text below.
+----- VERBATIM MODEL TEXT BELOW THIS LINE -----
+=== AUDIT FINDINGS ===
+FLAG: all_util_was_missing
+REASON: This feature (and the underlying all_util field it flags) was only collected by the credit bureau for loans issued from around December 2015 onward, so its "missing" state is really a proxy for loan vintage/cohort rather than a stable credit-risk signal, and both the 2016 validation period and the 2017 test period fall entirely after that cutoff, so neither evaluation can reveal whether the model's learned behavior for this feature (fitted mostly on the minority of training rows from Dec-2015–2016) generalizes.
+EVIDENCE: lookup_feature('all_util') states it is "collected for loans issued from around December 2015 onward," and get_feature_shap_detail shows all_util_was_missing ranks 27th by mean |SHAP| with 99.98% of test rows getting the same small positive contribution, consistent with the flag being essentially constant (always "not missing") in the 2016/2017 evaluation windows.
+CONFIDENCE: medium
+###
+FLAG: open_acc_6m_was_missing
+REASON: Like all_util, the underlying open_acc_6m field was only collected from around December 2015 onward, making this missingness flag a stand-in for the pre/post-Dec-2015 cohort split within the 2014-2016 training data, a split that does not exist in either the 2016 validation set or the 2017 test set, so the close match between validation and test AUC cannot confirm this part of the model generalizes rather than reflecting a period-specific artifact.
+EVIDENCE: lookup_feature('open_acc_6m') states it is "collected for loans issued from around December 2015 onward," and get_feature_shap_detail shows open_acc_6m_was_missing ranks 36th by mean |SHAP| with 99.99% of rows in the test set receiving a uniformly positive contribution, indicating the flag is essentially always in its "not missing" state in the periods being evaluated.
+CONFIDENCE: medium
+=== END AUDIT FINDINGS ===

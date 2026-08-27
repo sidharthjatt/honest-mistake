@@ -1,0 +1,456 @@
+{
+  "_MODE": "REAL RUN - LIVE API CALLS.",
+  "config_id": "toolsv1.0-populated-suppressed",
+  "calls": [
+    {
+      "seq": 1,
+      "tool": "get_shap_ranking",
+      "arguments": {
+        "top_n": 20
+      },
+      "ok": true,
+      "outcome": "returned=20"
+    },
+    {
+      "seq": 2,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "recover"
+      },
+      "ok": true,
+      "outcome": "match_count=2"
+    },
+    {
+      "seq": 3,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "pymnt"
+      },
+      "ok": true,
+      "outcome": "match_count=6"
+    },
+    {
+      "seq": 4,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "last_"
+      },
+      "ok": true,
+      "outcome": "match_count=15"
+    },
+    {
+      "seq": 5,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "total_pymnt"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 6,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "last_pymnt_amnt"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 7,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "recoveries"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 8,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "last_fico_range_high"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 9,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "last_fico_range_low"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 10,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "last_credit_pull_d"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 11,
+      "tool": "get_shap_ranking",
+      "arguments": {
+        "top_n": 180
+      },
+      "ok": true,
+      "outcome": "returned=180"
+    },
+    {
+      "seq": 12,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "issue_d"
+      },
+      "ok": true,
+      "outcome": "match_count=1"
+    },
+    {
+      "seq": 13,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "loan_status"
+      },
+      "ok": true,
+      "outcome": "match_count=2"
+    },
+    {
+      "seq": 14,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "term"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 15,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "term"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 16,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "term"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 17,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "default"
+      },
+      "ok": true,
+      "outcome": "match_count=0"
+    },
+    {
+      "seq": 18,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "charged off"
+      },
+      "ok": true,
+      "outcome": "match_count=3"
+    },
+    {
+      "seq": 19,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "target"
+      },
+      "ok": true,
+      "outcome": "match_count=0"
+    },
+    {
+      "seq": 20,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "issue_d"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 21,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "loan_status"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 22,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "loan_status"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 23,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "hardship"
+      },
+      "ok": true,
+      "outcome": "match_count=15"
+    },
+    {
+      "seq": 24,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "settlement"
+      },
+      "ok": true,
+      "outcome": "match_count=7"
+    },
+    {
+      "seq": 25,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "debt_settlement"
+      },
+      "ok": true,
+      "outcome": "match_count=2"
+    },
+    {
+      "seq": 26,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "hardship_flag"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 27,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "debt_settlement_flag"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 28,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "settlement_status"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 29,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "all_util"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 30,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "open_acc_6m"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 31,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "emp_length"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 32,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "emp_length_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 33,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "all_util_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 34,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "open_acc_6m_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 35,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "total_cu_tl_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 36,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "inq_fi_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 37,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "mths_since_rcnt_il_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 38,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "open_il_12m_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 39,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "total_bal_il_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 40,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "all_util"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 41,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "open_acc_6m"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 42,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "open_il_12m"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 43,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "sub_grade"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 44,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "grade"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 45,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "dti"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 46,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "int_rate"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 47,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "acc_open_past_24mths"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 48,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "fico_range_low"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 49,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "emp_length_was_missing"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 50,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "funded_amnt_inv"
+      },
+      "ok": true,
+      "outcome": "available"
+    }
+  ]
+}

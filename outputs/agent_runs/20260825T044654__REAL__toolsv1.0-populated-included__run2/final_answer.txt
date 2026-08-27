@@ -1,0 +1,11 @@
+========================================================================
+REAL RUN - LIVE API CALLS.
+========================================================================
+run          20260825T044654__REAL__toolsv1.0-populated-included__run2
+generated    2026-08-25T04:41:34
+config_id    toolsv1.0-populated-included
+termination  call_limit  (usable: False)
+
+The runner did not parse or alter the text below.
+----- VERBATIM MODEL TEXT BELOW THIS LINE -----
+Let me examine ablation results for the top features to check reliance patterns and see if any precomputed ablations reveal instability.

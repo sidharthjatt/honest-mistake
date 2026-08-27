@@ -7,3 +7,5 @@ shap
 optuna
 matplotlib
 seaborn
+anthropic
+python-dotenv

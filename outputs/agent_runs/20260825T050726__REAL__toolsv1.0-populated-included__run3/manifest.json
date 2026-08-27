@@ -1,0 +1,33 @@
+{
+  "_MODE": "REAL RUN - LIVE API CALLS.",
+  "mode": "REAL",
+  "mock": false,
+  "network_calls_made": true,
+  "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+  "timestamp": "2026-08-25T05:02:11",
+  "finished": "2026-08-25T05:07:26",
+  "wall_seconds": 315.37,
+  "model": "claude-sonnet-5",
+  "sampling_parameters": "none sent - removed for this model family",
+  "max_tokens_per_turn": 12400,
+  "config_id": "toolsv1.0-populated-included",
+  "tool_layer_version": "1.0",
+  "dictionary_populated_field": "included",
+  "termination": "completed",
+  "is_usable": true,
+  "last_stop_reason": "end_turn",
+  "turns": 16,
+  "tool_calls": 52,
+  "usage": {
+    "input": 362621,
+    "output": 23275,
+    "cache_creation": 0,
+    "cache_read": 0
+  },
+  "limits": {
+    "max_turns": 20,
+    "max_tool_calls": 70
+  },
+  "system_prompt_chars": 4268,
+  "ceilings_stated_in_prompt": true
+}

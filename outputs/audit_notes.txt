@@ -84,8 +84,52 @@ SLICE AUCs (overall 0.7296; flag if > 0.03 below)
   bureau fields missing        n=0 — empty slice
   bureau fields present        n=169,300  default 23.12%  AUC 0.7296
     -> cohort is EMPTY in 2017: LC collected these fields for all test-era
-       loans. The 21 was_missing flag columns can never fire at test time —
-       they are train-era artifacts. Noted as an audit observation.
+       loans. Of the 22 was_missing flag columns, 11 are constant zero
+       across the 2017 test set and can never fire there; those are
+       train-era artifacts. Noted as an audit observation.
+       The remaining 11 do fire in 2017 and are NOT dead weight:
+         all_util_was_missing                          0.012% of test rows
+         emp_length_was_missing                        7.160% of test rows
+         il_util_was_missing                          13.504% of test rows
+         mths_since_last_delinq_was_missing           49.841% of test rows
+         mths_since_last_major_derog_was_missing      72.327% of test rows
+         mths_since_last_record_was_missing           80.549% of test rows
+         mths_since_rcnt_il_was_missing                2.576% of test rows
+         mths_since_recent_bc_dlq_was_missing         76.639% of test rows
+         mths_since_recent_bc_was_missing              1.246% of test rows
+         mths_since_recent_inq_was_missing             9.091% of test rows
+         mths_since_recent_revol_delinq_was_missing   66.288% of test rows
+
+======================================================================
+CORRECTION — 2026-08-25
+======================================================================
+  The slice section above previously read:
+
+      "The 21 was_missing flag columns can never fire at test time —
+       they are train-era artifacts."
+
+  That figure was wrong twice over, and both errors are corrected above.
+
+  The count. There are 22 was_missing columns in the feature matrix, not
+  21: 13 from the bureau block collected from around December 2015, 8
+  from the mths_since_* family, and emp_length_was_missing. No grouping
+  of the matrix produces 21.
+
+  The sweep. The claim generalised from one column, open_acc_6m, whose
+  flag is indeed constant zero in 2017, to every was_missing column.
+  Only 11 of the 22 are constant zero there. The other 11 do fire, some
+  of them heavily: mths_since_last_record_was_missing on 80.5% of test
+  rows, and il_util_was_missing on 13.5% despite belonging to the same
+  December-2015 bureau block that motivated the original claim. Calling
+  the whole family "dead weight at test time" was not supported.
+
+  src/07_audit.py has been changed to count these from the matrix rather
+  than state a fixed number, so the figure cannot go stale again. Note
+  that regenerating this file will reproduce the corrected counts but not
+  this correction block, which is written by hand.
+
+  The same "21" figure also appears in README.md, which is being rewritten
+  separately and has not been edited here.
 
 ======================================================================
 OUTPUT

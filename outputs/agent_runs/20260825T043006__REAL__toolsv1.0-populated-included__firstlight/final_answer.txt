@@ -1,0 +1,11 @@
+========================================================================
+REAL RUN - LIVE API CALLS.
+========================================================================
+run          20260825T043006__REAL__toolsv1.0-populated-included__firstlight
+generated    2026-08-25T04:29:53
+config_id    toolsv1.0-populated-included
+termination  call_limit  (usable: False)
+
+The runner did not parse or alter the text below.
+----- VERBATIM MODEL TEXT BELOW THIS LINE -----
+Now let me check whether any of these post-origination features are actually among the model's 180 input features by querying their SHAP details.

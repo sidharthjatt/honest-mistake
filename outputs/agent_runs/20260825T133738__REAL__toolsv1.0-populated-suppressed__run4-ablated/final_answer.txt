@@ -1,0 +1,32 @@
+========================================================================
+REAL RUN - LIVE API CALLS.
+========================================================================
+run          20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated
+generated    2026-08-25T13:31:22
+config_id    toolsv1.0-populated-suppressed
+termination  completed  (usable: True)
+
+The runner did not parse or alter the text below.
+----- VERBATIM MODEL TEXT BELOW THIS LINE -----
+Based on my investigation, I did not find direct post-origination data leakage (payment history, recoveries, hardship, and settlement fields are all documented but confirmed absent from the model's 180 features), and the validation (0.7273) vs. held-out test (0.7296) scores are close, arguing against gross overfitting to the tuning set. However, I found a concrete, tool-supported anomaly in several engineered "missingness" indicators for supplemental credit-bureau fields, plus a structural concern about outcome maturity for the most important feature.
+
+Key observations:
+- `all_util_was_missing` and `open_acc_6m_was_missing` (ranks 27 and 36, non-trivial SHAP weight) show SHAP contributions that are positive in ~99.98–99.99% of the 30,000 sampled 2017 test rows with essentially 0% near-zero cases — i.e., the model applies almost the same one-directional adjustment to virtually every row in the holdout, unlike a feature that varies meaningfully. This is the signature of a feature whose value is nearly constant in the test period, while the model presumably learned its weight from a training period (2014–2016) where the field's presence/absence varied — consistent with a known-type covariate shift where credit-bureau data collection coverage changed across vintages. `open_il_12m_was_missing` shows a similar, slightly less extreme pattern (99.08% positive, 0.82% near-zero).
+- `term` is the single most important feature (rank 1, ~7% of total attribution) and loans can run up to 60 months; `loan_status` (the presumed label source, confirmed not used as a model input) is documented to include a non-terminal "Current" state. This raises a real risk that 2017-vintage loans, especially longer-term ones, had less time to reveal a final default/non-default outcome than the 2014–2016 loans used for training/tuning, which could make the held-out label distribution for 2017 systematically different (e.g., under-representing late defaults) in a way that doesn't reflect the population the model will actually be scored on when fully matured. I could not directly confirm the label-construction window or censoring rate with the available tools, so this is a lower-confidence, structural concern rather than a demonstrated fact.
+
+=== AUDIT FINDINGS ===
+FLAG: all_util_was_missing
+REASON: This engineered indicator behaves as though it takes essentially one constant value across almost the entire 2017 holdout, meaning the "missing" branch of model logic that was presumably learned from a more heterogeneous 2014-2016 training population is barely exercised in the test set, so the held-out AUC does not meaningfully validate the model's behavior on this feature and may not reflect performance once data-availability patterns shift again.
+EVIDENCE: get_feature_shap_detail for all_util_was_missing shows pct_positive=99.98%, pct_negative=0.02%, pct_near_zero=0.0%, i.e. a near-uniform one-directional contribution across 30,000 sampled test rows.
+CONFIDENCE: medium
+###
+FLAG: open_acc_6m_was_missing
+REASON: Like all_util_was_missing, this indicator's contribution is almost perfectly one-directional across the 2017 test sample, indicating the feature is essentially constant in the holdout period even though the model assigns it real weight (rank 36), suggesting a train/test mismatch in data completeness rather than a stable risk signal the held-out score can be trusted to generalize.
+EVIDENCE: get_feature_shap_detail for open_acc_6m_was_missing shows pct_positive=99.99%, pct_negative=0.0%, pct_near_zero=0.013%, min=-0.00008 (essentially no negative cases) over 30,000 sampled test rows.
+CONFIDENCE: medium
+###
+FLAG: term
+REASON: As the model's single most influential feature, term's learned relationship with default risk could be distorted by differential outcome maturity: loans can run up to 60 months, and since loan_status (the presumed source of the default label) includes a non-terminal "Current" state, the 2017 holdout's longer-term loans may not yet have revealed their true final outcome the way the 2014-2016 training vintages had, making the held-out AUC an uncertain proxy for performance once those loans fully mature.
+EVIDENCE: lookup_feature shows term is "either 36 or 60" months and loan_status "Current" is listed alongside "Fully Paid" and "Charged Off" as possible statuses, while get_shap_ranking places term first with mean_abs_shap 0.189 (largest of all 180 features).
+CONFIDENCE: low
+=== END AUDIT FINDINGS ===
