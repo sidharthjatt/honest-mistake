@@ -1,0 +1,142 @@
+{
+  "_MODE": "MOCK RUN - SYNTHETIC FIXTURE REPLIES, NO API CALL WAS MADE. NOTHING BELOW IS A MODEL RESULT.",
+  "config_id": "toolsv2.0-populated-included-scopes-all-retrieval-pgvector-bge-small-en-v1.5-canary",
+  "calls": [
+    {
+      "seq": 1,
+      "tool": "get_shap_ranking",
+      "arguments": {
+        "top_n": 20
+      },
+      "ok": true,
+      "outcome": "returned=20"
+    },
+    {
+      "seq": 2,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "loan_amnt"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 3,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "annual_inc"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 4,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "annual_inc"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 5,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "annual_inc"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 6,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "balance"
+      },
+      "ok": true,
+      "outcome": "match_count=11"
+    },
+    {
+      "seq": 7,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "total_acc"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 8,
+      "tool": "get_shap_ranking",
+      "arguments": {
+        "n": 10
+      },
+      "ok": false,
+      "outcome": "unexpected_argument"
+    },
+    {
+      "seq": 9,
+      "tool": "get_feature_correlation",
+      "arguments": {
+        "feature": "revol_util"
+      },
+      "ok": false,
+      "outcome": "unknown_tool"
+    },
+    {
+      "seq": 10,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "emp_length"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 11,
+      "tool": "get_feature_target_association",
+      "arguments": {
+        "feature": "emp_length"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 12,
+      "tool": "get_correlated_features",
+      "arguments": {
+        "feature": "emp_length"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 13,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "loan_amnt"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 14,
+      "tool": "get_feature_target_association",
+      "arguments": {
+        "feature": "inq_fi_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 15,
+      "tool": "get_correlated_features",
+      "arguments": {
+        "feature": "loan_amnt",
+        "top_k": 99
+      },
+      "ok": true,
+      "outcome": "available"
+    }
+  ]
+}

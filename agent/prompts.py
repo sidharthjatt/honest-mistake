@@ -120,11 +120,16 @@ whether that reading is justified, and to report anything you find that
 would make it misleading. Nobody has told you what, if anything, is
 wrong. It is possible that nothing is.
 
-Five tools are available to you. Use them to investigate. You can ask
+Eight tools are available to you. Use them to investigate. You can ask
 what a column contains, search across the column descriptions, see which
 columns the model relies on most heavily and how one column's influence
 is distributed across loans, and see how the model scores when it is
-refitted without a particular column.
+refitted without a particular column. You can also examine how a single
+column is distributed and how complete it is across the training data as
+a whole, across the evaluation data, and within each of the four annual
+groups the data spans; see how strongly a column on its own orders the
+outcome, apart from the fitted model; and list the other columns that
+move together with a given column.
 
 How to work:
 

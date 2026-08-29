@@ -1,0 +1,323 @@
+{
+  "_MODE": "MOCK RUN - SYNTHETIC FIXTURE REPLIES, NO API CALL WAS MADE. NOTHING BELOW IS A MODEL RESULT.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Begin your review."
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_01",
+          "name": "get_shap_ranking",
+          "input": {
+            "top_n": 20
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_01",
+          "content": "{\"total_features\": 181, \"returned\": 20, \"note\": \"mean_abs_shap is in log-odds units, averaged over 30,000 sampled test rows.\", \"ranking\": [{\"rank\": 1, \"feature\": \"recoveries\", \"mean_abs_shap\": 2.2137876}, {\"rank\": 2, \"feature\": \"term\", \"mean_abs_shap\": 0.2558708}, {\"rank\": 3, \"feature\": \"sub_grade\", \"mean_abs_shap\": 0.14046815}, {\"rank\": 4, \"feature\": \"annual_inc\", \"mean_abs_shap\": 0.13464776}, {\"rank\": 5, \"feature\": \"dti\", \"mean_abs_shap\": 0.1247072}, {\"rank\": 6, \"feature\": \"home_ownership_RENT\", \"mean_abs_shap\": 0.08971133}, {\"rank\": 7, \"feature\": \"emp_length_was_missing\", \"mean_abs_shap\": 0.069815055}, {\"rank\": 8, \"feature\": \"grade\", \"mean_abs_shap\": 0.06634232}, {\"rank\": 9, \"feature\": \"all_util_was_missing\", \"mean_abs_shap\": 0.06426495}, {\"rank\": 10, \"feature\": \"mo_sin_old_rev_tl_op\", \"mean_abs_shap\": 0.057077914}, {\"rank\": 11, \"feature\": \"acc_open_past_24mths\", \"mean_abs_shap\": 0.05562768}, {\"rank\": 12, \"feature\": \"loan_amnt\", \"mean_abs_shap\": 0.05196962}, {\"rank\": 13, \"feature\": \"initial_list_status_f\", \"mean_abs_shap\": 0.050200753}, {\"rank\": 14, \"feature\": \"open_acc_6m_was_missing\", \"mean_abs_shap\": 0.04712146}, {\"rank\": 15, \"feature\": \"credit_history_months\", \"mean_abs_shap\": 0.046710644}, {\"rank\": 16, \"feature\": \"total_bc_limit\", \"mean_abs_shap\": 0.041715305}, {\"rank\": 17, \"feature\": \"num_actv_rev_tl\", \"mean_abs_shap\": 0.040958893}, {\"rank\": 18, \"feature\": \"int_rate\", \"mean_abs_shap\": 0.0384838}, {\"rank\": 19, \"feature\": \"avg_cur_bal\", \"mean_abs_shap\": 0.038459383}, {\"rank\": 20, \"feature\": \"funded_amnt_inv\", \"mean_abs_shap\": 0.03775907}]}"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Taking the columns one at a time to see how each is described before drawing any comparison."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_02",
+          "name": "lookup_feature",
+          "input": {
+            "feature": "loan_amnt"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_02",
+          "content": "{\"found\": true, \"feature\": \"loan_amnt\", \"description\": \"Amount of money the borrower requested.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"borrower application\"}"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Deciding which columns to retrieve together.",
+          "signature": "sig_mock_thinking_03"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_03a",
+          "name": "lookup_feature",
+          "input": {
+            "feature": "annual_inc"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_03b",
+          "name": "get_feature_shap_detail",
+          "input": {
+            "feature": "annual_inc"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_03c",
+          "name": "get_ablation_result",
+          "input": {
+            "feature": "annual_inc"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_03a",
+          "content": "{\"found\": true, \"feature\": \"annual_inc\", \"description\": \"Annual income the borrower reported.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"borrower application\"}"
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_03b",
+          "content": "{\"found\": true, \"feature\": \"annual_inc\", \"rows\": 30000, \"rank_by_mean_abs_shap\": 4, \"units\": \"log-odds contribution per row\", \"mean_abs_shap\": 0.13464811689829753, \"share_of_total_abs_shap\": 0.027140250855807842, \"mean_signed_shap\": -0.032653672684746074, \"std\": 0.15440573258892995, \"min\": -0.3678165376186371, \"p1\": -0.2950852555036545, \"p5\": -0.2571728348731995, \"q25\": -0.16432426497340202, \"median\": -0.03590550273656845, \"q75\": 0.08294606022536755, \"p95\": 0.2321193091571331, \"p99\": 0.2846375459432602, \"max\": 0.3872460126876831, \"pct_positive\": 43.413333333333334, \"pct_negative\": 56.06666666666666, \"pct_near_zero\": 0.52, \"top1pct_abs_share\": 0.02387586977028759}"
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_03c",
+          "content": "{\"available\": true, \"feature\": \"annual_inc\", \"note\": \"Model retrained without this column, then scored on the held-out 2017 test set. Deltas are relative to the same model trained with every feature.\", \"roc_auc_without_feature\": 0.8728162514220549, \"pr_auc_without_feature\": 0.8012909217407063, \"delta_roc_auc\": -0.000202369371824, \"delta_pr_auc\": -0.0004171932426169}"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Widening the search to see which other columns are described in similar terms."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_04a",
+          "name": "search_data_dictionary",
+          "input": {
+            "query": "balance"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_04b",
+          "name": "lookup_feature",
+          "input": {
+            "feature": "total_acc"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_04a",
+          "content": "{\"query\": \"balance\", \"match_count\": 11, \"returned\": 11, \"results\": [{\"feature\": \"hardship_payoff_balance_amount\", \"description\": \"Payoff balance on the loan as of the hardship plan start date.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"num_rev_tl_bal_gt_0\", \"description\": \"Number of revolving trades carrying a balance greater than zero.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"credit bureau\"}, {\"feature\": \"revol_bal\", \"description\": \"Total revolving balance across the borrower's accounts.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"credit bureau\"}, {\"feature\": \"settlement_percentage\", \"description\": \"Settlement amount as a percentage of the outstanding balance at the time of settlement.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"total_bal_ex_mort\", \"description\": \"Total current balance across all accounts other than mortgages.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"credit bureau\"}, {\"feature\": \"il_util\", \"description\": \"Ratio of current balance to credit limit across the borrower's instalment accounts.\", \"populated\": \"at application, before the loan is approved; collected for loans issued from around December 2015 onward\", \"source\": \"credit bureau\"}, {\"feature\": \"avg_cur_bal\", \"description\": \"Average current balance across all of the borrower's accounts.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"credit bureau\"}, {\"feature\": \"all_util\", \"description\": \"Balance to credit limit ratio across all of the borrower's trades.\", \"populated\": \"at application, before the loan is approved; collected for loans issued from around December 2015 onward\", \"source\": \"credit bureau\"}, {\"feature\": \"bc_util\", \"description\": \"Ratio of current balance to credit limit across all bankcard accounts.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"credit bureau\"}, {\"feature\": \"percent_bc_gt_75\", \"description\": \"Percent of bankcard accounts with a balance above 75 percent of their limit.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"credit bureau\"}, {\"feature\": \"dti\", \"description\": \"Debt-to-income ratio: monthly debt payments other than mortgage and this loan, divided by monthly income.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"borrower application\"}]}"
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_04b",
+          "content": "{\"found\": true, \"feature\": \"total_acc\", \"description\": \"Total number of credit lines in the borrower's file, open and closed.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"credit bureau\"}"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Requesting a larger slice of the ranking."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_05",
+          "name": "get_shap_ranking",
+          "input": {
+            "n": 10
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_05",
+          "content": "{\"message\": \"'get_shap_ranking' does not accept n. It accepts: top_n.\"}"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Checking whether a different view of the same data is available."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_06",
+          "name": "get_feature_correlation",
+          "input": {
+            "feature": "revol_util"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_06",
+          "content": "{\"message\": \"There is no tool called 'get_feature_correlation'. Available tools: get_ablation_result, get_correlated_features, get_feature_coverage, get_feature_shap_detail, get_feature_target_association, get_shap_ranking, lookup_feature, search_data_dictionary.\"}"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Looking at one column three ways: how it is spread, how it stands on its own, and what it moves with."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_07a",
+          "name": "get_feature_coverage",
+          "input": {
+            "feature": "emp_length"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_07b",
+          "name": "get_feature_target_association",
+          "input": {
+            "feature": "emp_length"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_07c",
+          "name": "get_correlated_features",
+          "input": {
+            "feature": "emp_length"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_07a",
+          "content": "{\"found\": true, \"feature\": \"emp_length\", \"has_missingness_flag\": true, \"note\": \"pct_zero and pct_at_999 count rows holding exactly that value. std is the sample standard deviation and p50 the median, both within the scope.\", \"scopes\": [{\"scope\": \"train\", \"n_rows\": 891742, \"has_missingness_flag\": true, \"pct_flagged_missing\": 5.8862, \"pct_zero\": 7.8841, \"pct_at_999\": 0.0, \"n_unique\": 11, \"mean\": 6.012165, \"std\": 3.588411, \"p50\": 6.0}, {\"scope\": \"test\", \"n_rows\": 169300, \"has_missingness_flag\": true, \"pct_flagged_missing\": 7.1601, \"pct_zero\": 9.2386, \"pct_at_999\": 0.0, \"n_unique\": 11, \"mean\": 5.838387, \"std\": 3.636653, \"p50\": 6.0}]}"
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_07b",
+          "content": "{\"found\": true, \"feature\": \"emp_length\", \"reading\": \"Each AUC is rank-based, computed from the Mann-Whitney U statistic using the raw feature value as the score. It is not corrected for direction: 0.5 means the feature does not order the outcome, above 0.5 means it orders it in the same direction, and below 0.5 means it orders it in reverse.\", \"auc_train\": 0.490324, \"auc_test\": 0.476325, \"point_biserial_test\": -0.035238, \"n_unique_test\": 11, \"is_constant_test\": false}"
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_07c",
+          "content": "{\"available\": true, \"feature\": \"emp_length\", \"returned\": 5, \"precomputed_count\": 15, \"note\": \"Pearson correlation between the two columns over the full held-out test set, ordered by absolute value. pearson_r keeps its sign.\", \"neighbours\": [{\"rank\": 1, \"neighbour\": \"credit_history_months\", \"pearson_r\": 0.185888, \"abs_pearson_r\": 0.185888}, {\"rank\": 2, \"neighbour\": \"mo_sin_old_rev_tl_op\", \"pearson_r\": 0.180795, \"abs_pearson_r\": 0.180795}, {\"rank\": 3, \"neighbour\": \"mort_acc\", \"pearson_r\": 0.168903, \"abs_pearson_r\": 0.168903}, {\"rank\": 4, \"neighbour\": \"home_ownership_RENT\", \"pearson_r\": -0.168883, \"abs_pearson_r\": 0.168883}, {\"rank\": 5, \"neighbour\": \"home_ownership_MORTGAGE\", \"pearson_r\": 0.150329, \"abs_pearson_r\": 0.150329}]}"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Repeating the three views on columns where each is expected to report something other than a full result."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_08a",
+          "name": "get_feature_coverage",
+          "input": {
+            "feature": "loan_amnt"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_08b",
+          "name": "get_feature_target_association",
+          "input": {
+            "feature": "inq_fi_was_missing"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_mock_08c",
+          "name": "get_correlated_features",
+          "input": {
+            "feature": "loan_amnt",
+            "top_k": 99
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_08a",
+          "content": "{\"found\": true, \"feature\": \"loan_amnt\", \"has_missingness_flag\": false, \"note\": \"pct_zero and pct_at_999 count rows holding exactly that value. std is the sample standard deviation and p50 the median, both within the scope.\", \"scopes\": [{\"scope\": \"train\", \"n_rows\": 891742, \"has_missingness_flag\": false, \"pct_zero\": 0.0, \"pct_at_999\": 0.0, \"n_unique\": 1499, \"mean\": 14569.560254, \"std\": 8619.210037, \"p50\": 12225.0}, {\"scope\": \"test\", \"n_rows\": 169300, \"has_missingness_flag\": false, \"pct_zero\": 0.0, \"pct_at_999\": 0.0, \"n_unique\": 1507, \"mean\": 14301.148258, \"std\": 9459.026988, \"p50\": 12000.0}], \"missingness_flag_note\": \"'loan_amnt' has no companion _was_missing column, so no flagged-missing percentage exists for it and none is reported.\"}"
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_08b",
+          "content": "{\"found\": true, \"feature\": \"inq_fi_was_missing\", \"reading\": \"Each AUC is rank-based, computed from the Mann-Whitney U statistic using the raw feature value as the score. It is not corrected for direction: 0.5 means the feature does not order the outcome, above 0.5 means it orders it in the same direction, and below 0.5 means it orders it in reverse.\", \"auc_train\": 0.475173, \"auc_test\": null, \"point_biserial_test\": null, \"n_unique_test\": 1, \"is_constant_test\": true, \"undefined_note\": \"'inq_fi_was_missing' takes a single value within the test split, so no association could be computed there and those figures are null rather than substituted.\"}"
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_mock_08c",
+          "content": "{\"available\": true, \"feature\": \"loan_amnt\", \"returned\": 15, \"precomputed_count\": 15, \"note\": \"Pearson correlation between the two columns over the full held-out test set, ordered by absolute value. pearson_r keeps its sign.\", \"neighbours\": [{\"rank\": 1, \"neighbour\": \"funded_amnt\", \"pearson_r\": 1.0, \"abs_pearson_r\": 1.0}, {\"rank\": 2, \"neighbour\": \"funded_amnt_inv\", \"pearson_r\": 0.999995, \"abs_pearson_r\": 0.999995}, {\"rank\": 3, \"neighbour\": \"installment\", \"pearson_r\": 0.952976, \"abs_pearson_r\": 0.952976}, {\"rank\": 4, \"neighbour\": \"term\", \"pearson_r\": 0.38908, \"abs_pearson_r\": 0.38908}, {\"rank\": 5, \"neighbour\": \"max_bal_bc\", \"pearson_r\": 0.358158, \"abs_pearson_r\": 0.358158}, {\"rank\": 6, \"neighbour\": \"total_bc_limit\", \"pearson_r\": 0.339644, \"abs_pearson_r\": 0.339644}, {\"rank\": 7, \"neighbour\": \"tot_hi_cred_lim\", \"pearson_r\": 0.32779, \"abs_pearson_r\": 0.32779}, {\"rank\": 8, \"neighbour\": \"total_rev_hi_lim\", \"pearson_r\": 0.318772, \"abs_pearson_r\": 0.318772}, {\"rank\": 9, \"neighbour\": \"tot_cur_bal\", \"pearson_r\": 0.304385, \"abs_pearson_r\": 0.304385}, {\"rank\": 10, \"neighbour\": \"revol_bal\", \"pearson_r\": 0.294363, \"abs_pearson_r\": 0.294363}, {\"rank\": 11, \"neighbour\": \"annual_inc\", \"pearson_r\": 0.290375, \"abs_pearson_r\": 0.290375}, {\"rank\": 12, \"neighbour\": \"total_bal_ex_mort\", \"pearson_r\": 0.266748, \"abs_pearson_r\": 0.266748}, {\"rank\": 13, \"neighbour\": \"recoveries\", \"pearson_r\": 0.222209, \"abs_pearson_r\": 0.222209}, {\"rank\": 14, \"neighbour\": \"avg_cur_bal\", \"pearson_r\": 0.220425, \"abs_pearson_r\": 0.220425}, {\"rank\": 15, \"neighbour\": \"total_il_high_credit_limit\", \"pearson_r\": 0.219986, \"abs_pearson_r\": 0.219986}], \"message\": \"99 neighbours were requested; only 15 were precomputed per feature, so 15 are returned.\"}"
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Working through the remaining columns in order, starting with the ones already retrieved and then"
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 pandas
 numpy
 pyarrow
+scipy
 scikit-learn
 xgboost
 shap
@@ -9,3 +10,6 @@ matplotlib
 seaborn
 anthropic
 python-dotenv
+sentence-transformers
+psycopg[binary]
+pgvector

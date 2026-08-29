@@ -16,6 +16,11 @@ Schema:
                        | 'Lending Club internal' | 'engineered',
     }
 
+`search()` has two tiers: exact substring matching over feature names,
+then semantic retrieval over descriptions via agent.retrieval. Only the
+description text is embedded — see agent/retrieval.py for why `populated`
+is deliberately kept out of the vector.
+
 Run the coverage self-check:
     .venv/bin/python -m agent.data_dictionary
 """
@@ -901,22 +906,152 @@ def lookup(feature: str) -> dict | None:
     return {"feature": feature, **entry}
 
 
-def search(query: str) -> list[dict]:
-    """Case-insensitive substring match over feature names and descriptions.
+# ----------------------------------------------------------------------
+# Retrieval path recording.
+#
+# Which backend actually served a search is part of a run's identity: a
+# run served by the semantic index and a run served by the substring
+# fallback are not the same experiment. The tool layer reads this when it
+# stamps run_config().
+#
+# The agent is never told. Nothing here reaches a tool payload — no field,
+# no message, no ordering difference beyond the results themselves.
+# ----------------------------------------------------------------------
+_PGVECTOR = "pgvector"
+_FALLBACK = "keyword-fallback"
+_retrieval_paths_used: set[str] = set()
 
-    Returns entries whose name or description contains `query`, name
-    matches first. Upgrade path: replace with embedding similarity.
+
+def retrieval_paths_used() -> set[str]:
+    """Which retrieval backends have served a search in this process."""
+    return set(_retrieval_paths_used)
+
+
+def reset_retrieval_paths() -> None:
+    """Clear the record. For tests and between runs."""
+    _retrieval_paths_used.clear()
+
+
+def mark_retrieval_unavailable() -> None:
+    """Record that the index is known to be unreachable for this run.
+
+    Called by the runner's preflight when warming the retrieval stack
+    fails. Without it a run that never happened to make a dictionary
+    search would stamp itself 'unused', which is true but hides that the
+    backend was down the whole time.
     """
-    q = query.strip().lower()
-    if not q:
+    _retrieval_paths_used.add(_FALLBACK)
+
+
+# Semantic tier bounds.
+#
+#   _MAX_DISTANCE   an absolute ceiling. Nothing beyond it is a match at
+#                   all. Note what this does and does not catch: a
+#                   gibberish string lands past it and is cut, but a
+#                   fluent English question about something the dictionary
+#                   does not hold embeds much closer than gibberish and
+#                   sits well inside it. See
+#                   outputs/agent_cache/RETRIEVAL_EVAL.md, `none` family.
+#   _TOP_K          how many neighbours tier 2 may return at most.
+#
+# This replaced a relative band that kept everything within 0.05 of the
+# closest hit. Two things killed it, both visible in the same eval run.
+#
+# One: a single global band could not serve two probes at once. For a
+# query of "FICO score" the band closed at 0.285, after the two most
+# recent FICO columns and before the two application-time ones at 0.325
+# and 0.339 — too narrow, and it returned half of a set that obviously
+# belongs together. For "which columns were computed rather than
+# collected" the same band let through 87 entries — too wide. Moving the
+# constant fixes one and worsens the other.
+#
+# Two, and the reason for a fixed cap rather than a better band: a
+# semantic retriever over 224 one-sentence entries should never report 87
+# matches, whatever the distances say. Bounding the tier is a structural
+# statement about how large a useful answer can be in a corpus this size,
+# not a per-query judgement about relevance. A relative band is the
+# latter dressed as the former.
+_MAX_DISTANCE = 0.45
+_TOP_K = 10
+
+
+def _semantic_description_hits(query: str, exclude: set[str]) -> list[dict]:
+    """Tier 2 via the vector index. Raises if the index is unreachable."""
+    from agent import retrieval
+
+    hits = retrieval.search_descriptions(query, len(FEATURE_DOCS))
+    if not hits:
         return []
-    name_hits, desc_hits = [], []
-    for feature, entry in FEATURE_DOCS.items():
-        record = {"feature": feature, **entry}
-        if q in feature.lower():
-            name_hits.append(record)
-        elif q in entry["description"].lower():
-            desc_hits.append(record)
+    out = []
+    for h in hits:
+        if h["distance"] > _MAX_DISTANCE:
+            break
+        if h["feature"] in exclude:
+            continue
+        # The contract is four keys. distance is working state, not output.
+        out.append({"feature": h["feature"],
+                    "description": h["description"],
+                    "populated": h["populated"],
+                    "source": h["source"]})
+        if len(out) == _TOP_K:
+            break
+    return out
+
+
+def _substring_description_hits(q_lower: str, exclude: set[str]) -> list[dict]:
+    """Tier 2 as it worked before the index existed, used as the fallback.
+
+    Case-insensitive substring over descriptions, in FEATURE_DOCS
+    insertion order.
+    """
+    return [
+        {"feature": feature, **entry}
+        for feature, entry in FEATURE_DOCS.items()
+        if feature not in exclude and q_lower in entry["description"].lower()
+    ]
+
+
+def search(query: str) -> list[dict]:
+    """Two-tier search over the dictionary, uncapped, in relevance order.
+
+    Tier 1 is unchanged from the substring implementation: entries whose
+    *name* contains the query, case-insensitively, in FEATURE_DOCS
+    insertion order.
+
+    Tier 2 is semantic retrieval over description embeddings, nearest
+    first, excluding anything tier 1 already returned. If the index cannot
+    be reached, tier 2 falls back to the substring matching over
+    descriptions that this function used to do. The fallback is recorded
+    for the run stamp and is invisible to the caller.
+
+    Every record has exactly the keys feature, description, populated and
+    source. Callers apply their own presentation limits.
+    """
+    q_raw = query.strip()
+    if not q_raw:
+        return []
+    q = q_raw.lower()
+
+    name_hits = [
+        {"feature": feature, **entry}
+        for feature, entry in FEATURE_DOCS.items()
+        if q in feature.lower()
+    ]
+    seen = {h["feature"] for h in name_hits}
+
+    try:
+        from agent.retrieval import RetrievalUnavailable
+    except Exception:  # retrieval deps absent — treat as unreachable
+        _retrieval_paths_used.add(_FALLBACK)
+        return name_hits + _substring_description_hits(q, seen)
+
+    try:
+        desc_hits = _semantic_description_hits(q_raw, seen)
+        _retrieval_paths_used.add(_PGVECTOR)
+    except RetrievalUnavailable:
+        _retrieval_paths_used.add(_FALLBACK)
+        desc_hits = _substring_description_hits(q, seen)
+
     return name_hits + desc_hits
 
 

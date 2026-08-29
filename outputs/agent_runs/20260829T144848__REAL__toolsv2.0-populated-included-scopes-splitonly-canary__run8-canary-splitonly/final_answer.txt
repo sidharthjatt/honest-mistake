@@ -1,0 +1,26 @@
+========================================================================
+REAL RUN - LIVE API CALLS.
+========================================================================
+run          20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly
+generated    2026-08-29T14:45:51
+config_id    toolsv2.0-populated-included-scopes-splitonly-retrieval-pgvector-bge-small-en-v1.5-canary
+termination  completed  (usable: True)
+
+The runner did not parse or alter the text below.
+----- VERBATIM MODEL TEXT BELOW THIS LINE -----
+=== AUDIT FINDINGS ===
+FLAG: recoveries
+REASON: This column is only populated once a loan has already been charged off, so it directly encodes post-default information rather than data available at underwriting, meaning the model's headline discriminative power substantially reflects target leakage rather than genuine forward-looking risk assessment.
+EVIDENCE: lookup_feature shows recoveries is "set once the loan has been charged off and recovery activity begins," it is the single largest SHAP contributor (44.6% of total absolute SHAP, mean_abs_shap 2.21 vs. 0.26 for the next feature), and get_ablation_result shows removing it drops the held-out 2017 ROC-AUC from 0.8730 to 0.7296.
+CONFIDENCE: high
+###
+FLAG: open_acc_6m_was_missing
+REASON: This feature's missingness indicator is essentially a proxy for the era/vintage of data collection rather than a stable risk signal, since it varies substantially during training but holds a single constant value in the 2017 evaluation set, so any structure the model learned around it cannot be validated by the held-out score and may reflect an artifact of the training period.
+EVIDENCE: get_feature_coverage shows pct_zero of 34.99% (i.e., 65% flagged missing) in train versus 100% zero (no missing rows at all) in test, and get_feature_target_association reports is_constant_test: true, meaning no association with the outcome could even be computed on the held-out data.
+CONFIDENCE: medium
+###
+FLAG: all_util_was_missing
+REASON: This feature shows the same kind of extreme train/test coverage shift (a ranking-relevant feature whose missingness pattern is not representative of the evaluation population), indicating the training population (2014-2016) differs structurally from the 2017 evaluation population in ways that could make the held-out AUC unrepresentative of genuinely new, future loans if data collection practices shift again.
+EVIDENCE: get_feature_coverage reports pct_flagged_missing of 65.02% in train versus 0.0124% in test for the underlying all_util field, and the companion missingness flag ranks 9th of 181 features by mean absolute SHAP per get_shap_ranking.
+CONFIDENCE: low
+=== END AUDIT FINDINGS ===

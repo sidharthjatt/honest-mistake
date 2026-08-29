@@ -1,6 +1,6 @@
 """tools.py — Honest Mistake, Layer 2 tool layer.
 
-The agent's entire view of the model and dataset passes through the five
+The agent's entire view of the model and dataset passes through the eight
 tools defined here. Nothing else is observable to it.
 
 WHAT THIS LAYER DELIBERATELY WITHHOLDS
@@ -36,12 +36,20 @@ Filesystem paths this module reads (the complete list):
     outputs/agent_cache/shap_global.csv
     outputs/agent_cache/shap_values.parquet
     outputs/agent_cache/ablation_cache.csv
+    outputs/agent_cache/coverage_profile.csv
+    outputs/agent_cache/univariate_assoc.csv
+    outputs/agent_cache/correlation_topk.csv
+
+Each is a fixed filename joined to the cache directory chosen once at
+construction. No filename, directory, or path fragment is ever taken from a
+tool argument.
 """
 
 from pathlib import Path
 
 import pandas as pd
 
+from agent import data_dictionary as _dict
 from agent.data_dictionary import lookup as _dict_lookup
 from agent.data_dictionary import search as _dict_search
 
@@ -50,8 +58,20 @@ _CACHE = _PROJECT_ROOT / "outputs" / "agent_cache"
 _SHAP_GLOBAL_CSV = _CACHE / "shap_global.csv"
 _SHAP_VALUES_PARQUET = _CACHE / "shap_values.parquet"
 _ABLATION_CSV = _CACHE / "ablation_cache.csv"
+_COVERAGE_CSV = _CACHE / "coverage_profile.csv"
+_UNIVARIATE_CSV = _CACHE / "univariate_assoc.csv"
+_CORRELATION_CSV = _CACHE / "correlation_topk.csv"
 
-TOOL_LAYER_VERSION = "1.0"
+# 2.0: eight tools rather than five, a second suppression switch, and
+# dictionary search backed by a vector index rather than substring
+# matching. A 1.0 run and a 2.0 run gave the agent materially different
+# evidence, so they must not share a version string.
+TOOL_LAYER_VERSION = "2.0"
+
+# What run_config reports when the vector index served every dictionary
+# search. Mirrors agent.retrieval.RETRIEVAL_BACKEND, restated here so the
+# stamp does not depend on the retrieval module importing cleanly.
+RETRIEVAL_BACKEND = "pgvector-bge-small-en-v1.5"
 
 # search() can otherwise be used to dump the whole dictionary in one call.
 _SEARCH_LIMIT = 25
@@ -59,15 +79,60 @@ _SEARCH_LIMIT = 25
 # |SHAP| below this counts as "no contribution" for this row.
 _NEAR_ZERO = 1e-3
 
+# ----------------------------------------------------------------------
+# WHAT include_vintage_scopes GOVERNS — read this before adding a tool.
+#
+# The switch removes every per-vintage *measurement* from what the agent
+# can see. It is not a filter on one tool; it is a statement about a class
+# of number, and it has to be applied at every site that reports one.
+# Twice now the switch's reach has been described as wider than its
+# implementation, because a tool was added carrying an annual field and
+# the switch was not extended to it. If you add a third, extend this list.
+#
+# Governed today, when include_vintage_scopes is False:
+#     get_feature_coverage             the 2014/2015/2016/2017 scope
+#                                      entries are dropped from `scopes`
+#     get_feature_target_association   the auc_2014 / auc_2015 / auc_2016
+#                                      keys are dropped, and any scope
+#                                      note stops naming them
+#
+# In both cases the fields are absent, not blanked: no placeholder, no
+# null, and nothing anywhere in the payload saying that something was
+# withheld. A note explaining the gap would tell the agent the figures
+# exist, which is the one thing the ablation cannot afford.
+#
+# Deliberately NOT governed:
+#     get_ablation_result's note      names 2017 because that is what the
+#                                     held-out split *is*. Naming a split
+#                                     is not reporting a per-vintage
+#                                     measurement, and the agent is told
+#                                     the split either way.
+#     the dictionary's own text       entries such as il_util say their
+#                                     field was collected from around
+#                                     December 2015. That is documentation
+#                                     of the column, and it falls under
+#                                     include_populated, which is a
+#                                     separate switch with its own arm of
+#                                     the experiment.
+# ----------------------------------------------------------------------
+_SPLIT_SCOPES = ("train", "test")
+_VINTAGE_SCOPES = ("2014", "2015", "2016", "2017")
+
+# correlation_topk.csv holds 15 neighbours per feature and no more, so a
+# larger request cannot be served by reading further.
+_DEFAULT_TOP_K = 5
+_MAX_TOP_K = 15
+
 
 class ToolLayer:
-    """The five tools, bound to one fixed configuration.
+    """The eight tools, bound to one fixed configuration.
 
-    The `populated` suppression switch is a constructor argument, so it is
-    fixed for the lifetime of the object and is not a parameter of any
-    tool. The agent calls tools only through `dispatch`, which forwards
-    only the arguments declared in the published schemas — none of which
-    include the switch. The agent therefore cannot read, set, or vary it.
+    The two suppression switches, `include_populated` and
+    `include_vintage_scopes`, are constructor arguments, so they are fixed
+    for the lifetime of the object and are not parameters of any tool. The
+    agent calls tools only through `dispatch`, which forwards only the
+    arguments declared in the published schemas — neither switch appears
+    there. The agent therefore cannot read, set, or vary either one.
 
     Chosen over a module-level global or a runtime patch because the
     binding is explicit and per-instance: two configurations can exist
@@ -76,8 +141,14 @@ class ToolLayer:
     """
 
     def __init__(self, include_populated: bool = True,
+                 include_vintage_scopes: bool = True,
                  cache_dir: Path | None = None):
         self.include_populated = bool(include_populated)
+        # When false, get_feature_coverage reports the train and test
+        # scopes only. The vintage scopes are dropped, not blanked: no
+        # placeholder row and no note that anything was left out, since
+        # either would tell the agent that per-vintage figures exist.
+        self.include_vintage_scopes = bool(include_vintage_scopes)
         # A parallel cache lets a canary variant be audited without
         # overwriting Layer 1's artefacts. The directory is part of the
         # run's identity, so it is stamped into config_id.
@@ -85,9 +156,15 @@ class ToolLayer:
         self._shap_global_csv = self.cache_dir / "shap_global.csv"
         self._shap_values_parquet = self.cache_dir / "shap_values.parquet"
         self._ablation_csv = self.cache_dir / "ablation_cache.csv"
+        self._coverage_csv = self.cache_dir / "coverage_profile.csv"
+        self._univariate_csv = self.cache_dir / "univariate_assoc.csv"
+        self._correlation_csv = self.cache_dir / "correlation_topk.csv"
         self._shap_global: pd.DataFrame | None = None
         self._shap_values: pd.DataFrame | None = None
         self._ablation: pd.DataFrame | None = None
+        self._coverage: pd.DataFrame | None = None
+        self._univariate: pd.DataFrame | None = None
+        self._correlation: pd.DataFrame | None = None
         self._calls: list[dict] = []
 
     # ------------------------------------------------------------------
@@ -96,15 +173,40 @@ class ToolLayer:
     def run_config(self) -> dict:
         """Configuration stamp for logging. Not exposed as a tool."""
         state = "included" if self.include_populated else "suppressed"
+        scopes = "all" if self.include_vintage_scopes else "splitonly"
         variant = "canary" if self.cache_dir != _CACHE else "layer1"
+        retrieval = self._retrieval_served()
         return {
             "tool_layer_version": TOOL_LAYER_VERSION,
             "dictionary_populated_field": state,
+            "coverage_scopes": scopes,
+            "retrieval": retrieval,
             "artefact_variant": variant,
             "cache_dir": self.cache_dir.name,
             "config_id": (f"toolsv{TOOL_LAYER_VERSION}-populated-{state}"
+                          f"-scopes-{scopes}-retrieval-{retrieval}"
                           f"-{variant}"),
         }
+
+    @staticmethod
+    def _retrieval_served() -> str:
+        """Which backend actually served dictionary search in this process.
+
+        Reports what happened, not what was configured. A run that fell
+        back to substring matching because the index was unreachable is a
+        different experiment from one the index served, and the stamp has
+        to say so without anyone having to remember.
+        """
+        used = _dict.retrieval_paths_used()
+        if not used:
+            # No dictionary search was made, so nothing served one. Saying
+            # "pgvector" here would claim a backend the run never used.
+            return "unused"
+        if used == {"pgvector"}:
+            return RETRIEVAL_BACKEND
+        if used == {"keyword-fallback"}:
+            return "keyword-fallback"
+        return "mixed"
 
     # ------------------------------------------------------------------
     # Call log — for analysing behaviour after a run.
@@ -132,7 +234,9 @@ class ToolLayer:
     @staticmethod
     def _outcome(name: str, result: dict) -> str:
         """One-line summary of how a call turned out."""
-        if name in ("lookup_feature", "get_feature_shap_detail"):
+        if name in ("lookup_feature", "get_feature_shap_detail",
+                    "get_feature_coverage",
+                    "get_feature_target_association"):
             if "found" not in result:
                 return "error"
             return "found" if result["found"] else "not_found"
@@ -148,6 +252,10 @@ class ToolLayer:
             if "available" not in result:
                 return "error"
             return "available" if result["available"] else "not_precomputed"
+        if name == "get_correlated_features":
+            if "available" not in result:
+                return "error"
+            return "available" if result["available"] else "not_available"
         return "error"
 
     def _record(self, name: str, arguments: dict, ok: bool,
@@ -187,6 +295,30 @@ class ToolLayer:
             except Exception:
                 return None
         return self._ablation
+
+    def _load_coverage(self) -> pd.DataFrame | None:
+        if self._coverage is None:
+            try:
+                self._coverage = pd.read_csv(self._coverage_csv)
+            except Exception:
+                return None
+        return self._coverage
+
+    def _load_univariate(self) -> pd.DataFrame | None:
+        if self._univariate is None:
+            try:
+                self._univariate = pd.read_csv(self._univariate_csv)
+            except Exception:
+                return None
+        return self._univariate
+
+    def _load_correlation(self) -> pd.DataFrame | None:
+        if self._correlation is None:
+            try:
+                self._correlation = pd.read_csv(self._correlation_csv)
+            except Exception:
+                return None
+        return self._correlation
 
     # ------------------------------------------------------------------
     # Dictionary entry shaping
@@ -408,6 +540,226 @@ class ToolLayer:
         }
 
     # ------------------------------------------------------------------
+    # Shared helper for the precomputed CSVs, which leave a cell empty
+    # wherever a statistic was undefined rather than writing a stand-in.
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _opt_float(value) -> float | None:
+        """Empty cell -> None. Never a substituted default."""
+        return None if pd.isna(value) else float(value)
+
+    # ------------------------------------------------------------------
+    # Tool 6 — get_feature_coverage
+    # ------------------------------------------------------------------
+    def get_feature_coverage(self, feature: str) -> dict:
+        """How populated and how distributed one feature is, per scope."""
+        if not isinstance(feature, str) or not feature.strip():
+            return {"found": False,
+                    "message": "Provide a feature name as a non-empty string."}
+        name = feature.strip()
+
+        df = self._load_coverage()
+        if df is None:
+            return {"found": False,
+                    "message": "The coverage profile is not available."}
+
+        rows = df.loc[df["feature"] == name]
+        if not len(rows):
+            return {
+                "found": False,
+                "feature": name,
+                "message": f"'{name}' is not one of the columns in the "
+                           f"model's feature matrix, so it has no coverage "
+                           f"profile. Use get_shap_ranking to see the "
+                           f"feature names.",
+            }
+
+        wanted = list(_SPLIT_SCOPES)
+        if self.include_vintage_scopes:
+            wanted += list(_VINTAGE_SCOPES)
+
+        by_scope = {str(r["scope"]): r for _, r in rows.iterrows()}
+        has_flag = bool(rows.iloc[0]["has_missingness_flag"])
+
+        scopes = []
+        for scope in wanted:
+            r = by_scope.get(scope)
+            if r is None:
+                continue
+            entry = {
+                "scope": scope,
+                "n_rows": int(r["n_rows"]),
+                "has_missingness_flag": has_flag,
+            }
+            if has_flag:
+                entry["pct_flagged_missing"] = self._opt_float(
+                    r["pct_flagged_missing"])
+            entry.update({
+                "pct_zero": self._opt_float(r["pct_zero"]),
+                "pct_at_999": self._opt_float(r["pct_at_999"]),
+                "n_unique": int(r["n_unique"]),
+                "mean": self._opt_float(r["mean"]),
+                "std": self._opt_float(r["std"]),
+                "p50": self._opt_float(r["p50"]),
+            })
+            scopes.append(entry)
+
+        out = {
+            "found": True,
+            "feature": name,
+            "has_missingness_flag": has_flag,
+            "note": "pct_zero and pct_at_999 count rows holding exactly that "
+                    "value. std is the sample standard deviation and p50 the "
+                    "median, both within the scope.",
+            "scopes": scopes,
+        }
+        if not has_flag:
+            out["missingness_flag_note"] = (
+                f"'{name}' has no companion _was_missing column, so no "
+                f"flagged-missing percentage exists for it and none is "
+                f"reported.")
+        return out
+
+    # ------------------------------------------------------------------
+    # Tool 7 — get_feature_target_association
+    # ------------------------------------------------------------------
+    def get_feature_target_association(self, feature: str) -> dict:
+        """One feature's standalone association with the outcome.
+
+        Every figure here comes from that one column and the outcome, with
+        no other column involved and no model fitted.
+        """
+        if not isinstance(feature, str) or not feature.strip():
+            return {"found": False,
+                    "message": "Provide a feature name as a non-empty string."}
+        name = feature.strip()
+
+        df = self._load_univariate()
+        if df is None:
+            return {"found": False,
+                    "message": "The univariate association figures are not "
+                               "available."}
+
+        hit = df.loc[df["feature"] == name]
+        if not len(hit):
+            return {
+                "found": False,
+                "feature": name,
+                "message": f"'{name}' is not one of the columns in the "
+                           f"model's feature matrix, so it has no univariate "
+                           f"association figures. Use get_shap_ranking to see "
+                           f"the feature names.",
+            }
+
+        r = hit.iloc[0]
+        # Governed by include_vintage_scopes — see the block above
+        # _SPLIT_SCOPES for what the switch covers and what it does not.
+        auc_fields = ["auc_train", "auc_test"]
+        if self.include_vintage_scopes:
+            auc_fields += ["auc_2014", "auc_2015", "auc_2016"]
+        scope_of = {"auc_train": "the training split",
+                    "auc_test": "the test split",
+                    "auc_2014": "2014", "auc_2015": "2015",
+                    "auc_2016": "2016"}
+
+        out = {
+            "found": True,
+            "feature": name,
+            "reading": "Each AUC is rank-based, computed from the "
+                       "Mann-Whitney U statistic using the raw feature value "
+                       "as the score. It is not corrected for direction: 0.5 "
+                       "means the feature does not order the outcome, above "
+                       "0.5 means it orders it in the same direction, and "
+                       "below 0.5 means it orders it in reverse.",
+        }
+        for f in auc_fields:
+            out[f] = self._opt_float(r[f])
+        out["point_biserial_test"] = self._opt_float(r["point_biserial_test"])
+        out["n_unique_test"] = int(r["n_unique_test"])
+        out["is_constant_test"] = bool(r["is_constant_test"])
+
+        # Only over the fields actually reported, so the note cannot name
+        # a vintage the caller was not given.
+        empty = [scope_of[f] for f in auc_fields if out[f] is None]
+        if empty:
+            out["undefined_note"] = (
+                f"'{name}' takes a single value within "
+                f"{', '.join(empty)}, so no association could be computed "
+                f"there and those figures are null rather than substituted.")
+        return out
+
+    # ------------------------------------------------------------------
+    # Tool 8 — get_correlated_features
+    # ------------------------------------------------------------------
+    def get_correlated_features(self, feature: str,
+                                top_k: int = _DEFAULT_TOP_K) -> dict:
+        """The features most linearly related to one feature, on test."""
+        if not isinstance(feature, str) or not feature.strip():
+            return {"available": False,
+                    "message": "Provide a feature name as a non-empty string."}
+        name = feature.strip()
+
+        try:
+            k = int(top_k)
+        except (TypeError, ValueError):
+            return {"available": False,
+                    "message": "top_k must be a whole number."}
+
+        clamp_note = None
+        if k > _MAX_TOP_K:
+            clamp_note = (f"{k} neighbours were requested; only "
+                          f"{_MAX_TOP_K} were precomputed per feature, so "
+                          f"{_MAX_TOP_K} are returned.")
+        k = max(1, min(k, _MAX_TOP_K))
+
+        df = self._load_correlation()
+        if df is None:
+            return {"available": False,
+                    "message": "The correlation neighbours are not available."}
+
+        rows = df.loc[df["feature"] == name].sort_values("rank")
+        if not len(rows):
+            return {
+                "available": False,
+                "feature": name,
+                "message": f"'{name}' is not one of the columns in the "
+                           f"model's feature matrix, so it has no correlation "
+                           f"neighbours. Use get_shap_ranking to see the "
+                           f"feature names.",
+            }
+
+        if rows["neighbour"].isna().all():
+            return {
+                "available": False,
+                "feature": name,
+                "message": f"Correlations are undefined for '{name}': it "
+                           f"holds a single value throughout the evaluation "
+                           f"split, so it has no variation to relate to any "
+                           f"other column. No neighbours can be reported.",
+            }
+
+        rows = rows.loc[rows["neighbour"].notna()].head(k)
+        out = {
+            "available": True,
+            "feature": name,
+            "returned": int(len(rows)),
+            "precomputed_count": _MAX_TOP_K,
+            "note": "Pearson correlation between the two columns over the "
+                    "full held-out test set, ordered by absolute value. "
+                    "pearson_r keeps its sign.",
+            "neighbours": [
+                {"rank": int(r["rank"]),
+                 "neighbour": str(r["neighbour"]),
+                 "pearson_r": float(r["pearson_r"]),
+                 "abs_pearson_r": float(r["abs_pearson_r"])}
+                for _, r in rows.iterrows()
+            ],
+        }
+        if clamp_note:
+            out["message"] = clamp_note
+        return out
+
+    # ------------------------------------------------------------------
     # Dispatch — the agent's only entry point
     # ------------------------------------------------------------------
     def dispatch(self, name: str, arguments: dict | None = None) -> dict:
@@ -418,6 +770,10 @@ class ToolLayer:
             "get_shap_ranking": self.get_shap_ranking,
             "get_feature_shap_detail": self.get_feature_shap_detail,
             "get_ablation_result": self.get_ablation_result,
+            "get_feature_coverage": self.get_feature_coverage,
+            "get_feature_target_association":
+                self.get_feature_target_association,
+            "get_correlated_features": self.get_correlated_features,
         }
         fn = handlers.get(name)
         if fn is None:
@@ -476,13 +832,14 @@ TOOL_SCHEMAS = [
     {
         "name": "search_data_dictionary",
         "description": (
-            "Find columns whose name or definition contains a search term. "
-            "Matching is plain case-insensitive substring matching against "
-            "those two fields only; other fields of an entry are returned "
-            "but not searched. Covers the whole dictionary, which documents "
-            "more columns than the model reads. Use it to explore related "
-            "columns when the exact name is not known. At most "
-            f"{_SEARCH_LIMIT} matches are returned per call."
+            "Find columns related to a search term. Names are matched "
+            "literally; beyond that, results are the entries closest to the "
+            "term by meaning, so a result may be unrelated to what was asked "
+            "and its presence in the list is not on its own evidence that "
+            "the dictionary holds an answer. Covers the whole dictionary, "
+            "which documents more columns than the model reads. Use it to "
+            "explore related columns when the exact name is not known. At "
+            f"most {_SEARCH_LIMIT} matches are returned per call."
         ),
         "input_schema": {
             "type": "object",
@@ -552,6 +909,79 @@ TOOL_SCHEMAS = [
                 "feature": {
                     "type": "string",
                     "description": "Exact name of one of the model's features.",
+                },
+            },
+            "required": ["feature"],
+        },
+    },
+    {
+        "name": "get_feature_coverage",
+        "description": (
+            "Report how populated and how distributed one feature is, as a "
+            "list of scopes. Each scope gives the row count, the percentage "
+            "of rows holding exactly zero and exactly 999, the number of "
+            "distinct values, and the mean, standard deviation and median. "
+            "Where the feature has a companion _was_missing column, the "
+            "percentage of rows it marks is included; where it has none, no "
+            "such percentage is reported. Covers exactly the columns the "
+            "model reads; any other name returns found=false."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "feature": {
+                    "type": "string",
+                    "description": "Exact name of one of the model's features.",
+                },
+            },
+            "required": ["feature"],
+        },
+    },
+    {
+        "name": "get_feature_target_association",
+        "description": (
+            "Report how well one feature on its own orders the outcome, with "
+            "no other column involved and no model fitted. Returns rank-based "
+            "ROC-AUC on the training split, on the test split, and within "
+            "each year of the training period, plus the Pearson correlation "
+            "with the outcome on test. A figure is null where the feature "
+            "holds a single value in that scope. Covers exactly the columns "
+            "the model reads; any other name returns found=false."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "feature": {
+                    "type": "string",
+                    "description": "Exact name of one of the model's features.",
+                },
+            },
+            "required": ["feature"],
+        },
+    },
+    {
+        "name": "get_correlated_features",
+        "description": (
+            "List the features most strongly correlated with one feature, "
+            "measured by Pearson correlation over the full held-out test set "
+            "and ordered by absolute value, sign retained. Neighbours were "
+            f"precomputed {_MAX_TOP_K} deep per feature, so top_k above "
+            f"{_MAX_TOP_K} returns {_MAX_TOP_K} with a note rather than an "
+            "error. A feature that holds a single value on the test set has "
+            "no correlations and returns available=false."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "feature": {
+                    "type": "string",
+                    "description": "Exact name of one of the model's features.",
+                },
+                "top_k": {
+                    "type": "integer",
+                    "description": (
+                        f"How many neighbours to return. Defaults to "
+                        f"{_DEFAULT_TOP_K}, maximum {_MAX_TOP_K}."),
                 },
             },
             "required": ["feature"],

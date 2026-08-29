@@ -1,0 +1,18 @@
+========================================================================
+REAL RUN - LIVE API CALLS.
+========================================================================
+run          20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2
+generated    2026-08-29T14:33:36
+config_id    toolsv2.0-populated-included-scopes-all-retrieval-pgvector-bge-small-en-v1.5-layer1
+termination  completed  (usable: True)
+
+The runner did not parse or alter the text below.
+----- VERBATIM MODEL TEXT BELOW THIS LINE -----
+Based on my investigation, I checked for the most common causes of a misleading held-out estimate: (1) post-origination/target leakage features, (2) mismatched train/test scope definitions, (3) distributional shifts across vintages, and (4) loan-maturity/censoring effects. I found no leakage (all post-origination fields like `recoveries`, `total_pymnt`, `last_pymnt_amnt`, `hardship_*`, `loan_status` are absent from the model's 180 features), and the test scope cleanly equals the 2017 vintage (169,300 rows in both). The overall model AUC is stable between the 2016 validation year (0.7273) and the 2017 test year (0.7296), which is reassuring. However, one specific anomaly stood out: the `term` feature's raw ability to order the outcome degrades sharply and specifically in the most recent vintages, unlike a correlated monetary feature (`installment`) which moves in the opposite direction — consistent with right-censoring of longer-tenor (60-month) loans in recent vintages that haven't had time to season/default by the observation cutoff.
+
+=== AUDIT FINDINGS ===
+FLAG: term
+REASON: Loan term (36 vs 60 months) is mechanically tied to how long a loan needs to season before a default can be observed, so its measured relationship with the outcome weakening specifically in the most recent vintages suggests that longer-tenor loans from 2016-2017 are more likely to be right-censored (still "Current," not yet resolved) than their 2014-2015 counterparts, meaning the 2017 test labels for these loans may not reflect their eventual true outcome and the reported AUC may not represent performance once those loans fully mature.
+EVIDENCE: get_feature_target_association showed term's univariate AUC falling from 0.614 (2014) and 0.624 (2015) to 0.576 (2016) and 0.566 (test/2017), a much sharper and differently-directioned decline than a correlated non-maturity feature, installment, which instead rose from 0.530/0.534/0.544 across the same years to 0.571 on test.
+CONFIDENCE: medium
+=== END AUDIT FINDINGS ===

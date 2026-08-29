@@ -1,0 +1,393 @@
+{
+  "_MODE": "REAL RUN - LIVE API CALLS.",
+  "config_id": "toolsv2.0-populated-suppressed-scopes-all-retrieval-pgvector-bge-small-en-v1.5-layer1",
+  "calls": [
+    {
+      "seq": 1,
+      "tool": "get_shap_ranking",
+      "arguments": {
+        "top_n": 20
+      },
+      "ok": true,
+      "outcome": "returned=20"
+    },
+    {
+      "seq": 2,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "pymnt"
+      },
+      "ok": true,
+      "outcome": "match_count=6"
+    },
+    {
+      "seq": 3,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "recover"
+      },
+      "ok": true,
+      "outcome": "match_count=12"
+    },
+    {
+      "seq": 4,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "total_pymnt"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 5,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "recoveries"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 6,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "last_pymnt_amnt"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 7,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "term"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 8,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "sub_grade"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 9,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "dti"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 10,
+      "tool": "get_feature_target_association",
+      "arguments": {
+        "feature": "dti"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 11,
+      "tool": "get_correlated_features",
+      "arguments": {
+        "feature": "dti"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 12,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "dti"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 13,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "dti"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 14,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "issue_d"
+      },
+      "ok": true,
+      "outcome": "match_count=11"
+    },
+    {
+      "seq": 15,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "loan_status"
+      },
+      "ok": true,
+      "outcome": "match_count=12"
+    },
+    {
+      "seq": 16,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "default"
+      },
+      "ok": true,
+      "outcome": "match_count=10"
+    },
+    {
+      "seq": 17,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "issue_d"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 18,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "loan_status"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 19,
+      "tool": "get_shap_ranking",
+      "arguments": {
+        "top_n": 180
+      },
+      "ok": true,
+      "outcome": "returned=180"
+    },
+    {
+      "seq": 20,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "annual_inc"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 21,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "revol_util"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 22,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "mths_since_recent_inq"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 23,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "mort_acc"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 24,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "total_bc_limit"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 25,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "bc_util"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 26,
+      "tool": "get_feature_target_association",
+      "arguments": {
+        "feature": "annual_inc"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 27,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "annual_inc"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 28,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "total_rev_hi_lim"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 29,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "il_util"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 30,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "il_util_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 31,
+      "tool": "get_feature_target_association",
+      "arguments": {
+        "feature": "il_util"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 32,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "all_util_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 33,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "all_util_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 34,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "all_util"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 35,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "application_type_Joint App"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 36,
+      "tool": "get_feature_shap_detail",
+      "arguments": {
+        "feature": "application_type_Joint App"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 37,
+      "tool": "get_feature_target_association",
+      "arguments": {
+        "feature": "application_type_Joint App"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 38,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "emp_length_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 39,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "emp_length_was_missing"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 40,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "target"
+      },
+      "ok": true,
+      "outcome": "match_count=1"
+    },
+    {
+      "seq": 41,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "charged"
+      },
+      "ok": true,
+      "outcome": "match_count=10"
+    },
+    {
+      "seq": 42,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "open_acc_6m_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 43,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "mths_since_rcnt_il_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    }
+  ]
+}

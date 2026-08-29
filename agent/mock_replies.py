@@ -14,13 +14,15 @@ The sequence exercises, in order:
      4  text and several tool calls together
      5  a tool call with an argument name the tool does not accept
      6  a tool call naming a tool that does not exist
-     7  a truncated turn (stop_reason "max_tokens"), no tool calls
-     8  text only with stop_reason "end_turn", which ends the loop
-     9  stop_reason "refusal", no tool calls
-    10  an unrecognised stop_reason, no tool calls
+     7  the three per-column tools, on ordinary arguments
+     8  the same three, on the arguments that reach their edge paths
+     9  a truncated turn (stop_reason "max_tokens"), no tool calls
+    10  text only with stop_reason "end_turn", which ends the loop
+    11  stop_reason "refusal", no tool calls
+    12  an unrecognised stop_reason, no tool calls
 
-The loop halts at 7, so 8, 9 and 10 are reached by continuing the mock
-cursor into successive runs rather than by resetting it. Entries 7 to 10
+The loop halts at 9, so 10, 11 and 12 are reached by continuing the mock
+cursor into successive runs rather than by resetting it. Entries 9 to 12
 exist because a turn carrying no tool calls looks the same whether the
 model finished, was cut off, declined, or stopped for a reason the loop
 has never seen; only stop_reason separates them, and each needs a
@@ -30,6 +32,14 @@ Entry 3 carries a thinking block. Sonnet 5 thinks adaptively by default
 and its thinking blocks must be echoed back unchanged on later turns, so
 the mock path has to carry one through the same code the real path uses
 rather than around it.
+
+Entries 7 and 8 exist because a tool that is only ever called through
+dispatch() has never been proved to work inside the loop, where its result
+has to survive being turned into a tool_result block and echoed back.
+Entry 8 picks arguments that reach the paths where those three tools
+return something other than a full result: a column with no companion
+missingness flag, a column that holds one value throughout the evaluation
+split, and a neighbour count above the number that was precomputed.
 
 Entries 5 and 6 are the deliberate error cases; their tool_use ids are
 listed in DELIBERATE_ERROR_CALLS. Every other tool call names a real
@@ -134,7 +144,41 @@ _REPLY_SPECS: list[tuple[list[dict], str]] = [
         "tool_use",
     ),
 
-    # 7 — a turn cut off by the output limit. No tool calls, and the loop
+    # 7 — the three per-column tools on ordinary arguments, in one turn.
+    (
+        [
+            _text("Looking at one column three ways: how it is spread, how "
+                  "it stands on its own, and what it moves with."),
+            _tool("toolu_mock_07a", "get_feature_coverage",
+                  {"feature": "emp_length"}),
+            _tool("toolu_mock_07b", "get_feature_target_association",
+                  {"feature": "emp_length"}),
+            _tool("toolu_mock_07c", "get_correlated_features",
+                  {"feature": "emp_length"}),
+        ],
+        "tool_use",
+    ),
+
+    # 8 — the same three on arguments that reach their edge paths: a column
+    #     with no companion flag, a column holding one value throughout the
+    #     evaluation split, and a neighbour count above what was precomputed.
+    #     These are valid calls, not errors, and each returns a shape the
+    #     ordinary path does not produce.
+    (
+        [
+            _text("Repeating the three views on columns where each is "
+                  "expected to report something other than a full result."),
+            _tool("toolu_mock_08a", "get_feature_coverage",
+                  {"feature": "loan_amnt"}),
+            _tool("toolu_mock_08b", "get_feature_target_association",
+                  {"feature": "inq_fi_was_missing"}),
+            _tool("toolu_mock_08c", "get_correlated_features",
+                  {"feature": "loan_amnt", "top_k": 99}),
+        ],
+        "tool_use",
+    ),
+
+    # 9 — a turn cut off by the output limit. No tool calls, and the loop
     #     must not read this as a finished answer.
     (
         [_text("Working through the remaining columns in order, starting "
@@ -142,21 +186,21 @@ _REPLY_SPECS: list[tuple[list[dict], str]] = [
         "max_tokens",
     ),
 
-    # 8 — text only, end_turn: the loop terminates normally here.
+    # 10 — text only, end_turn: the loop terminates normally here.
     (
         [_text("That is enough material from the tools. Writing up the "
                "assessment now.")],
         "end_turn",
     ),
 
-    # 9 — declined. Carries no tool calls, so without an explicit check
-    #     this is shaped exactly like a finished turn.
+    # 11 — declined. Carries no tool calls, so without an explicit check
+    #      this is shaped exactly like a finished turn.
     (
         [_text("I am not going to continue with this request.")],
         "refusal",
     ),
 
-    # 10 — a stop_reason the loop has never seen. Must not be read as a
+    # 12 — a stop_reason the loop has never seen. Must not be read as a
     #      completion, and the raw value must survive into the record.
     (
         [_text("Partial output before an unfamiliar stop.")],

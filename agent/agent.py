@@ -31,8 +31,12 @@ from agent.llm import call_llm
 from agent.prompts import build_system_prompt
 from agent.tools import TOOL_SCHEMAS, ToolLayer
 
-DEFAULT_MAX_TURNS = 12
-DEFAULT_MAX_TOOL_CALLS = 40
+# Kept in step with run_audit.py's CLI defaults. These apply only when
+# run_react_loop is called directly, which the runner never does — but a
+# stale ceiling on an unused path is exactly the kind of thing that comes
+# back later, and 12/40 is the pair that killed two runs.
+DEFAULT_MAX_TURNS = 20
+DEFAULT_MAX_TOOL_CALLS = 70
 
 COMPLETED = "completed"
 TRUNCATED = "truncated"

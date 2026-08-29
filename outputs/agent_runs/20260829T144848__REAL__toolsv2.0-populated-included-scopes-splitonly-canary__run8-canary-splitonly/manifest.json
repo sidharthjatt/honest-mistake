@@ -1,0 +1,40 @@
+{
+  "_MODE": "REAL RUN - LIVE API CALLS.",
+  "mode": "REAL",
+  "mock": false,
+  "network_calls_made": true,
+  "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+  "timestamp": "2026-08-29T14:45:51",
+  "finished": "2026-08-29T14:48:48",
+  "wall_seconds": 176.79,
+  "model": "claude-sonnet-5",
+  "sampling_parameters": "none sent - removed for this model family",
+  "max_tokens_per_turn": 12400,
+  "config_id": "toolsv2.0-populated-included-scopes-splitonly-retrieval-pgvector-bge-small-en-v1.5-canary",
+  "config_id_directory": "toolsv2.0-populated-included-scopes-splitonly-canary",
+  "artefact_variant": "canary",
+  "cache_dir": "agent_cache_canary",
+  "canary": true,
+  "n_features_stated_in_prompt": 181,
+  "tool_layer_version": "2.0",
+  "dictionary_populated_field": "included",
+  "coverage_scopes": "splitonly",
+  "retrieval": "pgvector-bge-small-en-v1.5",
+  "termination": "completed",
+  "is_usable": true,
+  "last_stop_reason": "end_turn",
+  "turns": 13,
+  "tool_calls": 31,
+  "usage": {
+    "input": 167323,
+    "output": 13299,
+    "cache_creation": 0,
+    "cache_read": 0
+  },
+  "limits": {
+    "max_turns": 20,
+    "max_tool_calls": 70
+  },
+  "system_prompt_chars": 4624,
+  "ceilings_stated_in_prompt": true
+}

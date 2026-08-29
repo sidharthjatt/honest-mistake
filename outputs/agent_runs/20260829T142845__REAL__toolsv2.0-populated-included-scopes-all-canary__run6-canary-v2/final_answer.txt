@@ -1,0 +1,16 @@
+========================================================================
+REAL RUN - LIVE API CALLS.
+========================================================================
+run          20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2
+generated    2026-08-29T14:28:04
+config_id    toolsv2.0-populated-included-scopes-all-retrieval-pgvector-bge-small-en-v1.5-canary
+termination  completed  (usable: True)
+
+The runner did not parse or alter the text below.
+----- VERBATIM MODEL TEXT BELOW THIS LINE -----
+=== AUDIT FINDINGS ===
+FLAG: recoveries
+REASON: This column is only populated after a loan has already been charged off and recovery activity begins, so it is a post-outcome artifact that leaks the label (default has already occurred) into a model meant to predict default before or at origination.
+EVIDENCE: lookup_feature reports recoveries is "populated: set once the loan has been charged off and recovery activity begins," it is by far the most important feature (mean_abs_shap 2.21 vs 0.26 for the next feature), and removing it drops test ROC-AUC from 0.8730 to 0.7296 (delta -0.1434) per get_ablation_result, while get_feature_target_association shows an unusually high point-biserial correlation (0.498) with the outcome on its own.
+CONFIDENCE: high
+=== END AUDIT FINDINGS ===

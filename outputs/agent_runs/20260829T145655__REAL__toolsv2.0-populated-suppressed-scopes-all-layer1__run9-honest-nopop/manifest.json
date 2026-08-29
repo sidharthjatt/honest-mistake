@@ -1,0 +1,40 @@
+{
+  "_MODE": "REAL RUN - LIVE API CALLS.",
+  "mode": "REAL",
+  "mock": false,
+  "network_calls_made": true,
+  "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+  "timestamp": "2026-08-29T14:51:38",
+  "finished": "2026-08-29T14:56:55",
+  "wall_seconds": 317.35,
+  "model": "claude-sonnet-5",
+  "sampling_parameters": "none sent - removed for this model family",
+  "max_tokens_per_turn": 12400,
+  "config_id": "toolsv2.0-populated-suppressed-scopes-all-retrieval-pgvector-bge-small-en-v1.5-layer1",
+  "config_id_directory": "toolsv2.0-populated-suppressed-scopes-all-layer1",
+  "artefact_variant": "layer1",
+  "cache_dir": "agent_cache",
+  "canary": false,
+  "n_features_stated_in_prompt": 180,
+  "tool_layer_version": "2.0",
+  "dictionary_populated_field": "suppressed",
+  "coverage_scopes": "all",
+  "retrieval": "pgvector-bge-small-en-v1.5",
+  "termination": "turn_limit",
+  "is_usable": false,
+  "last_stop_reason": "tool_use",
+  "turns": 20,
+  "tool_calls": 43,
+  "usage": {
+    "input": 502004,
+    "output": 21744,
+    "cache_creation": 0,
+    "cache_read": 0
+  },
+  "limits": {
+    "max_turns": 20,
+    "max_tool_calls": 70
+  },
+  "system_prompt_chars": 4624,
+  "ceilings_stated_in_prompt": true
+}

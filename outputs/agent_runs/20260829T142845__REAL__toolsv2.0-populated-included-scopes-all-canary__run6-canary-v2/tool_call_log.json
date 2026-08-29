@@ -1,0 +1,160 @@
+{
+  "_MODE": "REAL RUN - LIVE API CALLS.",
+  "config_id": "toolsv2.0-populated-included-scopes-all-retrieval-pgvector-bge-small-en-v1.5-canary",
+  "calls": [
+    {
+      "seq": 1,
+      "tool": "get_shap_ranking",
+      "arguments": {
+        "top_n": 20
+      },
+      "ok": true,
+      "outcome": "returned=20"
+    },
+    {
+      "seq": 2,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "recoveries"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 3,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "recoveries"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 4,
+      "tool": "get_feature_target_association",
+      "arguments": {
+        "feature": "recoveries"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 5,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "recoveries"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 6,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "recovery"
+      },
+      "ok": true,
+      "outcome": "match_count=4"
+    },
+    {
+      "seq": 7,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "pymnt"
+      },
+      "ok": true,
+      "outcome": "match_count=6"
+    },
+    {
+      "seq": 8,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "prncp"
+      },
+      "ok": true,
+      "outcome": "match_count=3"
+    },
+    {
+      "seq": 9,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "collection_recovery_fee"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 10,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "total_pymnt"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 11,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "last_pymnt_amnt"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 12,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "out_prncp"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 13,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "total_rec_prncp"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 14,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "pymnt_plan"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 15,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "term"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 16,
+      "tool": "lookup_feature",
+      "arguments": {
+        "feature": "sub_grade"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 17,
+      "tool": "get_correlated_features",
+      "arguments": {
+        "feature": "recoveries",
+        "top_k": 10
+      },
+      "ok": true,
+      "outcome": "available"
+    }
+  ]
+}

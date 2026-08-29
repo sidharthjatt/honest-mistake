@@ -1,0 +1,11 @@
+========================================================================
+MOCK RUN - SYNTHETIC FIXTURE REPLIES, NO API CALL WAS MADE. NOTHING BELOW IS A MODEL RESULT.
+========================================================================
+run          20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall
+generated    2026-08-29T14:42:37
+config_id    toolsv2.0-populated-included-scopes-all-retrieval-pgvector-bge-small-en-v1.5-canary
+termination  truncated  (usable: False)
+
+The runner did not parse or alter the text below.
+----- VERBATIM MODEL TEXT BELOW THIS LINE -----
+Working through the remaining columns in order, starting with the ones already retrieved and then

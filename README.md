@@ -4,7 +4,7 @@ A credit-default model built the honest way, and an agent that tries to catch it
 
 Most public models on the Lending Club data report AUCs above 0.90. Almost all of them are wrong: they train on columns that only exist *after* a loan's outcome is known, so the model is quietly reading the answer off the back of the page. This project does the opposite. It strips out every post-outcome column, keeps only what a lender would have at the moment of decision, and lands at **ROC-AUC 0.7296** on a true future-year holdout. That lower number is the point.
 
-Then it goes a step further. A second layer hands an autonomous agent five read-only tools and asks it to audit the finished model, without ever telling it what to look for. Five live runs, a planted canary, and an ablation that failed for a reason worth reporting.
+Then it goes a step further. A second layer hands an autonomous agent eight read-only tools and asks it to audit the finished model, without ever telling it what to look for. Eleven live runs, seven of them usable, a planted canary, and an ablation that failed for a reason worth reporting.
 
 The name is deliberate. *Mistake* is the hidden leakage a model carries. *Honest* is the discipline of surfacing it instead of hiding behind a flattering metric — including when the honest result is a zero.
 
@@ -100,7 +100,7 @@ The model's most confident false positive was a G5, 60-month, 31%-interest small
 
 The audit above is mine. I knew where the leaks were, because I removed them. That makes it a demonstration, not a test.
 
-Layer 2 is the test. An agent gets five read-only tools and the trained model, and is asked to report anything that would make the held-out number misleading. **It is never told what to look for.**
+Layer 2 is the test. An agent gets eight read-only tools and the trained model, and is asked to report anything that would make the held-out number misleading. **It is never told what to look for.**
 
 ### The constraint that makes it real
 
@@ -108,7 +108,41 @@ The easy version of this project tells the agent to find target leakage, watches
 
 So the system prompt contains no mention of leakage, of timing, of when a field is populated, or of anything having been removed during data preparation. A self-check greps the prompt for seventeen steering terms and all 224 documented column names, and fails the build if any appear. Even a column name in a code comment fails it, because the next person editing the prompt would read it.
 
-The agent gets the modelling task, five tools, a budget, and a required output format. Where it goes from there is its own.
+The agent gets the modelling task, eight tools, a budget, and a required output format. Where it goes from there is its own.
+
+### The tool surface
+
+Eight read-only tools. Five came first: look up a column, search the dictionary, rank features by mean absolute SHAP, describe one feature's SHAP distribution, and report the drop-one ablation result.
+
+Three were added later. Each reads a precomputed artefact and answers a question the original five could not.
+
+`get_feature_coverage` reports how one column is distributed and how complete it is, in the training data as a whole, in the evaluation data, and within each of the four annual groups the data spans. It is the only view with a time axis.
+
+`get_feature_target_association` reports how strongly one column orders the outcome on its own, apart from the fitted model. Rank-based AUC, not corrected for direction, so a column that orders the outcome in reverse lands below 0.5 and stays there. A column can be near-invisible in both SHAP and ablation and still be a strong standalone predictor.
+
+`get_correlated_features` lists the columns that move most with a given column, by Pearson correlation on the full test set. Ablation alone cannot tell "carries no information" apart from "another column carries the same information". This separates them.
+
+### Dictionary search is semantic now
+
+`search_data_dictionary` used to be case-insensitive substring matching over names and descriptions. Asking it about utilisation returned nothing, because no description contains that word.
+
+It has two tiers now. Names are still matched literally, in dictionary order, so a query like `mths_since` returns the whole family exactly as before. Beyond that, entries are ranked by cosine distance between the query and the description embedding. The model is `BAAI/bge-small-en-v1.5`, pinned to a commit rather than a branch, 384 dimensions, L2-normalised. Vectors live in Postgres with pgvector, running locally in Docker on port 5433.
+
+There is no HNSW or IVFFlat index on the vectors, and that is a decision rather than an omission. The table holds 224 rows. A sequential scan over 224 vectors of 384 dimensions runs in well under a millisecond and returns the true nearest neighbours every time. An approximate index would be slower to build, no faster to query, and would introduce a recall parameter capable of changing which entries the agent sees between runs.
+
+Only the `description` field is embedded. Not the column name, not `source`, and not `populated`. `populated` is stored and returned alongside a hit but is never indexed, filtered on, or scored, because one of the ablations below drops it after retrieval, and that only means something if it had no hand in choosing or ordering the results.
+
+If the database is unreachable the search falls back to the old substring matching. The agent is told nothing about which path served it. The run's configuration stamp records it, so a fallback run is never mistaken for an indexed one.
+
+Retrieval quality is measured against 28 probes in [RETRIEVAL_EVAL.md](outputs/agent_cache/RETRIEVAL_EVAL.md). Paraphrase questions went from returning nothing to usually returning the right answer first. Conceptual questions about provenance and lifecycle remain the weak family.
+
+### Two switches
+
+Both are constructor arguments on the tool layer. Neither appears in any published tool schema, and `dispatch()` rejects either if the agent sends it as a tool argument.
+
+`include_populated` drops the dictionary's `populated` field, which says when a column receives its value. The definition stays; the lifecycle position goes.
+
+`include_vintage_scopes` drops every per-vintage measurement. `get_feature_coverage` returns only train and test, and `get_feature_target_association` drops its three per-year AUCs. The keys are absent rather than blanked, and nothing says anything was withheld, because saying so would tell the agent the figures exist.
 
 ### What happened
 
@@ -163,21 +197,36 @@ The gap was one-directional — it could only ever undercount false positives, n
 
 **Two paid runs were lost to a token ceiling set too low.** Both are in the register with the reason they were excluded. A register showing one successful run and nothing else would misrepresent what this took.
 
+### What the eight-tool surface changed
+
+The planted column was caught in every canary configuration, including with the per-vintage view withheld. What varied between configurations was the number of false positives, not whether the leak was found.
+
+Detection never depended on the annual breakdown. The split-only run's stated evidence was the dictionary entry, a 44.6% share of total absolute SHAP, and the ablation delta, none of which is a per-vintage figure.
+
+On the honest cache the expanded surface did not improve the score. Every scored honest-cache run in this project sits at precision 0.000, recall 0.000 and f1 0.000, on both tool surfaces and under both switch settings. Suppressing `populated` moved neither number, which is what I predicted from the description scan below, though the false-positive count did move.
+
+The full results, the figures, and what the evaluation cannot measure are in [LAYER2_EVAL.md](outputs/agent_cache/LAYER2_EVAL.md).
+
 ### Run register
 
-| Run | Config | Matrix | Result | Flags | TP | FP | Canary |
-|---|---|---|---|---|---|---|---|
-| run3 | populated included | 180 | completed, 16 turns / 52 calls | 2 | 0 | 2 | — |
-| run4 | populated suppressed | 180 | completed, 16 turns / 50 calls | 3 | 0 | 3 | — |
-| run5 | populated included | 181 | completed, 6 turns / 13 calls | 1 | 1 | 0 | **caught** |
+| Run | Tools | Config | Matrix | Result | Flags | TP | FP | Canary |
+|---|---|---|---|---|---|---|---|---|
+| run3 | 5 | populated included | 180 | completed, 16 turns / 52 calls | 2 | 0 | 2 | — |
+| run4 | 5 | populated suppressed | 180 | completed, 16 turns / 50 calls | 3 | 0 | 3 | — |
+| run5 | 5 | populated included | 181 | completed, 6 turns / 13 calls | 1 | 1 | 0 | **caught** |
+| run6 | 8 | populated included, all scopes | 181 | completed, 6 turns / 17 calls | 1 | 1 | 0 | **caught** |
+| run7 | 8 | populated included, all scopes | 180 | completed, 14 turns / 33 calls | 1 | 0 | 1 | — |
+| run8 | 8 | populated included, split only | 181 | completed, 13 turns / 31 calls | 3 | 1 | 2 | **caught** |
+| run9 | 8 | populated suppressed, all scopes | 180 | turn limit at 20, unusable | none | n/a | n/a | — |
+| run10 | 8 | populated suppressed, all scopes | 180 | completed, 12 turns / 29 calls | 3 | 0 | 3 | — |
 
-Three earlier runs terminated as truncated or limit-hit and are not results. They are listed in `EVAL_NOTES.md` with their reasons.
+Four earlier runs terminated as truncated or limit-hit and are not results. They are listed in `EVAL_NOTES.md` with their reasons. Six MOCK directories are also committed as verification evidence for the config_id fix and the two ablation-switch corrections; they replay fixtures and are not model results. run9 is kept in the register rather than replaced: run10 is the same configuration at a higher turn ceiling, not a retry, and the pair is the clearest evidence in the project of run-to-run variance.
 
-Recall is not comparable across matrices: the denominator is 39 true positives in every row, but none is present in run3/run4's matrix and exactly one is present in run5's.
+Recall is not comparable across matrices: the denominator is 39 true positives in every row, but none is present in the 180-feature matrix and exactly one is present in the 181-feature one.
 
 ### Design decisions worth naming
 
-**The agent cannot read the answer.** No file-read tool, no shell, no directory listing, no code execution. Five tools, each bound to one known artefact. `outputs/leakage_drop_log.txt` holds the ground truth and is unreachable — verified by a runtime audit hook that recorded 460 file opens across a full exercise and confirmed none touched it.
+**The agent cannot read the answer.** No file-read tool, no shell, no directory listing, no code execution. Eight tools, each bound to one known artefact, with every filename a fixed constant joined to a cache directory chosen at construction. `outputs/leakage_drop_log.txt` holds the ground truth and is unreachable. A runtime audit hook re-run over all eight tools and every error path confirms that a tool call opens the six cache artefacts and nothing else, with no file under `data/` touched and no subprocess started.
 
 **The ground truth was written before the agent existed.** Deliberately. If the agent had come first, I would have read its output and then written a key that happened to match it.
 
@@ -222,8 +271,9 @@ Each script writes a plain-text notes file to `outputs/`, so the reasoning trail
 | Module | Does |
 |---|---|
 | `precompute.py` | Caches SHAP and drop-one ablations so the agent never recomputes at runtime |
-| `data_dictionary.py` | 224 documented columns; the agent's only route to what a field means |
-| `tools.py` | The five tools, the ablation switch, and the call log |
+| `data_dictionary.py` | 224 documented columns, and the two-tier search over them |
+| `retrieval.py` | pgvector client for the semantic tier; connection and model from the environment only |
+| `tools.py` | The eight tools, both ablation switches, and the call log |
 | `prompts.py` | System prompt and answer format, with the steering-term self-check |
 | `agent.py` | The ReAct loop, budgets, and termination classification |
 | `run_audit.py` | Runner, mode stamping, and run artefacts |

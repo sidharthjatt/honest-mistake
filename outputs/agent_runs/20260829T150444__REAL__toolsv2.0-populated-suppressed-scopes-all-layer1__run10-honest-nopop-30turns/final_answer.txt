@@ -1,0 +1,26 @@
+========================================================================
+REAL RUN - LIVE API CALLS.
+========================================================================
+run          20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns
+generated    2026-08-29T14:59:36
+config_id    toolsv2.0-populated-suppressed-scopes-all-retrieval-pgvector-bge-small-en-v1.5-layer1
+termination  completed  (usable: True)
+
+The runner did not parse or alter the text below.
+----- VERBATIM MODEL TEXT BELOW THIS LINE -----
+=== AUDIT FINDINGS ===
+FLAG: all_util_was_missing
+REASON: This feature's missingness is entirely determined by loan vintage rather than borrower risk, so the model has effectively learned a calendar-time proxy whose apparent predictive value only "transfers" cleanly to 2017 because 2017 happens to share the same data-collection regime as the tail of the training period, meaning the held-out score does not test the model against a genuinely different missingness regime.
+EVIDENCE: get_feature_coverage shows this column's mean (share not-missing... actually share "was_missing") is 1.0 in 2014, 0.9496 in 2015, 0.0002 in 2016, and 0.0001 in 2017/test, while it ranks 27th by mean|SHAP| (0.0299) in get_shap_ranking, i.e. a feature the model weights heavily is a near-perfect step function of vintage rather than of credit behavior.
+CONFIDENCE: medium
+###
+FLAG: open_acc_6m_was_missing
+REASON: Like its sibling flag above, this column is missing for essentially 100% of 2014 loans, ~95% of 2015 loans, and 0% of 2016/2017 loans, so it and the "additional credit-pull" fields it gates encode when the loan was originated rather than a stable, generalizable borrower characteristic, and the 2016-vs-2017 similarity that makes the backtest look clean is a data-pipeline artifact, not evidence the model would cope with a further change in what fields are collected.
+EVIDENCE: get_feature_coverage returns pct_zero/mean = 100%/1.0 (2014), 94.95%/0.9496 (2015), then a hard drop to 99.98%/0.0002 (2016) and 100%/0.0 (2017/test), and the same cliff recurs identically for total_cu_tl_was_missing and inq_fi_was_missing, confirming a systemic schema change rather than a one-off data quirk.
+CONFIDENCE: medium
+###
+FLAG: acc_open_past_24mths
+REASON: This top-6-ranked feature's standalone ability to rank-order default outcomes is noticeably weaker on the 2017 test year than on any training year, which is a sign of feature-target drift that a single-year holdout AUC will not surface as a trend, even though in this instance the overall model is not very reliant on it.
+EVIDENCE: get_feature_target_association reports auc_2014=0.5685, auc_2015=0.5910, auc_2016=0.5724 versus auc_test(2017)=0.5337, a drop of roughly 0.04 AUC points that is not explained by training-year variance alone, though get_ablation_result shows removing the feature changes overall model ROC-AUC by only +0.0001, so this drift has not yet materially harmed the aggregate score.
+CONFIDENCE: low
+=== END AUDIT FINDINGS ===

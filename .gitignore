@@ -8,16 +8,14 @@ outputs/models/*
 !outputs/models/best_params.json
 !outputs/models/best_params_canary.json
 
-# Agent caches (regenerable) — the small evidence files are tracked, the
-# 30 MB per-row SHAP matrices are not. One rule per cache: a pattern
-# ending in agent_cache/ does not match agent_cache_canary/.
-outputs/agent_cache/*
-!outputs/agent_cache/shap_global.csv
-!outputs/agent_cache/ablation_cache.csv
-
-outputs/agent_cache_canary/*
-!outputs/agent_cache_canary/shap_global.csv
-!outputs/agent_cache_canary/ablation_cache.csv
+# Agent caches (regenerable). Only the per-row SHAP matrices are excluded;
+# they are 30 MB each. Everything else in these directories is a small
+# evidence file and is tracked by default. Written this way round on
+# purpose: the previous form listed each tracked file by name, and three
+# times a new artefact was silently left untracked because nobody
+# remembered to add a line for it.
+outputs/agent_cache/*.parquet
+outputs/agent_cache_canary/*.parquet
 
 # Python
 __pycache__/

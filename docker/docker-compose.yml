@@ -1,0 +1,43 @@
+# Postgres 17 + pgvector, for the Layer 2 dictionary retrieval index.
+#
+# Host port is 5433 on purpose. Another Postgres already listens on 5432
+# on this machine; binding there would make it possible to point the
+# retrieval client at the wrong database without noticing. 5433 is not a
+# preference, it is the thing that keeps the two apart.
+#
+#   docker compose -f docker/docker-compose.yml up -d --wait
+#   docker compose -f docker/docker-compose.yml down        (keeps data)
+#   docker compose -f docker/docker-compose.yml down -v     (drops data)
+
+name: honest-mistake
+
+services:
+  pgvector:
+    # Pinned tag, not :latest — the index is rebuilt from this image and
+    # a silent Postgres or pgvector bump would change it underneath us.
+    image: pgvector/pgvector:0.8.0-pg17
+    container_name: honest-mistake-pgvector
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${PG_DB}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    ports:
+      # host:container — 5433 on the host, stock 5432 inside.
+      - "${PG_PORT}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Runs once, on an empty data directory only.
+      - ./init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # `docker compose up -d --wait` blocks on this, so the build script
+      # never races the server's first start.
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER} -d ${PG_DB}"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+volumes:
+  pgdata:
+    name: honest-mistake-pgdata

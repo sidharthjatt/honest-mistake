@@ -47,12 +47,55 @@ REAL_BANNER = "REAL RUN - LIVE API CALLS."
 VERBATIM_DELIMITER = "----- VERBATIM MODEL TEXT BELOW THIS LINE -----"
 
 
-def _preflight(cache_dir: Path) -> None:
+def _warm_retrieval() -> None:
+    """Load the embedding model and open the database connection now.
+
+    Two reasons, both about doing this outside a tool call. The first is
+    cost: the first search would otherwise pay a five-second model load
+    mid-run. The second matters more. Importing torch runs
+    traceback.format_stack() in torch.cuda at import time, which sends
+    linecache to read the source of every frame then on the stack. If that
+    import happens inside a tool call, the frames include
+    agent/data_dictionary.py, whose source this project keeps out of
+    anything a tool call can reach. Importing here puts only the runner on
+    the stack.
+
+    Never fatal. If the database is down the run continues on substring
+    matching, and the degraded backend is recorded so the run stamp says
+    so rather than claiming an index it never used.
+    """
+    from agent import data_dictionary, retrieval
+
+    try:
+        retrieval.get_model()
+        retrieval.get_connection()
+        stats = retrieval.index_stats()
+    except retrieval.RetrievalUnavailable:
+        data_dictionary.mark_retrieval_unavailable()
+        print("  retrieval    DEGRADED — the dictionary index is unreachable; "
+              "search will use substring matching")
+        return
+
+    if stats["rows"] == 0 or stats["dimension"] != stats["expected_dimension"]:
+        data_dictionary.mark_retrieval_unavailable()
+        print(f"  retrieval    DEGRADED — the index holds {stats['rows']} rows "
+              f"at dimension {stats['dimension']}; search will use substring "
+              f"matching")
+        return
+
+    print(f"  retrieval    ready — {stats['rows']} entries, "
+          f"dim {stats['dimension']}, {stats['model']}")
+
+
+def _preflight(cache_dir: Path, warm_retrieval: bool = True) -> None:
     """Fail clearly if the cached artefacts the tools need are absent."""
     required = {
         "SHAP ranking": cache_dir / "shap_global.csv",
         "per-row SHAP values": cache_dir / "shap_values.parquet",
         "ablation results": cache_dir / "ablation_cache.csv",
+        "coverage profile": cache_dir / "coverage_profile.csv",
+        "univariate associations": cache_dir / "univariate_assoc.csv",
+        "correlation neighbours": cache_dir / "correlation_topk.csv",
     }
     missing = [label for label, path in required.items() if not path.exists()]
     if missing:
@@ -61,6 +104,11 @@ def _preflight(cache_dir: Path) -> None:
             f"({', '.join(missing)}). Generate them by running the precompute "
             "step, then try again."
         )
+
+    # Mock runs replay fixtures and are not evaluated on their evidence, so
+    # they skip the model load rather than pay five seconds for it.
+    if warm_retrieval:
+        _warm_retrieval()
 
 
 def _require_api_key() -> None:
@@ -145,8 +193,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--no-populated", action="store_true",
                         help="build the tool layer with the populated field "
                              "suppressed")
-    parser.add_argument("--max-turns", type=int, default=12)
-    parser.add_argument("--max-tool-calls", type=int, default=40)
+    parser.add_argument("--no-vintage-scopes", action="store_true",
+                        help="build the tool layer with the per-vintage "
+                             "coverage scopes withheld")
+    # 20/70, not 12/40. Every run that reached a usable answer used 20/70;
+    # both runs that died on a limit were at 12/40, and one of those was a
+    # paid run thrown away at 37 of 40 calls. The safe value is the default
+    # so that spending money does not depend on remembering a flag.
+    parser.add_argument("--max-turns", type=int, default=20)
+    parser.add_argument("--max-tool-calls", type=int, default=70)
     parser.add_argument("--canary", action="store_true",
                         help="audit the canary model and its parallel cache "
                              "instead of the Layer 1 model")
@@ -171,14 +226,17 @@ def main(argv: list[str] | None = None) -> int:
         n_features = int(rec["n_features"])
         tuning_record = _PARAMS_CANARY
 
-    _preflight(cache_dir)
+    _preflight(cache_dir, warm_retrieval=not mock)
     if not mock:
         print_real_run_warning(args.max_turns, args.max_tool_calls)
         _require_api_key()
 
     # Fresh layer per run, so no log or cached frame bleeds between runs.
     tools = ToolLayer(include_populated=not args.no_populated,
+                      include_vintage_scopes=not args.no_vintage_scopes,
                       cache_dir=cache_dir)
+    # Taken before the loop: this is what was *configured*, which is all a
+    # directory name created up front can honestly claim.
     config = tools.run_config()
 
     # Built from the same values passed to the loop, so the ceilings the
@@ -197,7 +255,24 @@ def main(argv: list[str] | None = None) -> int:
     )
     finished = datetime.now()
 
-    out_dir = _run_dir(config["config_id"], mock, args.label)
+    # What actually served the run. run_config() reads the retrieval path
+    # from what happened, so before the loop it can only say "unused"; taken
+    # here it says pgvector or keyword-fallback, and that is what the record
+    # must carry.
+    final_config = tools.run_config()
+
+    # The directory name is fixed before the run, so it carries only the
+    # settings that were chosen: version, both switches, and the artefact
+    # variant. The retrieval backend is an outcome, not a setting, and a
+    # name written up front cannot know it — so the name omits it rather
+    # than asserting a value that is wrong on every run. The manifest below
+    # carries the full identity including retrieval. The two never
+    # contradict each other; the directory is a subset of the manifest.
+    dir_stem = (f"toolsv{config['tool_layer_version']}"
+                f"-populated-{config['dictionary_populated_field']}"
+                f"-scopes-{config['coverage_scopes']}"
+                f"-{config['artefact_variant']}")
+    out_dir = _run_dir(dir_stem, mock, args.label)
 
     manifest = {
         "mode": "MOCK" if mock else "REAL",
@@ -210,13 +285,16 @@ def main(argv: list[str] | None = None) -> int:
         "model": MODEL if not mock else f"{MODEL} (not called; fixtures used)",
         "sampling_parameters": "none sent - removed for this model family",
         "max_tokens_per_turn": MAX_TOKENS,
-        "config_id": config["config_id"],
-        "artefact_variant": config["artefact_variant"],
-        "cache_dir": config["cache_dir"],
+        "config_id": final_config["config_id"],
+        "config_id_directory": dir_stem,
+        "artefact_variant": final_config["artefact_variant"],
+        "cache_dir": final_config["cache_dir"],
         "canary": bool(args.canary),
         "n_features_stated_in_prompt": n_features,
-        "tool_layer_version": config["tool_layer_version"],
-        "dictionary_populated_field": config["dictionary_populated_field"],
+        "tool_layer_version": final_config["tool_layer_version"],
+        "dictionary_populated_field": final_config["dictionary_populated_field"],
+        "coverage_scopes": final_config["coverage_scopes"],
+        "retrieval": final_config["retrieval"],
         "termination": run.termination,
         "is_usable": run.is_usable,
         "last_stop_reason": run.last_stop_reason,
