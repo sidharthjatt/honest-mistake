@@ -4,14 +4,22 @@ Repo: honest-mistake. A multi-layer ML audit project.
 
 - Layer 1 (done): leakage-free credit default model, XGBoost,
   180 features, temporal split, ROC-AUC 0.7296.
-- Layer 2 (in progress): a raw ReAct agent in agent/ that audits that
-  model. Plain Python + Anthropic API. No LangChain, no frameworks.
+- Layer 2 (shipped, 97a339c): a raw ReAct agent in agent/ that audits
+  that model. Eight read-only tools, pgvector semantic retrieval over
+  the data dictionary, two ablation switches. Plain Python + Anthropic
+  API. No LangChain, no frameworks.
 
-Layer 2 currently has 5 read-only tools in agent/tools.py:
+Layer 2 has 8 read-only tools in agent/tools.py:
 lookup_feature, search_data_dictionary, get_shap_ranking,
-get_feature_shap_detail, get_ablation_result.
+get_feature_shap_detail, get_ablation_result, get_feature_coverage,
+get_feature_target_association, get_correlated_features.
 All reachable only through dispatch(). All read fixed artefacts under
-outputs/agent_cache/.
+outputs/agent_cache/, except search_data_dictionary, whose second tier
+queries a local pgvector index built from the dictionary descriptions.
+
+Two ablation switches, both constructor arguments on ToolLayer and
+neither present in any published tool schema: include_populated and
+include_vintage_scopes.
 
 ## Standing rules — not negotiable
 
