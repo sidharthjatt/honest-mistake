@@ -291,6 +291,14 @@ Stated plainly, because hiding them would defeat the purpose.
 - **The timing ablation cannot answer its own question** on this dictionary, for the reason given above.
 - **This is a research pipeline, not a service.** Single scripts, no packaging or tests beyond each module's self-check.
 
+## Roadmap
+
+Layer 3 is in design. Layer 2 audits a model with a fixed tool surface; Layer 3 asks what happens when the tools themselves are not fixed.
+
+The agent detects a capability gap, generates a tool specification for it, executes that tool in a sandbox, validates it against a known answer before admitting it, and persists what survives into a registry. A human-in-the-loop checkpoint sits in front of admission. Evaluation moves from a single scorer to an Agent-as-a-Judge with a separate verifier, since a generated tool needs its output checked by something other than the process that produced it.
+
+Nothing in this section is implemented yet. The numbers and claims above cover Layers 1 and 2 only.
+
 ## Reproducing
 
 ```bash
