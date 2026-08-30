@@ -1,15 +1,19 @@
-pandas
-numpy
-pyarrow
-scipy
-scikit-learn
-xgboost
-shap
-optuna
-matplotlib
-seaborn
-anthropic
-python-dotenv
-sentence-transformers
-psycopg[binary]
-pgvector
+# Pinned to the versions the reported results were produced with.
+# The 0.7296 baseline is seeded, but seeding only reproduces exactly
+# when the library versions match.
+
+pandas==3.0.3
+numpy==2.4.6
+pyarrow==24.0.0
+scipy==1.17.1
+scikit-learn==1.9.0
+xgboost==3.2.0
+shap==0.51.0
+optuna==4.9.0
+matplotlib==3.11.0
+seaborn==0.13.2
+anthropic==0.122.0
+python-dotenv==1.2.2
+sentence-transformers==5.7.0
+psycopg[binary]==3.3.4
+pgvector==0.5.0
