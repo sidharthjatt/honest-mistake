@@ -1,0 +1,5351 @@
+{
+  "specification": "PREREGISTRATION.md",
+  "amendments_applied": [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "A7",
+    "A8",
+    "A9"
+  ],
+  "rows": [
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M1",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "termination": "call_limit",
+        "max_turns": 3,
+        "max_tool_calls": 8,
+        "max_tokens_per_turn": 2000
+      }
+    },
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M3",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M4",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M5",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M6",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M8",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M9",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M10",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M11",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M14",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "tokens": {
+          "input": 12679,
+          "output": 1163,
+          "cache_creation": 0,
+          "cache_read": 0
+        },
+        "model": "claude-sonnet-5",
+        "rates": {
+          "input_per_mtok": 2.0,
+          "output_per_mtok": 10.0
+        },
+        "rates_taken": "claude-api reference cached 2026-06-24",
+        "cost": null,
+        "cost_status": "withheld_rate_unverified",
+        "rate_verification": null
+      }
+    },
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M16",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M17a",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M17b",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real_canary"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M1",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "termination": "truncated",
+        "max_turns": 12,
+        "max_tool_calls": 40,
+        "max_tokens_per_turn": 2000
+      }
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M3",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M4",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M5",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M6",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M8",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M9",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M10",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M11",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M14",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "tokens": {
+          "input": 36087,
+          "output": 3667,
+          "cache_creation": 0,
+          "cache_read": 0
+        },
+        "model": "claude-sonnet-5",
+        "rates": {
+          "input_per_mtok": 2.0,
+          "output_per_mtok": 10.0
+        },
+        "rates_taken": "claude-api reference cached 2026-06-24",
+        "cost": null,
+        "cost_status": "withheld_rate_unverified",
+        "rate_verification": null
+      }
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M16",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M17a",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M17b",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real_canary"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M1",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "termination": "call_limit",
+        "max_turns": 12,
+        "max_tool_calls": 40,
+        "max_tokens_per_turn": 12400
+      }
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M3",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M4",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M5",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M6",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M8",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M9",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M10",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M11",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M14",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "tokens": {
+          "input": 241559,
+          "output": 25825,
+          "cache_creation": 0,
+          "cache_read": 0
+        },
+        "model": "claude-sonnet-5",
+        "rates": {
+          "input_per_mtok": 2.0,
+          "output_per_mtok": 10.0
+        },
+        "rates_taken": "claude-api reference cached 2026-06-24",
+        "cost": null,
+        "cost_status": "withheld_rate_unverified",
+        "rate_verification": null
+      }
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M16",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M17a",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M17b",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real_canary"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M1",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "termination": "completed",
+        "max_turns": 20,
+        "max_tool_calls": 70,
+        "max_tokens_per_turn": 12400
+      }
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M3",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "turns": 16,
+        "tool_calls": 52
+      }
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M4",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "calls_per_tool_bearing_turn": [
+          1,
+          4,
+          10,
+          1,
+          3,
+          4,
+          5,
+          5,
+          4,
+          4,
+          3,
+          3,
+          2,
+          2,
+          1
+        ],
+        "tool_bearing_turns": 15,
+        "mean": 3.466666666666667
+      }
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M5",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "1.0",
+        "logged_calls": 52,
+        "by_tool": {
+          "get_ablation_result": {
+            "count": 6,
+            "share": 0.11538461538461539
+          },
+          "get_feature_shap_detail": {
+            "count": 14,
+            "share": 0.2692307692307692
+          },
+          "get_shap_ranking": {
+            "count": 2,
+            "share": 0.038461538461538464
+          },
+          "lookup_feature": {
+            "count": 21,
+            "share": 0.40384615384615385
+          },
+          "search_data_dictionary": {
+            "count": 9,
+            "share": 0.17307692307692307
+          }
+        }
+      }
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M6",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "1.0",
+        "distinct_tools": [
+          "get_ablation_result",
+          "get_feature_shap_detail",
+          "get_shap_ranking",
+          "lookup_feature",
+          "search_data_dictionary"
+        ],
+        "distinct_tool_count": 5,
+        "tools_available": 5,
+        "coverage": 1.0,
+        "excluded_names_outside_surface": []
+      }
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M8",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 52,
+        "rejected_calls": 0,
+        "rate": 0.0,
+        "by_outcome": {
+          "unknown_tool": 0,
+          "unexpected_argument": 0,
+          "bad_arguments": 0,
+          "failed": 0
+        }
+      }
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M9",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 52,
+        "calls_returning_no_data": 11,
+        "rate": 0.21153846153846154
+      }
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M10",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 52,
+        "repeat_calls": 0,
+        "repeat_seqs": []
+      }
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M11",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "distinct_features": 36,
+        "in_matrix": [
+          "all_util_was_missing",
+          "emp_length_was_missing",
+          "open_acc_6m_was_missing",
+          "term"
+        ],
+        "out_of_matrix": [
+          "collection_recovery_fee",
+          "debt_settlement_flag",
+          "last_pymnt_amnt",
+          "last_pymnt_d",
+          "next_pymnt_d",
+          "out_prncp",
+          "pymnt_plan",
+          "recoveries",
+          "settlement_status",
+          "total_pymnt"
+        ],
+        "unclassified": [
+          "acc_open_past_24mths",
+          "all_util",
+          "bc_util",
+          "dti",
+          "emp_length",
+          "funded_amnt_inv",
+          "grade",
+          "il_util",
+          "inq_fi",
+          "int_rate",
+          "issue_d",
+          "max_bal_bc",
+          "mo_sin_old_il_acct",
+          "mo_sin_old_rev_tl_op",
+          "mths_since_rcnt_il",
+          "mths_since_recent_inq",
+          "num_actv_rev_tl",
+          "open_acc_6m",
+          "open_il_12m",
+          "open_rv_24m",
+          "sub_grade",
+          "total_cu_tl"
+        ]
+      }
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M14",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "tokens": {
+          "input": 362621,
+          "output": 23275,
+          "cache_creation": 0,
+          "cache_read": 0
+        },
+        "model": "claude-sonnet-5",
+        "rates": {
+          "input_per_mtok": 2.0,
+          "output_per_mtok": 10.0
+        },
+        "rates_taken": "claude-api reference cached 2026-06-24",
+        "cost": null,
+        "cost_status": "withheld_rate_unverified",
+        "rate_verification": null
+      }
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M16",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 2,
+        "confidence": {
+          "high": 0,
+          "medium": 2,
+          "low": 0
+        },
+        "explicit_no_findings": false,
+        "warning_count": 0,
+        "warnings": []
+      }
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M17a",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 2,
+        "grounded": 2,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "all_util_was_missing",
+            "tools_named": [
+              "lookup_feature",
+              "get_feature_shap_detail"
+            ],
+            "grounded": true,
+            "sub_reason": null
+          },
+          {
+            "record_index": 2,
+            "flag": "open_acc_6m_was_missing",
+            "tools_named": [
+              "lookup_feature",
+              "get_feature_shap_detail"
+            ],
+            "grounded": true,
+            "sub_reason": null
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M17b",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 2,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "all_util_was_missing",
+            "matched": 1,
+            "unmatched": 0,
+            "derived": 0,
+            "quoted": 1,
+            "prompt": 2,
+            "multiply_sourced": 0,
+            "tokens": [
+              {
+                "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r1|t1",
+                "text": "2015",
+                "span": [
+                  89,
+                  93
+                ],
+                "classification": "quoted",
+                "turned_on_tie": false,
+                "adjudication": {
+                  "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r1|t1",
+                  "sources": [
+                    {
+                      "class": "quoted",
+                      "payload_string": "at application, before the loan is approved; collected for loans issued from around December 2015 onward",
+                      "seq": 29
+                    }
+                  ]
+                }
+              },
+              {
+                "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r1|t2",
+                "text": "99.98%",
+                "span": [
+                  189,
+                  195
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r1|t3",
+                "text": "2016",
+                "span": [
+                  337,
+                  341
+                ],
+                "classification": "prompt",
+                "turned_on_tie": false,
+                "adjudication": {
+                  "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r1|t3",
+                  "sources": [
+                    {
+                      "class": "prompt",
+                      "prompt_text": "It was fitted on loans issued between 2014 and 2016 and then scored once on loans issued in 2017, which were held back and not used in fitting or in selecting settings.",
+                      "rendered_from_commit": "eb89b98"
+                    }
+                  ]
+                }
+              },
+              {
+                "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r1|t4",
+                "text": "2017",
+                "span": [
+                  342,
+                  346
+                ],
+                "classification": "prompt",
+                "turned_on_tie": false,
+                "adjudication": {
+                  "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r1|t4",
+                  "sources": [
+                    {
+                      "class": "prompt",
+                      "prompt_text": "It was fitted on loans issued between 2014 and 2016 and then scored once on loans issued in 2017, which were held back and not used in fitting or in selecting settings.",
+                      "rendered_from_commit": "eb89b98"
+                    }
+                  ]
+                }
+              }
+            ],
+            "scientific_notation": []
+          },
+          {
+            "record_index": 2,
+            "flag": "open_acc_6m_was_missing",
+            "matched": 1,
+            "unmatched": 0,
+            "derived": 0,
+            "quoted": 1,
+            "prompt": 0,
+            "multiply_sourced": 0,
+            "tokens": [
+              {
+                "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r2|t1",
+                "text": "2015",
+                "span": [
+                  92,
+                  96
+                ],
+                "classification": "quoted",
+                "turned_on_tie": false,
+                "adjudication": {
+                  "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r2|t1",
+                  "sources": [
+                    {
+                      "class": "quoted",
+                      "payload_string": "at application, before the loan is approved; collected for loans issued from around December 2015 onward",
+                      "seq": 30
+                    }
+                  ]
+                }
+              },
+              {
+                "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r2|t2",
+                "text": "99.99%",
+                "span": [
+                  195,
+                  201
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              }
+            ],
+            "scientific_notation": []
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "scope_not_canary",
+      "detail": {
+        "scope": "usable_real_canary"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M1",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "termination": "completed",
+        "max_turns": 20,
+        "max_tool_calls": 70,
+        "max_tokens_per_turn": 12400
+      }
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M3",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "turns": 16,
+        "tool_calls": 50
+      }
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M4",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "calls_per_tool_bearing_turn": [
+          1,
+          3,
+          6,
+          1,
+          3,
+          2,
+          3,
+          2,
+          1,
+          3,
+          3,
+          6,
+          5,
+          3,
+          8
+        ],
+        "tool_bearing_turns": 15,
+        "mean": 3.3333333333333335
+      }
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M5",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "1.0",
+        "logged_calls": 50,
+        "by_tool": {
+          "get_ablation_result": {
+            "count": 9,
+            "share": 0.18
+          },
+          "get_feature_shap_detail": {
+            "count": 23,
+            "share": 0.46
+          },
+          "get_shap_ranking": {
+            "count": 2,
+            "share": 0.04
+          },
+          "lookup_feature": {
+            "count": 5,
+            "share": 0.1
+          },
+          "search_data_dictionary": {
+            "count": 11,
+            "share": 0.22
+          }
+        }
+      }
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M6",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "1.0",
+        "distinct_tools": [
+          "get_ablation_result",
+          "get_feature_shap_detail",
+          "get_shap_ranking",
+          "lookup_feature",
+          "search_data_dictionary"
+        ],
+        "distinct_tool_count": 5,
+        "tools_available": 5,
+        "coverage": 1.0,
+        "excluded_names_outside_surface": []
+      }
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M8",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 50,
+        "rejected_calls": 0,
+        "rate": 0.0,
+        "by_outcome": {
+          "unknown_tool": 0,
+          "unexpected_argument": 0,
+          "bad_arguments": 0,
+          "failed": 0
+        }
+      }
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M9",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 50,
+        "calls_returning_no_data": 13,
+        "rate": 0.26
+      }
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M10",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 50,
+        "repeat_calls": 0,
+        "repeat_seqs": []
+      }
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M11",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "distinct_features": 31,
+        "in_matrix": [
+          "all_util",
+          "all_util_was_missing",
+          "emp_length_was_missing",
+          "inq_fi_was_missing",
+          "mths_since_rcnt_il_was_missing",
+          "open_acc_6m",
+          "open_acc_6m_was_missing",
+          "open_il_12m",
+          "open_il_12m_was_missing",
+          "term",
+          "total_bal_il_was_missing",
+          "total_cu_tl_was_missing"
+        ],
+        "out_of_matrix": [
+          "debt_settlement_flag",
+          "hardship_flag",
+          "issue_d",
+          "last_credit_pull_d",
+          "last_fico_range_high",
+          "last_fico_range_low",
+          "last_pymnt_amnt",
+          "loan_status",
+          "recoveries",
+          "settlement_status",
+          "total_pymnt"
+        ],
+        "unclassified": [
+          "acc_open_past_24mths",
+          "dti",
+          "emp_length",
+          "fico_range_low",
+          "funded_amnt_inv",
+          "grade",
+          "int_rate",
+          "sub_grade"
+        ]
+      }
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M14",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "tokens": {
+          "input": 313078,
+          "output": 29288,
+          "cache_creation": 0,
+          "cache_read": 0
+        },
+        "model": "claude-sonnet-5",
+        "rates": {
+          "input_per_mtok": 2.0,
+          "output_per_mtok": 10.0
+        },
+        "rates_taken": "claude-api reference cached 2026-06-24",
+        "cost": null,
+        "cost_status": "withheld_rate_unverified",
+        "rate_verification": null
+      }
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M16",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 3,
+        "confidence": {
+          "high": 0,
+          "medium": 2,
+          "low": 1
+        },
+        "explicit_no_findings": false,
+        "warning_count": 0,
+        "warnings": []
+      }
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M17a",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 3,
+        "grounded": 3,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "all_util_was_missing",
+            "tools_named": [
+              "get_feature_shap_detail"
+            ],
+            "grounded": true,
+            "sub_reason": null
+          },
+          {
+            "record_index": 2,
+            "flag": "open_acc_6m_was_missing",
+            "tools_named": [
+              "get_feature_shap_detail"
+            ],
+            "grounded": true,
+            "sub_reason": null
+          },
+          {
+            "record_index": 3,
+            "flag": "term",
+            "tools_named": [
+              "lookup_feature",
+              "get_shap_ranking"
+            ],
+            "grounded": true,
+            "sub_reason": null
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M17b",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 3,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "all_util_was_missing",
+            "matched": 4,
+            "unmatched": 0,
+            "derived": 0,
+            "quoted": 0,
+            "prompt": 0,
+            "multiply_sourced": 0,
+            "tokens": [
+              {
+                "token_id": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated|r1|t1",
+                "text": "99.98%",
+                "span": [
+                  68,
+                  74
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated|r1|t2",
+                "text": "0.02%",
+                "span": [
+                  89,
+                  94
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated|r1|t3",
+                "text": "0.0%",
+                "span": [
+                  110,
+                  114
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated|r1|t4",
+                "text": "30,000",
+                "span": [
+                  172,
+                  178
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              }
+            ],
+            "scientific_notation": []
+          },
+          {
+            "record_index": 2,
+            "flag": "open_acc_6m_was_missing",
+            "matched": 5,
+            "unmatched": 0,
+            "derived": 0,
+            "quoted": 0,
+            "prompt": 0,
+            "multiply_sourced": 0,
+            "tokens": [
+              {
+                "token_id": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated|r2|t1",
+                "text": "99.99%",
+                "span": [
+                  71,
+                  77
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated|r2|t2",
+                "text": "0.0%",
+                "span": [
+                  92,
+                  96
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated|r2|t3",
+                "text": "0.013%",
+                "span": [
+                  112,
+                  118
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated|r2|t4",
+                "text": "-0.00008",
+                "span": [
+                  124,
+                  132
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated|r2|t5",
+                "text": "30,000",
+                "span": [
+                  170,
+                  176
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              }
+            ],
+            "scientific_notation": []
+          },
+          {
+            "record_index": 3,
+            "flag": "term",
+            "matched": 4,
+            "unmatched": 0,
+            "derived": 0,
+            "quoted": 0,
+            "prompt": 0,
+            "multiply_sourced": 0,
+            "tokens": [
+              {
+                "token_id": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated|r3|t1",
+                "text": "36",
+                "span": [
+                  37,
+                  39
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated|r3|t2",
+                "text": "60",
+                "span": [
+                  43,
+                  45
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated|r3|t3",
+                "text": "0.189",
+                "span": [
+                  213,
+                  218
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated|r3|t4",
+                "text": "180",
+                "span": [
+                  235,
+                  238
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              }
+            ],
+            "scientific_notation": []
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+      "tool_layer_version": "1.0",
+      "canary": false,
+      "canary_source": "derived",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "scope_not_canary",
+      "detail": {
+        "scope": "usable_real_canary"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M1",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "termination": "completed",
+        "max_turns": 20,
+        "max_tool_calls": 70,
+        "max_tokens_per_turn": 12400
+      }
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M3",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "turns": 6,
+        "tool_calls": 13
+      }
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M4",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "calls_per_tool_bearing_turn": [
+          1,
+          2,
+          1,
+          3,
+          6
+        ],
+        "tool_bearing_turns": 5,
+        "mean": 2.6
+      }
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M5",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "1.0",
+        "logged_calls": 13,
+        "by_tool": {
+          "get_ablation_result": {
+            "count": 1,
+            "share": 0.07692307692307693
+          },
+          "get_feature_shap_detail": {
+            "count": 7,
+            "share": 0.5384615384615384
+          },
+          "get_shap_ranking": {
+            "count": 1,
+            "share": 0.07692307692307693
+          },
+          "lookup_feature": {
+            "count": 1,
+            "share": 0.07692307692307693
+          },
+          "search_data_dictionary": {
+            "count": 3,
+            "share": 0.23076923076923078
+          }
+        }
+      }
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M6",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "1.0",
+        "distinct_tools": [
+          "get_ablation_result",
+          "get_feature_shap_detail",
+          "get_shap_ranking",
+          "lookup_feature",
+          "search_data_dictionary"
+        ],
+        "distinct_tool_count": 5,
+        "tools_available": 5,
+        "coverage": 1.0,
+        "excluded_names_outside_surface": []
+      }
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M8",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 13,
+        "rejected_calls": 0,
+        "rate": 0.0,
+        "by_outcome": {
+          "unknown_tool": 0,
+          "unexpected_argument": 0,
+          "bad_arguments": 0,
+          "failed": 0
+        }
+      }
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M9",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 13,
+        "calls_returning_no_data": 6,
+        "rate": 0.46153846153846156
+      }
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M10",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 13,
+        "repeat_calls": 0,
+        "repeat_seqs": []
+      }
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M11",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "distinct_features": 7,
+        "in_matrix": [
+          "recoveries"
+        ],
+        "out_of_matrix": [
+          "collection_recovery_fee",
+          "last_pymnt_amnt",
+          "last_pymnt_d",
+          "next_pymnt_d",
+          "total_pymnt",
+          "total_pymnt_inv"
+        ],
+        "unclassified": []
+      }
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M14",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "tokens": {
+          "input": 31935,
+          "output": 4692,
+          "cache_creation": 0,
+          "cache_read": 0
+        },
+        "model": "claude-sonnet-5",
+        "rates": {
+          "input_per_mtok": 2.0,
+          "output_per_mtok": 10.0
+        },
+        "rates_taken": "claude-api reference cached 2026-06-24",
+        "cost": null,
+        "cost_status": "withheld_rate_unverified",
+        "rate_verification": null
+      }
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M16",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 1,
+        "confidence": {
+          "high": 1,
+          "medium": 0,
+          "low": 0
+        },
+        "explicit_no_findings": false,
+        "warning_count": 0,
+        "warnings": []
+      }
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17a",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 1,
+        "grounded": 0,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "recoveries",
+            "tools_named": [],
+            "grounded": false,
+            "sub_reason": "no tool named"
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17b",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 1,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "recoveries",
+            "matched": 4,
+            "unmatched": 0,
+            "derived": 1,
+            "quoted": 0,
+            "prompt": 0,
+            "multiply_sourced": 1,
+            "tokens": [
+              {
+                "token_id": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary|r1|t1",
+                "text": "2.21",
+                "span": [
+                  171,
+                  175
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary|r1|t2",
+                "text": "44.6%",
+                "span": [
+                  177,
+                  182
+                ],
+                "classification": "derived",
+                "turned_on_tie": false,
+                "adjudication": {
+                  "token_id": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary|r1|t2",
+                  "sources": [
+                    {
+                      "class": "derived",
+                      "computation": "share_of_total_abs_shap * 100",
+                      "source_values": [
+                        "0.44621969809442985"
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "token_id": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary|r1|t3",
+                "text": "181",
+                "span": [
+                  219,
+                  222
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary|r1|t4",
+                "text": "0.8730",
+                "span": [
+                  277,
+                  283
+                ],
+                "classification": "multiply_sourced",
+                "turned_on_tie": false,
+                "adjudication": {
+                  "token_id": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary|r1|t4",
+                  "sources": [
+                    {
+                      "class": "derived",
+                      "computation": "roc_auc_without_feature - delta_roc_auc",
+                      "source_values": [
+                        "0.7295752764137673",
+                        "-0.1434433443801116"
+                      ]
+                    },
+                    {
+                      "class": "prompt",
+                      "prompt_text": "Its score on the held-back 2017 loans is a ROC-AUC of 0.8730; on the 2016 loans used while selecting settings it scored 0.9020.",
+                      "rendered_from_commit": "eb89b98"
+                    }
+                  ]
+                },
+                "sources_applying": [
+                  "derived",
+                  "prompt"
+                ]
+              },
+              {
+                "token_id": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary|r1|t5",
+                "text": "0.7296",
+                "span": [
+                  287,
+                  293
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary|r1|t6",
+                "text": "-0.1434",
+                "span": [
+                  301,
+                  308
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              }
+            ],
+            "scientific_notation": []
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+      "tool_layer_version": "1.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M18",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "planted_column": "recoveries",
+        "a2_seq_mapping_assertion": "passed",
+        "exposure_seq": 1,
+        "investigation_seq": 2,
+        "investigation_minus_exposure": 1,
+        "exposure_absent": false,
+        "investigation_absent": false
+      }
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M1",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "all_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M3",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M4",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M5",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M6",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M8",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M9",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M10",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M11",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M14",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "all_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M16",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17a",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17b",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142518__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-up",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real_canary"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M1",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M3",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M4",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M5",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M6",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M8",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M9",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M10",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M11",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M14",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M16",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17a",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17b",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142554__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-down",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "validity_precondition_failed",
+      "detail": {
+        "retrieval_segment": "keyword-fallback"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M1",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "termination": "completed",
+        "max_turns": 20,
+        "max_tool_calls": 70,
+        "max_tokens_per_turn": 12400
+      }
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M3",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "turns": 6,
+        "tool_calls": 17
+      }
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M4",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "calls_per_tool_bearing_turn": [
+          1,
+          4,
+          3,
+          6,
+          3
+        ],
+        "tool_bearing_turns": 5,
+        "mean": 3.4
+      }
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M5",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "2.0",
+        "logged_calls": 17,
+        "by_tool": {
+          "get_ablation_result": {
+            "count": 1,
+            "share": 0.058823529411764705
+          },
+          "get_correlated_features": {
+            "count": 1,
+            "share": 0.058823529411764705
+          },
+          "get_feature_coverage": {
+            "count": 7,
+            "share": 0.4117647058823529
+          },
+          "get_feature_target_association": {
+            "count": 1,
+            "share": 0.058823529411764705
+          },
+          "get_shap_ranking": {
+            "count": 1,
+            "share": 0.058823529411764705
+          },
+          "lookup_feature": {
+            "count": 3,
+            "share": 0.17647058823529413
+          },
+          "search_data_dictionary": {
+            "count": 3,
+            "share": 0.17647058823529413
+          }
+        }
+      }
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M6",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "2.0",
+        "distinct_tools": [
+          "get_ablation_result",
+          "get_correlated_features",
+          "get_feature_coverage",
+          "get_feature_target_association",
+          "get_shap_ranking",
+          "lookup_feature",
+          "search_data_dictionary"
+        ],
+        "distinct_tool_count": 7,
+        "tools_available": 8,
+        "coverage": 0.875,
+        "excluded_names_outside_surface": []
+      }
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M8",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 17,
+        "rejected_calls": 0,
+        "rate": 0.0,
+        "by_outcome": {
+          "unknown_tool": 0,
+          "unexpected_argument": 0,
+          "bad_arguments": 0,
+          "failed": 0
+        }
+      }
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M9",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 17,
+        "calls_returning_no_data": 6,
+        "rate": 0.35294117647058826
+      }
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M10",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 17,
+        "repeat_calls": 0,
+        "repeat_seqs": []
+      }
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M11",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "distinct_features": 9,
+        "in_matrix": [
+          "recoveries"
+        ],
+        "out_of_matrix": [
+          "collection_recovery_fee",
+          "last_pymnt_amnt",
+          "out_prncp",
+          "pymnt_plan",
+          "total_pymnt",
+          "total_rec_prncp"
+        ],
+        "unclassified": [
+          "sub_grade",
+          "term"
+        ]
+      }
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M14",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "tokens": {
+          "input": 40764,
+          "output": 2845,
+          "cache_creation": 0,
+          "cache_read": 0
+        },
+        "model": "claude-sonnet-5",
+        "rates": {
+          "input_per_mtok": 2.0,
+          "output_per_mtok": 10.0
+        },
+        "rates_taken": "claude-api reference cached 2026-06-24",
+        "cost": null,
+        "cost_status": "withheld_rate_unverified",
+        "rate_verification": null
+      }
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M16",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 1,
+        "confidence": {
+          "high": 1,
+          "medium": 0,
+          "low": 0
+        },
+        "explicit_no_findings": false,
+        "warning_count": 0,
+        "warnings": []
+      }
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17a",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 1,
+        "grounded": 1,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "recoveries",
+            "tools_named": [
+              "lookup_feature",
+              "get_ablation_result",
+              "get_feature_target_association"
+            ],
+            "grounded": true,
+            "sub_reason": null
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17b",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 1,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "recoveries",
+            "matched": 5,
+            "unmatched": 0,
+            "derived": 0,
+            "quoted": 0,
+            "prompt": 0,
+            "multiply_sourced": 1,
+            "tokens": [
+              {
+                "token_id": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2|r1|t1",
+                "text": "2.21",
+                "span": [
+                  174,
+                  178
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2|r1|t2",
+                "text": "0.26",
+                "span": [
+                  182,
+                  186
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2|r1|t3",
+                "text": "0.8730",
+                "span": [
+                  250,
+                  256
+                ],
+                "classification": "multiply_sourced",
+                "turned_on_tie": false,
+                "adjudication": {
+                  "token_id": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2|r1|t3",
+                  "sources": [
+                    {
+                      "class": "derived",
+                      "computation": "roc_auc_without_feature - delta_roc_auc",
+                      "source_values": [
+                        "0.7295752764137673",
+                        "-0.1434433443801116"
+                      ]
+                    },
+                    {
+                      "class": "prompt",
+                      "prompt_text": "Its score on the held-back 2017 loans is a ROC-AUC of 0.8730; on the 2016 loans used while selecting settings it scored 0.9020.",
+                      "rendered_from_commit": "e037495"
+                    }
+                  ]
+                },
+                "sources_applying": [
+                  "derived",
+                  "prompt"
+                ]
+              },
+              {
+                "token_id": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2|r1|t4",
+                "text": "0.7296",
+                "span": [
+                  260,
+                  266
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2|r1|t5",
+                "text": "-0.1434",
+                "span": [
+                  274,
+                  281
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2|r1|t6",
+                "text": "0.498",
+                "span": [
+                  397,
+                  402
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              }
+            ],
+            "scientific_notation": []
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M18",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "planted_column": "recoveries",
+        "a2_seq_mapping_assertion": "passed",
+        "exposure_seq": 1,
+        "investigation_seq": 2,
+        "investigation_minus_exposure": 1,
+        "exposure_absent": false,
+        "investigation_absent": false
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M1",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "termination": "completed",
+        "max_turns": 20,
+        "max_tool_calls": 70,
+        "max_tokens_per_turn": 12400
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M3",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "turns": 14,
+        "tool_calls": 33
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M4",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "calls_per_tool_bearing_turn": [
+          1,
+          4,
+          5,
+          4,
+          2,
+          3,
+          3,
+          2,
+          3,
+          2,
+          2,
+          1,
+          1
+        ],
+        "tool_bearing_turns": 13,
+        "mean": 2.5384615384615383
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M5",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "2.0",
+        "logged_calls": 33,
+        "by_tool": {
+          "get_ablation_result": {
+            "count": 3,
+            "share": 0.09090909090909091
+          },
+          "get_correlated_features": {
+            "count": 1,
+            "share": 0.030303030303030304
+          },
+          "get_feature_coverage": {
+            "count": 5,
+            "share": 0.15151515151515152
+          },
+          "get_feature_shap_detail": {
+            "count": 6,
+            "share": 0.18181818181818182
+          },
+          "get_feature_target_association": {
+            "count": 9,
+            "share": 0.2727272727272727
+          },
+          "get_shap_ranking": {
+            "count": 2,
+            "share": 0.06060606060606061
+          },
+          "search_data_dictionary": {
+            "count": 7,
+            "share": 0.21212121212121213
+          }
+        }
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M6",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "2.0",
+        "distinct_tools": [
+          "get_ablation_result",
+          "get_correlated_features",
+          "get_feature_coverage",
+          "get_feature_shap_detail",
+          "get_feature_target_association",
+          "get_shap_ranking",
+          "search_data_dictionary"
+        ],
+        "distinct_tool_count": 7,
+        "tools_available": 8,
+        "coverage": 0.875,
+        "excluded_names_outside_surface": []
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M8",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 33,
+        "rejected_calls": 0,
+        "rate": 0.0,
+        "by_outcome": {
+          "unknown_tool": 0,
+          "unexpected_argument": 0,
+          "bad_arguments": 0,
+          "failed": 0
+        }
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M9",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 33,
+        "calls_returning_no_data": 6,
+        "rate": 0.18181818181818182
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M10",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 33,
+        "repeat_calls": 0,
+        "repeat_seqs": []
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M11",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "distinct_features": 17,
+        "in_matrix": [
+          "acc_open_past_24mths",
+          "dti",
+          "emp_length_was_missing",
+          "fico_range_low",
+          "grade",
+          "installment",
+          "int_rate",
+          "mort_acc",
+          "mths_since_recent_inq",
+          "sub_grade",
+          "term"
+        ],
+        "out_of_matrix": [
+          "hardship_payoff_balance_amount",
+          "last_pymnt_amnt",
+          "loan_status",
+          "next_pymnt_d",
+          "recoveries",
+          "total_pymnt"
+        ],
+        "unclassified": []
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M14",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "tokens": {
+          "input": 303979,
+          "output": 18754,
+          "cache_creation": 0,
+          "cache_read": 0
+        },
+        "model": "claude-sonnet-5",
+        "rates": {
+          "input_per_mtok": 2.0,
+          "output_per_mtok": 10.0
+        },
+        "rates_taken": "claude-api reference cached 2026-06-24",
+        "cost": null,
+        "cost_status": "withheld_rate_unverified",
+        "rate_verification": null
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M16",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 1,
+        "confidence": {
+          "high": 0,
+          "medium": 1,
+          "low": 0
+        },
+        "explicit_no_findings": false,
+        "warning_count": 0,
+        "warnings": []
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M17a",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 1,
+        "grounded": 1,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "term",
+            "tools_named": [
+              "get_feature_target_association"
+            ],
+            "grounded": true,
+            "sub_reason": null
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M17b",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 1,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "term",
+            "matched": 12,
+            "unmatched": 0,
+            "derived": 0,
+            "quoted": 0,
+            "prompt": 0,
+            "multiply_sourced": 0,
+            "tokens": [
+              {
+                "token_id": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2|r1|t1",
+                "text": "0.614",
+                "span": [
+                  73,
+                  78
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2|r1|t2",
+                "text": "2014",
+                "span": [
+                  80,
+                  84
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2|r1|t3",
+                "text": "0.624",
+                "span": [
+                  90,
+                  95
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2|r1|t4",
+                "text": "2015",
+                "span": [
+                  97,
+                  101
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2|r1|t5",
+                "text": "0.576",
+                "span": [
+                  106,
+                  111
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2|r1|t6",
+                "text": "2016",
+                "span": [
+                  113,
+                  117
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2|r1|t7",
+                "text": "0.566",
+                "span": [
+                  123,
+                  128
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2|r1|t8",
+                "text": "2017",
+                "span": [
+                  135,
+                  139
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2|r1|t9",
+                "text": "0.530",
+                "span": [
+                  270,
+                  275
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2|r1|t10",
+                "text": "0.534",
+                "span": [
+                  276,
+                  281
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2|r1|t11",
+                "text": "0.544",
+                "span": [
+                  282,
+                  287
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2|r1|t12",
+                "text": "0.571",
+                "span": [
+                  313,
+                  318
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              }
+            ],
+            "scientific_notation": []
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "scope_not_canary",
+      "detail": {
+        "scope": "usable_real_canary"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M1",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "all_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M3",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M4",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M5",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M6",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M8",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M9",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M10",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M11",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M14",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "all_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M16",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17a",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17b",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144211__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real_canary"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M1",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "all_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M3",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M4",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M5",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M6",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M8",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M9",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M10",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M11",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M14",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "all_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M16",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17a",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17b",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144243__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real_canary"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M1",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "all_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M3",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M4",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M5",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M6",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M8",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M9",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M10",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M11",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M14",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "all_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M16",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17a",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17b",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144500__MOCK__toolsv2.0-populated-included-scopes-splitonly-canary__mock-splitonly-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real_canary"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M1",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "all_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M3",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M4",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M5",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M6",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M8",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M9",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M10",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M11",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M14",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "all_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M16",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17a",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17b",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144524__MOCK__toolsv2.0-populated-included-scopes-all-canary__mock-scopesall-v2",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "scope_not_real",
+      "detail": {
+        "scope": "usable_real_canary"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M1",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "termination": "completed",
+        "max_turns": 20,
+        "max_tool_calls": 70,
+        "max_tokens_per_turn": 12400
+      }
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M3",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "turns": 13,
+        "tool_calls": 31
+      }
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M4",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "calls_per_tool_bearing_turn": [
+          1,
+          2,
+          2,
+          2,
+          2,
+          2,
+          6,
+          4,
+          3,
+          2,
+          3,
+          2
+        ],
+        "tool_bearing_turns": 12,
+        "mean": 2.5833333333333335
+      }
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M5",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "2.0",
+        "logged_calls": 31,
+        "by_tool": {
+          "get_ablation_result": {
+            "count": 4,
+            "share": 0.12903225806451613
+          },
+          "get_correlated_features": {
+            "count": 1,
+            "share": 0.03225806451612903
+          },
+          "get_feature_coverage": {
+            "count": 6,
+            "share": 0.1935483870967742
+          },
+          "get_feature_shap_detail": {
+            "count": 12,
+            "share": 0.3870967741935484
+          },
+          "get_feature_target_association": {
+            "count": 3,
+            "share": 0.0967741935483871
+          },
+          "get_shap_ranking": {
+            "count": 1,
+            "share": 0.03225806451612903
+          },
+          "lookup_feature": {
+            "count": 1,
+            "share": 0.03225806451612903
+          },
+          "search_data_dictionary": {
+            "count": 3,
+            "share": 0.0967741935483871
+          }
+        }
+      }
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M6",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "2.0",
+        "distinct_tools": [
+          "get_ablation_result",
+          "get_correlated_features",
+          "get_feature_coverage",
+          "get_feature_shap_detail",
+          "get_feature_target_association",
+          "get_shap_ranking",
+          "lookup_feature",
+          "search_data_dictionary"
+        ],
+        "distinct_tool_count": 8,
+        "tools_available": 8,
+        "coverage": 1.0,
+        "excluded_names_outside_surface": []
+      }
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M8",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 31,
+        "rejected_calls": 0,
+        "rate": 0.0,
+        "by_outcome": {
+          "unknown_tool": 0,
+          "unexpected_argument": 0,
+          "bad_arguments": 0,
+          "failed": 0
+        }
+      }
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M9",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 31,
+        "calls_returning_no_data": 11,
+        "rate": 0.3548387096774194
+      }
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M10",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 31,
+        "repeat_calls": 0,
+        "repeat_seqs": []
+      }
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M11",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "distinct_features": 17,
+        "in_matrix": [
+          "all_util",
+          "all_util_was_missing",
+          "emp_length_was_missing",
+          "int_rate",
+          "open_acc_6m_was_missing",
+          "recoveries"
+        ],
+        "out_of_matrix": [
+          "collection_recovery_fee",
+          "hardship_last_payment_amount",
+          "last_credit_pull_d",
+          "last_fico_range_high",
+          "last_fico_range_low",
+          "last_pymnt_amnt",
+          "last_pymnt_d",
+          "out_prncp",
+          "pymnt_plan",
+          "total_pymnt",
+          "total_rec_late_fee"
+        ],
+        "unclassified": []
+      }
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M14",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "tokens": {
+          "input": 167323,
+          "output": 13299,
+          "cache_creation": 0,
+          "cache_read": 0
+        },
+        "model": "claude-sonnet-5",
+        "rates": {
+          "input_per_mtok": 2.0,
+          "output_per_mtok": 10.0
+        },
+        "rates_taken": "claude-api reference cached 2026-06-24",
+        "cost": null,
+        "cost_status": "withheld_rate_unverified",
+        "rate_verification": null
+      }
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M16",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 3,
+        "confidence": {
+          "high": 1,
+          "medium": 1,
+          "low": 1
+        },
+        "explicit_no_findings": false,
+        "warning_count": 0,
+        "warnings": []
+      }
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17a",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 3,
+        "grounded": 3,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "recoveries",
+            "tools_named": [
+              "lookup_feature",
+              "get_ablation_result"
+            ],
+            "grounded": true,
+            "sub_reason": null
+          },
+          {
+            "record_index": 2,
+            "flag": "open_acc_6m_was_missing",
+            "tools_named": [
+              "get_feature_coverage",
+              "get_feature_target_association"
+            ],
+            "grounded": true,
+            "sub_reason": null
+          },
+          {
+            "record_index": 3,
+            "flag": "all_util_was_missing",
+            "tools_named": [
+              "get_shap_ranking",
+              "get_feature_coverage"
+            ],
+            "grounded": true,
+            "sub_reason": null
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M17b",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 3,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "recoveries",
+            "matched": 3,
+            "unmatched": 0,
+            "derived": 1,
+            "quoted": 0,
+            "prompt": 0,
+            "multiply_sourced": 2,
+            "tokens": [
+              {
+                "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r1|t1",
+                "text": "44.6%",
+                "span": [
+                  149,
+                  154
+                ],
+                "classification": "derived",
+                "turned_on_tie": false,
+                "adjudication": {
+                  "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r1|t1",
+                  "sources": [
+                    {
+                      "class": "derived",
+                      "computation": "share_of_total_abs_shap * 100",
+                      "source_values": [
+                        "0.44621969809442985"
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r1|t2",
+                "text": "2.21",
+                "span": [
+                  193,
+                  197
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r1|t3",
+                "text": "0.26",
+                "span": [
+                  202,
+                  206
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r1|t4",
+                "text": "2017",
+                "span": [
+                  291,
+                  295
+                ],
+                "classification": "multiply_sourced",
+                "turned_on_tie": false,
+                "adjudication": {
+                  "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r1|t4",
+                  "sources": [
+                    {
+                      "class": "quoted",
+                      "payload_string": "Model retrained without this column, then scored on the held-out 2017 test set. Deltas are relative to the same model trained with every feature.",
+                      "seq": 4
+                    },
+                    {
+                      "class": "prompt",
+                      "prompt_text": "It was fitted on loans issued between 2014 and 2016 and then scored once on loans issued in 2017, which were held back and not used in fitting or in selecting settings.",
+                      "rendered_from_commit": "e037495"
+                    }
+                  ]
+                },
+                "sources_applying": [
+                  "quoted",
+                  "prompt"
+                ]
+              },
+              {
+                "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r1|t5",
+                "text": "0.8730",
+                "span": [
+                  309,
+                  315
+                ],
+                "classification": "multiply_sourced",
+                "turned_on_tie": false,
+                "adjudication": {
+                  "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r1|t5",
+                  "sources": [
+                    {
+                      "class": "derived",
+                      "computation": "roc_auc_without_feature - delta_roc_auc",
+                      "source_values": [
+                        "0.7295752764137673",
+                        "-0.1434433443801116"
+                      ]
+                    },
+                    {
+                      "class": "prompt",
+                      "prompt_text": "Its score on the held-back 2017 loans is a ROC-AUC of 0.8730; on the 2016 loans used while selecting settings it scored 0.9020.",
+                      "rendered_from_commit": "e037495"
+                    }
+                  ]
+                },
+                "sources_applying": [
+                  "derived",
+                  "prompt"
+                ]
+              },
+              {
+                "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r1|t6",
+                "text": "0.7296",
+                "span": [
+                  319,
+                  325
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              }
+            ],
+            "scientific_notation": []
+          },
+          {
+            "record_index": 2,
+            "flag": "open_acc_6m_was_missing",
+            "matched": 3,
+            "unmatched": 0,
+            "derived": 0,
+            "quoted": 0,
+            "prompt": 0,
+            "multiply_sourced": 0,
+            "tokens": [
+              {
+                "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r2|t1",
+                "text": "34.99%",
+                "span": [
+                  39,
+                  45
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r2|t2",
+                "text": "65%",
+                "span": [
+                  53,
+                  56
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r2|t3",
+                "text": "100%",
+                "span": [
+                  90,
+                  94
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              }
+            ],
+            "scientific_notation": []
+          },
+          {
+            "record_index": 3,
+            "flag": "all_util_was_missing",
+            "matched": 3,
+            "unmatched": 0,
+            "derived": 0,
+            "quoted": 0,
+            "prompt": 0,
+            "multiply_sourced": 0,
+            "tokens": [
+              {
+                "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r3|t1",
+                "text": "65.02%",
+                "span": [
+                  52,
+                  58
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r3|t2",
+                "text": "0.0124%",
+                "span": [
+                  75,
+                  82
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r3|t3",
+                "text": "181",
+                "span": [
+                  174,
+                  177
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              }
+            ],
+            "scientific_notation": []
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+      "tool_layer_version": "2.0",
+      "canary": true,
+      "canary_source": "field",
+      "metric": "M18",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "planted_column": "recoveries",
+        "a2_seq_mapping_assertion": "passed",
+        "exposure_seq": 1,
+        "investigation_seq": 2,
+        "investigation_minus_exposure": 1,
+        "exposure_absent": false,
+        "investigation_absent": false
+      }
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M1",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "termination": "turn_limit",
+        "max_turns": 20,
+        "max_tool_calls": 70,
+        "max_tokens_per_turn": 12400
+      }
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M3",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M4",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M5",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M6",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M8",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M9",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M10",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M11",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M14",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "tokens": {
+          "input": 502004,
+          "output": 21744,
+          "cache_creation": 0,
+          "cache_read": 0
+        },
+        "model": "claude-sonnet-5",
+        "rates": {
+          "input_per_mtok": 2.0,
+          "output_per_mtok": 10.0
+        },
+        "rates_taken": "claude-api reference cached 2026-06-24",
+        "cost": null,
+        "cost_status": "withheld_rate_unverified",
+        "rate_verification": null
+      }
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M16",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M17a",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M17b",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "scope_not_usable",
+      "detail": {
+        "scope": "usable_real_canary"
+      },
+      "value": null
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M1",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "termination": "completed",
+        "max_turns": 30,
+        "max_tool_calls": 70,
+        "max_tokens_per_turn": 12400
+      }
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M3",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "turns": 12,
+        "tool_calls": 29
+      }
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M4",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "calls_per_tool_bearing_turn": [
+          1,
+          3,
+          4,
+          1,
+          4,
+          3,
+          3,
+          3,
+          1,
+          3,
+          3
+        ],
+        "tool_bearing_turns": 11,
+        "mean": 2.6363636363636362
+      }
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M5",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "2.0",
+        "logged_calls": 29,
+        "by_tool": {
+          "get_ablation_result": {
+            "count": 2,
+            "share": 0.06896551724137931
+          },
+          "get_correlated_features": {
+            "count": 1,
+            "share": 0.034482758620689655
+          },
+          "get_feature_coverage": {
+            "count": 12,
+            "share": 0.41379310344827586
+          },
+          "get_feature_target_association": {
+            "count": 7,
+            "share": 0.2413793103448276
+          },
+          "get_shap_ranking": {
+            "count": 2,
+            "share": 0.06896551724137931
+          },
+          "search_data_dictionary": {
+            "count": 5,
+            "share": 0.1724137931034483
+          }
+        }
+      }
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M6",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "surface": "2.0",
+        "distinct_tools": [
+          "get_ablation_result",
+          "get_correlated_features",
+          "get_feature_coverage",
+          "get_feature_target_association",
+          "get_shap_ranking",
+          "search_data_dictionary"
+        ],
+        "distinct_tool_count": 6,
+        "tools_available": 8,
+        "coverage": 0.75,
+        "excluded_names_outside_surface": []
+      }
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M8",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 29,
+        "rejected_calls": 0,
+        "rate": 0.0,
+        "by_outcome": {
+          "unknown_tool": 0,
+          "unexpected_argument": 0,
+          "bad_arguments": 0,
+          "failed": 0
+        }
+      }
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M9",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 29,
+        "calls_returning_no_data": 4,
+        "rate": 0.13793103448275862
+      }
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M10",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "logged_calls": 29,
+        "repeat_calls": 0,
+        "repeat_seqs": []
+      }
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M11",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "distinct_features": 17,
+        "in_matrix": [
+          "acc_open_past_24mths",
+          "all_util_was_missing",
+          "dti",
+          "emp_length_was_missing",
+          "fico_range_low",
+          "grade",
+          "inq_fi_was_missing",
+          "int_rate",
+          "mths_since_rcnt_il_was_missing",
+          "open_acc_6m_was_missing",
+          "sub_grade",
+          "term",
+          "total_cu_tl_was_missing"
+        ],
+        "out_of_matrix": [
+          "last_pymnt_amnt",
+          "last_pymnt_d",
+          "recoveries",
+          "total_pymnt"
+        ],
+        "unclassified": []
+      }
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M14",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "tokens": {
+          "input": 274562,
+          "output": 23260,
+          "cache_creation": 0,
+          "cache_read": 0
+        },
+        "model": "claude-sonnet-5",
+        "rates": {
+          "input_per_mtok": 2.0,
+          "output_per_mtok": 10.0
+        },
+        "rates_taken": "claude-api reference cached 2026-06-24",
+        "cost": null,
+        "cost_status": "withheld_rate_unverified",
+        "rate_verification": null
+      }
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M16",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 3,
+        "confidence": {
+          "high": 0,
+          "medium": 2,
+          "low": 1
+        },
+        "explicit_no_findings": false,
+        "warning_count": 0,
+        "warnings": []
+      }
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M17a",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 3,
+        "grounded": 3,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "all_util_was_missing",
+            "tools_named": [
+              "get_shap_ranking",
+              "get_feature_coverage"
+            ],
+            "grounded": true,
+            "sub_reason": null
+          },
+          {
+            "record_index": 2,
+            "flag": "open_acc_6m_was_missing",
+            "tools_named": [
+              "get_feature_coverage"
+            ],
+            "grounded": true,
+            "sub_reason": null
+          },
+          {
+            "record_index": 3,
+            "flag": "acc_open_past_24mths",
+            "tools_named": [
+              "get_ablation_result",
+              "get_feature_target_association"
+            ],
+            "grounded": true,
+            "sub_reason": null
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M17b",
+      "status": "computed",
+      "reason": null,
+      "detail": null,
+      "value": {
+        "records": 3,
+        "per_record": [
+          {
+            "record_index": 1,
+            "flag": "all_util_was_missing",
+            "matched": 8,
+            "unmatched": 1,
+            "derived": 0,
+            "quoted": 0,
+            "prompt": 0,
+            "multiply_sourced": 0,
+            "tokens": [
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r1|t1",
+                "text": "1.0",
+                "span": [
+                  101,
+                  104
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r1|t2",
+                "text": "2014",
+                "span": [
+                  108,
+                  112
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r1|t3",
+                "text": "0.9496",
+                "span": [
+                  114,
+                  120
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r1|t4",
+                "text": "2015",
+                "span": [
+                  124,
+                  128
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r1|t5",
+                "text": "0.0002",
+                "span": [
+                  130,
+                  136
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r1|t6",
+                "text": "2016",
+                "span": [
+                  140,
+                  144
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r1|t7",
+                "text": "0.0001",
+                "span": [
+                  150,
+                  156
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r1|t8",
+                "text": "2017",
+                "span": [
+                  160,
+                  164
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r1|t9",
+                "text": "0.0299",
+                "span": [
+                  206,
+                  212
+                ],
+                "classification": "unmatched",
+                "turned_on_tie": false
+              }
+            ],
+            "scientific_notation": []
+          },
+          {
+            "record_index": 2,
+            "flag": "open_acc_6m_was_missing",
+            "matched": 11,
+            "unmatched": 0,
+            "derived": 1,
+            "quoted": 0,
+            "prompt": 0,
+            "multiply_sourced": 0,
+            "tokens": [
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t1",
+                "text": "100%",
+                "span": [
+                  45,
+                  49
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t2",
+                "text": "1.0",
+                "span": [
+                  50,
+                  53
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t3",
+                "text": "2014",
+                "span": [
+                  55,
+                  59
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t4",
+                "text": "94.95%",
+                "span": [
+                  62,
+                  68
+                ],
+                "classification": "derived",
+                "turned_on_tie": false,
+                "adjudication": {
+                  "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t4",
+                  "sources": [
+                    {
+                      "class": "derived",
+                      "computation": "mean for scope 2015 * 100",
+                      "source_values": [
+                        "0.9495530"
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t5",
+                "text": "0.9496",
+                "span": [
+                  69,
+                  75
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t6",
+                "text": "2015",
+                "span": [
+                  77,
+                  81
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t7",
+                "text": "99.98%",
+                "span": [
+                  104,
+                  110
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t8",
+                "text": "0.0002",
+                "span": [
+                  111,
+                  117
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t9",
+                "text": "2016",
+                "span": [
+                  119,
+                  123
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t10",
+                "text": "100%",
+                "span": [
+                  129,
+                  133
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t11",
+                "text": "0.0",
+                "span": [
+                  134,
+                  137
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t12",
+                "text": "2017",
+                "span": [
+                  139,
+                  143
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              }
+            ],
+            "scientific_notation": []
+          },
+          {
+            "record_index": 3,
+            "flag": "acc_open_past_24mths",
+            "matched": 7,
+            "unmatched": 0,
+            "derived": 0,
+            "quoted": 0,
+            "prompt": 0,
+            "multiply_sourced": 0,
+            "tokens": [
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r3|t1",
+                "text": "0.5685",
+                "span": [
+                  48,
+                  54
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r3|t2",
+                "text": "0.5910",
+                "span": [
+                  65,
+                  71
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r3|t3",
+                "text": "0.5724",
+                "span": [
+                  82,
+                  88
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r3|t4",
+                "text": "2017",
+                "span": [
+                  105,
+                  109
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r3|t5",
+                "text": "0.5337",
+                "span": [
+                  111,
+                  117
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r3|t6",
+                "text": "0.04",
+                "span": [
+                  137,
+                  141
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              },
+              {
+                "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r3|t7",
+                "text": "+0.0001",
+                "span": [
+                  300,
+                  307
+                ],
+                "classification": "matched",
+                "turned_on_tie": false
+              }
+            ],
+            "scientific_notation": []
+          }
+        ]
+      }
+    },
+    {
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "tool_layer_version": "2.0",
+      "canary": false,
+      "canary_source": "field",
+      "metric": "M18",
+      "status": "excluded",
+      "reason": "scope_not_canary",
+      "detail": {
+        "scope": "usable_real_canary"
+      },
+      "value": null
+    }
+  ]
+}

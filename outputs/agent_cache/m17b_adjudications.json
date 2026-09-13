@@ -1,0 +1,149 @@
+{
+  "adjudications": [
+    {
+      "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r1|t1",
+      "sources": [
+        {
+          "class": "quoted",
+          "payload_string": "at application, before the loan is approved; collected for loans issued from around December 2015 onward",
+          "seq": 29
+        }
+      ]
+    },
+    {
+      "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r1|t3",
+      "sources": [
+        {
+          "class": "prompt",
+          "prompt_text": "It was fitted on loans issued between 2014 and 2016 and then scored once on loans issued in 2017, which were held back and not used in fitting or in selecting settings.",
+          "rendered_from_commit": "eb89b98"
+        }
+      ]
+    },
+    {
+      "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r1|t4",
+      "sources": [
+        {
+          "class": "prompt",
+          "prompt_text": "It was fitted on loans issued between 2014 and 2016 and then scored once on loans issued in 2017, which were held back and not used in fitting or in selecting settings.",
+          "rendered_from_commit": "eb89b98"
+        }
+      ]
+    },
+    {
+      "token_id": "20260825T050726__REAL__toolsv1.0-populated-included__run3|r2|t1",
+      "sources": [
+        {
+          "class": "quoted",
+          "payload_string": "at application, before the loan is approved; collected for loans issued from around December 2015 onward",
+          "seq": 30
+        }
+      ]
+    },
+    {
+      "token_id": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary|r1|t2",
+      "sources": [
+        {
+          "class": "derived",
+          "computation": "share_of_total_abs_shap * 100",
+          "source_values": [
+            "0.44621969809442985"
+          ]
+        }
+      ]
+    },
+    {
+      "token_id": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary|r1|t4",
+      "sources": [
+        {
+          "class": "derived",
+          "computation": "roc_auc_without_feature - delta_roc_auc",
+          "source_values": [
+            "0.7295752764137673",
+            "-0.1434433443801116"
+          ]
+        },
+        {
+          "class": "prompt",
+          "prompt_text": "Its score on the held-back 2017 loans is a ROC-AUC of 0.8730; on the 2016 loans used while selecting settings it scored 0.9020.",
+          "rendered_from_commit": "eb89b98"
+        }
+      ]
+    },
+    {
+      "token_id": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2|r1|t3",
+      "sources": [
+        {
+          "class": "derived",
+          "computation": "roc_auc_without_feature - delta_roc_auc",
+          "source_values": [
+            "0.7295752764137673",
+            "-0.1434433443801116"
+          ]
+        },
+        {
+          "class": "prompt",
+          "prompt_text": "Its score on the held-back 2017 loans is a ROC-AUC of 0.8730; on the 2016 loans used while selecting settings it scored 0.9020.",
+          "rendered_from_commit": "e037495"
+        }
+      ]
+    },
+    {
+      "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r1|t1",
+      "sources": [
+        {
+          "class": "derived",
+          "computation": "share_of_total_abs_shap * 100",
+          "source_values": [
+            "0.44621969809442985"
+          ]
+        }
+      ]
+    },
+    {
+      "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r1|t4",
+      "sources": [
+        {
+          "class": "quoted",
+          "payload_string": "Model retrained without this column, then scored on the held-out 2017 test set. Deltas are relative to the same model trained with every feature.",
+          "seq": 4
+        },
+        {
+          "class": "prompt",
+          "prompt_text": "It was fitted on loans issued between 2014 and 2016 and then scored once on loans issued in 2017, which were held back and not used in fitting or in selecting settings.",
+          "rendered_from_commit": "e037495"
+        }
+      ]
+    },
+    {
+      "token_id": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly|r1|t5",
+      "sources": [
+        {
+          "class": "derived",
+          "computation": "roc_auc_without_feature - delta_roc_auc",
+          "source_values": [
+            "0.7295752764137673",
+            "-0.1434433443801116"
+          ]
+        },
+        {
+          "class": "prompt",
+          "prompt_text": "Its score on the held-back 2017 loans is a ROC-AUC of 0.8730; on the 2016 loans used while selecting settings it scored 0.9020.",
+          "rendered_from_commit": "e037495"
+        }
+      ]
+    },
+    {
+      "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r2|t4",
+      "sources": [
+        {
+          "class": "derived",
+          "computation": "mean for scope 2015 * 100",
+          "source_values": [
+            "0.9495530"
+          ]
+        }
+      ]
+    }
+  ]
+}

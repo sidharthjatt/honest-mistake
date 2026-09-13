@@ -1,0 +1,19 @@
+{
+  "unmatched_tokens": [
+    {
+      "token_id": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns|r1|t9",
+      "run_directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+      "record_index": 1,
+      "flag": "all_util_was_missing",
+      "text": "0.0299",
+      "span": [
+        206,
+        212
+      ],
+      "evidence": "get_feature_coverage shows this column's mean (share not-missing... actually share \"was_missing\") is 1.0 in 2014, 0.9496 in 2015, 0.0002 in 2016, and 0.0001 in 2017/test, while it ranks 27th by mean|SHAP| (0.0299) in get_shap_ranking, i.e. a feature the model weights heavily is a near-perfect step function of vintage rather than of credit behavior."
+    }
+  ],
+  "scientific_notation": [],
+  "classification_turned_on_tie": [],
+  "adjudications": []
+}
