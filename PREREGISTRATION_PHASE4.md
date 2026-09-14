@@ -363,6 +363,68 @@ Written after the pilot and before either full run.
 
 **The pilot.** Per A4, the pilot's four episodes are not scored. A1, C3, B2 and NM3 are re-run afresh as part of each full run, like every other item.
 
+### A6. 2026-09-14. Phase 4b: a change to the detector prompt's format instruction only
+
+Written after Phase 4 was scored, and before the new prompt existed.
+
+**Why 4b runs.** Phase 4's result (`outputs/layer3/LAYER3_PHASE4.md`) binds output-format compliance and gap detection together and cannot separate them: 20 of 52 final replies were prose followed by a JSON object, and each was scored incorrect on format alone. Phase 4b changes only the detector prompt's instruction about output format and runs again. The difference between the two results isolates how much of Phase 4's failure was format.
+
+**The permitted change, exactly.** One instruction about output format.
+- **It may not contain:**
+  - a hint;
+  - an example answer;
+  - any question from section 2, any item, or any label assignment;
+  - anything that bears on whether a particular question can be answered.
+- **In particular, it may not mention null values, undefined figures, or absent fields.** A3's frozen answer turns on exactly that, and a line about it would defeat the trap.
+- **Everything else stays the same:** every other line of the detector prompt is unchanged, and so are the spec-generation prompt (`6c3cca8f…`), the parser, the tools, the question set, the model and every setting in section 1.
+
+**How the change is made.** The new prompt is a new file, `layer3/prompts/phase4b_detector_system.txt`. The A3 file `layer3/prompts/phase4_detector_system.txt` is not edited, because Phase 4's run records carry its hash and must go on referring to a file that matches them. The runner loads the 4b prompt from its own file and refuses it unless it matches the hash recorded at the end of this amendment.
+
+**Phase 4 is not superseded.** Phase 4's result stands as scored. 4b's result will stand beside it. The comparison between the two is itself the finding. If 4b passes, what that shows is that the detector passes with an explicit format instruction. It does not show that Phase 4's detector passed.
+
+**Nothing frozen is touched.** The question set, the accept rules and every threshold are exactly as frozen, and as applied in A5. The detector has now failed against them once, and relaxing them after a failure is the failure mode this project exists to avoid.
+
+**The protocol for 4b.**
+- Two full runs back to back, labelled `phase4b-run1` and `phase4b-run2`, with 26 episodes each, and spec requests made under the same rule as Phase 4.
+- No pilot.
+- Before any request, the Phase 4 mock suite is re-run against the new prompt, to confirm that the hash refusal works and that the parser is unchanged.
+- Results are scored under section 3 exactly as Phase 4 was: each run separately, both runs required, and unparsed output incorrect.
+- Each run's parse-failure count is reported against Phase 4's 9 and 11.
+- Phase 4's two runs cost $0.732420 together. The ledger stands at $1.184947.
+
+**Prediction for A3, written before any 4b run. This is a prediction, not a result.**
+- **The expectation:** A3 is labelled `not_answerable` again in both runs, with a reply that parses, so it is scored incorrect again.
+- **Why:** in both Phase 4 runs A3's reply parsed. The detector read `auc_2014` as null, gave the right reason, and still labelled the question not answerable. That is a labelling judgement, not a format failure, and a format-only change should not move it.
+- **What that would mean:** part a would fail again on the mandatory A3, whatever happens to the parse failures.
+- **The rest of the prediction:** parse failures should fall, but not necessarily to zero, because A1 already showed format compliance varying on an unchanged prompt.
+
+**The new prompt's hash.** Recorded once the file existed, and before any request used it.
+
+| Prompt | File | SHA-256 | Size |
+|---|---|---|---|
+| Phase 4b detector system prompt | `layer3/prompts/phase4b_detector_system.txt` | `f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1` | 1,753 bytes, 18 lines |
+
+**The change, line for line.** The file is byte-for-byte the A3 prompt with one sentence replaced, and nothing else differs.
+- **Removed:** `When you have decided, reply with one JSON object and nothing else, in this form:`
+- **Added:** `When you have decided, your final reply must be the JSON object alone, beginning with { and ending with }, with no words or blank lines before or after it, in this form:`
+- **Checked after writing:** the A3 file still hashes to `db401deb03318893e45b7b2fbad804ac7560233b5c4f9d26e25afd0af281e0d8`.
+
+**The forbidden-content check.** The added line was searched, case-insensitively, for:
+- `null`, `undefined`, `absent`, `missing`, `empty`, `none`, `not returned`;
+- `example`, `e.g`, `hint`, `trap`;
+- `declared`, `silent`, `near-miss`, `non-gap`;
+- the three output label values;
+- every feature name used in the question set, and `balance`, `recoveries`, `180`, the years 2014 to 2017, `leakage` and `canary`;
+- item IDs.
+
+None occurs in it.
+
+Four of those terms occur elsewhere in the prompt, with exactly the same counts as in the A3 prompt, because they come from lines that were not changed:
+- `null` (once), in the description of `difference_or_missing`;
+- `missing` (twice), in the field name `difference_or_missing`;
+- `example` (once), in the field-path example `items[2].value`;
+- the three label values, in the definition of the output format.
+
 ## Defect register
 
 Numbering continues from D8 in `PREREGISTRATION_PHASE3.md`.

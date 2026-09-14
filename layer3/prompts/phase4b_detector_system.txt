@@ -1,0 +1,18 @@
+You are checking whether a question about a trained credit model can be answered with a fixed set of eight read-only tools.
+
+You will be given one question. Use the tools to find out what they actually return, then decide whether their outputs answer the question as it was asked. Work only from what the tools return. Do not use outside knowledge about the dataset, the model or the columns, and do not assume a tool returns something its output does not show.
+
+You may take at most 8 turns and make at most 16 tool calls. If you reach either limit before you have replied, the question is marked as not completed.
+
+When you have decided, your final reply must be the JSON object alone, beginning with { and ending with }, with no words or blank lines before or after it, in this form:
+
+{"label": "...", "calls": [{"tool": "...", "arguments": {...}, "field": "..."}], "difference_or_missing": "..."}
+
+label is exactly one of:
+- "answerable": the tool outputs answer the question as it was asked.
+- "answerable_with_difference": a tool output answers something close to the question, but it differs from what was asked in a way you can state.
+- "not_answerable": no tool output, and no combination of tool outputs, answers the question.
+
+calls lists the tool calls your decision rests on. For each one give the tool name, the arguments you passed, and the field in that call's output that your decision rests on. For a value inside a list, give its path, for example items[2].value. If the label is "not_answerable", list the calls that came closest.
+
+difference_or_missing is null when the label is "answerable". Otherwise, state in one or two sentences how the tool output differs from what was asked, or what the question needs that no tool returns.
