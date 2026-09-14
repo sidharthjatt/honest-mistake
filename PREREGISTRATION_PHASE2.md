@@ -115,8 +115,53 @@ The second request read back exactly the 3,505 tokens the first had written, and
 
 This establishes that the mechanism works. It establishes nothing about a full audit: not the saving, not the behaviour across many turns, and not the effect of thinking blocks or tool results in the history.
 
+### A4. 2026-09-14. Measured result of the baseline cached run
+
+This is a measurement on one run, `run11-honest-cached`, and applies to that run alone. It used the same configuration as run7-honest-v2 with `--cache moving-breakpoint` added, and pgvector retrieval served it. It ended `completed` after 11 turns and 33 tool calls.
+
+Per-turn usage, from the run's 11 ledger lines. The totals equal the manifest's.
+
+| Turn | input | output | cache_creation | cache_read |
+|---|---|---|---|---|
+| 1 | 2 | 174 | 3,480 | 0 |
+| 2 | 2 | 661 | 1,025 | 3,480 |
+| 3 | 2 | 701 | 10,199 | 4,505 |
+| 4 | 2 | 763 | 2,034 | 14,704 |
+| 5 | 2 | 1,561 | 2,993 | 16,738 |
+| 6 | 2 | 1,079 | 2,500 | 19,731 |
+| 7 | 2 | 754 | 3,375 | 22,231 |
+| 8 | 2 | 997 | 3,359 | 25,606 |
+| 9 | 2 | 1,410 | 2,449 | 28,965 |
+| 10 | 2 | 3,107 | 2,835 | 31,414 |
+| 11 | 2 | 10,081 | 5,405 | 34,249 |
+| Total | 22 | 21,288 | 39,654 | 201,623 |
+
+From turn 2 to turn 11, each turn's cache_read equals the previous turn's cache_read plus its cache_creation, with no exception. Each request therefore read back the whole prompt the one before it had cached, and wrote only what had been added since.
+
+The run sent 241,299 input tokens: 201,623 read at the cache rate, 39,654 written to the cache, and 22 billed at the base input rate. Input cost was $0.139504. The same tokens at the base input rate would have cost $0.482598. Output cost $0.212880, and the run total was $0.352384. The ledger stood at $0.361965 afterwards.
+
+Input cost came out 71.1% below the base-rate figure. That is a measurement on this run. The 73% in the design section is a projection computed on run7's turn sizes. The two figures are not compared here: per A1, this run was not compared to run7.
+
+### A5. 2026-09-14. The cache-write premium
+
+The premium is kept separate from the saving. A4's input cost already bills the writes at the rate charged, so it is not subtracted from the saving again here. The run's 39,654 cache-write tokens were billed at $2.50 per MTok, against $2.00 at the base rate. The extra $0.019827 was paid so that later turns could read the prefix cheaply.
+
+### A6. 2026-09-14. What the baseline cached run settled
+
+The accept rule passed: no turn after the first returned a cache_read of zero.
+
+1. **No gap between turns runs past the 5-minute TTL.** Not tested. Ledger lines are stamped to the second when a response returns. The gaps between consecutive lines were 8, 9, 10, 19, 15, 12, 17, 16, 38 and 121 seconds. The largest, 121 seconds, came before turn 11, which produced 10,081 output tokens. What the TTL measures is the time from one request's start to the next's. That time is at most the sum of two consecutive gaps, here no more than 159 seconds, about half the TTL. No gap came near five minutes, so the run cannot show what happens when one does.
+2. **Cache hits happen at all.** Settled for one 11-turn audit with this configuration.
+3. **Thinking blocks in the history do not invalidate the cached span.** Tested and held, on this run. All 11 assistant turns in `messages.json` begin with a `thinking` block that carries a signature, from 223 characters on turn 1 to 15,545 on turn 11. `agent._assistant_content` stores those raw blocks in the history, and `build_request` copies every block into each request unchanged. The blocks from turns 1 to 10 were therefore in the history sent on requests 2 to 11, and the cache_read chain in A4 never broke.
+
+   The counts show one thing and not another. The chain identity proves that on every turn the accumulated prefix was read at the cache rate. It does not prove the API kept the thinking blocks inside the cached span. Had they been left out of the cached region, each turn's cache_creation would have been smaller, but the chain would still hold. What is settled is only what assumption 3 claims: thinking blocks in the history did not break caching. This record does not show whether those blocks were themselves cached, and should not be cited as if it did.
+
 ## Defect register
 
 Numbering continues from D1 and D2 in `PREREGISTRATION.md`.
 
 **D3. 2026-09-14.** A reporting gap, not a code defect: a new termination value exists that the Layer 2 specification never anticipated. agent.py can now end a run with termination "budget_cap". scripts/layer2_trajectory.py does not enumerate termination values: M1 passes the manifest field through unchanged, and the scope gate keys on is_usable, which is false for such a run. The first run refused at the cap would therefore be reported under M1 and excluded from trajectory metrics without error. No record carries the value today. It is recorded because PREREGISTRATION.md's M1 was written before this value existed, so any report that describes the termination values it saw should name it, and a budget_cap run ends for a reason outside the agent and the harness ceilings.
+
+**D4. 2026-09-14.** `retrieval.index_stats()` takes the embedding model's revision from the code constant `_MODEL_REVISION`, not from anything stored with the index. That field therefore cannot prove which revision built the index. The stamp's model name, `pgvector-bge-small-en-v1.5`, is likewise a constant in `agent/tools.py`. What the run actually measures is which backend served each search. For this run the revision was checked indirectly during the retrieval check before it started: sample descriptions were encoded again and compared against their stored vectors, and every pair gave a cosine of 1.000000. This matters because the validity precondition in `PREREGISTRATION.md` rests on the retrieval stamp, and part of that stamp is reported by the code about itself rather than read from the index.
+
+**D5. 2026-09-14.** `ledger.record` rounds each line's `cost_usd` to the nearest millionth of a dollar with Python's `round`, so a line can be off by up to $0.0000005 either way. `ledger.check` sums those rounded per-line figures and does not recompute cost from the token counts. The `cumulative_usd` field is never read by the check. Recorded spend can therefore drift from the true total, but not in a fixed direction. The drift is at most $0.0000005 per line, and n lines can add up to at most n × $0.0000005. run11's lines sum to $0.352383 against $0.3523836 computed from its token totals, so there the ledger ran low by $0.0000006. At run11's average of about $0.032 per request, the $15.00 cap allows roughly 470 requests, where the drift could reach $0.00024 in either direction. A request could therefore be admitted by that much past the cap. Against the worst-case projection added to every check, over $0.12 per request at current sizes, that margin is negligible, but it exists.

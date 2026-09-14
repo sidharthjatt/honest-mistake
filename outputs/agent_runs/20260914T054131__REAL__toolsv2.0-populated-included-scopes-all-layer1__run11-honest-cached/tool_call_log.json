@@ -1,0 +1,303 @@
+{
+  "_MODE": "REAL RUN - LIVE API CALLS.",
+  "config_id": "toolsv2.0-populated-included-scopes-all-retrieval-pgvector-bge-small-en-v1.5-layer1",
+  "calls": [
+    {
+      "seq": 1,
+      "tool": "get_shap_ranking",
+      "arguments": {
+        "top_n": 20
+      },
+      "ok": true,
+      "outcome": "returned=20"
+    },
+    {
+      "seq": 2,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "recoveries"
+      },
+      "ok": true,
+      "outcome": "match_count=4"
+    },
+    {
+      "seq": 3,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "last_pymnt"
+      },
+      "ok": true,
+      "outcome": "match_count=7"
+    },
+    {
+      "seq": 4,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "total_rec"
+      },
+      "ok": true,
+      "outcome": "match_count=13"
+    },
+    {
+      "seq": 5,
+      "tool": "get_shap_ranking",
+      "arguments": {
+        "top_n": 180
+      },
+      "ok": true,
+      "outcome": "returned=180"
+    },
+    {
+      "seq": 6,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "total_bal_il"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 7,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "onward"
+      },
+      "ok": true,
+      "outcome": "match_count=6"
+    },
+    {
+      "seq": 8,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "emp_length_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 9,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "all_util_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 10,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "open_acc_6m_was_missing"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 11,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "emp_length_was_missing"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 12,
+      "tool": "get_feature_target_association",
+      "arguments": {
+        "feature": "term"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 13,
+      "tool": "get_feature_target_association",
+      "arguments": {
+        "feature": "dti"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 14,
+      "tool": "get_feature_target_association",
+      "arguments": {
+        "feature": "acc_open_past_24mths"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 15,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "issue_d"
+      },
+      "ok": true,
+      "outcome": "not_found"
+    },
+    {
+      "seq": 16,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "issue_d"
+      },
+      "ok": true,
+      "outcome": "match_count=11"
+    },
+    {
+      "seq": 17,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "funded_amnt_inv"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 18,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "term"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 19,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "loan_status"
+      },
+      "ok": true,
+      "outcome": "match_count=12"
+    },
+    {
+      "seq": 20,
+      "tool": "search_data_dictionary",
+      "arguments": {
+        "query": "default"
+      },
+      "ok": true,
+      "outcome": "match_count=10"
+    },
+    {
+      "seq": 21,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "term"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 22,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "grade"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 23,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "sub_grade"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 24,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "grade"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 25,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "dti"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 26,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "int_rate"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 27,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "acc_open_past_24mths"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 28,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "fico_range_low"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 29,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "annual_inc"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 30,
+      "tool": "get_ablation_result",
+      "arguments": {
+        "feature": "mo_sin_old_rev_tl_op"
+      },
+      "ok": true,
+      "outcome": "available"
+    },
+    {
+      "seq": 31,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "mths_since_recent_inq"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 32,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "mort_acc"
+      },
+      "ok": true,
+      "outcome": "found"
+    },
+    {
+      "seq": 33,
+      "tool": "get_feature_coverage",
+      "arguments": {
+        "feature": "total_bc_limit"
+      },
+      "ok": true,
+      "outcome": "found"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+========================================================================
+REAL RUN - LIVE API CALLS.
+========================================================================
+run          20260914T054131__REAL__toolsv2.0-populated-included-scopes-all-layer1__run11-honest-cached
+generated    2026-09-14T05:37:02
+config_id    toolsv2.0-populated-included-scopes-all-retrieval-pgvector-bge-small-en-v1.5-layer1
+termination  completed  (usable: True)
+
+The runner did not parse or alter the text below.
+----- VERBATIM MODEL TEXT BELOW THIS LINE -----
+Based on my investigation, I did not find direct target leakage (no post-origination fields like `recoveries`, `last_pymnt_*`, `total_rec_*`, or `loan_status`/`issue_d` are among the model's 180 inputs), and the top-20 feature ablations show no single feature has an outsized, suspicious effect on the held-out score. The 2016-validation AUC (0.7273) and 2017-test AUC (0.7296) are also close, which superficially supports the reading. However, two other patterns emerged that bear on whether the 2017 figure generalizes:
+
+1. Several features show a sharp, documented change in data availability partway through the training window (e.g. `total_bal_il` is "collected for loans issued from around December 2015 onward"), going from ~100% missing in 2014 to ~95% missing in 2015 to ~0% missing in 2016/2017. The model's experience of this feature as a genuinely populated, variable field comes almost entirely from 2016 (which happens to match 2017). The held-out score's apparent stability may partly reflect that 2016 and 2017 share this same late-arriving data regime, rather than the model having been robustly tested against the more heterogeneous conditions that made up most of its training data.
+
+2. Using the standalone (non-model) association tool, several of the model's most heavily weighted features show declining discriminative power from the training years to the 2017 test year: `term` (the single highest-SHAP feature) goes from AUC 0.614 (2014) / 0.624 (2015) / 0.576 (2016) down to 0.566 on test; `acc_open_past_24mths` (6th-highest SHAP) goes from 0.568 / 0.591 / 0.572 down to 0.534 on test. This is evidence of real temporal drift in how these variables relate to the outcome, which a single 2017 snapshot AUC does not reveal on its own.
+
+Neither of these overturns the headline number, but both are legitimate reasons the 0.7296 figure could be a less stable estimate of future performance than it appears.
+
+=== AUDIT FINDINGS ===
+FLAG: total_bal_il
+REASON: This feature was structurally absent for almost all of 2014 and most of 2015 and only became reliably populated in 2016, so the model's learned relationship for it comes almost entirely from a data regime that happens to match the 2017 test year rather than from a range of conditions the test year would independently validate.
+EVIDENCE: get_feature_coverage showed pct_flagged_missing of 100.0 in 2014, 94.96 in 2015, 0.018 in 2016, and 0.0 in test/2017, with n_unique collapsing to 1 in 2014.
+CONFIDENCE: medium
+###
+FLAG: term
+REASON: As the single most heavily weighted feature in the model, its standalone ability to rank default risk declines noticeably from the training years to the held-out year, indicating temporal drift that a one-shot 2017 AUC does not capture and that may not persist at the same level going forward.
+EVIDENCE: get_feature_target_association reported rank-AUC of 0.614 (2014), 0.624 (2015), 0.576 (2016) versus 0.566 on the test set.
+CONFIDENCE: medium
+###
+FLAG: acc_open_past_24mths
+REASON: This top-6 SHAP feature shows a substantial drop in its own association with the outcome between the training years and the test year, suggesting the relationships the model relies on are not stationary and the 2017 score may not project cleanly onto later years.
+EVIDENCE: get_feature_target_association reported rank-AUC of 0.568 (2014), 0.591 (2015), 0.572 (2016) versus 0.534 on the test set.
+CONFIDENCE: medium
+=== END AUDIT FINDINGS ===
