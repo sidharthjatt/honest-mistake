@@ -270,3 +270,20 @@ Some of the change between Phase 4 and 4b can be attributed to the format instru
 - **Anything about A3 beyond what is stated.** Whether a different wording of the question or of the label definitions would move it was not tested, and would be a new amendment and new runs.
 - **Anything adjudicated, or anything about spec quality.** The same limits apply as in Phase 4.
 - **A clean cost comparison.** 4b run 2 probably benefited from run 1's cache, and that was not measured.
+
+---
+
+# Three kinds of failure
+
+Added 2026-09-15, after Phase 4 and 4b were both scored. Nothing above is changed.
+
+The failures observed across Phase 4 and 4b are not one kind of failure but three.
+
+- **Format.** The reply does not parse. It was 20 of 52 replies in Phase 4, and 11 of 52 with an explicit instruction to reply with the JSON object alone. Every instance was prose followed by JSON.
+- **Judgement.** A3, in all four scored runs. The detector retrieved `auc_2014`, read it correctly as null because `all_util` holds a single value in 2014, and treated a null answer as no answer. Its replies parsed, and its reasoning was right. The label was wrong.
+- **Grounding.** A2, in both 4b runs. The label `answerable` was right, but the cited call was `get_feature_coverage` (`n_unique` in the test scope), not the `get_feature_target_association` call section 3 accepts. The accept rule caught this only because it requires a citation, not a label alone. Whether that cited field is an equally sound route to the answer is a question about section 3's accept list. It is not decided here.
+
+**An accept rule that matched labels alone would have scored A2 correct,** and the distinction between a right answer and a right answer grounded in the evidence the rule names would have been lost. The three kinds call for different responses:
+- a format failure can be reduced by instruction, as 4b showed, but not removed;
+- a judgement failure was untouched by the format change;
+- a grounding failure is invisible unless the rule asks for the evidence.
