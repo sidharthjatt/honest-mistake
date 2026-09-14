@@ -25,8 +25,10 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+from agent import ledger
 from agent.agent import run_audit as run_react_loop
-from agent.llm import MAX_TOKENS, MODEL
+from agent.llm import (CACHE_MODES, CACHE_OFF, MAX_TOKENS, MODEL,
+                       build_request, projected_request_usd)
 from agent.prompts import build_system_prompt
 from agent.tools import ToolLayer
 
@@ -207,6 +209,9 @@ def main(argv: list[str] | None = None) -> int:
                              "instead of the Layer 1 model")
     parser.add_argument("--label", type=str, default=None,
                         help="short label appended to the run directory name")
+    parser.add_argument("--cache", choices=CACHE_MODES, default=CACHE_OFF,
+                        help="prompt caching mode; off sends requests exactly "
+                             "as the Layer 2 runs did")
     args = parser.parse_args(argv)
 
     # Mock is the default: a paid call has to be requested, never reached
@@ -245,6 +250,20 @@ def main(argv: list[str] | None = None) -> int:
                                  n_features=n_features,
                                  tuning_record=tuning_record)
 
+    if not mock:
+        # The same check the loop makes before every request, made here on
+        # the first one so a refused run leaves no directory behind.
+        from agent.agent import TOOL_SCHEMAS
+        from agent.llm import _client
+        first = build_request([{"role": "user", "content": "Begin your review."}],
+                              TOOL_SCHEMAS, system, args.cache)
+        try:
+            ledger.check(MODEL, projected_request_usd(_client(), first))
+        except ledger.BudgetExceeded as exc:
+            raise SystemExit(f"Cannot start a real run. {exc}")
+        print(f"  ledger       ${ledger.spent_usd():.4f} of "
+              f"${ledger.CAP_USD:.2f} recorded")
+
     started = datetime.now()
     run = run_react_loop(
         tools,
@@ -252,6 +271,8 @@ def main(argv: list[str] | None = None) -> int:
         max_turns=args.max_turns,
         max_tool_calls=args.max_tool_calls,
         system=system,
+        cache=args.cache,
+        label=args.label,
     )
     finished = datetime.now()
 
@@ -285,6 +306,7 @@ def main(argv: list[str] | None = None) -> int:
         "model": MODEL if not mock else f"{MODEL} (not called; fixtures used)",
         "sampling_parameters": "none sent - removed for this model family",
         "max_tokens_per_turn": MAX_TOKENS,
+        "prompt_caching": args.cache,
         "config_id": final_config["config_id"],
         "config_id_directory": dir_stem,
         "artefact_variant": final_config["artefact_variant"],
@@ -332,8 +354,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  output          {u['output']:,}")
         print(f"  cache_creation  {u['cache_creation']:,}")
         print(f"  cache_read      {u['cache_read']:,}")
-        print("  no cost figure is given here: pricing is not verified in "
-              "this project, and a wrong number would be worse than none.")
+        print(f"  cost            ${ledger.cost_usd(MODEL, u):.4f} at "
+              f"{ledger.RATES_SOURCE}")
+        print(f"  ledger          ${ledger.spent_usd():.4f} of "
+              f"${ledger.CAP_USD:.2f} recorded")
 
     if not run.is_usable:
         print(f"\nNote: this run ended as '{run.termination}'. Its answer is "

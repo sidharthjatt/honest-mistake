@@ -27,7 +27,8 @@ import json
 from dataclasses import dataclass, field
 from typing import Any
 
-from agent.llm import call_llm
+from agent.ledger import BudgetExceeded
+from agent.llm import CACHE_OFF, call_llm
 from agent.prompts import build_system_prompt
 from agent.tools import TOOL_SCHEMAS, ToolLayer
 
@@ -46,6 +47,8 @@ STOP_SEQUENCE = "stop_sequence"
 UNKNOWN_STOP = "unknown_stop_reason"
 TURN_LIMIT = "turn_limit"
 CALL_LIMIT = "call_limit"
+# The spend ledger refused the next request; nothing was sent for it.
+BUDGET_CAP = "budget_cap"
 
 # Only end_turn means the model decided it was done. Every other value,
 # recognised or not, ends the run without producing a usable answer, and
@@ -135,6 +138,8 @@ def run_audit(
     max_turns: int = DEFAULT_MAX_TURNS,
     max_tool_calls: int = DEFAULT_MAX_TOOL_CALLS,
     system: str | None = None,
+    cache: str = CACHE_OFF,
+    label: str | None = None,
 ) -> AuditRun:
     """Run the loop to termination and return the record of it.
 
@@ -166,7 +171,12 @@ def run_audit(
             termination = TURN_LIMIT
             break
 
-        reply = call_llm(messages, TOOL_SCHEMAS, system, mock=mock)
+        try:
+            reply = call_llm(messages, TOOL_SCHEMAS, system, mock=mock,
+                             cache=cache, label=label)
+        except BudgetExceeded:
+            termination = BUDGET_CAP
+            break
         turns += 1
         for k in usage:
             usage[k] += reply["usage"].get(k, 0)
