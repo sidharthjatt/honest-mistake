@@ -2,7 +2,7 @@
 
 ## What this is
 
-A retrospective measurement of the existing Layer 2 run records against the specification in [PREREGISTRATION.md](../../PREREGISTRATION.md), frozen before any of these numbers were computed and amended nine times since, each amendment dated and recorded in that file. It measures the agent's mechanics: how runs ended, how long they were, which tools were called and how, whether calls were rejected or repeated, whether cited evidence names tools that were called and figures that tools returned, and how soon the planted column was examined after it first appeared. It does not measure whether the agent's findings were correct. That is covered by [LAYER2_EVAL.md](LAYER2_EVAL.md).
+A retrospective measurement of the existing Layer 2 run records against the specification in [PREREGISTRATION.md](../../PREREGISTRATION.md), frozen before any of these numbers were computed and amended nine times since, each amendment dated and recorded in that file. It measures the agent's mechanics: how runs ended, how long they were, which tools were called and how, whether calls were rejected or repeated, whether cited evidence names tools that were called and figures that tools returned, and how soon the planted column was examined after it first appeared. It does not measure whether the agent's findings were correct. This document reports how the agent got to its conclusions. What it concluded, and whether that was right, is reported in [LAYER2_EVAL.md](LAYER2_EVAL.md).
 
 ## Scope
 

@@ -2,6 +2,8 @@
 
 Across four scored runs the planted column was caught in every canary configuration. What changed between configurations was the number of false positives, not whether the leak was found.
 
+This document reports what the agent concluded, and whether it was right. How it got there, meaning its turns, tool calls, rejected and repeated calls, and whether its cited evidence traces back to tool output, is measured in [LAYER2_TRAJECTORY.md](LAYER2_TRAJECTORY.md).
+
 ## What was tested
 
 Two caches and two switches.
