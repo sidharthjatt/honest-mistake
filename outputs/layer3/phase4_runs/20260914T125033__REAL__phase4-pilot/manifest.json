@@ -1,0 +1,272 @@
+{
+  "_MODE": "REAL RUN - LIVE API CALLS.",
+  "mode": "REAL",
+  "label": "phase4-pilot",
+  "generated": "2026-09-14T12:50:33",
+  "model": "claude-sonnet-5",
+  "max_tokens_per_turn": 12400,
+  "thinking": {
+    "type": "adaptive",
+    "display": "summarized"
+  },
+  "cache": "moving-breakpoint",
+  "limits": {
+    "max_turns": 8,
+    "max_tool_calls": 16
+  },
+  "prompts": {
+    "detector_sha256": "db401deb03318893e45b7b2fbad804ac7560233b5c4f9d26e25afd0af281e0d8",
+    "spec_sha256": "6c3cca8f5fca3df3e463f71bdd83a4c6463e6d0280521808bea9475a4db950ca"
+  },
+  "episodes": [
+    {
+      "item": "A1",
+      "question": "How many features does the model read, and what are they?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 3,
+      "tool_calls": 2,
+      "output_tokens_per_turn": [
+        103,
+        85,
+        109
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 103,
+          "cache_creation": 2495,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 85,
+          "cache_creation": 7507,
+          "cache_read": 2495
+        },
+        {
+          "input": 2,
+          "output": 109,
+          "cache_creation": 183,
+          "cache_read": 10002
+        }
+      ],
+      "cost_usd": 0.030944,
+      "output": {
+        "label": "answerable",
+        "calls": [
+          {
+            "tool": "get_shap_ranking",
+            "arguments": {
+              "top_n": 1000
+            },
+            "field": "total_features"
+          },
+          {
+            "tool": "get_shap_ranking",
+            "arguments": {
+              "top_n": 1000
+            },
+            "field": "ranking"
+          }
+        ],
+        "difference_or_missing": null
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "db401deb03318893e45b7b2fbad804ac7560233b5c4f9d26e25afd0af281e0d8"
+    },
+    {
+      "item": "C3",
+      "question": "When all_util is high, does its SHAP contribution push predictions up?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 3,
+      "tool_calls": 2,
+      "output_tokens_per_turn": [
+        83,
+        695,
+        379
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 83,
+          "cache_creation": 2504,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 695,
+          "cache_creation": 415,
+          "cache_read": 2504
+        },
+        {
+          "input": 2,
+          "output": 379,
+          "cache_creation": 1047,
+          "cache_read": 2919
+        }
+      ],
+      "cost_usd": 0.022582,
+      "output": {
+        "label": "not_answerable",
+        "calls": [
+          {
+            "tool": "get_feature_shap_detail",
+            "arguments": {
+              "feature": "all_util"
+            },
+            "field": "mean_signed_shap"
+          },
+          {
+            "tool": "get_correlated_features",
+            "arguments": {
+              "feature": "all_util",
+              "top_k": 5
+            },
+            "field": "neighbours"
+          }
+        ],
+        "difference_or_missing": "The available tools only give aggregate statistics of all_util's SHAP distribution (mean, percentiles, positive/negative share) and its correlation with other features, but none of them link high values of all_util itself to the sign of its SHAP contribution (e.g., a dependence plot or value-binned SHAP average). Without that conditioning, we cannot confirm whether high all_util values specifically push predictions up."
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "db401deb03318893e45b7b2fbad804ac7560233b5c4f9d26e25afd0af281e0d8"
+    },
+    {
+      "item": "B2",
+      "question": "Which features are most correlated with purpose_wedding on the test set?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        58,
+        115
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 58,
+          "cache_creation": 2503,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 115,
+          "cache_creation": 146,
+          "cache_read": 2503
+        }
+      ],
+      "cost_usd": 0.008861,
+      "output": {
+        "label": "not_answerable",
+        "calls": [
+          {
+            "tool": "get_correlated_features",
+            "arguments": {
+              "feature": "purpose_wedding"
+            },
+            "field": "available"
+          }
+        ],
+        "difference_or_missing": "The tool reports that purpose_wedding has a single constant value on the test set, so correlations are undefined and no correlated features can be returned."
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "db401deb03318893e45b7b2fbad804ac7560233b5c4f9d26e25afd0af281e0d8"
+    },
+    {
+      "item": "NM3",
+      "question": "How many dictionary entries contain the literal text 'balance' in their name or definition?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        116,
+        742
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 116,
+          "cache_creation": 2508,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 742,
+          "cache_creation": 988,
+          "cache_read": 2508
+        }
+      ],
+      "cost_usd": 0.01783,
+      "output": {
+        "label": "not_answerable",
+        "calls": [
+          {
+            "tool": "search_data_dictionary",
+            "arguments": {
+              "query": "balance"
+            },
+            "field": "results"
+          }
+        ],
+        "difference_or_missing": "The search tool does not perform literal substring matching; it returns semantically related entries (e.g. 'dti', whose name and description do not contain the text 'balance' anywhere), so its match_count cannot be used to answer how many entries literally contain the text 'balance'."
+      },
+      "parse_error": null,
+      "retrieval": "pgvector-bge-small-en-v1.5",
+      "prompt_sha256": "db401deb03318893e45b7b2fbad804ac7560233b5c4f9d26e25afd0af281e0d8"
+    }
+  ],
+  "spec_requests": [
+    {
+      "item": "C3",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "usage": {
+        "input": 2,
+        "output": 451,
+        "cache_creation": 2329,
+        "cache_read": 0
+      },
+      "output_tokens": 451,
+      "cost_usd": 0.010337,
+      "output": {
+        "spec": {
+          "name": "get_shap_dependence_bins",
+          "description": "Show how one feature's SHAP contribution varies with the feature's own value. The feature's range on the sampled test rows is divided into bins; for each bin this reports the bin's value range, the mean and median SHAP value of rows falling in it, and the row count. Use it to see whether high (or low) values of a feature are associated with positive or negative SHAP contributions. Covers exactly the columns the model reads; any other name returns found=false.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "feature": {
+                "type": "string",
+                "description": "Exact name of one of the model's features."
+              },
+              "num_bins": {
+                "type": "integer",
+                "description": "Number of equal-width bins to divide the feature's value range into. Defaults to 10, maximum 20."
+              }
+            },
+            "required": [
+              "feature"
+            ]
+          },
+          "data_source": "new precomputed artefact: feature, bin_index, value_low, value_high, mean_shap, median_shap, row_count"
+        }
+      },
+      "parse_error": null,
+      "prompt_sha256": "6c3cca8f5fca3df3e463f71bdd83a4c6463e6d0280521808bea9475a4db950ca"
+    }
+  ],
+  "spec_requests_not_made": [],
+  "totals": {
+    "episodes": 4,
+    "detection_requests": 10,
+    "detection_cost_usd": 0.080216,
+    "spec_requests": 1,
+    "spec_cost_usd": 0.010337
+  }
+}

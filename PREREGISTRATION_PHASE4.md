@@ -334,6 +334,35 @@ Written before any Phase 4 generation request. The token counts below were made 
   Output is 60–80% of the spend and the only part no count can predict, so the two-run decision rests on those two numbers more than on the dollar figure.
 - **When it runs:** only after the runner and the spec-request path have been built, checked on mock replies with no API request, the mock results reported, and the pilot approved.
 
+### A5. 2026-09-14. Two runs instead of one
+
+Written after the pilot and before either full run.
+
+**The measured basis.** The pilot (`outputs/layer3/phase4_runs/20260914T125033__REAL__phase4-pilot/`) ran its four episodes and one spec request for $0.090554, against a projected $0.152 to $0.731 for the same work.
+- All four episodes completed, in 2 to 3 turns.
+- Output ran 58 to 742 tokens per turn, every figure below run11's median of 880.
+- **Split by kind:** detection cost $0.080216 for four episodes, $0.020054 each, and the spec request cost $0.010337.
+- **Scaled to a full run of 26 episodes and 13 spec requests:** $0.656, and two runs $1.31.
+- **The conservative figures:** dividing the whole $0.090554 by four gives $0.0227 per episode. Scaling that and then adding the spec requests gives about $0.72 for one run and $1.44 for two. Those figures count the spec request twice, so they overstate the cost.
+- **The limit on this basis:** it rests on four episodes, and a full run may differ.
+
+**Why the run count moved.** A1 cut three runs to one under a budget projection that no longer binds: detection episodes are now measured as far cheaper than audit runs. The question set, the accept rules and every threshold are still exactly as frozen. The cut is being partly reversed, not the test relaxed.
+
+**What two runs give, and what they do not.**
+- **Disagreement identifies an unstable item.** If an item gets a different label in each run, it is unstable.
+- **Two runs cannot estimate how often an item is unstable.** Two matching labels mean the item matched twice, not that it is stable.
+- **2-of-2 is not 3-of-3,** and must not be read as one.
+
+**How the accept rules apply across two runs, fixed now.** This is fixed before either run, not after seeing which items disagree.
+- Every rule in section 3 is applied to each run separately, as section 3 was written.
+- **The detector is accepted only if every rule holds in both runs.** An item counts toward a part's threshold only within its own run.
+- **Runs are never pooled,** and a pass in either run is never enough.
+- This applies to parts a, b and c, the near-miss rules, and the spec-generation rules alike.
+
+**Spec requests per run.** Section 1 makes a spec request only for an item in parts b or c that the detector labels `not_answerable` in that run. A run may therefore make fewer than 13. The number made in each run is reported, and an item not labelled `not_answerable` has no spec request in that run.
+
+**The pilot.** Per A4, the pilot's four episodes are not scored. A1, C3, B2 and NM3 are re-run afresh as part of each full run, like every other item.
+
 ## Defect register
 
 Numbering continues from D8 in `PREREGISTRATION_PHASE3.md`.
