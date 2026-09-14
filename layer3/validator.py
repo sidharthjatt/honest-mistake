@@ -101,8 +101,12 @@ def run_in_process(tool: Path, qid: str) -> Observation:
 
     Only for tools that attempt no escape. Nothing is refused and no time or
     memory limit is enforced, so a tool run this way can do anything this
-    process can.
+    process can. Tools marked SANDBOX_ONLY attempt an escape and are refused
+    here, so one can never run against the real repository by mistake.
     """
+    if "SANDBOX_ONLY = True" in tool.read_text():
+        raise RuntimeError(f"{tool.name} attempts an escape and runs only in "
+                           f"the sandbox.")
     question = QUESTIONS[qid]
     buffer = io.StringIO()
     exit_code, exception = 0, None

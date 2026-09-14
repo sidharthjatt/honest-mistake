@@ -190,7 +190,52 @@ The validator is not considered working until it has rejected every one of N1 to
 
 ## Amendments
 
-None yet.
+### A1. 2026-09-14. The sandbox image, pinned by digest
+
+Written after the image was pulled and before any sandbox code existed.
+
+The sandbox uses `python:3.11-slim`, pulled by digest rather than by tag, so a later push to the tag cannot change the image underneath the results.
+
+- **Index digest (what was pulled):** `sha256:9534e5a8e315485d4061ed659af0fd78a284c015f9b73661b41d6bab25604534`. Pulled as `python@sha256:9534e5a8…`, and the local image ID equals this digest.
+- **Platform manifest used on this machine:** `linux/arm64/v8`, `sha256:6c5ae9d998f4cc06f892f428d7af53a566c24ad0dc29fa572696b647cf2762a7`.
+- **Contents, from the image's own metadata:** Python 3.11.16, version label `3.11.16-slim-trixie`, base `debian:trixie-slim`, created 2026-08-31T23:57:33Z, 49,186,138 bytes.
+- **Host:** Docker client and server 29.7.2, kernel `7.0.12-linuxkit`.
+
+The container runs this digest and nothing else. A different image is used only after a further dated amendment recording its digest.
+
+### A2. 2026-09-14. The container contract named no libraries
+
+Written after R2 and R5 failed in the container, and before any broken tool had run in it.
+
+**What was missing.** Section 4 specified what the sandbox refuses and what it mounts. It never said which libraries the image must contain. The image pinned in A1 is stock `python:3.11-slim`, which has only pip, setuptools, wheel and packaging. Part A did not catch this, because its tools ran in the project's virtualenv, where numpy, pandas and pyarrow were already installed.
+
+**How it was found.** In the container, on the A1 image, R1, R3, R4 and R6 passed on all three runs. R2 and R5 crashed on all three. That is the job the reference tools were added to do: a sandbox that rejects everything would also reject every broken tool, and would look as if it worked. The cause was confirmed by starting the same image with no sandbox flags at all, where numpy, pandas and pyarrow were all absent. No refusal was involved. The failure came at import, before either tool touched the network, a file or memory.
+
+**What was not changed.** The questions were not changed to fit the image. K2 and K5 still give the tool `shap_values.parquet`, and R2 and R5 are unchanged. No refusal was relaxed.
+
+**The first `crashed` outcomes.** The `crashed` class was first exercised by these two reference tools, not by a broken tool. Each of the six executions was classified `crashed` from this raw observation: Docker exit code 1, `OOMKilled` false, not killed by the harness, child return code 1, and a Docker elapsed time of 0.117 to 0.136 s (0.149 to 0.171 s on the harness clock). The last line of stderr was `ModuleNotFoundError: No module named 'pyarrow'` for R2 and `ModuleNotFoundError: No module named 'numpy'` for R5. Peak memory was 18.1 to 18.5 MiB, which is the Python interpreter that starts the tool.
+
+**The image now used.** A derived image, built from `docker/sandbox/Dockerfile`:
+
+- **Base:** `python@sha256:9534e5a8e315485d4061ed659af0fd78a284c015f9b73661b41d6bab25604534`, as in A1.
+- **Libraries, at the exact versions in `requirements.txt`:** `numpy==2.4.6`, `pandas==3.0.3`, `pyarrow==24.0.0`.
+- **Everything pip resolved, from `pip freeze` inside the image:** `numpy==2.4.6`, `packaging==26.3`, `pandas==3.0.3`, `pyarrow==24.0.0`, `python-dateutil==2.9.0.post0`, `six==1.17.0`. `requirements.txt` does not pin python-dateutil or six. They are recorded here as resolved, not as pinned.
+- **Derived image digest:** `sha256:801f6454116549ae4369be7d1ed8e64c3b2143e255931c0c67bc312de67450f6`, linux/arm64, 143,321,615 bytes, created 2026-09-14T06:04:11Z. This is the local image ID. The image was built locally and never pushed to a registry. Rebuilding the Dockerfile produces a different ID, because the creation time is part of the image, so a rebuild is a new image and needs its own amendment.
+- **Confirmed inside the image, with `--network none`:** Python 3.11.16, and numpy 2.4.6, pandas 3.0.3 and pyarrow 24.0.0 all import.
+
+**Network.** The network is used while the image is built, because pip downloads the libraries. It is never available while a tool runs: every tool container still starts with `--network none`, as in section 4.
+
+### A3. 2026-09-14. R5's memory headroom
+
+Written after all six reference tools passed on the A2 image, and after the broken tools had run.
+
+The 512 MiB memory limit was frozen without being timed, as section 3 says. On the A2 image, R5 peaked at between 272.7 and 282.7 MiB across its three runs. The highest, 282.7 MiB, is 55% of the limit. The figure is the container's cgroup `memory.peak`, the same counter the limit is enforced against. It includes about 11 MiB for the interpreter that starts the tool, and page cache from reading the 30 MB `shap_values.parquet`. It therefore overstates what R5 itself allocates, but it is what the limit sees. The other five reference tools peaked between 11.7 and 31.6 MiB.
+
+**The limit is not being changed.** R5 is the heaviest realistic reference case: it loads the full SHAP matrix through pandas, and it fits. Raising the limit after seeing a number this close to half of it would be tuning the rule on the observation, which is the thing this document exists to prevent.
+
+**The risk is carried forward.** Tools generated in Phase 4 will have a memory profile nobody knows in advance. A generated tool that exceeds 512 MiB will be classified `memory_limit`. That is the limit doing its job, not a defect in the sandbox or the tool contract, and it should not be read or reported as one.
+
+**Time.** No tool came near half of the 30 s limit. The slowest reference run was R5 at 0.356 s on the harness clock.
 
 ## Defect register
 
