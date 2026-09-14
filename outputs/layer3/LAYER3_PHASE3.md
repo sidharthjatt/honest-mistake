@@ -2,7 +2,7 @@
 
 Written 2026-09-14. This reports what was run against the specification in [PREREGISTRATION_PHASE3.md](../../PREREGISTRATION_PHASE3.md) and what happened. It adds no rule. Where the specification was amended along the way (A1 to A3, D7 and D8), the amendment is cited, not restated.
 
-The Layer 2 analyses measure the audit agent: [LAYER2_EVAL.md](../agent_cache/LAYER2_EVAL.md) reports what it concluded, and [LAYER2_TRAJECTORY.md](../agent_cache/LAYER2_TRAJECTORY.md) how it got there. This document measures something else: the machinery that will validate a tool before any agent is allowed to use it. No agent ran and no API call was made in Phase 3.
+The Layer 2 analyses measure the audit agent: [LAYER2_EVAL.md](../agent_cache/LAYER2_EVAL.md) reports what it concluded, and [LAYER2_TRAJECTORY.md](../agent_cache/LAYER2_TRAJECTORY.md) how it got there. This document measures something else: the machinery that will validate a tool before any agent is allowed to use it. No agent ran and no API call was made in Phase 3. Phase 4, which ran a gap detector against the eight tools, is reported in [LAYER3_PHASE4.md](LAYER3_PHASE4.md).
 
 ## What was run
 
