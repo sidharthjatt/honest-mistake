@@ -201,10 +201,100 @@ If the projection does not fit, the number of runs or items is reduced by a date
 
 ## Amendments
 
-None yet.
+### A1. 2026-09-14. One run instead of three
+
+Written before any prompt existed and before any Phase 4 request.
+
+**The change.** Phase 4 makes one complete run over the question set, not three. Everything in this file that refers to three runs now refers to the one run:
+- the protocol's "three complete runs";
+- the accept rules applying "to each of the three runs separately";
+- the spec-generation rules applying "per run";
+- section 6's counts, which fall from 78 detection episodes and 39 spec requests to 26 and 13.
+
+**Why.** Layer 3 does not fit under its $15.00 cap at three runs once Phases 5 to 7 are costed (A2). The cap is not being raised. The plan changed instead.
+
+**What was not reduced.** The question set (9 non-gaps, 6 declared gaps, 7 silent gaps, 4 near-misses), the accept rules, and every threshold stand exactly as frozen. The run count was cut rather than any of them, because a cheaper test must not become an easier one.
+
+**What is lost.** The accept rules were meant to hold on each of three runs, which is a 3-of-3 consistency requirement. That requirement is gone.
+- **Why it matters here in particular:** Phase 4 is the first phase in Layer 3 whose subject is non-deterministic. Every Phase 3 tool gave the same output on every run. A detector does not. One run cannot separate a detector that reliably gets an item right from one that got it right once, and it gives no measure of how often the detector's labels change between runs.
+- **What a pass on the one run shows:** that the detector met the thresholds once. It does not show that it would meet them again. Any result from Phase 4 is reported with that limitation attached.
+
+### A2. 2026-09-14. The Layer 3 budget, and the Phase 6 design
+
+Written before any prompt existed and before any Phase 4 request. These are the first cost estimates for Phases 5 to 7. No earlier per-phase estimate existed in the repository or in any session.
+
+**Measured numbers the estimates rest on:**
+- The eight tool schemas count 1,979 tokens (`PREREGISTRATION_PHASE2.md`, step 2A). `agent/tools.py` has not changed since commit `97a339c`, which predates that count.
+- run11, from the ledger and its `messages.json`:
+  - 0.3003 tokens per character added between turns;
+  - 1,096 tokens added per tool call;
+  - 1,785 tokens of echoed assistant turn per turn;
+  - output per non-final turn with a median of 880, a mean of 1,121 and a maximum of 3,107;
+  - a recorded cost of $0.352383.
+- Across Layer 2's 12 real runs, output per turn has a median of 1,213 and a maximum of 2,152.
+- The tool results the question set would trigger, dispatched locally and converted at run11's ratio, are 53 to 778 tokens each, except `get_shap_ranking(top_n=180)` at 4,139.
+- Rates are those in `PREREGISTRATION_PHASE2.md`.
+
+**Estimates.** Each row says what is arithmetic on the measured numbers and what is a guess.
+
+| Phase | What it runs | Requests | Estimate | Measured | Guessed |
+|---|---|---|---|---|---|
+| 4, one run | 26 detection episodes and 13 spec requests | 52–108 | $1.00–$4.63 | tool schemas, tool result sizes, run11's output and echo per turn, rates | detector prompt size (1,000–2,000), final output (800–3,000), extra calls (0–2), how calls are grouped into turns, spec prompt and output sizes |
+| 5 | code generated from the 8 expected specs, run through the Phase 3 sandbox and validator, with retries | 8–24 | $0.22–$1.49 | rates only | scope (taken from the README roadmap), attempts (1–3), prompt (4,000–6,000), output (2,000–5,000) |
+| 6 | two tool-less judges and one verifier over every Phase 4 detection episode | 78 | $2.50 (judges $1.56, verifier $0.94) | rates only | scope, transcript size (6,000), judge prompt (1,500), output per request (1,500) |
+| 7 | four end-to-end audit runs | 4 runs | $2.82–$4.23 | run11's $0.352383 | scope, and a cost multiplier of 2–3 over run11 |
+| **Total** | | | **$6.54–$12.85** | | |
+
+Against the $14.638035 remaining, this leaves $1.79 to $8.10. The Phase 4 figure is replaced by a projection from counted tokens (the next amendment after the prompts are written) before any request is made.
+
+**The Phase 6 design decision.** Judges are tool-less and cover every Phase 4 detection episode.
+- **Why coverage beats capability:** Phase 6's claim is agreement measured against a chance floor, and judging a third of the sample would weaken that floor. A judge that needs tools to reach its verdict is a second auditor, not a judge.
+- **How 78 became 26:** the coverage argument was first made for 78 episodes, priced at $7.49. Once A1 cut Phase 4 to one run, those 78 no longer exist. The substance of the argument still holds: no episode that exists gets left out. Phase 6 therefore judges all 26, which costs $2.50 at the same per-episode rates.
+- **The sample size is not incidental.** The chance floor can still be computed at 26 episodes. But the agreement estimate carries a wider uncertainty band at 26 than it would at 78, and that widening is a direct consequence of cutting Phase 4 to one run. Any agreement figure Phase 6 reports must be presented with its sample size and its uncertainty band, and never as if 26 were a free choice.
+- **What it gives up:** at full design, tool-using judges over 78 episodes would have cost $23.08, more than the whole remaining budget.
+
+**Phase 6 options that were rejected.**
+- **Judging the 26 episodes three times,** $7.49. Repeated passes over the same material measure one judge's consistency with itself, not agreement between independent judges. That is a legitimate metric, but it is not Phase 6's claim, and it would cost $7.49 for the same material that $2.50 covers.
+- **Keeping Phase 4 at three runs so 78 episodes exist,** $13.53–$27.11 for Layer 3. It reverses the Phase 4 decision in A1, and breaches the cap at the high end.
+
+**Phase 4 at two runs is reopened, not decided.** The $1.79–$8.10 headroom reopens whether Phase 4 could afford two runs. That will be decided after the pilot, on measured cost per episode, not now on estimates. Until then Phase 4 stays frozen at one run.
+
+**Rejected, with reasons.**
+- **A second cache breakpoint on the system prompt,** to share the prefix across episodes, would save $0.55–$0.72. It would reinstate a design `PREREGISTRATION_PHASE2.md` rejected on its own merits, and the saving is not worth that precedent.
+- **Cutting Phase 7 from four runs to two** would save up to $1.41. The end-to-end runs are that phase's evidence.
+
+**How firm these numbers are.** Only the Phase 4 row rests substantially on measured numbers. Phases 5 to 7 have no document defining their scope, so their rows are planning figures and not commitments. Each phase will get its own projection from counted tokens before it spends.
+
+### A3. 2026-09-14. The two prompts, recorded by hash
+
+Written after both prompts existed and before any Phase 4 request, as section 1 requires.
+
+| Prompt | File | SHA-256 | Size |
+|---|---|---|---|
+| Detector system prompt | `layer3/prompts/phase4_detector_system.txt` | `db401deb03318893e45b7b2fbad804ac7560233b5c4f9d26e25afd0af281e0d8` | 1,665 bytes, 18 lines |
+| Spec-generation system prompt | `layer3/prompts/phase4_spec_system.txt` | `6c3cca8f5fca3df3e463f71bdd83a4c6463e6d0280521808bea9475a4db950ca` | 1,386 bytes, 16 lines |
+
+**How they are sent.** Each file's UTF-8 text is sent exactly as it is, with nothing stripped or added.
+- **A detection episode:** the detector prompt is the system prompt, the question is the only content of the first user message, and the eight schemas in `agent/tools.py` are passed as tools.
+- **A spec request:** the spec prompt is the system prompt, and one user message holds the question, the detector's JSON output and the eight tool definitions as JSON. No tools are passed.
+
+**What they do not contain.** Neither prompt contains:
+- any question from section 2, any item ID, or any part name;
+- any answer, any feature name used in the question set, any feature count or year;
+- the word `recoveries`, or the name of any file listed in section 5.
+
+This was checked by searching both files for `declared`, `silent`, `near-miss`, `non-gap`, every feature name used in the question set, `balance`, `recoveries`, `180`, the years 2014 to 2017, and the protected file names. There were no matches. The spec prompt names the six honest-cache files, because spec rule 4 requires a tool's data source to be one of them.
+
+**How "any label" is read.** Section 1 says the system prompt may not contain "any label". In that rule, "label" means an item's part assignment (non-gap, declared gap, silent gap, near-miss) and item IDs. The three output values `answerable`, `answerable_with_difference` and `not_answerable` appear in the detector prompt because the frozen output format in section 1 requires the detector to emit one of them.
+
+This is a reading of the rule, not a change to it. No rule text changes. The rule exists to stop the prompt revealing which items are gaps, and the three output values reveal nothing about any item.
+
+**Changes.** Any change to either file after this amendment needs a new dated amendment recording the new hash before any request uses it.
 
 ## Defect register
 
 Numbering continues from D8 in `PREREGISTRATION_PHASE3.md`.
 
 **D9. 2026-09-14.** The no-NaN finding from step 0b rests on parquet `null_count` statistics read from the metadata of `X_train.parquet` and `X_test.parquet`: 0 nulls, with statistics present for every column. `null_count` counts nulls. It does not count NaN stored as a floating-point value, so NaN in the 77 float columns was not ruled out; the 103 integer columns cannot hold NaN. Imputation itself was not verified from any artefact: that the matrices were filled in during feature preparation is a statement about how they were built, and checking it would take the source data, which step 0b did not read. Near-miss 4 depends only on what the tool returns and on the flag structure, both verified. Any claim that the source values were imputed stands on this defect entry, not on a check.
+
+**D10. 2026-09-14.** Phase 5's real risk is scope, not cost. Specs for C2, C3, C5, C6 and C7, if produced as section 3 expects, can only name `new precomputed artefact` as their data source. Each needs something built from `data/` that no current artefact holds: training-split percentiles, value paired with SHAP row by row, training-split point-biserial correlations, training-split correlations, and model scores by year. No known answer exists for any of them, so the Phase 3 validator has nothing to check such a tool against. Phase 5 could therefore turn into building artefacts and new known answers rather than implementing tools. This is recorded now so that scope decision is taken deliberately when Phase 5 starts, and not discovered in the middle of building.
