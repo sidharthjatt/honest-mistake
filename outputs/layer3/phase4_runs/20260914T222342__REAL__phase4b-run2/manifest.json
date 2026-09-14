@@ -1,0 +1,1474 @@
+{
+  "_MODE": "REAL RUN - LIVE API CALLS.",
+  "mode": "REAL",
+  "label": "phase4b-run2",
+  "generated": "2026-09-14T22:23:42",
+  "model": "claude-sonnet-5",
+  "max_tokens_per_turn": 12400,
+  "thinking": {
+    "type": "adaptive",
+    "display": "summarized"
+  },
+  "cache": "moving-breakpoint",
+  "limits": {
+    "max_turns": 8,
+    "max_tool_calls": 16
+  },
+  "detector_prompt": "4b",
+  "prompts": {
+    "detector_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1",
+    "spec_sha256": "6c3cca8f5fca3df3e463f71bdd83a4c6463e6d0280521808bea9475a4db950ca"
+  },
+  "episodes": [
+    {
+      "item": "A1",
+      "question": "How many features does the model read, and what are they?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 3,
+      "tool_calls": 2,
+      "output_tokens_per_turn": [
+        119,
+        89,
+        109
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 119,
+          "cache_creation": 2519,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 89,
+          "cache_creation": 7523,
+          "cache_read": 2519
+        },
+        {
+          "input": 2,
+          "output": 109,
+          "cache_creation": 156,
+          "cache_read": 10042
+        }
+      ],
+      "cost_usd": 0.031189,
+      "output": {
+        "label": "answerable",
+        "calls": [
+          {
+            "tool": "get_shap_ranking",
+            "arguments": {
+              "top_n": 1000
+            },
+            "field": "total_features"
+          },
+          {
+            "tool": "get_shap_ranking",
+            "arguments": {
+              "top_n": 1000
+            },
+            "field": "ranking"
+          }
+        ],
+        "difference_or_missing": null
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "A2",
+      "question": "Is purpose_wedding constant on the test set?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 3,
+      "tool_calls": 2,
+      "output_tokens_per_turn": [
+        103,
+        81,
+        80
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 103,
+          "cache_creation": 2522,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 81,
+          "cache_creation": 818,
+          "cache_read": 2522
+        },
+        {
+          "input": 2,
+          "output": 80,
+          "cache_creation": 121,
+          "cache_read": 3340
+        }
+      ],
+      "cost_usd": 0.012477,
+      "output": {
+        "label": "answerable",
+        "calls": [
+          {
+            "tool": "get_feature_coverage",
+            "arguments": {
+              "feature": "purpose_wedding"
+            },
+            "field": "scopes[1].n_unique"
+          }
+        ],
+        "difference_or_missing": null
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "A3",
+      "question": "What is all_util's standalone ROC-AUC within 2014?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        90,
+        127
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 90,
+          "cache_creation": 2527,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 127,
+          "cache_creation": 354,
+          "cache_read": 2527
+        }
+      ],
+      "cost_usd": 0.009886,
+      "output": {
+        "label": "not_answerable",
+        "calls": [
+          {
+            "tool": "get_feature_target_association",
+            "arguments": {
+              "feature": "all_util"
+            },
+            "field": "auc_2014"
+          }
+        ],
+        "difference_or_missing": "The tool returns auc_2014 as null because all_util takes a single value within 2014, so no ROC-AUC could be computed for that year; no other tool provides this figure."
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "A4",
+      "question": "Is all_util documented in the data dictionary?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        73,
+        65
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 73,
+          "cache_creation": 2521,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 65,
+          "cache_creation": 164,
+          "cache_read": 2521
+        }
+      ],
+      "cost_usd": 0.008605,
+      "output": {
+        "label": "answerable",
+        "calls": [
+          {
+            "tool": "lookup_feature",
+            "arguments": {
+              "feature": "all_util"
+            },
+            "field": "found"
+          }
+        ],
+        "difference_or_missing": null
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "A5",
+      "question": "Where does max_bal_bc_was_missing rank by mean absolute SHAP?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 3,
+      "tool_calls": 2,
+      "output_tokens_per_turn": [
+        86,
+        99,
+        73
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 86,
+          "cache_creation": 2534,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 99,
+          "cache_creation": 7490,
+          "cache_read": 2534
+        },
+        {
+          "input": 2,
+          "output": 73,
+          "cache_creation": 215,
+          "cache_read": 10024
+        }
+      ],
+      "cost_usd": 0.030701,
+      "output": {
+        "label": "answerable",
+        "calls": [
+          {
+            "tool": "get_shap_ranking",
+            "arguments": {
+              "top_n": 1000
+            },
+            "field": "ranking[165].rank"
+          }
+        ],
+        "difference_or_missing": null
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "A6",
+      "question": "How many 2014 rows does all_util's coverage profile cover?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        93,
+        76
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 93,
+          "cache_creation": 2527,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 76,
+          "cache_creation": 850,
+          "cache_read": 2527
+        }
+      ],
+      "cost_usd": 0.010646,
+      "output": {
+        "label": "answerable",
+        "calls": [
+          {
+            "tool": "get_feature_coverage",
+            "arguments": {
+              "feature": "all_util"
+            },
+            "field": "scopes[2].n_rows"
+          }
+        ],
+        "difference_or_missing": null
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "A7",
+      "question": "Which 15 features are most correlated with all_util on the test set?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        130,
+        76
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 130,
+          "cache_creation": 2526,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 76,
+          "cache_creation": 1001,
+          "cache_read": 2526
+        }
+      ],
+      "cost_usd": 0.011391,
+      "output": {
+        "label": "answerable",
+        "calls": [
+          {
+            "tool": "get_correlated_features",
+            "arguments": {
+              "feature": "all_util",
+              "top_k": 15
+            },
+            "field": "neighbours"
+          }
+        ],
+        "difference_or_missing": null
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "A8",
+      "question": "How does held-out ROC-AUC change when the model is retrained without its highest-ranked feature?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 3,
+      "tool_calls": 2,
+      "output_tokens_per_turn": [
+        80,
+        52,
+        116
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 80,
+          "cache_creation": 2537,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 52,
+          "cache_creation": 177,
+          "cache_read": 2537
+        },
+        {
+          "input": 2,
+          "output": 116,
+          "cache_creation": 201,
+          "cache_read": 2714
+        }
+      ],
+      "cost_usd": 0.01083,
+      "output": {
+        "label": "answerable",
+        "calls": [
+          {
+            "tool": "get_shap_ranking",
+            "arguments": {
+              "top_n": 1
+            },
+            "field": "ranking[0].feature"
+          },
+          {
+            "tool": "get_ablation_result",
+            "arguments": {
+              "feature": "term"
+            },
+            "field": "delta_roc_auc"
+          }
+        ],
+        "difference_or_missing": null
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "A9",
+      "question": "Is addr_state one of the model's inputs?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        84,
+        68
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 84,
+          "cache_creation": 2521,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 68,
+          "cache_creation": 159,
+          "cache_read": 2521
+        }
+      ],
+      "cost_usd": 0.008732,
+      "output": {
+        "label": "answerable",
+        "calls": [
+          {
+            "tool": "get_feature_coverage",
+            "arguments": {
+              "feature": "addr_state"
+            },
+            "field": "found"
+          }
+        ],
+        "difference_or_missing": null
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "B1",
+      "question": "How does held-out ROC-AUC change when the model is retrained without percent_bc_gt_75?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        119,
+        181
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 119,
+          "cache_creation": 2538,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 181,
+          "cache_creation": 243,
+          "cache_read": 2538
+        }
+      ],
+      "cost_usd": 0.010468,
+      "output": {
+        "label": "not_answerable",
+        "calls": [
+          {
+            "tool": "get_ablation_result",
+            "arguments": {
+              "feature": "percent_bc_gt_75"
+            },
+            "field": "available"
+          }
+        ],
+        "difference_or_missing": "Ablation results are only precomputed for the 20 highest mean-|SHAP| features, and percent_bc_gt_75 is not among them, so no retrained-without-feature ROC-AUC figure exists for it."
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "B2",
+      "question": "Which features are most correlated with purpose_wedding on the test set?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        58,
+        202
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 58,
+          "cache_creation": 2527,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 202,
+          "cache_creation": 146,
+          "cache_read": 2527
+        }
+      ],
+      "cost_usd": 0.009796,
+      "output": {
+        "label": "not_answerable",
+        "calls": [
+          {
+            "tool": "get_correlated_features",
+            "arguments": {
+              "feature": "purpose_wedding"
+            },
+            "field": "available"
+          }
+        ],
+        "difference_or_missing": "The tool reports that purpose_wedding holds a single value across the test set, so no correlations can be computed or returned for it; no other tool provides correlation data."
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "B3",
+      "question": "What does addr_state's SHAP distribution look like?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 3,
+      "tool_calls": 2,
+      "output_tokens_per_turn": [
+        93,
+        109,
+        126
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 93,
+          "cache_creation": 2523,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 109,
+          "cache_creation": 160,
+          "cache_read": 2523
+        },
+        {
+          "input": 2,
+          "output": 126,
+          "cache_creation": 172,
+          "cache_read": 2683
+        }
+      ],
+      "cost_usd": 0.011471,
+      "output": {
+        "label": "not_answerable",
+        "calls": [
+          {
+            "tool": "get_feature_shap_detail",
+            "arguments": {
+              "feature": "addr_state"
+            },
+            "field": "found"
+          }
+        ],
+        "difference_or_missing": "addr_state is documented in the data dictionary but is not one of the model's features, so get_feature_shap_detail returns found=false and no SHAP distribution exists for it."
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "B4",
+      "question": "What share of addr_state's rows hold exactly zero, in each year?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 3,
+      "tool_calls": 2,
+      "output_tokens_per_turn": [
+        127,
+        107,
+        255
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 127,
+          "cache_creation": 2528,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 107,
+          "cache_creation": 202,
+          "cache_read": 2528
+        },
+        {
+          "input": 2,
+          "output": 255,
+          "cache_creation": 171,
+          "cache_read": 2730
+        }
+      ],
+      "cost_usd": 0.013206,
+      "output": null,
+      "parse_error": "the reply is not exactly one JSON object: Expecting value: line 1 column 1 (char 0)",
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "B5",
+      "question": "What is addr_state's standalone ROC-AUC on the test set?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 6,
+      "tool_calls": 6,
+      "output_tokens_per_turn": [
+        56,
+        145,
+        170,
+        96,
+        171,
+        238
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 56,
+          "cache_creation": 2528,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 145,
+          "cache_creation": 133,
+          "cache_read": 2528
+        },
+        {
+          "input": 2,
+          "output": 170,
+          "cache_creation": 3232,
+          "cache_read": 2661
+        },
+        {
+          "input": 2,
+          "output": 96,
+          "cache_creation": 398,
+          "cache_read": 5893
+        },
+        {
+          "input": 2,
+          "output": 171,
+          "cache_creation": 7501,
+          "cache_read": 6291
+        },
+        {
+          "input": 2,
+          "output": 238,
+          "cache_creation": 399,
+          "cache_read": 13792
+        }
+      ],
+      "cost_usd": 0.050494,
+      "output": {
+        "label": "not_answerable",
+        "calls": [
+          {
+            "tool": "get_feature_target_association",
+            "arguments": {
+              "feature": "addr_state"
+            },
+            "field": "found"
+          },
+          {
+            "tool": "get_shap_ranking",
+            "arguments": {
+              "top_n": 200
+            },
+            "field": "ranking"
+          }
+        ],
+        "difference_or_missing": "The model does not use a single 'addr_state' feature; it is one-hot encoded into 50+ separate addr_state_XX columns, each with its own individual standalone ROC-AUC (e.g. addr_state_CA: 0.5012, addr_state_NY: 0.5089). No tool provides a combined/aggregate standalone AUC for the original categorical addr_state variable as a whole."
+      },
+      "parse_error": null,
+      "retrieval": "pgvector-bge-small-en-v1.5",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "B6",
+      "question": "Which features are most correlated with addr_state on the test set?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 3,
+      "tool_calls": 3,
+      "output_tokens_per_turn": [
+        96,
+        139,
+        297
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 96,
+          "cache_creation": 2524,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 139,
+          "cache_creation": 173,
+          "cache_read": 2524
+        },
+        {
+          "input": 2,
+          "output": 297,
+          "cache_creation": 3226,
+          "cache_read": 2697
+        }
+      ],
+      "cost_usd": 0.021184,
+      "output": null,
+      "parse_error": "the reply is not exactly one JSON object: Expecting value: line 1 column 1 (char 0)",
+      "retrieval": "pgvector-bge-small-en-v1.5",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "C1",
+      "question": "How does held-out ROC-AUC change when term and sub_grade are removed together?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 2,
+      "output_tokens_per_turn": [
+        183,
+        244
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 183,
+          "cache_creation": 2532,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 244,
+          "cache_creation": 537,
+          "cache_read": 2532
+        }
+      ],
+      "cost_usd": 0.012457,
+      "output": null,
+      "parse_error": "the reply is not exactly one JSON object: Expecting value: line 1 column 1 (char 0)",
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "C2",
+      "question": "What is all_util's 99th percentile value on the training split?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 4,
+      "tool_calls": 3,
+      "output_tokens_per_turn": [
+        150,
+        87,
+        101,
+        155
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 150,
+          "cache_creation": 2524,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 87,
+          "cache_creation": 906,
+          "cache_read": 2524
+        },
+        {
+          "input": 2,
+          "output": 101,
+          "cache_creation": 352,
+          "cache_read": 3430
+        },
+        {
+          "input": 2,
+          "output": 155,
+          "cache_creation": 192,
+          "cache_read": 3782
+        }
+      ],
+      "cost_usd": 0.016828,
+      "output": {
+        "label": "not_answerable",
+        "calls": [
+          {
+            "tool": "get_feature_coverage",
+            "arguments": {
+              "feature": "all_util"
+            },
+            "field": "scopes[0].p50"
+          }
+        ],
+        "difference_or_missing": "The coverage tool only reports mean, std, and median (p50) per scope, not the 99th percentile; no other tool exposes percentile statistics for a feature's distribution, so the 99th percentile of all_util on the training split cannot be obtained."
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "C3",
+      "question": "When all_util is high, does its SHAP contribution push predictions up?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 3,
+      "tool_calls": 3,
+      "output_tokens_per_turn": [
+        76,
+        644,
+        682
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 76,
+          "cache_creation": 2528,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 644,
+          "cache_creation": 407,
+          "cache_read": 2528
+        },
+        {
+          "input": 2,
+          "output": 682,
+          "cache_creation": 1316,
+          "cache_read": 2935
+        }
+      ],
+      "cost_usd": 0.025752,
+      "output": {
+        "label": "not_answerable",
+        "calls": [
+          {
+            "tool": "get_feature_shap_detail",
+            "arguments": {
+              "feature": "all_util"
+            },
+            "field": "mean_signed_shap"
+          },
+          {
+            "tool": "get_feature_target_association",
+            "arguments": {
+              "feature": "all_util"
+            },
+            "field": "point_biserial_test"
+          },
+          {
+            "tool": "get_correlated_features",
+            "arguments": {
+              "feature": "all_util",
+              "top_k": 5
+            },
+            "field": "neighbours"
+          }
+        ],
+        "difference_or_missing": "The tools report the overall distribution of SHAP values and the feature's correlation with the outcome, but none of them shows how the SHAP contribution varies conditional on the feature's own value (e.g. a partial-dependence or binned SHAP-vs-value view). So there is no direct evidence tying 'high all_util' values specifically to positive SHAP push; only indirect signals (positive point-biserial correlation with target) are available, which is not the same as showing the SHAP direction for high values of the feature itself."
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "C4",
+      "question": "Which test rows carry all_util's largest SHAP attributions?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        151,
+        228
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 151,
+          "cache_creation": 2527,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 228,
+          "cache_creation": 482,
+          "cache_read": 2527
+        }
+      ],
+      "cost_usd": 0.011826,
+      "output": null,
+      "parse_error": "the reply is not exactly one JSON object: Expecting value: line 1 column 1 (char 0)",
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "C5",
+      "question": "What is all_util's point-biserial correlation with the outcome on the training split?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 3,
+      "tool_calls": 2,
+      "output_tokens_per_turn": [
+        162,
+        94,
+        181
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 162,
+          "cache_creation": 2530,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 94,
+          "cache_creation": 426,
+          "cache_read": 2530
+        },
+        {
+          "input": 2,
+          "output": 181,
+          "cache_creation": 192,
+          "cache_read": 2956
+        }
+      ],
+      "cost_usd": 0.013349,
+      "output": {
+        "label": "answerable_with_difference",
+        "calls": [
+          {
+            "tool": "get_feature_target_association",
+            "arguments": {
+              "feature": "all_util"
+            },
+            "field": "point_biserial_test"
+          }
+        ],
+        "difference_or_missing": "The tool only reports point-biserial correlation with the outcome on the test split (point_biserial_test = 0.09068); it does not provide this correlation for the training split, only rank-based AUC (auc_train) is given there."
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "C6",
+      "question": "Which features are most correlated with all_util on the training split?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        117,
+        123
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 117,
+          "cache_creation": 2523,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 123,
+          "cache_creation": 469,
+          "cache_read": 2523
+        }
+      ],
+      "cost_usd": 0.010393,
+      "output": {
+        "label": "answerable_with_difference",
+        "calls": [
+          {
+            "tool": "get_correlated_features",
+            "arguments": {
+              "feature": "all_util"
+            },
+            "field": "neighbours"
+          }
+        ],
+        "difference_or_missing": "The tool reports Pearson correlations computed over the held-out test set, not the training split, so it answers a similar but distinct question than the one asked about the training split."
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "C7",
+      "question": "What is the model's ROC-AUC on the 2016 vintage?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 2,
+      "output_tokens_per_turn": [
+        352,
+        231
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 352,
+          "cache_creation": 2528,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 231,
+          "cache_creation": 592,
+          "cache_read": 2528
+        }
+      ],
+      "cost_usd": 0.014144,
+      "output": {
+        "label": "not_answerable",
+        "calls": [
+          {
+            "tool": "get_shap_ranking",
+            "arguments": {
+              "top_n": 1
+            },
+            "field": "ranking"
+          }
+        ],
+        "difference_or_missing": "None of the tools report an overall model-level ROC-AUC broken down by loan vintage/year; get_feature_target_association only gives per-feature (not whole-model) association by year, and the other tools cover SHAP, ablation, coverage, and correlation, none of which give the model's aggregate performance metric for a specific vintage like 2016."
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "NM1",
+      "question": "What is max_bal_bc_was_missing's mean absolute SHAP value?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        126,
+        85
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 126,
+          "cache_creation": 2532,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 85,
+          "cache_creation": 488,
+          "cache_read": 2532
+        }
+      ],
+      "cost_usd": 0.010174,
+      "output": {
+        "label": "answerable",
+        "calls": [
+          {
+            "tool": "get_feature_shap_detail",
+            "arguments": {
+              "feature": "max_bal_bc_was_missing"
+            },
+            "field": "mean_abs_shap"
+          }
+        ],
+        "difference_or_missing": null
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "NM3",
+      "question": "How many dictionary entries contain the literal text 'balance' in their name or definition?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        326,
+        508
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 326,
+          "cache_creation": 2532,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 508,
+          "cache_creation": 1198,
+          "cache_read": 2532
+        }
+      ],
+      "cost_usd": 0.018179,
+      "output": {
+        "label": "not_answerable",
+        "calls": [
+          {
+            "tool": "search_data_dictionary",
+            "arguments": {
+              "query": "balance"
+            },
+            "field": "match_count"
+          }
+        ],
+        "difference_or_missing": "The tool does not return a literal substring count; its own description and the results (e.g. 'dti', which contains no 'balance' text at all) show it mixes in semantically related entries beyond exact literal matches, so the returned match_count of 11 cannot be trusted as the count of entries literally containing 'balance'."
+      },
+      "parse_error": null,
+      "retrieval": "pgvector-bge-small-en-v1.5",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "NM4",
+      "question": "What share of loan_amnt's values were missing in the source data, in each year?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        145,
+        212
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 145,
+          "cache_creation": 2529,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 212,
+          "cache_creation": 875,
+          "cache_read": 2529
+        }
+      ],
+      "cost_usd": 0.012594,
+      "output": null,
+      "parse_error": "the reply is not exactly one JSON object: Expecting value: line 1 column 1 (char 0)",
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    },
+    {
+      "item": "NM6",
+      "question": "In what percentage of test rows does all_util contribute exactly zero to the prediction?",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "turns": 2,
+      "tool_calls": 1,
+      "output_tokens_per_turn": [
+        99,
+        149
+      ],
+      "usage_per_request": [
+        {
+          "input": 2,
+          "output": 99,
+          "cache_creation": 2533,
+          "cache_read": 0
+        },
+        {
+          "input": 2,
+          "output": 149,
+          "cache_creation": 431,
+          "cache_read": 2533
+        }
+      ],
+      "cost_usd": 0.010405,
+      "output": {
+        "label": "answerable_with_difference",
+        "calls": [
+          {
+            "tool": "get_feature_shap_detail",
+            "arguments": {
+              "feature": "all_util"
+            },
+            "field": "pct_near_zero"
+          }
+        ],
+        "difference_or_missing": "The tool reports pct_near_zero (3.56%), a count of rows whose SHAP value is close to zero within some tolerance, rather than 'exactly zero' as asked; no field gives the exact-zero count."
+      },
+      "parse_error": null,
+      "retrieval": "unused",
+      "prompt_sha256": "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+    }
+  ],
+  "spec_requests": [
+    {
+      "item": "B1",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "usage": {
+        "input": 2,
+        "output": 786,
+        "cache_creation": 2228,
+        "cache_read": 0
+      },
+      "output_tokens": 786,
+      "cost_usd": 0.013434,
+      "output": {
+        "spec": {
+          "name": "get_full_ablation_result",
+          "description": "Report how the model scores on the held-out test set when retrained without one feature, covering every feature the model reads rather than only the top 20 by mean absolute SHAP value. Returns baseline ROC-AUC, ROC-AUC after retraining without the feature, and the difference. A feature the model does not read returns available=false.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "feature": {
+                "type": "string",
+                "description": "Exact name of one of the model's features, e.g. 'percent_bc_gt_75'."
+              }
+            },
+            "required": [
+              "feature"
+            ]
+          },
+          "data_source": "new precomputed artefact: feature, baseline_roc_auc, roc_auc_without_feature, delta_roc_auc, available"
+        }
+      },
+      "parse_error": null,
+      "prompt_sha256": "6c3cca8f5fca3df3e463f71bdd83a4c6463e6d0280521808bea9475a4db950ca"
+    },
+    {
+      "item": "B2",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "usage": {
+        "input": 2,
+        "output": 182,
+        "cache_creation": 2193,
+        "cache_read": 0
+      },
+      "output_tokens": 182,
+      "cost_usd": 0.007306,
+      "output": {
+        "decline": "purpose_wedding holds a single constant value across the test set, so Pearson correlation (and any other correlation measure) with it is mathematically undefined there. No precomputed artefact or tool can supply correlations for a constant column, since the underlying statistic does not exist on this data slice."
+      },
+      "parse_error": null,
+      "prompt_sha256": "6c3cca8f5fca3df3e463f71bdd83a4c6463e6d0280521808bea9475a4db950ca"
+    },
+    {
+      "item": "B3",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "usage": {
+        "input": 2,
+        "output": 121,
+        "cache_creation": 2194,
+        "cache_read": 0
+      },
+      "output_tokens": 121,
+      "cost_usd": 0.006699,
+      "output": {
+        "decline": "addr_state is not one of the model's features (get_feature_shap_detail returns found=false for it), so no SHAP values exist for it. Since no tool reads raw model input data, and SHAP values are only computed for features the model actually uses, no new read-only tool over precomputed artefacts could supply a SHAP distribution for a feature the model never reads."
+      },
+      "parse_error": null,
+      "prompt_sha256": "6c3cca8f5fca3df3e463f71bdd83a4c6463e6d0280521808bea9475a4db950ca"
+    },
+    {
+      "item": "B5",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "usage": {
+        "input": 2,
+        "output": 621,
+        "cache_creation": 2311,
+        "cache_read": 0
+      },
+      "output_tokens": 621,
+      "cost_usd": 0.011992,
+      "output": {
+        "spec": {
+          "name": "get_grouped_feature_association",
+          "description": "Report the standalone predictive strength of one original (pre-encoding) categorical or grouped feature, computed by combining all of its one-hot encoded model columns into a single group-level score. Covers only features that were split into multiple model columns (e.g. one-hot encoded categoricals); a name that maps to a single model column returns found=false and should instead be looked up directly. Returns rank-based ROC-AUC on the training split and on the test split, the number of encoded columns combined, and the list of those column names.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "feature": {
+                "type": "string",
+                "description": "Exact name of the original pre-encoding feature, e.g. 'addr_state'."
+              }
+            },
+            "required": [
+              "feature"
+            ]
+          },
+          "data_source": "new precomputed artefact: original_feature, n_encoded_columns, encoded_columns, roc_auc_train, roc_auc_test"
+        }
+      },
+      "parse_error": null,
+      "prompt_sha256": "6c3cca8f5fca3df3e463f71bdd83a4c6463e6d0280521808bea9475a4db950ca"
+    },
+    {
+      "item": "C2",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "usage": {
+        "input": 2,
+        "output": 478,
+        "cache_creation": 2224,
+        "cache_read": 0
+      },
+      "output_tokens": 478,
+      "cost_usd": 0.010344,
+      "output": {
+        "spec": {
+          "name": "get_feature_percentiles",
+          "description": "Report precomputed percentile statistics for one feature's distribution within a given scope (e.g. the training split, the test split, or a specific training year). Returns the value at standard percentile cut points (p1, p5, p10, p25, p50, p75, p90, p95, p99) for that feature and scope. Covers exactly the columns the model reads; any other name returns found=false. A scope not present for that feature returns found=false for that scope.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "feature": {
+                "type": "string",
+                "description": "Exact name of one of the model's features, e.g. 'all_util'."
+              },
+              "scope": {
+                "type": "string",
+                "description": "Which subset of rows to report percentiles for, e.g. 'train', 'test', or a specific training year label."
+              }
+            },
+            "required": [
+              "feature",
+              "scope"
+            ]
+          },
+          "data_source": "new precomputed artefact: feature, scope, p1, p5, p10, p25, p50, p75, p90, p95, p99"
+        }
+      },
+      "parse_error": null,
+      "prompt_sha256": "6c3cca8f5fca3df3e463f71bdd83a4c6463e6d0280521808bea9475a4db950ca"
+    },
+    {
+      "item": "C3",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "usage": {
+        "input": 2,
+        "output": 495,
+        "cache_creation": 2408,
+        "cache_read": 0
+      },
+      "output_tokens": 495,
+      "cost_usd": 0.010974,
+      "output": {
+        "spec": {
+          "name": "get_feature_shap_by_bin",
+          "description": "Report how one feature's SHAP contribution varies across the feature's own value range. The feature's values on the 30,000-row SHAP sample were divided into equal-frequency bins; for each bin this returns the value range, the mean and median SHAP contribution of rows in that bin, and the row count. Use it to see whether high or low values of a feature push predictions up or down. Covers exactly the columns the model reads; any other name returns found=false.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "feature": {
+                "type": "string",
+                "description": "Exact name of one of the model's features."
+              },
+              "num_bins": {
+                "type": "integer",
+                "description": "Number of equal-frequency bins to divide the feature's values into. Defaults to 10, maximum 20."
+              }
+            },
+            "required": [
+              "feature"
+            ]
+          },
+          "data_source": "new precomputed artefact: feature, bin_index, bin_low, bin_high, mean_feature_value, mean_shap, median_shap, row_count"
+        }
+      },
+      "parse_error": null,
+      "prompt_sha256": "6c3cca8f5fca3df3e463f71bdd83a4c6463e6d0280521808bea9475a4db950ca"
+    },
+    {
+      "item": "C7",
+      "termination": "completed",
+      "last_stop_reason": "end_turn",
+      "usage": {
+        "input": 2,
+        "output": 327,
+        "cache_creation": 2251,
+        "cache_read": 0
+      },
+      "output_tokens": 327,
+      "cost_usd": 0.008901,
+      "output": {
+        "spec": {
+          "name": "get_model_performance_by_vintage",
+          "description": "Report the model's overall performance metrics on the held-out test set, broken down by loan vintage year. For a given vintage, returns the aggregate ROC-AUC (and supporting figures such as row count and average predicted score) computed across all rows originated in that year, using the model's actual predictions rather than any single feature.",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "vintage_year": {
+                "type": "integer",
+                "description": "Loan origination year to report on, e.g. 2016."
+              }
+            },
+            "required": [
+              "vintage_year"
+            ]
+          },
+          "data_source": "new precomputed artefact: vintage_year, n_rows, roc_auc, mean_predicted_score, positive_rate"
+        }
+      },
+      "parse_error": null,
+      "prompt_sha256": "6c3cca8f5fca3df3e463f71bdd83a4c6463e6d0280521808bea9475a4db950ca"
+    }
+  ],
+  "spec_requests_not_made": [
+    {
+      "item": "B4",
+      "reason": "the detector's result was completed, not not_answerable"
+    },
+    {
+      "item": "B6",
+      "reason": "the detector's result was completed, not not_answerable"
+    },
+    {
+      "item": "C1",
+      "reason": "the detector's result was completed, not not_answerable"
+    },
+    {
+      "item": "C4",
+      "reason": "the detector's result was completed, not not_answerable"
+    },
+    {
+      "item": "C5",
+      "reason": "the detector's result was answerable_with_difference, not not_answerable"
+    },
+    {
+      "item": "C6",
+      "reason": "the detector's result was answerable_with_difference, not not_answerable"
+    }
+  ],
+  "totals": {
+    "episodes": 26,
+    "detection_requests": 67,
+    "detection_cost_usd": 0.407176,
+    "spec_requests": 7,
+    "spec_cost_usd": 0.069651
+  }
+}

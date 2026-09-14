@@ -351,6 +351,117 @@ check("a spec item outside parts b and c is refused",
                                       "--out", str(out)]), SystemExit))
 
 # ======================================================================
+print("\n[8b] the Phase 4b detector prompt (A6), and the A3 path unchanged")
+import ast  # noqa: E402
+import subprocess  # noqa: E402
+
+B4_TEXT = phase4.DETECTOR_PROMPT_4B.read_text(encoding="utf-8")
+OLD_SENTENCE = "When you have decided, reply with one JSON object and nothing else, in this form:"
+NEW_SENTENCE = ("When you have decided, your final reply must be the JSON object alone, beginning with { and "
+                "ending with }, with no words or blank lines before or after it, in this form:")
+check("4b prompt hashes to A6's value, which is written in the document",
+      hashlib.sha256(phase4.DETECTOR_PROMPT_4B.read_bytes()).hexdigest() == phase4.DETECTOR_SHA256_4B
+      and phase4.DETECTOR_SHA256_4B in DOC)
+check("4b prompt is the A3 prompt with exactly the one format sentence replaced",
+      DET_TEXT.count(OLD_SENTENCE) == 1 and B4_TEXT == DET_TEXT.replace(OLD_SENTENCE, NEW_SENTENCE, 1))
+check("the table binds a3 to the A3 file and hash, and 4b to its own",
+      phase4.DETECTOR_PROMPTS == {"a3": (phase4.DETECTOR_PROMPT, phase4.DETECTOR_SHA256),
+                                  "4b": (phase4.DETECTOR_PROMPT_4B, phase4.DETECTOR_SHA256_4B)})
+
+
+def one_episode(detector=None, name="p.jsonl"):
+    c = MockClient([scripted([thinking("sig-1"), tool_use(1)], "tool_use", output=700, cache_creation=2500),
+                    scripted([thinking("sig-2"), text(VALID)], "end_turn", output=400, cache_creation=2200,
+                             cache_read=2500)])
+    with mocked(c, ledger_file(name)):
+        e = (phase4.run_detection("A3", ToolLayer(), "mock-4b") if detector is None
+             else phase4.run_detection("A3", ToolLayer(), "mock-4b", detector))
+    return e, c
+
+
+e_default, c_default = one_episode(None, "default.jsonl")
+e_a3, c_a3 = one_episode("a3", "a3.jsonl")
+e_4b, c_4b = one_episode("4b", "4b.jsonl")
+check("default detector is a3: identical requests with and without naming it",
+      c_default.created == c_a3.created and e_default.prompt_sha256 == phase4.DETECTOR_SHA256)
+check("4b requests send the 4b prompt exactly as the system text",
+      all(r["system"] == [{"type": "text", "text": B4_TEXT}] for r in c_4b.created))
+
+
+def without_system(reqs):
+    return [{k: v for k, v in r.items() if k != "system"} for r in reqs]
+
+
+check("4b requests are identical to a3 requests apart from the system text",
+      without_system(c_4b.created) == without_system(c_a3.created) and len(c_4b.created) == 2)
+check("4b episode records the 4b hash and parses identically",
+      e_4b.prompt_sha256 == phase4.DETECTOR_SHA256_4B and e_4b.output == e_a3.output
+      and e_4b.output_tokens_per_turn == e_a3.output_tokens_per_turn)
+tampered_4b = TMPDIR / "tampered_4b.txt"
+tampered_4b.write_bytes(phase4.DETECTOR_PROMPT_4B.read_bytes().replace(b"alone", b"alone "))
+saved_table = dict(phase4.DETECTOR_PROMPTS)
+phase4.DETECTOR_PROMPTS["4b"] = (tampered_4b, phase4.DETECTOR_SHA256_4B)
+tc = MockClient([scripted([text(VALID)], "end_turn")])
+with mocked(tc, ledger_file("tampered4b.jsonl")):
+    refused = raises(lambda: phase4.run_detection("A3", ToolLayer(), "x", "4b"), phase4.PromptMismatch)
+phase4.DETECTOR_PROMPTS.clear()
+phase4.DETECTOR_PROMPTS.update(saved_table)
+check("a 4b prompt changed by one byte is refused before anything is sent", refused and tc.created == [])
+uc = MockClient([scripted([text(VALID)], "end_turn")])
+with mocked(uc, ledger_file("unknown.jsonl")):
+    check("an unknown detector prompt name is refused before anything is sent",
+          raises(lambda: phase4.run_detection("A3", ToolLayer(), "x", "4c"), ValueError) and uc.created == [])
+out4b = TMPDIR / "runs4b"
+rc = run_phase4.main(["--mock", "--detector-prompt", "4b", "--items", "A1,B2", "--spec-items", "B2",
+                      "--label", "phase4b-mock-check", "--out", str(out4b)])
+m4b = json.loads(next(out4b.iterdir()).joinpath("manifest.json").read_text())
+check("command line with --detector-prompt 4b records the 4b hash throughout",
+      rc == 0 and m4b["detector_prompt"] == "4b"
+      and m4b["prompts"] == {"detector_sha256": phase4.DETECTOR_SHA256_4B, "spec_sha256": phase4.SPEC_SHA256}
+      and all(x["prompt_sha256"] == phase4.DETECTOR_SHA256_4B for x in m4b["episodes"]))
+check("command line defaults to a3 and records it", manifest.get("detector_prompt") == "a3")
+check("an unknown --detector-prompt value is refused",
+      raises(lambda: run_phase4.main(["--mock", "--detector-prompt", "4c", "--items", "A1", "--label", "x",
+                                      "--out", str(out4b)]), SystemExit))
+
+committed = subprocess.run(["git", "show", "cbf900b:layer3/phase4.py"], cwd=ROOT, capture_output=True,
+                           text=True, check=True).stdout
+current = (ROOT / "layer3" / "phase4.py").read_text()
+
+
+def definitions(source, names):
+    tree = ast.parse(source)
+    found = {}
+    for node in tree.body:
+        if isinstance(node, (ast.FunctionDef, ast.ClassDef)) and node.name in names:
+            found[node.name] = ast.dump(node)
+        elif isinstance(node, (ast.Assign, ast.AnnAssign)):
+            targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+            for t in targets:
+                if isinstance(t, ast.Name) and t.id in names:
+                    found[t.id] = ast.dump(node)
+    return found
+
+
+UNCHANGED = ["ParseError", "_reject_constant", "_one_object", "_exact_keys", "parse_detector_output",
+             "parse_spec_output", "LABELS", "TOOL_NAMES", "QUESTIONS", "SPEC_ELIGIBLE", "question_text",
+             "spec_user_message", "run_spec_request", "SPEC_PROMPT", "SPEC_SHA256", "DETECTOR_PROMPT",
+             "DETECTOR_SHA256", "MAX_TURNS", "MAX_TOOL_CALLS", "load_prompt", "Episode", "SpecRequest",
+             "MockClient", "mocked", "scripted"]
+before_defs, after_defs = definitions(committed, UNCHANGED), definitions(current, UNCHANGED)
+changed = [n for n in UNCHANGED if before_defs.get(n) != after_defs.get(n)]
+check("parser, questions, spec path, limits, A3 constants and mock client are unchanged since cbf900b "
+      f"({len(UNCHANGED)} definitions compared)", not changed and len(before_defs) == len(UNCHANGED), changed)
+
+
+def loop_body(source):
+    fn = next(n for n in ast.parse(source).body if isinstance(n, ast.FunctionDef) and n.name == "run_detection")
+    return [ast.dump(s) for s in fn.body if isinstance(s, ast.While)]
+
+
+check("run_detection's loop is unchanged since cbf900b", loop_body(committed) == loop_body(current))
+
+# ======================================================================
 print("\n[9] guarantees")
 check("no real anthropic client was constructed", CLIENTS_BUILT == [])
 check("llm._client and the ledger path were restored",

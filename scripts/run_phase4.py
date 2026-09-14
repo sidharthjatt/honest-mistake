@@ -43,6 +43,8 @@ def main(argv=None) -> int:
     p.add_argument("--spec-items", default="")
     p.add_argument("--label", required=True)
     p.add_argument("--out", default=str(phase4.RUNS_DIR))
+    p.add_argument("--detector-prompt", choices=sorted(phase4.DETECTOR_PROMPTS), default="a3",
+                   help="a3 is the prompt recorded in A3; 4b is the A6 prompt")
     args = p.parse_args(argv)
 
     items = [i.strip() for i in args.items.split(",") if i.strip()]
@@ -55,17 +57,19 @@ def main(argv=None) -> int:
         raise SystemExit(f"Spec items must be run items from parts b or c: {stray}")
 
     tools = ToolLayer()  # honest cache, both suppression switches on
+    detector = args.detector_prompt
 
     if args.real:
         print("REAL RUN - LIVE API CALLS.")
+        print(f"  detector prompt: {detector} ({phase4.DETECTOR_PROMPTS[detector][1][:16]}...)")
         stats = phase4.preflight_retrieval()
         print(f"  retrieval ready: {stats['rows']} rows, dimension {stats['dimension']}")
         print(f"  ledger before: ${ledger.spent_usd():.6f} of ${ledger.CAP_USD:.2f}")
-        episodes, specs, skipped = phase4.run_items(items, spec_items, tools, args.label)
-        run_dir = phase4.write_record("REAL", args.label, episodes, specs, skipped, Path(args.out))
+        episodes, specs, skipped = phase4.run_items(items, spec_items, tools, args.label, detector)
+        run_dir = phase4.write_record("REAL", args.label, episodes, specs, skipped, Path(args.out), detector)
         print(f"  ledger after: ${ledger.spent_usd():.6f}")
     else:
-        print("MOCK RUN - fabricated replies, no API request.")
+        print(f"MOCK RUN - fabricated replies, no API request. Detector prompt: {detector}.")
         replies = []
         for n, _ in enumerate(items, start=1):
             replies += phase4.fabricated_detection_replies(n)
@@ -73,9 +77,9 @@ def main(argv=None) -> int:
         with tempfile.TemporaryDirectory() as tmp:
             client = phase4.MockClient(replies)
             with phase4.mocked(client, Path(tmp) / "mock_ledger.jsonl"):
-                episodes, specs, skipped = phase4.run_items(items, spec_items, tools, args.label)
+                episodes, specs, skipped = phase4.run_items(items, spec_items, tools, args.label, detector)
                 print(f"  mock ledger lines: {len(ledger.LEDGER_PATH.read_text().splitlines())}")
-        run_dir = phase4.write_record("MOCK", args.label, episodes, specs, skipped, Path(args.out))
+        run_dir = phase4.write_record("MOCK", args.label, episodes, specs, skipped, Path(args.out), detector)
 
     _print_results(episodes, specs, skipped)
     print(f"  record: {run_dir}")

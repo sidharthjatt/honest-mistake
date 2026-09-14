@@ -46,6 +46,17 @@ SPEC_PROMPT = PROMPTS / "phase4_spec_system.txt"
 DETECTOR_SHA256 = "db401deb03318893e45b7b2fbad804ac7560233b5c4f9d26e25afd0af281e0d8"
 SPEC_SHA256 = "6c3cca8f5fca3df3e463f71bdd83a4c6463e6d0280521808bea9475a4db950ca"
 
+# From amendment A6: the A3 prompt with its format instruction changed and
+# nothing else. It has its own file so Phase 4's records still match theirs.
+DETECTOR_PROMPT_4B = PROMPTS / "phase4b_detector_system.txt"
+DETECTOR_SHA256_4B = "f37ed96ff07a0497e3e4aacba73872e95febf3559dd3306e2e880e89fb4769c1"
+
+# Detector prompts by name, each bound to its own file and recorded hash.
+DETECTOR_PROMPTS = {
+    "a3": (DETECTOR_PROMPT, DETECTOR_SHA256),
+    "4b": (DETECTOR_PROMPT_4B, DETECTOR_SHA256_4B),
+}
+
 RUNS_DIR = ROOT / "outputs" / "layer3" / "phase4_runs"
 REAL_LEDGER = ledger.LEDGER_PATH
 
@@ -227,9 +238,16 @@ class Episode:
         }
 
 
-def run_detection(item: str, tools: ToolLayer, label: str) -> Episode:
+def _detector_prompt(detector: str) -> tuple[Path, str]:
+    if detector not in DETECTOR_PROMPTS:
+        raise ValueError(f"unknown detector prompt {detector!r}; expected one of {sorted(DETECTOR_PROMPTS)}")
+    return DETECTOR_PROMPTS[detector]
+
+
+def run_detection(item: str, tools: ToolLayer, label: str, detector: str = "a3") -> Episode:
     """One detection episode, to termination. Never retried."""
-    system = load_prompt(DETECTOR_PROMPT, DETECTOR_SHA256)
+    prompt_path, prompt_sha256 = _detector_prompt(detector)
+    system = load_prompt(prompt_path, prompt_sha256)
     question = question_text(item)
     data_dictionary.reset_retrieval_paths()
     tools.reset_call_log()
@@ -292,7 +310,7 @@ def run_detection(item: str, tools: ToolLayer, label: str) -> Episode:
 
     return Episode(
         item=item, question=question, label_in_ledger=label,
-        prompt_sha256=DETECTOR_SHA256, termination=termination,
+        prompt_sha256=prompt_sha256, termination=termination,
         last_stop_reason=last_stop_reason, turns=turns, tool_calls=calls_made,
         usage_per_request=usage, final_text=final_text, output=output,
         parse_error=parse_error, retrieval=tools.run_config()["retrieval"],
@@ -379,7 +397,8 @@ def preflight_retrieval() -> dict:
 
 def write_record(mode: str, label: str, episodes: list[Episode],
                  specs: list[SpecRequest], skipped: list[dict],
-                 out_dir: Path = RUNS_DIR) -> Path:
+                 out_dir: Path = RUNS_DIR, detector: str = "a3") -> Path:
+    _, detector_sha256 = _detector_prompt(detector)
     stamp = datetime.now().strftime("%Y%m%dT%H%M%S")
     run_dir = Path(out_dir) / f"{stamp}__{mode}__{label}"
     run_dir.mkdir(parents=True, exist_ok=False)
@@ -391,7 +410,8 @@ def write_record(mode: str, label: str, episodes: list[Episode],
         "model": llm.MODEL, "max_tokens_per_turn": llm.MAX_TOKENS,
         "thinking": llm.THINKING, "cache": llm.CACHE_MOVING,
         "limits": {"max_turns": MAX_TURNS, "max_tool_calls": MAX_TOOL_CALLS},
-        "prompts": {"detector_sha256": DETECTOR_SHA256, "spec_sha256": SPEC_SHA256},
+        "detector_prompt": detector,
+        "prompts": {"detector_sha256": detector_sha256, "spec_sha256": SPEC_SHA256},
         "episodes": [e.summary() for e in episodes],
         "spec_requests": [s.summary() for s in specs],
         "spec_requests_not_made": skipped,
@@ -414,10 +434,11 @@ def write_record(mode: str, label: str, episodes: list[Episode],
 
 
 def run_items(items: list[str], spec_items: list[str], tools: ToolLayer,
-              label: str) -> tuple[list[Episode], list[SpecRequest], list[dict]]:
+              label: str, detector: str = "a3") -> tuple[list[Episode], list[SpecRequest], list[dict]]:
+    _detector_prompt(detector)
     episodes: list[Episode] = []
     for item in items:
-        episode = run_detection(item, tools, label)
+        episode = run_detection(item, tools, label, detector)
         episodes.append(episode)
         if episode.termination == BUDGET_CAP:
             break
