@@ -2,7 +2,7 @@
 
 Across four scored runs the planted column was caught in every canary configuration. What changed between configurations was the number of false positives, not whether the leak was found.
 
-This document reports what the agent concluded, and whether it was right. How it got there, meaning its turns, tool calls, rejected and repeated calls, and whether its cited evidence traces back to tool output, is measured in [LAYER2_TRAJECTORY.md](LAYER2_TRAJECTORY.md).
+This document reports what the agent concluded, and whether it was right. How it got there, meaning its turns, tool calls, rejected and repeated calls, and whether its cited evidence traces back to tool output, is measured in [LAYER2_TRAJECTORY.md](LAYER2_TRAJECTORY.md). The Layer 3 machinery that will validate a tool before an agent may use it, which does not measure the agent at all, is reported in [LAYER3_PHASE3.md](../layer3/LAYER3_PHASE3.md).
 
 ## What was tested
 
