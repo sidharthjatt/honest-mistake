@@ -247,6 +247,8 @@ Written before any prompt existed and before any Phase 4 request. These are the 
 
 Against the $14.638035 remaining, this leaves $1.79 to $8.10. The Phase 4 figure is replaced by a projection from counted tokens (the next amendment after the prompts are written) before any request is made.
 
+The counted projection (A4) landed close to this character-ratio estimate, but for offsetting reasons. The prompts are smaller than guessed, and the tool results are larger: A1's tool result counts 7,459 tokens against the ratio's 4,139. The agreement was coincidental, so the character ratio must not be cited later as validated.
+
 **The Phase 6 design decision.** Judges are tool-less and cover every Phase 4 detection episode.
 - **Why coverage beats capability:** Phase 6's claim is agreement measured against a chance floor, and judging a third of the sample would weaken that floor. A judge that needs tools to reach its verdict is a second auditor, not a judge.
 - **How 78 became 26:** the coverage argument was first made for 78 episodes, priced at $7.49. Once A1 cut Phase 4 to one run, those 78 no longer exist. The substance of the argument still holds: no episode that exists gets left out. Phase 6 therefore judges all 26, which costs $2.50 at the same per-episode rates.
@@ -290,6 +292,47 @@ This was checked by searching both files for `declared`, `silent`, `near-miss`, 
 This is a reading of the rule, not a change to it. No rule text changes. The rule exists to stop the prompt revealing which items are gaps, and the three output values reveal nothing about any item.
 
 **Changes.** Any change to either file after this amendment needs a new dated amendment recording the new hash before any request uses it.
+
+### A4. 2026-09-14. The counted projection, two request details, and the pilot
+
+Written before any Phase 4 generation request. The token counts below were made with the free counting endpoint and spent nothing: the ledger stood at $0.361965 over 13 lines both before and after.
+
+**Two request details left open by A3, fixed here.**
+- **The question text sent** is the item's question as written in section 2, with Markdown code formatting removed. `` `all_util` `` is sent as `all_util`. Nothing else in the question changes.
+- **The spec request's single user message** is exactly: `Question: {question}`, a blank line, `Check output:`, a newline, the detector's JSON output, a blank line, `Tool definitions:`, a newline, and the eight tool definitions from `agent/tools.py` serialised with `json.dumps` and default settings.
+
+**The counted projection for one run.**
+- **Counted:**
+  - the first detection request for each of the 26 questions, as sent with the moving breakpoint and the thinking setting: 2,497 to 2,516 tokens;
+  - the tokens added by each item's accepted tool calls and their real results, counted without the thinking setting on both sides: 126 to 1,256 tokens, and 7,459 for A1;
+  - each of the 13 spec requests' prompts, with a placeholder standing in for the detector's output: 2,228 to 2,243 tokens.
+- **Not countable before a response exists:**
+  - output per turn, taken from run11's median of 880 and maximum of 3,107;
+  - final output, guessed at 800 to 3,000;
+  - echoed thinking per turn, taken from run11's 1,785;
+  - the number of turns and extra calls, guessed.
+- **Result:** detection $0.78 to $4.07 over 52 to 108 requests, plus spec generation $0.20 to $0.46, for **$0.98 to $4.54**. Output is 60–80% of that. Layer 3 with this figure: $6.52 to $12.76, leaving $1.88 to $8.12.
+
+**The pilot.** It was approved as proposed, before any pilot request.
+- **What it runs:** detection episodes for A1, C3, B2 and NM3, and one spec request for C3.
+  - A1 is the most expensive episode by counted tokens.
+  - C3 is the largest exchange among the others.
+  - B2 is the cheapest.
+  - NM3 is the only one that goes through the pgvector index.
+  - Between them they span one non-gap, one silent gap, one declared gap and one near-miss.
+  - The traps A3 and A9 are left out on purpose.
+- **Projected cost:** $0.152 to $0.731.
+- **Its rules:**
+  1. Pilot episodes are not scored, and they are not part of the Phase 4 run, which runs all 26 items afresh.
+  2. Pilot labels are not used to change either prompt. If a prompt changes anyway, the change needs a new amendment and hash, and the pilot's figures no longer apply to the new prompt.
+  3. Pilot requests are recorded in the ledger under their own label.
+  4. The pilot's purpose is measurement for the two-run decision reopened in A2.
+- **What it measures, as first-class results and not only as cost:**
+  - **turns per episode,** and **output tokens per turn** for each request;
+  - its cost per episode is reported alongside those.
+
+  Output is 60–80% of the spend and the only part no count can predict, so the two-run decision rests on those two numbers more than on the dollar figure.
+- **When it runs:** only after the runner and the spec-request path have been built, checked on mock replies with no API request, the mock results reported, and the pilot approved.
 
 ## Defect register
 
