@@ -4,7 +4,7 @@ A credit-default model built the honest way, and an agent that tries to catch it
 
 Most public models on the Lending Club data report AUCs above 0.90. Almost all of them are wrong: they train on columns that only exist *after* a loan's outcome is known, so the model is quietly reading the answer off the back of the page. This project does the opposite. It strips out every post-outcome column, keeps only what a lender would have at the moment of decision, and lands at **ROC-AUC 0.7296** on a true future-year holdout. That lower number is the point.
 
-Then it goes a step further. A second layer hands an autonomous agent eight read-only tools and asks it to audit the finished model, without ever telling it what to look for. Eleven live runs, seven of them usable, a planted canary, and an ablation that failed for a reason worth reporting.
+Then it goes a step further. A second layer hands an autonomous agent eight read-only tools and asks it to audit the finished model, without ever telling it what to look for. Twelve live runs, eight of them usable, a planted canary, and an ablation that failed for a reason worth reporting.
 
 The name is deliberate. *Mistake* is the hidden leakage a model carries. *Honest* is the discipline of surfacing it instead of hiding behind a flattering metric — including when the honest result is a zero.
 
@@ -219,8 +219,9 @@ The full results, the figures, and what the evaluation cannot measure are in [LA
 | run8 | 8 | populated included, split only | 181 | completed, 13 turns / 31 calls | 3 | 1 | 2 | **caught** |
 | run9 | 8 | populated suppressed, all scopes | 180 | turn limit at 20, unusable | none | n/a | n/a | — |
 | run10 | 8 | populated suppressed, all scopes | 180 | completed, 12 turns / 29 calls | 3 | 0 | 3 | — |
+| run11 | 8 | populated included, all scopes, prompt caching on | 180 | completed, 11 turns / 33 calls | 3 | 0 | 3 | — |
 
-Four earlier runs terminated as truncated or limit-hit and are not results. They are listed in `EVAL_NOTES.md` with their reasons. Six MOCK directories are also committed as verification evidence for the config_id fix and the two ablation-switch corrections; they replay fixtures and are not model results. run9 is kept in the register rather than replaced: run10 is the same configuration at a higher turn ceiling, not a retry, and the pair is the clearest evidence in the project of run-to-run variance.
+Three earlier runs terminated as truncated or limit-hit and are not results. They are listed in `EVAL_NOTES.md` with their reasons. Six MOCK directories are also committed as verification evidence for the config_id fix and the two ablation-switch corrections; they replay fixtures and are not model results. run9 is kept in the register rather than replaced: run10 is the same configuration at a higher turn ceiling, not a retry, and the pair is the clearest evidence in the project of run-to-run variance.
 
 Recall is not comparable across matrices: the denominator is 39 true positives in every row, but none is present in the 180-feature matrix and exactly one is present in the 181-feature one.
 
@@ -289,15 +290,41 @@ Stated plainly, because hiding them would defeat the purpose.
 - **Probabilities are not calibrated.** Class weighting shifts predicted probabilities upward to favour recall, which inflates the Brier score by construction. Ranking metrics are unaffected. Calibration is not addressed anywhere in this repository.
 - **The canary establishes a floor, not a ceiling.** Tier A detection only. Nothing here shows the agent would catch a leak without a descriptive giveaway.
 - **The timing ablation cannot answer its own question** on this dictionary, for the reason given above.
-- **This is a research pipeline, not a service.** Single scripts, no packaging or tests beyond each module's self-check.
+- **This is a research pipeline, not a service.** Single scripts and no packaging. Beyond each module's self-check, the tests are three scripts under `scripts/`: for the trajectory metrics, for the caching and ledger code, and for the Phase 4 runner on mocks.
 
-## Roadmap
+## Layer 3: generated tools
 
-Layer 3 is in design. Layer 2 audits a model with a fixed tool surface; Layer 3 asks what happens when the tools themselves are not fixed.
+Layer 3 is partly built. Layer 2 audits a model with a fixed tool surface; Layer 3 asks what happens when the tools themselves are not fixed.
 
-The agent detects a capability gap, generates a tool specification for it, executes that tool in a sandbox, validates it against a known answer before admitting it, and persists what survives into a registry. A human-in-the-loop checkpoint sits in front of admission. Evaluation moves from a single scorer to an Agent-as-a-Judge with a separate verifier, since a generated tool needs its output checked by something other than the process that produced it.
+Each phase was preregistered before it ran and reported with what it does not establish. The specifications are `PREREGISTRATION_PHASE2.md` to `PREREGISTRATION_PHASE5.md`, and the results are in `outputs/layer3/`.
 
-Nothing in this section is implemented yet. The numbers and claims above cover Layers 1 and 2 only.
+What was built:
+
+- **Prompt caching and a spend ledger with a hard cap** (Phase 2). On one measured audit run, input cost came out 71.1% below the base rate.
+- **A sandbox and a known-answer validator** (Phase 3). Six hand-written correct tools pass, and fourteen hand-written broken tools are each rejected with the predicted outcome.
+- **A gap detector and a tool-spec generator** (Phase 4 and 4b), run over 26 fixed questions. The detector was not accepted under its frozen rules in either version. Its failures were of three kinds:
+  - **format:** 20 of 52 replies did not parse, then 11 of 52 after the instruction was rewritten;
+  - **judgement:** a null answer read as no answer;
+  - **grounding:** a right label with the wrong evidence cited.
+- **One generated tool, taken from code generation to a registry decision** (Phase 5). `get_top_shap_rows`, from one Phase 4 spec, passed its three test cases on 9 of 9 sandbox runs, and was admitted to the registry with its limitations recorded.
+
+What it does not establish:
+
+- **Validation is self-consistency only.** The tool's expected answers were read from the same file its data was built from. No independent answer exists, and the tool is recorded as admitted, never as validated.
+- **The chain did not run end to end.** Detection and the spec were read from a Phase 4 record. Only code generation, the sandbox, validation and the registry decision ran live.
+- **The detector was not accepted.**
+- **Nothing reads the registry.** Admission exposes the tool to no agent.
+
+Four planned parts were cut, each because it had no real target or no independent reference to judge it against:
+
+- **a human-in-the-loop checkpoint,** because nothing is waiting to be gated;
+- **an Agent-as-a-Judge with a separate verifier,** because what it would judge either already has a mechanical reference or has none;
+- **a fix for the detector's format failure,** because no request-level mechanism fits its frozen output format;
+- **an adversarial test,** because no Layer 3 component has both a live target and an independent reference, and the attacks it would have made are already covered.
+
+The reasons are recorded in amendments A6 to A8 of `PREREGISTRATION_PHASE5.md` and in `outputs/layer3/LAYER3_PHASE4.md`.
+
+The sections above this one cover Layers 1 and 2 only.
 
 ## Reproducing
 
