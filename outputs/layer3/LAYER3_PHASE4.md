@@ -287,3 +287,75 @@ The failures observed across Phase 4 and 4b are not one kind of failure but thre
 - a format failure can be reduced by instruction, as 4b showed, but not removed;
 - a judgement failure was untouched by the format change;
 - a grounding failure is invisible unless the rule asks for the evidence.
+
+---
+
+# The format failure has no request-level fix
+
+Added 2026-09-15. Nothing above is changed. This is a measured finding about the format failure. It rescores nothing, no API request was made for it, and the ledger is unchanged at $2.183232.
+
+## What the unparsed replies are
+
+Across the four scored runs, 31 final replies did not parse: 9 and 11 in Phase 4, then 6 and 5 in 4b. Every one was measured from the run records.
+- **Each is valid JSON with prose in front of it.**
+  - The prose ran 45 to 608 characters, so the first `{` sits at characters 47 to 610.
+  - 30 of the 31 have nothing after the object. One, B3 in 4b run 1, has 3 characters after it.
+  - Each final message was a single text block, and every episode ended with `end_turn`.
+- **The JSON alone passes the frozen parser in all 31.** Taken from the first `{` to the last `}`, it passes `parse_detector_output`. None failed because its JSON was malformed, incomplete, had the wrong keys or held an invalid label.
+- **This is a measurement, not a rescoring.** The frozen rule still scores all 31 incorrect and forbids taking a label from them, and no score above changes.
+
+## What the request constrained
+
+**The reply's shape was constrained only by prompt text.** Prefill, stop sequences, forced tool use and structured outputs were all unused. Each request carried the eight tool schemas with the default `tool_choice` of `auto`, adaptive thinking, and the moving cache breakpoint.
+
+**From Phase 4 to 4b, one sentence of the prompt changed.**
+- **Before:** "reply with one JSON object and nothing else".
+- **After:** "your final reply must be the JSON object alone, beginning with { and ending with }, with no words or blank lines before or after it".
+- **What moved:** parse failures went from 20 of 52 to 11 of 52. Each figure rests on two runs.
+
+## Five mechanisms, each ruled out
+
+Checked on 2026-09-15. Where a reason rests on something other than the live Claude documentation, the list says so.
+1. **Prefill.** The live thinking page says: "You can't prefill the assistant response while thinking is on." The detector runs with thinking on. That prefill returns a 400 on `claude-sonnet-5` comes from the cached claude-api skill, not the live pages.
+2. **Stop sequences.** A stop sequence ends generation when it appears. In all 31 failures the prose comes before the JSON, and a stop sequence cannot remove text written before it. This rests on the run records and on what a stop sequence does. No documentation page was needed for it.
+3. **Strict tool use.** The live page says `strict: true` "guarantees Claude's tool inputs match your JSON Schema". It constrains tool inputs, and every failure is in a text reply.
+4. **Forced `tool_choice`.** On the live define-tools page, `any` "tells Claude that it must use one of the provided tools", and when it is set "the API prefills the assistant message to force a tool to be used".
+   - It applies to every request it is set on. An episode ends on the turn with no tool call, so forcing a call conflicts with how an episode ends.
+   - Carrying the answer as a ninth tool would change the tool surface, which is a second variable.
+5. **Structured outputs (`output_config.format`).** The live schema limitations section requires `additionalProperties` to be "set to `false` for objects", and lists anything other than `false` as unsupported, returning a 400.
+   - The frozen output's `calls[].arguments` is an open object whose keys differ per tool. The prompt defines it as "the arguments you passed", and the parser accepts any object.
+   - A closed object that declares no properties accepts only `{}`. Declaring the keys would narrow what the frozen format accepts.
+   - So expressing the output as a schema would change the output format.
+
+**The Python SDK closes open objects silently.** The same page says the Python, TypeScript, Ruby and PHP SDKs "Add `additionalProperties: false` to all objects". Through the Python SDK the open object would not have raised an error. It would have become `{}` without notice. Had the schema requirement not been read, the output format would have changed silently.
+
+## The conclusion
+
+**Among the mechanisms available on this API, none fixes the format failure at the request level, with this output format.** What remains is prompt wording. That is what 4b already changed, and it was not tried again.
+
+## The design consequence
+
+**The frozen output format is what blocks the structured-outputs route.**
+- **What would have been different:** had `calls[].arguments` been a closed object with declared keys per tool, the `additionalProperties` requirement would not have ruled structured outputs out.
+- **When the format was frozen:** in section 1 of `PREREGISTRATION_PHASE4.md`, before any of this mattered.
+
+**Structured outputs would still not have been shown to work.** A second question was never settled either way: whether `output_config.format` constrains the turns in a tool loop that should call a tool.
+- The live structured outputs page says JSON outputs and strict tool use "work together" and suit "agentic workflows where you need both reliable tool calls and structured final outputs".
+- It does not say how the format applies to a response that stops to call a tool.
+- The probe that would have settled that was not sent, because the schema check failed first.
+
+## The measurement that was not run
+
+**What was planned:** four detection runs, about $1.66, all on the same day, on the same 26 questions, with the prompt byte-identical. Two runs of the unchanged 4b configuration were the fresh before. Two runs with `output_config.format` as the one change were the after. Parsed replies out of 52 per pair, using the frozen parser.
+
+**Why it was planned that way:** the records already show variance between runs on an unchanged prompt.
+- A1 parsed in the pilot and failed in both Phase 4 runs.
+- The two 4b runs on the same day gave 6 and 5 unparsed.
+
+A new after compared with 4b's old 11 of 52 would have measured drift and variance together.
+
+**Why it was not run:** its one candidate variable failed the schema check before any request, and no other request-level mechanism qualifies. Nothing was sent, and the ledger is unchanged at $2.183232.
+
+**What it could not have shown in any case:**
+- **Stability.** Two runs per arm would have been two points, not a spread, and not an estimate of stability.
+- **Anything about A3 or A2.** A3's judgement failure and A2's grounding failure were untouched by format, and the detector would have stayed unaccepted whatever the parse rate did.
