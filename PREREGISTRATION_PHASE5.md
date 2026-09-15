@@ -333,6 +333,99 @@ Written after the artefact was built and verified, and before the code-generatio
 
 **Kept out of git.** The file is not committed. A line added to `.gitignore`, `outputs/layer3/phase5/*.parquet`, keeps it out, the same way `outputs/agent_cache/*.parquet` keeps out its source.
 
+### A3. 2026-09-15. The code-generation prompt, recorded in full and by hash
+
+Written after the prompt existed and before any request, count or check used it. Nothing has been sent.
+
+**The request, as it will be made.**
+
+| Part | Source | SHA-256 | Size |
+|---|---|---|---|
+| System prompt | `layer3/prompts/phase5_codegen_system.txt` | `e0d0ef68478b67da51bc1ed0be7af6324e9e2493241fc55039859e8fdac9e035` | 1,441 bytes, 19 lines |
+| User message | the `text` field of item C4 in `outputs/layer3/phase4_runs/20260914T135142__REAL__phase4-run1/spec_requests.json` | `cc6d4fbe5da53e87abbaea367671aa3188b3bcd3af760ad50532123299f734f9` | 712 bytes |
+
+**How the two parts are used.**
+- **The system prompt** is the file's UTF-8 text exactly as it is, with nothing stripped or added. It ends with one newline.
+- **The user message** is the only content of the one user message. It is the spec's raw reply text from the record, byte for byte, with nothing added, removed or resolved. It is the spec quoted in section 3.
+- **No tools are passed.** The frozen rules in section 4 do not say whether tools are passed with the code-generation request. The decision to pass none was made here, at step 3, and not earlier. A code-generation request has no use for them.
+- The other settings are those in the code-generation rules in section 4.
+
+**The system prompt, in full.** The file is authoritative. The text between the fences below is its content.
+
+```text
+You write one Python tool from a specification.
+
+The user message is a tool specification, as JSON. Write the tool it describes, as a single Python file.
+
+How the tool is run:
+- It is run as `python /tool/tool.py`, with no command-line arguments.
+- It reads its arguments from /inputs/arguments.json. That file holds one JSON object with a value for each property in the specification's input_schema.
+- Its data is one Parquet file, /inputs/shap_values_long.parquet, with three columns: row_id (int64), feature (string, dictionary-encoded) and shap_value (float32).
+- Those two files are the only files under /inputs.
+- It runs on Python 3.11.16 with numpy 2.4.6, pandas 3.0.3 and pyarrow 24.0.0, plus the standard library. Nothing else is installed, and nothing can be installed.
+- It must finish within 30 seconds and use no more than 512 MiB of memory.
+
+What the tool prints: exactly one JSON object on standard output, and then it exits with status 0. The object has these keys:
+- "found": required, true or false.
+- When "found" is true, "rows" is required: a list of objects, each with "row_id" (an integer, not a boolean) and "shap_value" (a finite number).
+- When "found" is false, "rows" may be left out. If it is present, it must be an empty list.
+- Other keys are allowed, both at the top level and in each row.
+
+Reply with the contents of tool.py and nothing else: no explanation before or after it, and no Markdown code fences.
+```
+
+**What comes from the spec.** Everything in the user message:
+- the tool's name and description;
+- the `feature` and `top_n` parameters with their descriptions, including "ranked by SHAP value descending" and the clamp clause;
+- the `found=false` clause;
+- the data source's three column names.
+
+The prompt restates none of it.
+
+**What we supply, as interface specification and not as validation rules.** These are facts about our harness, not the spec. A correct tool cannot find or produce what it was never told about, and a failure on those grounds would say nothing about capability. With one attempt and no retry, it would also be a rejection that means nothing.
+1. **Where the data is, and its format.** The mount path `/inputs/shap_values_long.parquet`, that it is Parquet, and its column types from Decision 1 and A2. The spec names the columns but not the file, its location, its format or its types. The prompt also says that this file and the arguments file are the only files under `/inputs`, which is a fact about the mount.
+2. **Where the arguments are.** `/inputs/arguments.json`, a JSON object holding a value for each input property, per A4 in `PREREGISTRATION_PHASE3.md`, and that the tool is run with no command-line arguments (Decision 5).
+3. **The output contract.** Decision 2, stated in full.
+4. **The environment.** Python and library versions from `PREREGISTRATION_PHASE3.md` A2, and the 30 second and 512 MiB limits, as the code-generation rules require.
+5. **The reply format.** Reply with the file's contents only, with no prose and no code fences. The reason is the same: the reply-parsing rule rejects prose and fences without repair, so a correct tool delivered inside a fence would be rejected for its wrapping, not its code.
+   - **Why this is interface and not an exclusion:** telling the model what shape to reply in is interface. Telling it how the reply will be checked is an exclusion. The prompt does the first and not the second. It asks for the file's contents only, with no explanation and no fences. It says nothing about how the reply is parsed, how many times anything runs, or what is compared.
+   - **What leaving it out would do:** a correct tool wrapped in a fence would be rejected for its wrapping. Under one attempt, that rejection says nothing about capability.
+
+**What is not in the prompt.** Unchanged from the code-generation rules:
+- the test values `all_util`, `top_n` = 10, `addr_state` and `row_id` as a feature argument, and any row_id or SHAP value;
+- the signed-versus-absolute resolution (Decision 3);
+- the tie rule (Decision 4);
+- the number of runs per test;
+- any statement of how the tool will be checked.
+
+Also not in the prompt:
+- **The artefact's layout from A2:** the row count, one row group per feature, and row order within groups.
+  - **Why it is left out:** telling the model about the 180 row groups would hand it a reading strategy. The generated tool's memory behaviour on a 5,400,000-row file is part of what this step observes. The code-generation rules also name only the filename and the column schema.
+- **The sandbox's refusals.** The prompt states the limits, as the rules require, but not what is refused.
+  - **Why they are left out:** what the sandbox blocks is how the execution is policed, not something a correct tool needs to know. A tool for this spec has no reason to use the network, write a file or read outside `/inputs`, and listing the refusals would describe the test environment rather than the interface.
+
+**The generated tool running out of memory is not the same as R7 running out of memory.**
+- **The generated tool:** if it is killed for exceeding 512 MiB, that is a result about the code it wrote. It is not a defect in the environment, and it is not a reason to stop. It is recorded as `memory_limit`, the tool is rejected under the registry rule, and the phase ends with that decision.
+- **R7:** A1's stop rule applies to R7 only. If R7, the correct tool we wrote by hand, fails the environment, that is a result about the environment, and the generated tool never runs.
+- **These two cases are never to be read as the same thing.**
+
+**How the exclusions were checked.** Both parts were searched as text, without regard to case.
+- **The system prompt** gave no match for:
+  - the test values: `all_util`, `addr_state`, `top_n`, `10`, `loan_amnt`, `example`;
+  - words about ranking and ties: `signed`, `absolute`, `magnitude`, `abs(`, `tie`, `equal`, `order`, `descending`, `ascending`, `sort`, `largest`, `highest`, `clamp`, `found=false`;
+  - words about checking: `check`, `test`, `valid`, `verif`, `correct`, `pass`, `score`, `expect`.
+- **Terms that did match,** each for an interface reason:
+  - `row_id` twice, as the column name and as the output key;
+  - `run` three times, in "is run as" and "runs on";
+  - `three` once, in "three columns".
+- **Digits in the prompt:** the versions, the limits `30` and `512`, `0` in "status 0", and `32` and `64` in the type names.
+- **The user message** gave no match for `all_util`, `addr_state`, `10`, `absolute` or `signed`.
+  - `row_id` appears once, in the data source's column list.
+  - `tie` appears once, inside the word "properties".
+  - `test` appears twice, in "test rows".
+
+**Changes.** Any change to either part after this amendment needs a new dated amendment recording the new hash before any request uses it.
+
 ## Defect register
 
 Numbering continues from D11 in `PREREGISTRATION_PHASE4.md`.
