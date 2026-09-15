@@ -233,8 +233,9 @@ Run on 2026-09-15 with `scripts/run_phase5_step6.py`, once. No API request was m
 
 - **The prediction.** Amendment A4 was written after step 4 and before the request was sent, on R7's peaks of 86–91% of the 512 MiB limit. It predicted that a generated tool that "loads the file through pandas, or makes one more copy of the data than R7 does, could plausibly be killed for memory".
 - **The observation.** The generated tool was not killed for memory on any run. It peaked at 359.9–387.2 MiB, 70–76% of the limit. That is below R7's 440.0–464.1 MiB on the same cases, image and artefact.
-- **A4's prediction was wrong.** That is recorded as a result. A4 stays exactly as written, and nothing in it is removed or softened.
-  - A4's wording is conditional on how a tool loads the file.
-  - Whether this tool meets that condition is not examined here.
+- **What is established, whatever the condition.** A4 named a plausible outcome, death on the memory limit, and that outcome did not occur. The tool peaked at 359.9–387.2 MiB, 70–76% of the limit, below R7's 440.0–464.1 MiB. This holds regardless of how the code reads the file.
+- **What is open.** A4's prediction was conditional on how a tool loads the file: through pandas, or with one more copy of the data than R7. Whether this tool meets that condition has not been examined. If it does not, A4 was not wrong: it was about a tool that did not turn up.
+- **The verdict.** A4's anticipated outcome did not occur. Whether A4's condition was met is open, pending the code being read. This is not recorded as "the prediction was wrong", which the evidence does not yet support. A4 stays exactly as written either way.
+- **When it is settled:** at the registry decision, when the code is read. It is not to be dropped.
 - **Lower peak memory is not a judgement about the code's quality.** It is peak memory and nothing else. Whether the tool's answers are right comes from V1, V3 and V4.
 - **Why the peak is lower is not investigated here.** The code was not read for a cause, and none is given. Anything about how the code reads the file belongs with the registry decision, after these results.
