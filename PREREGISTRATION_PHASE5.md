@@ -250,7 +250,43 @@ There is no partial admission and no second attempt.
 
 ## Amendments
 
-None yet.
+### A1. 2026-09-15. The validator is proven on the real artefact, and R7 failing the environment stops the phase
+
+Written before step 2 begins, so these rules exist before the artefact they constrain. No Phase 5 artefact, prompt or request exists yet.
+
+**What R7, N15, N16 and N17 run against.**
+- **The rule:** every execution of R7, N15, N16 and N17 mounts `shap_values_long.parquet`, the full artefact built under Decision 1. It must be the same file, at the SHA-256 recorded in that step's amendment, that the generated tool will read. It is never a fixture, never a subset, and never a smaller file built for the checks.
+- **How it is shown:** each execution's host-side hash of the mounted artefact is recorded before and after, and must equal the recorded SHA-256. This applies in process and in the sandbox.
+- **Why:** if the validator is proven on anything smaller, it is proven under different conditions from the ones the generated tool faces. The 512 MiB memory limit in particular would go untested where it matters. A3 in `PREREGISTRATION_PHASE3.md` already records R5 at 55% of that limit on the smaller wide matrix.
+
+**If R7 fails the environment.**
+- **The rule:** if any sandbox execution of R7 ends in a refusal-class outcome, the checks stop there and the result is reported. The outcomes that count:
+  - `memory_limit`;
+  - `timeout`;
+  - `crashed` caused by any of the other refusals in section 4 of `PREREGISTRATION_PHASE3.md`.
+- **Crashes are not sorted while running.** Whether a crash was caused by a refusal is a judgement. So any `crashed` execution of R7 also stops the checks and is reported with its recorded error, and whether it was a refusal is decided afterwards, not while the checks run.
+- **What is not done** without the decision being taken explicitly first:
+  - no limit is raised;
+  - the artefact is not shrunk or re-laid out;
+  - R7 is not rewritten to fit.
+- **What follows:** the generated tool does not run, and no code-generation request is made.
+- **Why:** R7 is a correct tool written by hand. If it fails the environment, that is a result about the environment, not about R7. A paid request sent into a test that no correct tool can pass would produce a rejection that means nothing, and that is worse than not running it.
+
+**How the wording changed.** This rule first named `memory_limit` only. It was widened to every refusal-class outcome before step 2 began, and before any artefact existed. Memory was named first because it was the case in mind, not because a timeout differs: a correct tool written by hand that runs out of time is equally a result about the environment.
+
+**Context for the rule, not a threshold.** R5's peak upper bound has risen across three readings:
+
+| Reading | R5 peak |
+|---|---|
+| Phase 3 | 272.7–282.7 MiB |
+| First A4 check run | 266.4–286.2 MiB |
+| Second A4 check run | 278.2–292.4 MiB, 57% of the limit |
+
+- **Nothing has failed.** A4 reports peaks rather than comparing them.
+- **R7 reads a much larger file:** 5,400,000 rows, against R5's 30,000 rows × 180 columns.
+- **This is why the stop rule exists, not a limit.** It is not compared against anything, not investigated, and nothing is tuned on it.
+
+**The order of steps is unchanged by this amendment.** The in-process mock checks enforce no time or memory limit, so this rule can only trigger in the sandbox.
 
 ## Defect register
 
