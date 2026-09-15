@@ -452,6 +452,50 @@ Also not in the prompt:
   - not a reason for a second attempt.
 - **A1's stop rule applies to R7 only,** and R7 passed. The distinction in A3 stands: the generated tool running out of memory is not the same as R7 running out of memory.
 
+### A5. 2026-09-15. The counted projection, before the request
+
+Written after the request was counted and before it was approved or sent. Section 5's rule is count, report, approve. Recording the projection before approval keeps it from being written next to the result. Phase 4 did the same in its A4.
+
+**What was counted.**
+- **The count:** 753 input tokens, from the free token-counting endpoint.
+- **The request counted is the request that will be sent.** `scripts/count_phase5_request.py` counted the request as `layer3/phase5_codegen.py` builds it, and the send uses the same function.
+- **Hash check:** that module refuses to build unless the system prompt and the spec reply text each hash to the values recorded in A3. So what is sent is what A3 records.
+- **Nothing was spent.** The ledger stood at $2.178496 over 301 lines both before and after the count.
+
+**The request's settings.**
+- model `claude-sonnet-5`;
+- 12,400 max tokens;
+- adaptive thinking, the setting in `agent/llm.py`;
+- the moving cache breakpoint, on the one user message;
+- no tools.
+
+**The projection.**
+
+| | |
+|---|---|
+| Projected cost | $0.016506 to $0.051882 |
+| Worst case under the ledger rule (all input at the cache-write rate, output at the full 12,400 max tokens) | $0.125883 |
+| Ledger now | $2.178496 of $15.00 |
+| Ledger after the request, at most | $2.304379 |
+
+Rates are those in `agent/ledger.py`: $2.00 input, $2.50 cache write, $10.00 output per million tokens, read 2026-09-14.
+
+**How input was priced.** At both the plain input rate, for the low end, and the cache-write rate, for the high end.
+- **Why both:** 753 tokens may be below the minimum length the cache will store, and that minimum was not checked. Neither case was assumed.
+- **What this does not claim:** it does not say the cache minimum doesn't apply. It says only that it was not checked.
+- Input is under $0.002 either way.
+
+**A finding about section 5's input guess.**
+- **The figures:** the counted input is 753 tokens, against section 5's guess of 2,500 to 3,500.
+- **How far off:** the guess was made before the prompt existed, and it was high by 3.3 to 4.6 times.
+- **What it fed:** it was the basis of section 5's estimate of $0.02 to $0.06.
+
+**Output.**
+- **The guess:** section 5's guess stands, 1,500 to 5,000 output tokens including thinking.
+- **Why it is only a guess:** output cannot be counted before a reply exists, and it is nearly all of the cost.
+- **After the request:** the actual output tokens, from the response's usage and the ledger line, are recorded.
+- **A figure outside 1,500 to 5,000** is a finding about the guess, not an overrun. The spend cap is enforced by the ledger check, not by this range.
+
 ## Defect register
 
 Numbering continues from D11 in `PREREGISTRATION_PHASE4.md`.
