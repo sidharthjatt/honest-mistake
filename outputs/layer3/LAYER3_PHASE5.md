@@ -164,6 +164,7 @@ Section 5 guessed both the input and the output of this request before the promp
 | Cost | A5's projected low end, $0.016506 | $0.004736 | the low end is 3.5 times the actual |
 
 - **What the guesses rested on:** the input guess was made before the prompt existed. The output guess was drawn from Phase 4's spec requests, which ran 121 to 1,395 output tokens; this reply's 323 falls inside that range.
+- **The two halves stand differently.** The input guess had no comparable source to draw on. The output guess did, and the actual output landed inside that source's range. Section 5's output range, 1,500 to 5,000, was set wholly above that source's 121 to 1,395.
 - **What A5 did about input:** it replaced the input guess with a count before the request.
 - **Output could not be replaced before a reply existed.**
 
@@ -172,3 +173,68 @@ The projection's high end, $0.051882, and the ledger's worst case, $0.125883, we
 ### A defect found before sending
 
 The empty-reply case was found in mock mode, before the real request, and fixed then. It is recorded as D15 in the defect register of `PREREGISTRATION_PHASE5.md`.
+
+## Step 6: the generated tool against V1, V3 and V4
+
+Run on 2026-09-15 with `scripts/run_phase5_step6.py`, once. No API request was made. These are the raw results, written before any interpretation and before the registry decision.
+
+### What ran
+
+- **The code:** `outputs/layer3/phase5/codegen/reply.txt` itself, SHA-256 `94199ea50aa1b9e32d8fc182570864ababe873ce317149124d52d1dc2791f27a`, mounted read-only as `/tool/tool.py`.
+  - The script confirmed its hash before any run.
+  - The code executed is byte for byte the reply.
+  - It was never run in process.
+- **Where:** in the sandbox, on the image pinned in `PREREGISTRATION_PHASE3.md` A2, `sha256:801f6454116549ae4369be7d1ed8e64c3b2143e255931c0c67bc312de67450f6`, under Phase 3's refusals and limits.
+- **The data:** the full artefact from A2. The file on disk hashed `07ff508b…cc0d`, equal to A2, before any run.
+- **The runs:** each case 3 times, with that case's `arguments.json`.
+- **Nothing stopped the runs.** All 9 went ahead regardless of outcome, as A4 requires: A1's stop rule is for R7 only. The only thing that would have halted them was the validator being unable to give a verdict, and that did not happen.
+- **Records before printing:** each run's full record was appended to `outputs/layer3/phase5/validation/runs.jsonl` before anything about it was printed. That covers exit state, peak memory, full stdout and stderr, full input hashes, the host-state check, the container settings and the verdict. The script refuses to run again while that file exists.
+
+### Results
+
+| Case | Run | Outcome | Exit | Harness kill / OOMKilled / oom_kill events | Wall | Peak memory | stdout |
+|---|---|---|---|---|---|---|---|
+| V1 | 1 | pass | 0 | False / False / 0 | 0.450 s | 383.7 MiB | 568 bytes |
+| V1 | 2 | pass | 0 | False / False / 0 | 0.334 s | 387.2 MiB | 568 bytes |
+| V1 | 3 | pass | 0 | False / False / 0 | 0.331 s | 365.4 MiB | 568 bytes |
+| V3 | 1 | pass | 0 | False / False / 0 | 0.335 s | 359.9 MiB | 17 bytes |
+| V3 | 2 | pass | 0 | False / False / 0 | 0.328 s | 374.1 MiB | 17 bytes |
+| V3 | 3 | pass | 0 | False / False / 0 | 0.329 s | 359.9 MiB | 17 bytes |
+| V4 | 1 | pass | 0 | False / False / 0 | 0.327 s | 364.1 MiB | 17 bytes |
+| V4 | 2 | pass | 0 | False / False / 0 | 0.335 s | 369.2 MiB | 17 bytes |
+| V4 | 3 | pass | 0 | False / False / 0 | 0.349 s | 363.4 MiB | 17 bytes |
+
+- **Reasons:** every run's recorded reason was "every item matches". Child return code was 0 on every run.
+- **Output:**
+  - **V1:** `found` true and a `rows` list, on every run. As printed, the first five row ids were 19735, 46997, 70290, 155258 and 19927, and the first value was 0.1251123994588852.
+  - **V3 and V4:** `{"found": false}` followed by a newline, on every run.
+
+### Hashes, before and after every run
+
+| Input | Case | Before | After |
+|---|---|---|---|
+| `shap_values_long.parquet` | all nine runs | `07ff508bba87ec97ee4fe46f5577ce065076de865279dc6a6cce9e2bf864cc0d` | the same |
+| `arguments.json` | V1 | `0b4756583b482335b5206690ca91b458d42cbedbbb92dc22ac8c2be9764d3383` | the same |
+| `arguments.json` | V3 | `978bd5b252319aa981ceb312feba5791382354c2db33e232371a8af0b13b1724` | the same |
+| `arguments.json` | V4 | `f1a2e5141f63879d857548d42d4f929d94cfe7664a2acee2724274c516ddbd61` | the same |
+
+### Host state and container
+
+- **Host state:** the harness's record was unchanged after every run. It covers every mounted input, the tool file (`reply.txt`), the spend ledger and `git status --porcelain`.
+- **Container, on every run:**
+  - network mode `none`;
+  - a read-only root filesystem;
+  - a 64 MiB tmpfs at `/tmp`;
+  - `/inputs` and `/tool/tool.py` mounted read-only;
+  - memory and swap both 536,870,912 bytes;
+  - image `sha256:801f6454…50f6`.
+
+### The memory finding
+
+- **The prediction.** Amendment A4 was written after step 4 and before the request was sent, on R7's peaks of 86–91% of the 512 MiB limit. It predicted that a generated tool that "loads the file through pandas, or makes one more copy of the data than R7 does, could plausibly be killed for memory".
+- **The observation.** The generated tool was not killed for memory on any run. It peaked at 359.9–387.2 MiB, 70–76% of the limit. That is below R7's 440.0–464.1 MiB on the same cases, image and artefact.
+- **A4's prediction was wrong.** That is recorded as a result. A4 stays exactly as written, and nothing in it is removed or softened.
+  - A4's wording is conditional on how a tool loads the file.
+  - Whether this tool meets that condition is not examined here.
+- **Lower peak memory is not a judgement about the code's quality.** It is peak memory and nothing else. Whether the tool's answers are right comes from V1, V3 and V4.
+- **Why the peak is lower is not investigated here.** The code was not read for a cause, and none is given. Anything about how the code reads the file belongs with the registry decision, after these results.
