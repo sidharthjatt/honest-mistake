@@ -14,6 +14,7 @@ serves the in-process runner here and the container runner later.
 from __future__ import annotations
 
 import contextlib
+import hashlib
 import io
 import json
 import os
@@ -116,8 +117,20 @@ def write_arguments(dest: Path, arguments: dict | None) -> None:
     path.write_bytes(json.dumps(arguments).encode("utf-8"))
 
 
-def run_in_process(tool: Path, qid: str,
-                   arguments: dict | None = None) -> Observation:
+def input_hashes(dest: Path) -> dict:
+    """SHA-256 of every file among a run's inputs, by file name."""
+    hashes = {}
+    for path in sorted(dest.iterdir()):
+        digest = hashlib.sha256()
+        with path.open("rb") as fh:
+            for chunk in iter(lambda: fh.read(1 << 20), b""):
+                digest.update(chunk)
+        hashes[path.name] = digest.hexdigest()
+    return hashes
+
+
+def run_in_process(tool: Path, qid: str, arguments: dict | None = None,
+                   hashes: dict | None = None) -> Observation:
     """Run a tool inside this interpreter, with no isolation at all.
 
     Only for tools that attempt no escape. Nothing is refused and no time or
@@ -136,6 +149,8 @@ def run_in_process(tool: Path, qid: str,
     with tempfile.TemporaryDirectory(prefix=f"{qid}_inputs_") as tmp:
         question.prepare(Path(tmp))
         write_arguments(Path(tmp), arguments)
+        if hashes is not None:
+            hashes["before"] = input_hashes(Path(tmp))
         os.environ[INPUTS_ENV] = tmp
         start = time.monotonic()
         try:
@@ -153,6 +168,8 @@ def run_in_process(tool: Path, qid: str,
                 os.environ.pop(INPUTS_ENV, None)
             else:
                 os.environ[INPUTS_ENV] = previous
+        if hashes is not None:
+            hashes["after"] = input_hashes(Path(tmp))
 
     return Observation(exit_code=exit_code,
                        stdout=buffer.getvalue().encode("utf-8"),

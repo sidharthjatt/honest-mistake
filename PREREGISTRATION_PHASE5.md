@@ -426,6 +426,32 @@ Also not in the prompt:
 
 **Changes.** Any change to either part after this amendment needs a new dated amendment recording the new hash before any request uses it.
 
+### A4. 2026-09-15. Memory headroom found in step 4, and a prediction written before the request
+
+**When this was written.** After step 4's checks and before the code-generation request was counted or sent.
+- **Why the timing matters:** written after the result, the prediction below would read as an explanation built around it. Written now, it can only be right or wrong.
+- **What is recorded here:** the observation, and one prediction. No rule changes.
+
+**What step 4 observed in the sandbox.** Every figure is the container's cgroup `memory.peak`, the counter the 512 MiB limit is enforced against.
+- **R7:** 440.0–464.1 MiB across V1, V3 and V4, which is 86–91% of the limit. It passed on every run.
+- **N17:** up to 479.6 MiB, 94% of the limit.
+- **Context, not a comparison or a threshold:** R5 peaked at 57% of the same limit on the smaller wide matrix, in the second A4 check run in `LAYER3_PHASE3.md`.
+
+**What R7's figure means.** R7 is deliberately plain.
+- It reads the whole artefact with pyarrow, filters on the feature name, and sorts.
+- It uses only what the code-generation prompt tells the model: the arguments file, the artefact's name, its format and its three columns. It uses nothing about the layout.
+- So its peak is the headroom a straightforward correct tool has under these conditions: about 48 MiB at best.
+- **Part of the peak is page cache** from reading the 46 MB file. The limit counts it, so it counts here.
+
+**The prediction.** A generated tool that loads the file through pandas, or makes one more copy of the data than R7 does, could plausibly be killed for memory.
+- **If that happens,** it is a result about the code the model wrote, and it is recorded as the outcome: `memory_limit`, and the tool is rejected under the registry rule.
+- **What it is not:**
+  - not a defect;
+  - not a reason to raise the limit;
+  - not a reason to rewrite the prompt, the artefact or anything else;
+  - not a reason for a second attempt.
+- **A1's stop rule applies to R7 only,** and R7 passed. The distinction in A3 stands: the generated tool running out of memory is not the same as R7 running out of memory.
+
 ## Defect register
 
 Numbering continues from D11 in `PREREGISTRATION_PHASE4.md`.

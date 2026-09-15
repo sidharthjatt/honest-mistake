@@ -121,8 +121,8 @@ def _exception_name(lines: list[str]) -> str | None:
     return None
 
 
-def run_in_container(tool: Path, qid: str,
-                     arguments: dict | None = None) -> SandboxRun:
+def run_in_container(tool: Path, qid: str, arguments: dict | None = None,
+                     hashes: dict | None = None) -> SandboxRun:
     question = QUESTIONS[qid]
     name = f"hm-sandbox-{uuid.uuid4().hex[:12]}"
 
@@ -170,6 +170,14 @@ def run_in_container(tool: Path, qid: str,
             _docker("rm", "-f", name, check=False)
 
         after = _host_state(tool, inputs)
+
+    if hashes is not None:
+        # The inputs' own hashes, for callers that must record the values
+        # and not only whether they changed (PREREGISTRATION_PHASE5.md A1).
+        hashes["before"] = {k[len("input "):]: v for k, v in before.items()
+                            if k.startswith("input ")}
+        hashes["after"] = {k[len("input "):]: v for k, v in after.items()
+                           if k.startswith("input ")}
 
     state, host = info["State"], info["HostConfig"]
     try:
