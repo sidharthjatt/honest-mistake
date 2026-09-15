@@ -1,0 +1,15 @@
+{
+ "late_adjudication": true,
+ "seed": 2349641954792209055,
+ "shuffle": "random.Random(seed).shuffle(list(range(16))); position n holds canonical index order[n-1]",
+ "canonical_order": "the four scored runs sorted by directory name, then each run's episodes.json order, keeping the eligible part c and material near-miss replies",
+ "count": 16,
+ "sources": {
+  "PREREGISTRATION_PHASE4.md": "20eed5dc3fa4a9c2c04d27510d8be43fc9c818d95abe27b1e5bbff2c84123a6d",
+  "outputs/layer3/phase4_runs/20260914T135142__REAL__phase4-run1/episodes.json": "ce3715b8e8b0be11d4d60df3e36b9c68b4ffc979aa9160a3034461adcee16426",
+  "outputs/layer3/phase4_runs/20260914T135615__REAL__phase4-run2/episodes.json": "0fd6163e3fc59d6e0612b03b904e306c4e55edc9e16d8e96ab4aedc2633b86d6",
+  "outputs/layer3/phase4_runs/20260914T221829__REAL__phase4b-run1/episodes.json": "576f64a8c4b36f390056eef9f894b4f30a1e02023fd78797120e27055bf9221e",
+  "outputs/layer3/phase4_runs/20260914T222342__REAL__phase4b-run2/episodes.json": "ef0a2d5badc29601a7e2e6233c831e1a7d23c0ae8aa0d8b5bd908fffce94231b"
+ },
+ "mapping_written": false
+}

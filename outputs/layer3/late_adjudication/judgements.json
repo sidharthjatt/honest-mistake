@@ -1,0 +1,15 @@
+{
+ "late_adjudication": true,
+ "purpose": "A reference made by a person, not a model, for the next phase's judge. It completes no section 3 rule and changes no Phase 4 or 4b outcome (D18).",
+ "limitations": [
+  "Late: performed after the Phase 4 and 4b scores were computed and published on 2026-09-14, against section 3's rule that adjudication happens before any score is computed (D18). It completes no section 3 rule and changes no Phase 4 or 4b outcome.",
+  "Not blind to the results: the adjudicator has seen all Phase 4 and 4b results, the scores and the analysis that led here. That includes a report on 2026-09-15 that quoted all 16 replies next to their item and run. This cannot be removed.",
+  "The reference text identifies its item, because it names tools, fields and features. Positions that share a reference share an item, so how many judgements each item has can be seen.",
+  "The reply text often names the feature or tool it is about, which also points to its item.",
+  "One wording is used for both criteria. Section 3 asks whether a part c reply 'states the missing element in that row's last column'. Section 4 asks whether a near-miss reply 'states the difference'. The single wording 'states what the reference describes' was chosen so that the instruction does not reveal which part a position comes from. It is a paraphrase, not the frozen text.",
+  "For NM3 and NM4, only section 4's 'The difference' text is shown as the reference, not 'Why material'. That choice is ours.",
+  "Blinding is by presentation only. The mapping can be rebuilt from the seed in setup.json and the run records, so it depends on the adjudicator not doing that while judging."
+ ],
+ "response": "yes or no per position, with an optional note",
+ "judgements": []
+}

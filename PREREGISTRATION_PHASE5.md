@@ -521,6 +521,38 @@ These are process approvals, not a checkpoint in a running pipeline. No pipeline
 - whether the README is amended;
 - whether a checkpoint is built later, when something real is there to gate.
 
+### A7. 2026-09-15. The late adjudication is stopped, and the judge and verifier phase is cut
+
+Written after the late adjudication was set up and before any judgement was made.
+
+**The late adjudication was set up, then stopped before any judgement.**
+- **What was set up:** `scripts/prepare_late_adjudication.py` wrote the 16 pending Phase 4 and 4b judgements to `outputs/layer3/late_adjudication/` as blinded records in shuffled order, with the seed in `setup.json` and the seven limitations in `judgements.json`.
+- **Where it stopped:** position 1 was shown to the adjudicator, and the work stopped there. `judgements.json` holds 0 judgements, and none will be added.
+- **Why it was stopped:**
+  - it cannot change any Phase 4 or 4b outcome;
+  - it cannot complete section 3's rule, because that rule's timing condition is gone (D18);
+  - it cannot change the registry entry.
+
+  Its only remaining purpose was a reference for a judge. That reference would have been one person's opinion, formed after seeing every result, over 8 distinct items, compared against a judge on a chance floor too weak for the number to mean anything. It would have produced a figure needing seven limitations stated beside it. That is work that exists to be written down, not to establish anything.
+- **D18 stands as written.** The timing rule was broken, and that is a real finding about Phase 4 regardless of what follows.
+
+**The Agent-as-a-Judge and verifier phase is cut.** A judge in this project would judge material of one of two kinds.
+- **Material that already has a mechanical reference:** Phase 4's parts a and b, and the Layer 2 scorer's verdicts against `agent/answer_key.py`. A judge here would re-derive a rule that is already written.
+- **Material with no independent reference:**
+  - the Phase 5 tool's answers;
+  - whether a generated spec answers its question;
+  - the substance of Layer 2's false-positive arguments.
+
+  Anything a judge were compared against would come from the same source as the thing judged. This is the circularity that cut Phase 5 from nine tools to one.
+
+The one case between the two, the 16 pending judgements against a frozen rubric, is the late adjudication stopped above.
+
+**This is a deliberate cut, not a silent drop.**
+- **How the phase was named and planned:** the README roadmap names "an Agent-as-a-Judge with a separate verifier" as where evaluation moves. A2 in `PREREGISTRATION_PHASE4.md` designs Phase 6 as two judges without tools and one verifier. The project owner also described it in conversation as a Layer 3 differentiator.
+- **Why the cut is recorded:** dropping it without a record would repeat the failure D16 records, where the plan changed and nothing said so.
+
+**What this means for the README.** The README's statement that evaluation "moves from a single scorer to an Agent-as-a-Judge with a separate verifier" is not true of the system as built. The same applies to any roadmap text that promises a judge or a verifier. This stands beside the HITL departure recorded in D17 and A6. Whether the README is amended is a separate decision, and it is not taken here.
+
 ## Defect register
 
 Numbering continues from D11 in `PREREGISTRATION_PHASE4.md`.
