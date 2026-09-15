@@ -522,3 +522,16 @@ This is recorded because the constraint is general: any row-level tool admitted 
 - **The result:** D12's date stays 2026-09-15, and it now rests on the scope report's own timestamp. A proposed correction back to 2026-09-14 was checked against the same record and not applied, because nothing in the record carries that date for the scope report.
 
 This is recorded because it is the error the register exists to catch: a date copied from a different finding. The value happened to be right, and that does not make the provenance right.
+
+**D15. 2026-09-15.** The first version of `scripts/send_phase5_request.py` reported a rejected reply as accepted.
+- **What went wrong:** it decided "parses as Python" with `ast.parse` alone. `ast.parse` accepts an empty string, so an empty reply would have been reported as "parses: yes". Section 4 rejects an empty reply.
+- **How it was found:** in mock mode, before the real request. The mock reply had no text block, so the reply was empty, and the script printed "parses as Python as returned: yes".
+- **What was changed, before the real send:** the report was split into three lines:
+  - whether `ast.parse` on the reply as returned succeeds;
+  - whether the reply is empty;
+  - the verdict under section 4, which requires both.
+
+  A second mock run then reported an empty reply as "no" under section 4. Only after that was the real request sent.
+- **It did not affect the real reply,** which is 646 bytes and non-empty.
+
+This is recorded because the general problem is not this one check. A single yes-or-no that merges several conditions can hide a case the rule rejects, and the report would read as a pass. Where a rule has more than one condition, each condition is reported on its own, next to the verdict that combines them.

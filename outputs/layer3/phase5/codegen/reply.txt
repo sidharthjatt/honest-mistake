@@ -1,0 +1,25 @@
+import json
+import pandas as pd
+
+with open('/inputs/arguments.json') as f:
+    args = json.load(f)
+
+feature = args.get('feature')
+top_n = args.get('top_n')
+
+df = pd.read_parquet('/inputs/shap_values_long.parquet')
+
+sub = df[df['feature'] == feature]
+
+if sub.empty:
+    print(json.dumps({"found": False}))
+else:
+    if top_n is None or top_n < 0:
+        top_n = 0
+    sub_sorted = sub.sort_values('shap_value', ascending=False)
+    top = sub_sorted.head(top_n)
+    rows = [
+        {"row_id": int(r.row_id), "shap_value": float(r.shap_value)}
+        for r in top.itertuples(index=False)
+    ]
+    print(json.dumps({"found": True, "rows": rows}))

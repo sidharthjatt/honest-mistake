@@ -109,3 +109,66 @@ Run before N15 and N16 were written, in a read-only pass over `shap_values.parqu
 - **The broken tools test anticipated failures only.** N15, N16 and N17 were written by the same process that wrote R7 and the validator. They show that three foreseen mistakes are caught, not that unforeseen ones would be.
 - **The clamp clause is untested (D13).** No case passes a `top_n` above the available count, and none passes `top_n` of 0 or less (Decision 4).
 - **R7 fits the memory limit narrowly.** Its highest peak was 464.1 MiB, about 48 MiB under the limit. See amendment A4.
+
+## Step 5: the code-generation request
+
+Sent on 2026-09-15 with `scripts/send_phase5_request.py`, once, after the counted projection was recorded in amendment A5 and approved. One attempt, with no retry.
+
+### The request as sent
+
+- **The parts:**
+  - **System prompt:** `layer3/prompts/phase5_codegen_system.txt`, SHA-256 `e0d0ef68478b67da51bc1ed0be7af6324e9e2493241fc55039859e8fdac9e035`.
+  - **User message:** the `text` field of item C4 in the Phase 4 run 1 record, SHA-256 `cc6d4fbe5da53e87abbaea367671aa3188b3bcd3af760ad50532123299f734f9`.
+  - Both are as recorded in A3.
+- **The hashes were enforced.** The parts were loaded by `layer3/phase5_codegen.py`, which refuses to build unless both hash to A3's values. The request was built, as it was counted, and was not refused.
+- **Settings:** `claude-sonnet-5`, 12,400 max tokens, adaptive thinking with summarised display, the moving cache breakpoint on the one user message, and no tools.
+- **The call path:** `agent.llm.call_llm`, so the ledger check before sending and the ledger line after it are the same code Phase 4 used. The ledger label is `phase5-codegen`.
+- **What was written first:** the reply and the full response, before anything else was computed.
+  - `outputs/layer3/phase5/codegen/reply.txt` is the reply text exactly as returned.
+  - `outputs/layer3/phase5/codegen/response.json` is the complete result, thinking block included, with the settings and both hashes.
+
+### What came back
+
+- **The reply:** 646 bytes, SHA-256 `94199ea50aa1b9e32d8fc182570864ababe873ce317149124d52d1dc2791f27a`.
+- **Stop reason:** `end_turn`.
+- **The response content:** one thinking block and one text block. The reply is that single text block.
+
+### Usage, cost and ledger
+
+| | |
+|---|---|
+| Input tokens | 753, the same as the count in A5 |
+| Output tokens | 323, thinking included. Usage does not report thinking separately. |
+| Cache | none written (0) and none read (0) |
+| Cost | $0.004736 |
+| Ledger | $2.178496 over 301 lines before; $2.183232 over 302 lines after |
+
+**On the cache, A5's wording stands.** No write and no read is consistent with the prompt being below the cache minimum, but it does not prove it. The minimum was never checked.
+
+### The section 4 verdict
+
+**The reply parses as Python, as returned, and it is not empty.** So under section 4 it is accepted for validation.
+- `ast.parse` on the reply as returned succeeded.
+- The reply is not empty.
+
+**This is a verdict on the reply's form only.** Nothing is yet said about the code: it has not been run, read for correctness or validated.
+
+### A finding about section 5's estimating
+
+Section 5 guessed both the input and the output of this request before the prompt existed, and both guesses were wrong by large margins. They were wrong in the same direction: both were too high. So they did not offset each other, and the cost came in below the projection's low end.
+
+| | Section 5's guess | Actual | How far off |
+|---|---|---|---|
+| Input tokens | 2,500–3,500 | 753, counted | high by 3.3–4.6 times |
+| Output tokens, thinking included | 1,500–5,000 | 323 | the low end alone is 4.6 times the actual |
+| Cost | A5's projected low end, $0.016506 | $0.004736 | the low end is 3.5 times the actual |
+
+- **What the guesses rested on:** the input guess was made before the prompt existed. The output guess was drawn from Phase 4's spec requests, which ran 121 to 1,395 output tokens; this reply's 323 falls inside that range.
+- **What A5 did about input:** it replaced the input guess with a count before the request.
+- **Output could not be replaced before a reply existed.**
+
+The projection's high end, $0.051882, and the ledger's worst case, $0.125883, were never approached. This is a finding about the estimate, not about the spend, which stayed far inside the cap.
+
+### A defect found before sending
+
+The empty-reply case was found in mock mode, before the real request, and fixed then. It is recorded as D15 in the defect register of `PREREGISTRATION_PHASE5.md`.
