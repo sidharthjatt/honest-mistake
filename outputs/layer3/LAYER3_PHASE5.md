@@ -237,5 +237,110 @@ Run on 2026-09-15 with `scripts/run_phase5_step6.py`, once. No API request was m
 - **What is open.** A4's prediction was conditional on how a tool loads the file: through pandas, or with one more copy of the data than R7. Whether this tool meets that condition has not been examined. If it does not, A4 was not wrong: it was about a tool that did not turn up.
 - **The verdict.** A4's anticipated outcome did not occur. Whether A4's condition was met is open, pending the code being read. This is not recorded as "the prediction was wrong", which the evidence does not yet support. A4 stays exactly as written either way.
 - **When it is settled:** at the registry decision, when the code is read. It is not to be dropped.
+
+## The registry decision
+
+Decided on 2026-09-15, after step 6's results were written and committed (`aaba3a2`, amended in `8dfb75c`). The code was then read for two purposes only: to settle the open memory point, and to record how the tool works for the registry entry. Reading it could not change the decision, which rests on V1, V3 and V4.
+
+### The rule it was decided under
+
+Quoted from section 4 of `PREREGISTRATION_PHASE5.md`, as frozen:
+
+> **Admitted, with limitations recorded.** A tool is admitted only if all of these hold:
+> 1. the code-generation reply parsed as Python;
+> 2. V1, V3 and V4 each passed on 3 of 3 executions;
+> 3. no execution ended in a refusal outcome;
+> 4. host-side state was unchanged after every execution.
+>
+> An admitted tool's entry records these limitations against it, and admission never omits them:
+> - self-consistency only, not independently validated;
+> - the clamp clause untested (D13);
+> - ranked by signed value, where the question could mean absolute (Decision 3);
+> - generated from an episode that was eligible but never adjudicated, and that parsed in 1 of 4 scored runs.
+>
+> **Admitted is not validated.** A tool passing its self-consistency check is admitted with those limitations. It is never recorded as validated.
+>
+> **Rejected.** A tool is rejected on any other result, and the entry records the first reason:
+> - the ledger refused the code-generation request;
+> - the reply did not parse as Python;
+> - a test failed, with the test, the run and the outcome class.
+>
+> There is no partial admission and no second attempt.
+>
+> **What admission does not do.** It does not add the tool to the eight Layer 2 tools, does not change `agent/tools.py`, and does not make the tool reachable by any agent. Phase 5 has no human-in-the-loop checkpoint and exposes nothing.
+
+### Each condition, against the record
+
+The entry's conditions were computed from `runs.jsonl`, not retyped.
+
+| Condition | Holds | Evidence |
+|---|---|---|
+| 1. The reply parsed as Python | yes | Step 5: `ast.parse` succeeded on the reply as returned, and the reply is not empty. |
+| 2. V1, V3 and V4 each passed on 3 of 3 executions | yes | Step 6: all nine executions `pass`. |
+| 3. No execution ended in a refusal outcome | yes | No `timeout`, `memory_limit` or `crashed` among the nine. |
+| 4. Host-side state unchanged after every execution | yes | Step 6: the host-state record was unchanged on all nine. |
+
+The ledger did not refuse the request, and no rejection reason applies.
+
+### The decision
+
+**`get_top_shap_rows` is admitted, with limitations recorded.** It is not recorded as validated.
+
+- **Where:** one entry appended to `outputs/layer3/registry.jsonl`, the first line of that file.
+- **What the entry holds:**
+  - the spec's name, its source record and item, and the spec text's hash;
+  - the code-generation prompt's hash and the generated code's hash;
+  - the image ID, the artefact's hash and the answer source's hash;
+  - each test's outcome on each run;
+  - the four conditions;
+  - the decision;
+  - the limitations;
+  - how the tool works;
+  - its exposure.
+
+**Admission does not expose the tool.** The tool is not added to the eight Layer 2 tools, `agent/tools.py` is unchanged, and no agent can reach it.
+
+### The limitations recorded against it
+
+These are the limitations already frozen, each with where it was frozen. Section 4 lists the first four. The last two are frozen in sections 1 and 2 and in A3, and are recorded here because they bound what admission means.
+
+1. **Self-consistency only.** The tool was checked against answers read from the same `shap_values.parquet` that the artefact was built from. So this does not establish that its answers are correct. (Section 4; section 2.)
+2. **The clamp clause is untested.** V2 was dropped because a correct output would exceed the 1 MiB stdout cap. (Section 4; D13.)
+3. **Ranked by signed SHAP value, descending.** The spec's wording could also have meant absolute value. (Section 4; Decision 3.)
+4. **The source episode.** The detector labelled it `not_answerable`. It was eligible but never adjudicated, and its reply parsed in only 1 of 4 scored runs. (Section 4; section 3.)
+5. **The chain did not run end to end.** Detection and spec generation were read from the Phase 4 run 1 record. Only code generation, the sandbox, validation and this decision ran live. (Sections 1 and 2.)
+6. **Interface supplied by us.** The output contract, the mount paths of the artefact and the arguments file, and the reply-shape instruction were supplied by us as interface specification, not by the spec. (Decision 2; A3.)
+
+### How the tool works
+
+From reading `reply.txt` (SHA-256 `94199ea5…f27a`):
+- **Arguments:** it reads `/inputs/arguments.json` with `json.load`, and takes `feature` and `top_n` with `dict.get` (lines 4–8).
+- **Reading the data:** it loads the whole artefact with `pd.read_parquet('/inputs/shap_values_long.parquet')` (line 10).
+- **Finding the feature:** it keeps the rows whose `feature` equals the argument (line 12). If none match, it prints `{"found": false}` (lines 14–15).
+- **`top_n`:** a value that is `None` or below 0 is set to 0 (lines 17–18). Rows are then taken with `head(top_n)` (line 20).
+- **Ranking:** it sorts the matching rows by `shap_value` with `ascending=False`, so by signed value, highest first (line 19).
+- **Output:** one JSON object, `found` true and `rows` of `row_id` as an integer and `shap_value` as a float (lines 21–25).
+
+### The open memory point, settled
+
+The memory finding in step 6 left open whether this tool meets A4's condition: loading the file through pandas, or making one more copy of the data than R7.
+
+**It meets the condition.** The code imports pandas and loads the whole file through it:
+
+```python
+import pandas as pd
+```
+
+```python
+df = pd.read_parquet('/inputs/shap_values_long.parquet')
+```
+
+Loading through pandas is one of the two alternatives A4 named, so the condition holds on that alone. The second alternative, one more copy of the data than R7, was not assessed, because the first settles it.
+
+**The finding:** A4's condition held, and A4's anticipated outcome, death on the memory limit, did not occur. The tool peaked at 359.9–387.2 MiB, 70–76% of the limit, below R7's 440.0–464.1 MiB.
+- **A4 was not about a tool that failed to turn up.** This is the tool it described.
+- **What remains true of A4:** the outcome it called plausible did not happen. Nothing more is claimed.
+- **A4 stays exactly as written.**
+- **No cause is given** for the lower peak. As in step 6, peak memory is not a judgement about the code, and correctness comes from V1, V3 and V4.
 - **Lower peak memory is not a judgement about the code's quality.** It is peak memory and nothing else. Whether the tool's answers are right comes from V1, V3 and V4.
 - **Why the peak is lower is not investigated here.** The code was not read for a cause, and none is given. Anything about how the code reads the file belongs with the registry decision, after these results.
