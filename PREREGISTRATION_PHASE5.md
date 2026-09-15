@@ -496,6 +496,31 @@ Rates are those in `agent/ledger.py`: $2.00 input, $2.50 cache write, $10.00 out
 - **After the request:** the actual output tokens, from the response's usage and the ledger line, are recorded.
 - **A figure outside 1,500 to 5,000** is a finding about the guess, not an overrun. The spend cap is enforced by the ledger check, not by this range.
 
+### A6. 2026-09-15. HITL is descoped, and the approvals that do exist
+
+Written after Phase 5's registry decision and after D16 and D17. No code, request or checkpoint exists for this amendment to describe.
+
+**The decision.** A human-in-the-loop checkpoint, and override logging with it, are descoped. This is not a change of mind. It is what a survey of the repository found on 2026-09-15.
+- **Nothing reads the registry.** No code opens `outputs/layer3/registry.jsonl`. Admission exposes nothing, so there is no downstream decision for a person to stand in front of.
+- **Nothing is queued.** The one admission, `get_top_shap_rows`, has already been made, and D17 records that it is not revisited. No other spec has been through code generation.
+- **An override log would be empty by design.**
+  - The frozen rules forbid repair, retry, taking a label from an unparsed reply, and second attempts. So no automated verdict in this project is one a person is allowed to overturn, and no overridable event exists.
+  - The spend ledger holds 0 refusal lines. A refusal raises an error and is never written down.
+- **Building a checkpoint now would mean manufacturing a decision for it to gate.** That is the reason for descoping. It is not a deferral, and no date is attached to it.
+
+**The human approval that does exist, under its own name.** A person approved each of these in conversation:
+- the one paid code-generation request;
+- each commit;
+- the push.
+
+These are process approvals, not a checkpoint in a running pipeline. No pipeline paused for them. The repository records them only indirectly: through amendments written before the step they preceded, such as A5, which was written before the request was approved, and through the commit history.
+
+**What this means for the README.** The README's sentence "A human-in-the-loop checkpoint sits in front of admission" is not true of the system as built. D17 records that Phase 5 departed from it without saying so. This amendment records the decision not to close that departure now.
+
+**What stays open.** Two decisions are not taken here, and nothing is proposed for either:
+- whether the README is amended;
+- whether a checkpoint is built later, when something real is there to gate.
+
 ## Defect register
 
 Numbering continues from D11 in `PREREGISTRATION_PHASE4.md`.

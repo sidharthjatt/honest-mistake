@@ -435,6 +435,31 @@ Numbering continues from D8 in `PREREGISTRATION_PHASE3.md`.
 
 **D11. 2026-09-14.** `run_items` in `layer3/phase4.py` words the reason for a spec request not made wrongly when an episode's reply did not parse. With no parsed output, it prints the termination value (`completed`) where a label belongs, as in "the detector's result was completed, not not_answerable". The decision is correct: with no parsed `not_answerable`, no spec request is made. But the recorded reason is misleading. It is not fixed, because the runner produced the results reported in `LAYER3_PHASE4.md`, and changing it now would separate the code from the record it generated.
 
+**D18. 2026-09-15.** The adjudication section 3 requires is performed late, after the scores were computed and published.
+
+Numbered D18 because numbering continues across the Layer 3 files, and `PREREGISTRATION_PHASE5.md` already holds D12 to D17. Written before any judgement is made.
+
+- **The rule and its timing condition.** Section 3 says part c's third condition "is adjudicated by a person, against that column, before any score is computed". Section 4 leaves the stated difference for the material near-misses to a person in the same way.
+- **The condition was not met.** The scores were computed and published in `LAYER3_PHASE4.md` on 2026-09-14 with no adjudication performed. The person now adjudicating has seen those scores.
+- **What is done, and how it is labelled.** The adjudication goes ahead as a **late adjudication**. It is labelled late wherever it appears.
+  - It is not a deferral, and it is not an exception to the rule.
+  - The rule was written with a timing condition, the condition was not met, and the label says so.
+- **Its one purpose:** to produce a reference made by a person, not a model, for the judge in the next phase to be compared against.
+- **What it does not do.**
+  - **It does not complete section 3's pending rule.** That rule's timing condition can no longer be met, so the late adjudication cannot satisfy it.
+  - **It changes no Phase 4 or 4b outcome.** Both rules these judgements feed already fail in at least one run whatever the judgements say:
+    - part c's upper bound is below 5 of 7 in all four scored runs;
+    - the material near-miss rule already fails in Phase 4 run 1 and 4b run 2.
+  - **It closes nothing.**
+- **Scope: all 16 judgements, not the 8 distinct items.**
+  - **The judgements:**
+    - 10 for part c: C1 twice, C2 twice, C3 three times, C4, C5 and C7;
+    - 6 for the material near-misses: NM3 four times, NM4 twice.
+  - **The same item appears with different wording in different runs.**
+  - **Why not per item:** the judge will see the same 16 replies, so a reference made per item could not be compared against it. Collapsing the runs into items would also discard the differences in wording.
+
+This is recorded because a rule with a timing condition that was missed cannot be quietly satisfied later. The late judgements are useful for a different purpose, and they are labelled so that they are never read as the adjudication section 3 asked for.
+
 ## Result
 
 What was run against this specification, and how it scored under section 3 as frozen, is reported in [LAYER3_PHASE4.md](outputs/layer3/LAYER3_PHASE4.md). That document adds no rule. This file remains the specification.
