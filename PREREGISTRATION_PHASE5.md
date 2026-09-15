@@ -553,6 +553,35 @@ The one case between the two, the 16 pending judgements against a frozen rubric,
 
 **What this means for the README.** The README's statement that evaluation "moves from a single scorer to an Agent-as-a-Judge with a separate verifier" is not true of the system as built. The same applies to any roadmap text that promises a judge or a verifier. This stands beside the HITL departure recorded in D17 and A6. Whether the README is amended is a separate decision, and it is not taken here.
 
+### A8. 2026-09-15. The adversarial test is cut, because what it would attack is already covered
+
+Written before any adversarial test was designed, built or run. No request was made.
+
+**The decision.** The adversarial test planned for Phase 7 is cut. No Layer 3 component has both a live target and an independent reference against which a result could be judged, without building something new.
+- **The sandbox.** It is live, and its behaviour is an independent reference, because refusals are observed from the container and not judged by a model. But its anticipated refusals are already exercised: N6 to N14 in Phase 3, and N18 in `PREREGISTRATION_PHASE3.md` A4. What remains was excluded on purpose by section 4 of `PREREGISTRATION_PHASE3.md`: process count limits, CPU share, timing side channels and attacks on Docker itself.
+- **The validator.** It is a self-consistency check only (section 2 of this document), so there is no independent answer to attack it against. N14 already covers a tool that reads the answer.
+- **The detector.** It is already unaccepted, in Phase 4 and in 4b. An attack on it cannot establish anything its frozen scores do not already show.
+- **The registry, HITL and the judge.** Nothing reads the registry. HITL was descoped in A6, and the judge and verifier were cut in A7, so neither exists to be attacked.
+
+**The one real target is in Layer 2, not Layer 3.** Prompt injection through tool outputs, or a subtle canary with no descriptive giveaway, would attack the Layer 2 audit agent. That target is live, and a planted column gives an independent reference. But it is Layer 2, not Layer 3, and it would need a new artefact and paid runs.
+
+**What adversarial work already exists.**
+- **Broken tools N1 to N18:**
+  - N1 to N5, wrong answers and bad output (Phase 3);
+  - N6 to N14, time, memory and escape attempts, one per refusal (Phase 3);
+  - N15 to N17, wrong rankings and a column name taken for a feature (Phase 5);
+  - N18, writing to the arguments file (`PREREGISTRATION_PHASE3.md` A4).
+- **Phase 4's traps:** A3 and A9, the near-misses NM1, NM3, NM4 and NM6, and spec rule 2 against parameters that could carry an escape.
+- **Layer 2's planted and hard cases:** the `recoveries` canary, the 14 hard negatives with their `_was_missing` twins, the steering-term self-check on the system prompt, and the files the audit answers from, kept unreachable by any tool.
+
+So the cut reads as "already covered", which is what it is.
+
+**This is the fourth cut, and all four share one reason.** Each lacked a real target, or lacked an independent reference to judge it against:
+- the human-in-the-loop checkpoint (A6);
+- the Agent-as-a-Judge and separate verifier (A7);
+- a request-level fix for the detector's format failure (`outputs/layer3/LAYER3_PHASE4.md`, "The format failure has no request-level fix");
+- the adversarial test (this amendment).
+
 ## Defect register
 
 Numbering continues from D11 in `PREREGISTRATION_PHASE4.md`.
