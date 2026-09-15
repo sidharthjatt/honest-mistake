@@ -31,6 +31,11 @@ MAX_STDOUT_BYTES = 1024 * 1024
 # unset and tools fall back to /inputs, which is where the mount goes.
 INPUTS_ENV = "TOOL_INPUTS"
 
+# A tool that takes arguments reads them from this file among its inputs
+# (PREREGISTRATION_PHASE3.md, amendment A4). Questions K1 to K6 take none,
+# and for them the file is never written.
+ARGUMENTS_FILE = "arguments.json"
+
 OUTCOMES = ("timeout", "memory_limit", "crashed", "bad_output",
             "wrong_answer", "pass")
 
@@ -96,7 +101,23 @@ def classify(qid: str, obs: Observation) -> Verdict:
     return Verdict("pass", "every item matches")
 
 
-def run_in_process(tool: Path, qid: str) -> Observation:
+def write_arguments(dest: Path, arguments: dict | None) -> None:
+    """Write the arguments file after a question's inputs are prepared.
+
+    Nothing is written when there are no arguments. A question whose own
+    inputs already hold a file of that name is refused, not overwritten.
+    """
+    if arguments is None:
+        return
+    path = dest / ARGUMENTS_FILE
+    if path.exists():
+        raise RuntimeError(f"the inputs already hold {ARGUMENTS_FILE}; it is "
+                           f"not overwritten.")
+    path.write_bytes(json.dumps(arguments).encode("utf-8"))
+
+
+def run_in_process(tool: Path, qid: str,
+                   arguments: dict | None = None) -> Observation:
     """Run a tool inside this interpreter, with no isolation at all.
 
     Only for tools that attempt no escape. Nothing is refused and no time or
@@ -114,6 +135,7 @@ def run_in_process(tool: Path, qid: str) -> Observation:
 
     with tempfile.TemporaryDirectory(prefix=f"{qid}_inputs_") as tmp:
         question.prepare(Path(tmp))
+        write_arguments(Path(tmp), arguments)
         os.environ[INPUTS_ENV] = tmp
         start = time.monotonic()
         try:

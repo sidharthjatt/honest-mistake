@@ -92,3 +92,51 @@ The harness decides between `timeout` and a normal exit from its own record of w
 - **The sandbox is reproducible on this machine only.** It is pinned by a local image ID, and a rebuild elsewhere gives a different image (D8).
 - **The report-script fix was never run.** Every attempt line now prints in full, but no graded run has used it. Per-attempt evidence in this document comes from the diagnostic run.
 - **K3's margin is narrow.** The tolerance is met with 88% of the allowance used, so a correct tool that adds any error of its own could fail K3.
+
+## Amendment A4: the arguments file
+
+Added 2026-09-15. Nothing above is changed. This reports the check for amendment A4 in the specification, which lets a tool read its arguments from `/inputs/arguments.json`. Phase 5 needs it for its first generated tool. No API request was made.
+
+### What was run
+
+`scripts/check_arguments_contract.py`, twice on 2026-09-15, on the image pinned in A2. The arguments used were `{"feature": "loan_amnt", "top_n": 3}`, whose serialised bytes have SHA-256 `022eba6b…6d04`.
+
+- **First run:** R1 to R6, in process and in the container, then P1 and N18, as A4 lists them.
+- **Second run:** the same cases, plus H1 on the host, which runs first.
+  - **Why H1 was added:** A4 freezes three rules: that a tool can read the file, that the file is read-only and hashed, and that the harness refuses to overwrite an existing file of that name. The first run checked only the first two, so H1 was added after it.
+  - **A4 does not name H1.** A4 was left as written.
+
+Both runs ended with 0 problems. Every case below ran 3 times in each run, and every run gave the expected result.
+
+### Results
+
+| Case | Where | Pass rule | Observed, both runs |
+|---|---|---|---|
+| H1, no overwrite | host, no tool | In a fresh directory, a second `write_arguments` call for the same path, with different arguments, raises `RuntimeError`, and the file's bytes are exactly those of the first write. The first write's bytes hash to the expected SHA-256. | refused with `RuntimeError: the inputs already hold arguments.json; it is not overwritten.` Bytes unchanged. Second run only. |
+| R1 to R6, no arguments | in process | pass | pass |
+| P1, reads its arguments | in process | exit 0; stdout exactly the arguments and the SHA-256 of the bytes written | as expected |
+| R1 to R6, no arguments | container | pass; network mode `none`, read-only root filesystem, `/inputs` and `/tool/tool.py` read-only, 512 MiB memory and swap, the A2 image; no arguments file among the inputs; host state unchanged | pass, every condition held |
+| P1, reads its arguments | container | as in process, with the same configuration; the arguments file among the hashed inputs; host state unchanged | as expected |
+| N18, tries to change its arguments | container | `crashed` with `OSError`; all three attempts refused with errno 30; stdout empty; host state unchanged | `crashed`. Append, open for writing and delete each gave `OSError: [Errno 30] Read-only file system: '/inputs/arguments.json'`. The file's hash was unchanged. |
+
+### Peak memory, reported and not compared
+
+A4 reports peaks and does not compare them with Phase 3's, because they vary from run to run.
+
+| Tool | Phase 3, derived image | First A4 run | Second A4 run |
+|---|---|---|---|
+| R5 | 272.7–282.7 MiB | 266.4–286.2 MiB | 278.2–292.4 MiB |
+
+The highest, 292.4 MiB, is 57% of the 512 MiB limit. The other reference tools peaked between 10.7 and 31.2 MiB. P1 and N18 peaked between 10.6 and 13.9 MiB. No run came near half of the 30 s limit: the slowest took 0.771 s, R5 on its first execution of the first run.
+
+### A change to the check script before its first run
+
+The expected container configuration in the script first listed `networks` and `tmpfs` too. Both were removed before the first run, because I had guessed their format from `docker inspect` and A4 does not name them.
+
+R1's first execution in each run prints the full configuration instead, and it showed `networks ['none']` and `tmpfs {'/tmp': 'rw,size=64m'}`. Both match section 4, but they were read from that printout, not asserted.
+
+### What this does not establish
+
+- **N1 to N14 were not re-run.** The escape attempts were exercised again only for writes to `/inputs`, by N18. The mount flags, network mode, limits and kill path were not changed, and the configuration was asserted on every R1 to R6 container run.
+- **H1 calls the harness function directly, not through a runner.** Both runners call that same function, `write_arguments`, but no run sent a duplicate file through one.
+- **Nothing here uses Phase 5's artefact or any generated tool.**

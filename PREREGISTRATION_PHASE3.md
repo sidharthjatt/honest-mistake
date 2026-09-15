@@ -237,6 +237,32 @@ The 512 MiB memory limit was frozen without being timed, as section 3 says. On t
 
 **Time.** No tool came near half of the 30 s limit. The slowest reference run was R5 at 0.356 s on the harness clock.
 
+### A4. 2026-09-15. The tool contract had no way to pass arguments
+
+Written before any code uses the extension, and before its check has run. Required by section 4, Decision 5, of `PREREGISTRATION_PHASE5.md`.
+
+**What was missing.** The tool contract in section 1 runs `python /tool/tool.py` with inputs under `/inputs`, and passes nothing else. K1 to K6 take no arguments, so the gap never showed. It showed at the first generated tool, `get_top_shap_rows`, which takes `feature` and `top_n`. This is a limitation of Phase 3, found on first use, not a change of mind.
+
+**The extension.**
+- A tool that takes arguments reads them from `/inputs/arguments.json`: one JSON object holding the arguments for that execution.
+- The harness writes the file into the same temporary inputs directory as the question's other inputs, after they are prepared. It is serialised with Python's `json.dumps` at default settings, encoded as UTF-8, with no trailing newline. That format is our choice.
+- It is mounted read-only with everything else under `/inputs`, and it is hashed on the host before and after each execution like every other mounted input.
+- If a question's own inputs already include a file of that name, the harness refuses to run rather than overwrite it.
+- In process, the file goes into the directory named by `TOOL_INPUTS`, the same place as the other inputs.
+
+**What does not change.**
+- The refusals in section 4, the 30 s and 512 MiB limits, the 1 MiB stdout cap, the outcome classes and their order, and the image pinned in A2.
+- K1 to K6. They take no arguments, so no arguments file is written for them and their `/inputs` holds exactly what it held before.
+
+**The check, before any Phase 5 code relies on it.** Two new hand-written tools, plus R1 to R6 again. These are contract checks, not known-answer questions.
+- **P1, reads its arguments.** Run under K1's mounts plus an arguments file holding `{"feature": "loan_amnt", "top_n": 3}`. It prints the parsed object and the SHA-256 of the bytes it read. It passes only if it exits 0, prints exactly that object, reports the SHA-256 of the bytes the harness wrote, and host-side hashes are unchanged. It is judged directly on that raw observation, because it answers no question in section 2. It runs 3 times in process and 3 times in the container.
+- **N18, tries to write to the arguments file.** Run under the same mounts. It appends to the file, opens it for writing, and deletes it, reporting each attempt and then raising the first error. If any attempt succeeds, it prints a well-formed K1 answer, so a failed refusal cannot pass for one. Expected outcome: `crashed` with `OSError`, every attempt refused with errno 30, and host-side hashes, including the arguments file's, unchanged. It runs 3 times, in the container only.
+- **R1 to R6, behaving as before.** Each runs 3 times in process and 3 times in the container, with no arguments. Each must pass on every run. In the container, the configuration must match section 4: no network, read-only root filesystem, `/tool/tool.py` and `/inputs` read-only, 512 MiB of memory and swap, and the A2 image. No arguments file may appear among the inputs, and host-side state must be unchanged. Timings and peak memory are reported, not compared with Phase 3's, because they vary from run to run.
+
+As in Part B, the reference tools run first in the container, and if any of them fails, nothing else runs. Any other result means the extension is not working, and Phase 5 does not use it.
+
+**What this does not establish.** N1 to N14 are not re-run. The mount flags, the network mode, the limits and the kill path are untouched, and the container configuration is checked on every R1 to R6 run, but the refusals themselves are exercised again only for writes to `/inputs`, by N18.
+
 ## Defect register
 
 Numbering continues from D6 in `PREREGISTRATION_PHASE2.md`.

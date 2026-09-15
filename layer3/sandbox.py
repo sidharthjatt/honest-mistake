@@ -31,7 +31,7 @@ from datetime import datetime
 from pathlib import Path
 
 from layer3.questions import QUESTIONS, ROOT
-from layer3.validator import Observation
+from layer3.validator import Observation, write_arguments
 
 # The derived image from amendment A2: the A1 base plus numpy, pandas and
 # pyarrow at the versions in requirements.txt. A local image ID, not a
@@ -121,13 +121,17 @@ def _exception_name(lines: list[str]) -> str | None:
     return None
 
 
-def run_in_container(tool: Path, qid: str) -> SandboxRun:
+def run_in_container(tool: Path, qid: str,
+                     arguments: dict | None = None) -> SandboxRun:
     question = QUESTIONS[qid]
     name = f"hm-sandbox-{uuid.uuid4().hex[:12]}"
 
     with tempfile.TemporaryDirectory(prefix=f"{qid}_inputs_") as tmp:
         inputs = Path(tmp)
         question.prepare(inputs)
+        # Amendment A4: the arguments file sits with the other inputs, so it
+        # is mounted read-only and hashed before and after like them.
+        write_arguments(inputs, arguments)
         before = _host_state(tool, inputs)
 
         # Escape fixtures are told where the repository sits on the host,
