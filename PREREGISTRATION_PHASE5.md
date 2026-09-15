@@ -535,3 +535,19 @@ This is recorded because it is the error the register exists to catch: a date co
 - **It did not affect the real reply,** which is 646 bytes and non-empty.
 
 This is recorded because the general problem is not this one check. A single yes-or-no that merges several conditions can hide a case the rule rejects, and the report would read as a pass. Where a rule has more than one condition, each condition is reported on its own, next to the verdict that combines them.
+
+**D16. 2026-09-15.** The Layer 3 phase numbering changed, and nothing recorded the change.
+- **The plan:** a plan agreed in chat, before this repository existed, had eight phases. Phase 5 was HITL policy and override logging, and phase 6 was judge, verifier and agreement. That plan is not written anywhere in the repository or its history. A search of every commit found no phase list, no numbered HITL phase and no mention of override logging. Its content is recorded here as the project owner states it, not as something the repository can show.
+- **What was committed instead:** A2 in `PREREGISTRATION_PHASE4.md`, dated 2026-09-14, numbers phase 5 as code generated from the expected specs, with its scope "taken from the README roadmap". It numbers phase 6 as judges and a verifier, and phase 7 as end-to-end audit runs. Phase 5 was then built as code generation, narrowed in section 1 of this document.
+- **What no amendment records:** that the numbering changed, or where HITL policy and override logging went. HITL has no phase number anywhere in the repository.
+- **The nature of the divergence:** it is between a committed document and a plan that was never committed. Nothing in the repository contradicts itself. The repository simply never recorded that it departed from the plan.
+
+This is recorded because a plan that lives only in conversation can be replaced without anyone noticing, and then the committed record reads as if it had always been the plan.
+
+**D17. 2026-09-15.** Phase 5 departed from the README roadmap, and did not record that it had.
+- **What the README says:** "A human-in-the-loop checkpoint sits in front of admission."
+- **What Phase 5 did:** it admitted `get_top_shap_rows` to the registry. Section 4 states "Phase 5 has no human-in-the-loop checkpoint and exposes nothing". That sentence says what Phase 5 lacks. It does not say that this departs from the README's design, and no amendment or defect entry did so at the time.
+- **Why Phase 4 had no such departure:** Phase 4 also had no checkpoint, but it admitted nothing. Its section 1 gives the reason: "There is nothing to admit."
+- **The admitted entry stands.** It is not being revisited, and the registry entry is not amended. What is recorded here is only that the departure from the README went unrecorded when the admission was made.
+
+This is recorded because a stated absence and a recorded departure are not the same thing. A reader of section 4 learns that no checkpoint existed, but not that the project's own roadmap said one would.
