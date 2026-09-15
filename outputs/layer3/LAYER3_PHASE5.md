@@ -321,6 +321,25 @@ From reading `reply.txt` (SHA-256 `94199ea5…f27a`):
 - **Ranking:** it sorts the matching rows by `shap_value` with `ascending=False`, so by signed value, highest first (line 19).
 - **Output:** one JSON object, `found` true and `rows` of `row_id` as an integer and `shap_value` as a float (lines 21–25).
 
+### Observations from the code read
+
+**These are not part of the registry entry and not part of the verdict.** They describe what the code does, noticed while reading it for the two purposes above. No assessment is attached, and none of them changes the decision, which rests on V1, V3 and V4.
+
+- **Above the available count.**
+  - **What the code does:** rows are taken with `head(top_n)` (line 20). When `top_n` is larger than the number of matching rows, `head` returns all of them, so for a feature with 30,000 rows it returns all 30,000.
+  - **Why this was never exercised:** V2, which would have tested it, was dropped. A correct all-rows output under the output contract is about 1.35 MB, over Phase 3's 1 MiB stdout cap (D13). The clamp clause stays untested.
+- **Zero or negative `top_n`.**
+  - **What the code does:** a `top_n` that is `None` or below 0 is set to 0 (lines 17–18). For a feature that matches, `head(0)` then returns no rows, so the tool prints `found` true with an empty `rows` list.
+  - **Order of checks:** the `found=false` check comes first (lines 14–15), so for a name with no matching rows the value of `top_n` makes no difference.
+  - **Never exercised:** no test used such a value (Decision 4).
+- **Order among equal values.**
+  - **What the code does:** it sorts with `sort_values('shap_value', ascending=False)` (line 19) and names no sort algorithm. Pandas then uses its default, which is not a stable sort, so the code does not fix the relative order of rows with equal `shap_value`.
+  - **What the rules allow:** Decision 4 accepts any order among equal values.
+  - **In V1:** V1's 10 largest `all_util` values are all distinct, so no tie arose.
+- **Fixed paths.**
+  - **What the code does:** it opens `/inputs/arguments.json` (line 4) and `/inputs/shap_values_long.parquet` (line 10) as literal paths, with no environment variable, argument or other fallback.
+  - **Where it ran:** only in the sandbox, where those paths exist. Whether it runs anywhere else was never tested.
+
 ### The open memory point, settled
 
 The memory finding in step 6 left open whether this tool meets A4's condition: loading the file through pandas, or making one more copy of the data than R7.
@@ -337,10 +356,10 @@ df = pd.read_parquet('/inputs/shap_values_long.parquet')
 
 Loading through pandas is one of the two alternatives A4 named, so the condition holds on that alone. The second alternative, one more copy of the data than R7, was not assessed, because the first settles it.
 
-**The finding:** A4's condition held, and A4's anticipated outcome, death on the memory limit, did not occur. The tool peaked at 359.9–387.2 MiB, 70–76% of the limit, below R7's 440.0–464.1 MiB.
+**The finding, in its settled form:** A4's condition held, because the tool loads the whole file through pandas. The outcome A4 called plausible, death on the memory limit, still did not occur. The tool peaked at 359.9–387.2 MiB, 70–76% of the limit, below R7's 440.0–464.1 MiB.
+- **This is more precise than "the prediction was wrong".** The condition was met and the outcome did not follow.
 - **A4 was not about a tool that failed to turn up.** This is the tool it described.
-- **What remains true of A4:** the outcome it called plausible did not happen. Nothing more is claimed.
 - **A4 stays exactly as written.**
-- **No cause is given** for the lower peak. As in step 6, peak memory is not a judgement about the code, and correctness comes from V1, V3 and V4.
+- **No cause is offered for the lower peak,** because none was measured. As in step 6, peak memory is not a judgement about the code, and correctness comes from V1, V3 and V4.
 - **Lower peak memory is not a judgement about the code's quality.** It is peak memory and nothing else. Whether the tool's answers are right comes from V1, V3 and V4.
 - **Why the peak is lower is not investigated here.** The code was not read for a cause, and none is given. Anything about how the code reads the file belongs with the registry decision, after these results.
