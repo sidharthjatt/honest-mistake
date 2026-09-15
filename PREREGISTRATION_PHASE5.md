@@ -288,6 +288,51 @@ Written before step 2 begins, so these rules exist before the artefact they cons
 
 **The order of steps is unchanged by this amendment.** The in-process mock checks enforce no time or memory limit, so this rule can only trigger in the sandbox.
 
+### A2. 2026-09-15. The artefact, built and verified
+
+Written after the artefact was built and verified, and before the code-generation prompt existed or any check had read the file. Under A1, this hash is the one R7, N15, N16, N17 and the generated tool must all read.
+
+**The source.**
+- `outputs/agent_cache/shap_values.parquet`, SHA-256 `d1d9465e85ad843d2c4537e55ecd0bb11566edc176848c9690aa0aa99a8e29b3`.
+- 30,000 rows and 181 columns in 1 row group: `row_id` (int64) first, then 180 float32 feature columns.
+- **Checked before the build, in a separate read-only pass:**
+  - `row_id` is unique, and not sorted;
+  - there are no nulls in any column;
+  - the 180 feature columns hold no NaN and no negative zero.
+
+**The build.** `scripts/build_phase5_artefact.py`, run once. It refuses to overwrite an existing file, and no earlier file existed.
+- **Written by:** pyarrow 24.0.0, the version pinned in `PREREGISTRATION_PHASE3.md` A2 for the sandbox image. The file's own metadata reads `parquet-cpp-arrow version 24.0.0`.
+- **Layout, as Decision 1 froze it:**
+  - `row_id` int64, `feature` dictionary-encoded, `shap_value` float32;
+  - one row group per feature;
+  - features in the source's column order;
+  - rows within each group in the source's row order.
+- **Settings not frozen by Decision 1, left at pyarrow's defaults and read back from the file's metadata:**
+  - Parquet format version 2.6;
+  - Snappy compression on every column;
+  - dictionary encoding requested for `feature` only. The encodings recorded are `RLE_DICTIONARY` for `feature`, and `PLAIN` and `RLE` for `row_id` and `shap_value`;
+  - Arrow type read back for `feature`: `dictionary<values=string, indices=int32>`.
+- **The file:** `outputs/layer3/phase5/shap_values_long.parquet`, 46,312,085 bytes.
+- **SHA-256:** `07ff508bba87ec97ee4fe46f5577ce065076de865279dc6a6cce9e2bf864cc0d`.
+
+**What the verification checked.** Every check read the written file back from disk, not the arrays used to build it. Each passed.
+- **Row count and groups:** the metadata gives 5,400,000 rows in 180 row groups, and every row group holds exactly 30,000 rows.
+- **Types and nulls:** read back, the columns are `row_id`, `feature` and `shap_value`, in that order, with `row_id` int64 and `shap_value` float32. No column holds a null.
+- **Row groups:** each row group's decoded `feature` values are a single name, and group *i*'s name is the source's *i*-th feature column.
+- **The round trip, done without using the row groups:**
+  - **Pivot:** the file's rows were split by decoded `feature` value, keeping file order within each feature.
+  - **Features:** in order of first appearance, they are the source's 180 feature columns, in the source's order.
+  - **Row order:** for each of the 180 features, the sequence of `row_id` values is identical, element for element, to the source's `row_id` column. That is the same 30,000 rows in the same order.
+  - **Values:** for each of the 180 features, the `shap_value` sequence is bit-identical as float32 to the source column. The raw 32-bit patterns were compared, not the values.
+  - **The whole matrix:** the 180 rebuilt columns, stacked into a 30,000 × 180 float32 matrix, are bit-identical to the source's 180 feature columns stacked the same way.
+
+**What the verification does not establish.**
+- **Nothing about whether the values are correct.** It shows the long file reproduces `shap_values.parquet` exactly. Whether that file's SHAP values are right is outside it, as section 2 says.
+- **That a rebuild gives the same hash.** The build was run once. Pyarrow writes its own version into the file, so a different version would give a different hash, and a rebuild would need its own amendment.
+- **Bit comparison and plain equality give the same verdict here.** Bit comparison would treat 0.0 and -0.0 as different and NaN as equal to itself. The source holds neither, so on this file the two tests agree.
+
+**Kept out of git.** The file is not committed. A line added to `.gitignore`, `outputs/layer3/phase5/*.parquet`, keeps it out, the same way `outputs/agent_cache/*.parquet` keeps out its source.
+
 ## Defect register
 
 Numbering continues from D11 in `PREREGISTRATION_PHASE4.md`.

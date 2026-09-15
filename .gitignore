@@ -17,6 +17,11 @@ outputs/models/*
 outputs/agent_cache/*.parquet
 outputs/agent_cache_canary/*.parquet
 
+# Phase 5's long-format SHAP artefact: rebuilt from shap_values.parquet by
+# scripts/build_phase5_artefact.py and identified by the hash recorded in
+# PREREGISTRATION_PHASE5.md, so it stays out of git like its source.
+outputs/layer3/phase5/*.parquet
+
 # Python
 __pycache__/
 *.py[cod]
