@@ -1,0 +1,273 @@
+{
+ "label": "firstlight",
+ "facts": {
+  "label": "firstlight",
+  "directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+  "model": "claude-sonnet-5",
+  "started": "2026-08-25T04:29:53",
+  "finished": "2026-08-25T04:30:06",
+  "canary": {
+   "present": false,
+   "established_by": "derived: this manifest has no 'canary' field, so presence is read from the feature count the run's own tool results report (180 without the canary, 181 with it)",
+   "feature_counts_seen_in_tool_results": [
+    180
+   ],
+   "column": null
+  },
+  "tool_layer_version": "1.0",
+  "dictionary_populated_field": "included",
+  "coverage_scopes": null,
+  "retrieval": null,
+  "prompt_caching": null,
+  "limits": {
+   "max_turns": 3,
+   "max_tool_calls": 8
+  },
+  "max_tokens_per_turn": 2000,
+  "termination": "call_limit",
+  "last_stop_reason": "tool_use",
+  "scorer_accepted": false,
+  "scorer_refusal_reason": "This run ended as 'call_limit' (last stop_reason 'tool_use'), so the agent never signalled that it had finished. A partial answer is not an answer and is not scored.",
+  "turns": 3,
+  "tool_calls": 5,
+  "usage_totals": {
+   "input": 12679,
+   "output": 1163,
+   "cache_creation": 0,
+   "cache_read": 0
+  },
+  "system_prompt_chars": 3544,
+  "fields_not_in_manifest": [
+   "canary",
+   "coverage_scopes",
+   "prompt_caching",
+   "retrieval"
+  ]
+ },
+ "final_answer_text": "========================================================================\nREAL RUN - LIVE API CALLS.\n========================================================================\nrun          20260825T043006__REAL__toolsv1.0-populated-included__firstlight\ngenerated    2026-08-25T04:29:53\nconfig_id    toolsv1.0-populated-included\ntermination  call_limit  (usable: False)\n\nThe runner did not parse or alter the text below.\n----- VERBATIM MODEL TEXT BELOW THIS LINE -----\nNow let me check whether any of these post-origination features are actually among the model's 180 input features by querying their SHAP details.\n",
+ "tool_calls_without_results": 7,
+ "ends_on_role": "assistant",
+ "per_turn_usage": null,
+ "per_turn_usage_note": "Not recorded for this run: its manifest holds usage totals only.",
+ "messages": [
+  {
+   "index": 0,
+   "role": "user",
+   "blocks": [
+    {
+     "type": "text",
+     "text": "Begin your review."
+    }
+   ]
+  },
+  {
+   "index": 1,
+   "role": "assistant",
+   "blocks": [
+    {
+     "type": "thinking",
+     "summary": "",
+     "summary_empty": true
+    },
+    {
+     "type": "text",
+     "text": "I'll start by examining which features the model relies on most heavily, since leakage or improper features often show up as surprisingly dominant predictors."
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01P5UJDurDyfotChk9tAUreP",
+     "tool": "get_shap_ranking",
+     "arguments": {
+      "top_n": 30
+     },
+     "result": "{\"total_features\": 180, \"returned\": 30, \"note\": \"mean_abs_shap is in log-odds units, averaged over 30,000 sampled test rows.\", \"ranking\": [{\"rank\": 1, \"feature\": \"term\", \"mean_abs_shap\": 0.18937306}, {\"rank\": 2, \"feature\": \"sub_grade\", \"mean_abs_shap\": 0.18281484}, {\"rank\": 3, \"feature\": \"grade\", \"mean_abs_shap\": 0.15663205}, {\"rank\": 4, \"feature\": \"dti\", \"mean_abs_shap\": 0.13494946}, {\"rank\": 5, \"feature\": \"int_rate\", \"mean_abs_shap\": 0.09148871}, {\"rank\": 6, \"feature\": \"acc_open_past_24mths\", \"mean_abs_shap\": 0.08298217}, {\"rank\": 7, \"feature\": \"home_ownership_RENT\", \"mean_abs_shap\": 0.06452696}, {\"rank\": 8, \"feature\": \"fico_range_low\", \"mean_abs_shap\": 0.064325}, {\"rank\": 9, \"feature\": \"loan_amnt\", \"mean_abs_shap\": 0.06066949}, {\"rank\": 10, \"feature\": \"annual_inc\", \"mean_abs_shap\": 0.056510087}, {\"rank\": 11, \"feature\": \"mo_sin_old_rev_tl_op\", \"mean_abs_shap\": 0.056148145}, {\"rank\": 12, \"feature\": \"mort_acc\", \"mean_abs_shap\": 0.05510395}, {\"rank\": 13, \"feature\": \"funded_amnt_inv\", \"mean_abs_shap\": 0.052919723}, {\"rank\": 14, \"feature\": \"emp_length_was_missing\", \"mean_abs_shap\": 0.0504323}, {\"rank\": 15, \"feature\": \"total_bc_limit\", \"mean_abs_shap\": 0.046520997}, {\"rank\": 16, \"feature\": \"avg_cur_bal\", \"mean_abs_shap\": 0.045390766}, {\"rank\": 17, \"feature\": \"total_rev_hi_lim\", \"mean_abs_shap\": 0.043933768}, {\"rank\": 18, \"feature\": \"mths_since_recent_inq\", \"mean_abs_shap\": 0.040535234}, {\"rank\": 19, \"feature\": \"home_ownership_MORTGAGE\", \"mean_abs_shap\": 0.03966826}, {\"rank\": 20, \"feature\": \"total_il_high_credit_limit\", \"mean_abs_shap\": 0.03794917}, {\"rank\": 21, \"feature\": \"percent_bc_gt_75\", \"mean_abs_shap\": 0.036892585}, {\"rank\": 22, \"feature\": \"num_rev_tl_bal_gt_0\", \"mean_abs_shap\": 0.035714973}, {\"rank\": 23, \"feature\": \"mths_since_recent_bc\", \"mean_abs_shap\": 0.035455823}, {\"rank\": 24, \"feature\": \"num_actv_rev_tl\", \"mean_abs_shap\": 0.03491027}, {\"rank\": 25, \"feature\": \"installment\", \"mean_abs_shap\": 0.03232999}, {\"rank\": 26, \"feature\": \"credit_history_months\", \"mean_abs_shap\": 0.031972263}, {\"rank\": 27, \"feature\": \"all_util_was_missing\", \"mean_abs_shap\": 0.029952029}, {\"rank\": 28, \"feature\": \"tot_hi_cred_lim\", \"mean_abs_shap\": 0.029239856}, {\"rank\": 29, \"feature\": \"open_rv_24m\", \"mean_abs_shap\": 0.027556917}, {\"rank\": 30, \"feature\": \"mths_since_last_delinq\", \"mean_abs_shap\": 0.02564759}]}",
+     "result_is_error": false,
+     "executed": true
+    }
+   ]
+  },
+  {
+   "index": 2,
+   "role": "user",
+   "blocks": [
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_01P5UJDurDyfotChk9tAUreP"
+    }
+   ]
+  },
+  {
+   "index": 3,
+   "role": "assistant",
+   "blocks": [
+    {
+     "type": "thinking",
+     "summary": "",
+     "summary_empty": true
+    },
+    {
+     "type": "text",
+     "text": "These look like standard credit-underwriting features. Let me check for common LendingClub leakage columns (post-origination info like payments, recoveries, collections) that shouldn't be available at scoring time."
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01KYbY2iz9mQBxKYrj8bvEtx",
+     "tool": "search_data_dictionary",
+     "arguments": {
+      "query": "recover"
+     },
+     "result": "{\"query\": \"recover\", \"match_count\": 2, \"returned\": 2, \"results\": [{\"feature\": \"recoveries\", \"description\": \"Gross amount recovered on the loan after it was charged off.\", \"populated\": \"set once the loan has been charged off and recovery activity begins\", \"source\": \"Lending Club internal\"}, {\"feature\": \"collection_recovery_fee\", \"description\": \"Fee charged on amounts recovered after the loan was charged off.\", \"populated\": \"set once the loan has been charged off and recovery activity begins\", \"source\": \"Lending Club internal\"}]}",
+     "result_is_error": false,
+     "executed": true
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_018BdWRhe68oXEnK5K5mJk2t",
+     "tool": "search_data_dictionary",
+     "arguments": {
+      "query": "pymnt"
+     },
+     "result": "{\"query\": \"pymnt\", \"match_count\": 6, \"returned\": 6, \"results\": [{\"feature\": \"pymnt_plan\", \"description\": \"Indicator of whether a payment plan is in place for the loan.\", \"populated\": \"set when a payment plan is arranged, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"total_pymnt\", \"description\": \"Total payment received to date on the loan.\", \"populated\": \"updated monthly during the loan term as the borrower makes payments\", \"source\": \"Lending Club internal\"}, {\"feature\": \"total_pymnt_inv\", \"description\": \"Total payment received to date on the investor-funded portion of the loan.\", \"populated\": \"updated monthly during the loan term as the borrower makes payments\", \"source\": \"Lending Club internal\"}, {\"feature\": \"last_pymnt_d\", \"description\": \"Month of the most recent payment received on the loan.\", \"populated\": \"updated monthly during the loan term as payments arrive\", \"source\": \"Lending Club internal\"}, {\"feature\": \"last_pymnt_amnt\", \"description\": \"Amount of the most recent payment received on the loan.\", \"populated\": \"updated monthly during the loan term as payments arrive\", \"source\": \"Lending Club internal\"}, {\"feature\": \"next_pymnt_d\", \"description\": \"Month in which the next scheduled payment is due.\", \"populated\": \"updated monthly during the loan term while the loan is in repayment\", \"source\": \"Lending Club internal\"}]}",
+     "result_is_error": false,
+     "executed": true
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01Rs9VsxeZX1P1ejg33krUQt",
+     "tool": "search_data_dictionary",
+     "arguments": {
+      "query": "last_"
+     },
+     "result": "{\"query\": \"last_\", \"match_count\": 15, \"returned\": 15, \"results\": [{\"feature\": \"inq_last_6mths\", \"description\": \"Number of credit inquiries in the previous six months, other than auto and mortgage inquiries.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"credit bureau\"}, {\"feature\": \"mths_since_last_delinq\", \"description\": \"Months since the borrower's most recent delinquency.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"credit bureau\"}, {\"feature\": \"mths_since_last_record\", \"description\": \"Months since the borrower's most recent public record.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"credit bureau\"}, {\"feature\": \"mths_since_last_major_derog\", \"description\": \"Months since the most recent 90-day or worse rating.\", \"populated\": \"at application, before the loan is approved\", \"source\": \"credit bureau\"}, {\"feature\": \"inq_last_12m\", \"description\": \"Number of credit inquiries in the previous 12 months.\", \"populated\": \"at application, before the loan is approved; collected for loans issued from around December 2015 onward\", \"source\": \"credit bureau\"}, {\"feature\": \"last_pymnt_d\", \"description\": \"Month of the most recent payment received on the loan.\", \"populated\": \"updated monthly during the loan term as payments arrive\", \"source\": \"Lending Club internal\"}, {\"feature\": \"last_pymnt_amnt\", \"description\": \"Amount of the most recent payment received on the loan.\", \"populated\": \"updated monthly during the loan term as payments arrive\", \"source\": \"Lending Club internal\"}, {\"feature\": \"last_credit_pull_d\", \"description\": \"Month of the most recent credit pull Lending Club made on this borrower.\", \"populated\": \"updated during the loan term each time a further credit pull is made\", \"source\": \"Lending Club internal\"}, {\"feature\": \"last_fico_range_low\", \"description\": \"Lower bound of the borrower's most recent FICO score band.\", \"populated\": \"refreshed periodically during the loan term\", \"source\": \"credit bureau\"}, {\"feature\": \"last_fico_range_high\", \"description\": \"Upper bound of the borrower's most recent FICO score band.\", \"populated\": \"refreshed periodically during the loan term\", \"source\": \"credit bureau\"}, {\"feature\": \"hardship_last_payment_amount\", \"description\": \"Amount of the last payment received as of the hardship plan start date.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"mths_since_last_delinq_was_missing\", \"description\": \"Takes the value 1 when mths_since_last_delinq had no value in the source data for this loan, and 0 when mths_since_last_delinq had a value.\", \"populated\": \"derived during feature preparation from the presence or absence of mths_since_last_delinq\", \"source\": \"engineered\"}, {\"feature\": \"mths_since_last_major_derog_was_missing\", \"description\": \"Takes the value 1 when mths_since_last_major_derog had no value in the source data for this loan, and 0 when mths_since_last_major_derog had a value.\", \"populated\": \"derived during feature preparation from the presence or absence of mths_since_last_major_derog\", \"source\": \"engineered\"}, {\"feature\": \"mths_since_last_record_was_missing\", \"description\": \"Takes the value 1 when mths_since_last_record had no value in the source data for this loan, and 0 when mths_since_last_record had a value.\", \"populated\": \"derived during feature preparation from the presence or absence of mths_since_last_record\", \"source\": \"engineered\"}, {\"feature\": \"inq_last_12m_was_missing\", \"description\": \"Takes the value 1 when inq_last_12m had no value in the source data for this loan, and 0 when inq_last_12m had a value.\", \"populated\": \"derived during feature preparation from the presence or absence of inq_last_12m\", \"source\": \"engineered\"}]}",
+     "result_is_error": false,
+     "executed": true
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01XqqyiveYxmQ5tAH8ve1xUX",
+     "tool": "search_data_dictionary",
+     "arguments": {
+      "query": "settlement"
+     },
+     "result": "{\"query\": \"settlement\", \"match_count\": 7, \"returned\": 7, \"results\": [{\"feature\": \"debt_settlement_flag\", \"description\": \"Indicator of whether the borrower is working with a debt settlement company on this loan.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"debt_settlement_flag_date\", \"description\": \"Date the debt settlement indicator was most recently set.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"settlement_status\", \"description\": \"Status of the borrower's settlement plan.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"settlement_date\", \"description\": \"Date the borrower agreed to the settlement plan.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"settlement_amount\", \"description\": \"Loan amount the borrower agreed to pay under the settlement plan.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"settlement_percentage\", \"description\": \"Settlement amount as a percentage of the outstanding balance at the time of settlement.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"settlement_term\", \"description\": \"Number of months the borrower is scheduled to pay under the settlement plan.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}]}",
+     "result_is_error": false,
+     "executed": true
+    }
+   ]
+  },
+  {
+   "index": 4,
+   "role": "user",
+   "blocks": [
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_01KYbY2iz9mQBxKYrj8bvEtx"
+    },
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_018BdWRhe68oXEnK5K5mJk2t"
+    },
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_01Rs9VsxeZX1P1ejg33krUQt"
+    },
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_01XqqyiveYxmQ5tAH8ve1xUX"
+    }
+   ]
+  },
+  {
+   "index": 5,
+   "role": "assistant",
+   "blocks": [
+    {
+     "type": "thinking",
+     "summary": "",
+     "summary_empty": true
+    },
+    {
+     "type": "text",
+     "text": "Now let me check whether any of these post-origination features are actually among the model's 180 input features by querying their SHAP details."
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01LcFrp2Pnbm8fRWHxjqRVKW",
+     "tool": "get_feature_shap_detail",
+     "arguments": {
+      "feature": "total_pymnt"
+     },
+     "result": null,
+     "result_is_error": null,
+     "executed": false
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01TEwWq3Uv8hypg7zyxrtaVL",
+     "tool": "get_feature_shap_detail",
+     "arguments": {
+      "feature": "recoveries"
+     },
+     "result": null,
+     "result_is_error": null,
+     "executed": false
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01AhunDQia13jawh1Fros9tX",
+     "tool": "get_feature_shap_detail",
+     "arguments": {
+      "feature": "last_pymnt_amnt"
+     },
+     "result": null,
+     "result_is_error": null,
+     "executed": false
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01FCmY3Ryk3CN9D59G1bPmeE",
+     "tool": "get_feature_shap_detail",
+     "arguments": {
+      "feature": "last_fico_range_high"
+     },
+     "result": null,
+     "result_is_error": null,
+     "executed": false
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01RSSHzcTdoAMJ3ocBkqnYL7",
+     "tool": "get_feature_shap_detail",
+     "arguments": {
+      "feature": "debt_settlement_flag"
+     },
+     "result": null,
+     "result_is_error": null,
+     "executed": false
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01CSknY5gD2hotR2pFdWKL7Q",
+     "tool": "get_feature_shap_detail",
+     "arguments": {
+      "feature": "settlement_status"
+     },
+     "result": null,
+     "result_is_error": null,
+     "executed": false
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_013q5vcZvQPDpWER3paemhh1",
+     "tool": "get_feature_shap_detail",
+     "arguments": {
+      "feature": "last_credit_pull_d"
+     },
+     "result": null,
+     "result_is_error": null,
+     "executed": false
+    }
+   ]
+  }
+ ]
+}

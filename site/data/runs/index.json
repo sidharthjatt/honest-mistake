@@ -1,0 +1,490 @@
+{
+ "runs": [
+  {
+   "label": "firstlight",
+   "directory": "20260825T043006__REAL__toolsv1.0-populated-included__firstlight",
+   "model": "claude-sonnet-5",
+   "started": "2026-08-25T04:29:53",
+   "finished": "2026-08-25T04:30:06",
+   "canary": {
+    "present": false,
+    "established_by": "derived: this manifest has no 'canary' field, so presence is read from the feature count the run's own tool results report (180 without the canary, 181 with it)",
+    "feature_counts_seen_in_tool_results": [
+     180
+    ],
+    "column": null
+   },
+   "tool_layer_version": "1.0",
+   "dictionary_populated_field": "included",
+   "coverage_scopes": null,
+   "retrieval": null,
+   "prompt_caching": null,
+   "limits": {
+    "max_turns": 3,
+    "max_tool_calls": 8
+   },
+   "max_tokens_per_turn": 2000,
+   "termination": "call_limit",
+   "last_stop_reason": "tool_use",
+   "scorer_accepted": false,
+   "scorer_refusal_reason": "This run ended as 'call_limit' (last stop_reason 'tool_use'), so the agent never signalled that it had finished. A partial answer is not an answer and is not scored.",
+   "turns": 3,
+   "tool_calls": 5,
+   "usage_totals": {
+    "input": 12679,
+    "output": 1163,
+    "cache_creation": 0,
+    "cache_read": 0
+   },
+   "system_prompt_chars": 3544,
+   "fields_not_in_manifest": [
+    "canary",
+    "coverage_scopes",
+    "prompt_caching",
+    "retrieval"
+   ]
+  },
+  {
+   "label": "run1",
+   "directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+   "model": "claude-sonnet-5",
+   "started": "2026-08-25T04:31:30",
+   "finished": "2026-08-25T04:32:15",
+   "canary": {
+    "present": false,
+    "established_by": "derived: this manifest has no 'canary' field, so presence is read from the feature count the run's own tool results report (180 without the canary, 181 with it)",
+    "feature_counts_seen_in_tool_results": [
+     180
+    ],
+    "column": null
+   },
+   "tool_layer_version": "1.0",
+   "dictionary_populated_field": "included",
+   "coverage_scopes": null,
+   "retrieval": null,
+   "prompt_caching": null,
+   "limits": {
+    "max_turns": 12,
+    "max_tool_calls": 40
+   },
+   "max_tokens_per_turn": 2000,
+   "termination": "truncated",
+   "last_stop_reason": "max_tokens",
+   "scorer_accepted": false,
+   "scorer_refusal_reason": "This run ended as 'truncated' (last stop_reason 'max_tokens'), so the agent never signalled that it had finished. A partial answer is not an answer and is not scored.",
+   "turns": 4,
+   "tool_calls": 10,
+   "usage_totals": {
+    "input": 36087,
+    "output": 3667,
+    "cache_creation": 0,
+    "cache_read": 0
+   },
+   "system_prompt_chars": 3544,
+   "fields_not_in_manifest": [
+    "canary",
+    "coverage_scopes",
+    "prompt_caching",
+    "retrieval"
+   ]
+  },
+  {
+   "label": "run2",
+   "directory": "20260825T044654__REAL__toolsv1.0-populated-included__run2",
+   "model": "claude-sonnet-5",
+   "started": "2026-08-25T04:41:34",
+   "finished": "2026-08-25T04:46:54",
+   "canary": {
+    "present": false,
+    "established_by": "derived: this manifest has no 'canary' field, so presence is read from the feature count the run's own tool results report (180 without the canary, 181 with it)",
+    "feature_counts_seen_in_tool_results": [
+     180
+    ],
+    "column": null
+   },
+   "tool_layer_version": "1.0",
+   "dictionary_populated_field": "included",
+   "coverage_scopes": null,
+   "retrieval": null,
+   "prompt_caching": null,
+   "limits": {
+    "max_turns": 12,
+    "max_tool_calls": 40
+   },
+   "max_tokens_per_turn": 12400,
+   "termination": "call_limit",
+   "last_stop_reason": "tool_use",
+   "scorer_accepted": false,
+   "scorer_refusal_reason": "This run ended as 'call_limit' (last stop_reason 'tool_use'), so the agent never signalled that it had finished. A partial answer is not an answer and is not scored.",
+   "turns": 12,
+   "tool_calls": 37,
+   "usage_totals": {
+    "input": 241559,
+    "output": 25825,
+    "cache_creation": 0,
+    "cache_read": 0
+   },
+   "system_prompt_chars": 3544,
+   "fields_not_in_manifest": [
+    "canary",
+    "coverage_scopes",
+    "prompt_caching",
+    "retrieval"
+   ]
+  },
+  {
+   "label": "run3",
+   "directory": "20260825T050726__REAL__toolsv1.0-populated-included__run3",
+   "model": "claude-sonnet-5",
+   "started": "2026-08-25T05:02:11",
+   "finished": "2026-08-25T05:07:26",
+   "canary": {
+    "present": false,
+    "established_by": "derived: this manifest has no 'canary' field, so presence is read from the feature count the run's own tool results report (180 without the canary, 181 with it)",
+    "feature_counts_seen_in_tool_results": [
+     180
+    ],
+    "column": null
+   },
+   "tool_layer_version": "1.0",
+   "dictionary_populated_field": "included",
+   "coverage_scopes": null,
+   "retrieval": null,
+   "prompt_caching": null,
+   "limits": {
+    "max_turns": 20,
+    "max_tool_calls": 70
+   },
+   "max_tokens_per_turn": 12400,
+   "termination": "completed",
+   "last_stop_reason": "end_turn",
+   "scorer_accepted": true,
+   "scorer_refusal_reason": null,
+   "turns": 16,
+   "tool_calls": 52,
+   "usage_totals": {
+    "input": 362621,
+    "output": 23275,
+    "cache_creation": 0,
+    "cache_read": 0
+   },
+   "system_prompt_chars": 4268,
+   "fields_not_in_manifest": [
+    "canary",
+    "coverage_scopes",
+    "prompt_caching",
+    "retrieval"
+   ]
+  },
+  {
+   "label": "run4-ablated",
+   "directory": "20260825T133738__REAL__toolsv1.0-populated-suppressed__run4-ablated",
+   "model": "claude-sonnet-5",
+   "started": "2026-08-25T13:31:22",
+   "finished": "2026-08-25T13:37:38",
+   "canary": {
+    "present": false,
+    "established_by": "derived: this manifest has no 'canary' field, so presence is read from the feature count the run's own tool results report (180 without the canary, 181 with it)",
+    "feature_counts_seen_in_tool_results": [
+     180
+    ],
+    "column": null
+   },
+   "tool_layer_version": "1.0",
+   "dictionary_populated_field": "suppressed",
+   "coverage_scopes": null,
+   "retrieval": null,
+   "prompt_caching": null,
+   "limits": {
+    "max_turns": 20,
+    "max_tool_calls": 70
+   },
+   "max_tokens_per_turn": 12400,
+   "termination": "completed",
+   "last_stop_reason": "end_turn",
+   "scorer_accepted": true,
+   "scorer_refusal_reason": null,
+   "turns": 16,
+   "tool_calls": 50,
+   "usage_totals": {
+    "input": 313078,
+    "output": 29288,
+    "cache_creation": 0,
+    "cache_read": 0
+   },
+   "system_prompt_chars": 4268,
+   "fields_not_in_manifest": [
+    "canary",
+    "coverage_scopes",
+    "prompt_caching",
+    "retrieval"
+   ]
+  },
+  {
+   "label": "run5-canary",
+   "directory": "20260825T141400__REAL__toolsv1.0-populated-included-canary__run5-canary",
+   "model": "claude-sonnet-5",
+   "started": "2026-08-25T14:12:55",
+   "finished": "2026-08-25T14:14:00",
+   "canary": {
+    "present": true,
+    "established_by": "manifest field 'canary'",
+    "column": "recoveries"
+   },
+   "tool_layer_version": "1.0",
+   "dictionary_populated_field": "included",
+   "coverage_scopes": null,
+   "retrieval": null,
+   "prompt_caching": null,
+   "limits": {
+    "max_turns": 20,
+    "max_tool_calls": 70
+   },
+   "max_tokens_per_turn": 12400,
+   "termination": "completed",
+   "last_stop_reason": "end_turn",
+   "scorer_accepted": true,
+   "scorer_refusal_reason": null,
+   "turns": 6,
+   "tool_calls": 13,
+   "usage_totals": {
+    "input": 31935,
+    "output": 4692,
+    "cache_creation": 0,
+    "cache_read": 0
+   },
+   "system_prompt_chars": 4268,
+   "fields_not_in_manifest": [
+    "coverage_scopes",
+    "prompt_caching",
+    "retrieval"
+   ]
+  },
+  {
+   "label": "run6-canary-v2",
+   "directory": "20260829T142845__REAL__toolsv2.0-populated-included-scopes-all-canary__run6-canary-v2",
+   "model": "claude-sonnet-5",
+   "started": "2026-08-29T14:28:04",
+   "finished": "2026-08-29T14:28:45",
+   "canary": {
+    "present": true,
+    "established_by": "manifest field 'canary'",
+    "column": "recoveries"
+   },
+   "tool_layer_version": "2.0",
+   "dictionary_populated_field": "included",
+   "coverage_scopes": "all",
+   "retrieval": "pgvector-bge-small-en-v1.5",
+   "prompt_caching": null,
+   "limits": {
+    "max_turns": 20,
+    "max_tool_calls": 70
+   },
+   "max_tokens_per_turn": 12400,
+   "termination": "completed",
+   "last_stop_reason": "end_turn",
+   "scorer_accepted": true,
+   "scorer_refusal_reason": null,
+   "turns": 6,
+   "tool_calls": 17,
+   "usage_totals": {
+    "input": 40764,
+    "output": 2845,
+    "cache_creation": 0,
+    "cache_read": 0
+   },
+   "system_prompt_chars": 4624,
+   "fields_not_in_manifest": [
+    "prompt_caching"
+   ]
+  },
+  {
+   "label": "run7-honest-v2",
+   "directory": "20260829T143754__REAL__toolsv2.0-populated-included-scopes-all-layer1__run7-honest-v2",
+   "model": "claude-sonnet-5",
+   "started": "2026-08-29T14:33:36",
+   "finished": "2026-08-29T14:37:54",
+   "canary": {
+    "present": false,
+    "established_by": "manifest field 'canary'",
+    "column": null
+   },
+   "tool_layer_version": "2.0",
+   "dictionary_populated_field": "included",
+   "coverage_scopes": "all",
+   "retrieval": "pgvector-bge-small-en-v1.5",
+   "prompt_caching": null,
+   "limits": {
+    "max_turns": 20,
+    "max_tool_calls": 70
+   },
+   "max_tokens_per_turn": 12400,
+   "termination": "completed",
+   "last_stop_reason": "end_turn",
+   "scorer_accepted": true,
+   "scorer_refusal_reason": null,
+   "turns": 14,
+   "tool_calls": 33,
+   "usage_totals": {
+    "input": 303979,
+    "output": 18754,
+    "cache_creation": 0,
+    "cache_read": 0
+   },
+   "system_prompt_chars": 4624,
+   "fields_not_in_manifest": [
+    "prompt_caching"
+   ]
+  },
+  {
+   "label": "run8-canary-splitonly",
+   "directory": "20260829T144848__REAL__toolsv2.0-populated-included-scopes-splitonly-canary__run8-canary-splitonly",
+   "model": "claude-sonnet-5",
+   "started": "2026-08-29T14:45:51",
+   "finished": "2026-08-29T14:48:48",
+   "canary": {
+    "present": true,
+    "established_by": "manifest field 'canary'",
+    "column": "recoveries"
+   },
+   "tool_layer_version": "2.0",
+   "dictionary_populated_field": "included",
+   "coverage_scopes": "splitonly",
+   "retrieval": "pgvector-bge-small-en-v1.5",
+   "prompt_caching": null,
+   "limits": {
+    "max_turns": 20,
+    "max_tool_calls": 70
+   },
+   "max_tokens_per_turn": 12400,
+   "termination": "completed",
+   "last_stop_reason": "end_turn",
+   "scorer_accepted": true,
+   "scorer_refusal_reason": null,
+   "turns": 13,
+   "tool_calls": 31,
+   "usage_totals": {
+    "input": 167323,
+    "output": 13299,
+    "cache_creation": 0,
+    "cache_read": 0
+   },
+   "system_prompt_chars": 4624,
+   "fields_not_in_manifest": [
+    "prompt_caching"
+   ]
+  },
+  {
+   "label": "run9-honest-nopop",
+   "directory": "20260829T145655__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run9-honest-nopop",
+   "model": "claude-sonnet-5",
+   "started": "2026-08-29T14:51:38",
+   "finished": "2026-08-29T14:56:55",
+   "canary": {
+    "present": false,
+    "established_by": "manifest field 'canary'",
+    "column": null
+   },
+   "tool_layer_version": "2.0",
+   "dictionary_populated_field": "suppressed",
+   "coverage_scopes": "all",
+   "retrieval": "pgvector-bge-small-en-v1.5",
+   "prompt_caching": null,
+   "limits": {
+    "max_turns": 20,
+    "max_tool_calls": 70
+   },
+   "max_tokens_per_turn": 12400,
+   "termination": "turn_limit",
+   "last_stop_reason": "tool_use",
+   "scorer_accepted": false,
+   "scorer_refusal_reason": "This run ended as 'turn_limit' (last stop_reason 'tool_use'), so the agent never signalled that it had finished. A partial answer is not an answer and is not scored.",
+   "turns": 20,
+   "tool_calls": 43,
+   "usage_totals": {
+    "input": 502004,
+    "output": 21744,
+    "cache_creation": 0,
+    "cache_read": 0
+   },
+   "system_prompt_chars": 4624,
+   "fields_not_in_manifest": [
+    "prompt_caching"
+   ]
+  },
+  {
+   "label": "run10-honest-nopop-30turns",
+   "directory": "20260829T150444__REAL__toolsv2.0-populated-suppressed-scopes-all-layer1__run10-honest-nopop-30turns",
+   "model": "claude-sonnet-5",
+   "started": "2026-08-29T14:59:36",
+   "finished": "2026-08-29T15:04:44",
+   "canary": {
+    "present": false,
+    "established_by": "manifest field 'canary'",
+    "column": null
+   },
+   "tool_layer_version": "2.0",
+   "dictionary_populated_field": "suppressed",
+   "coverage_scopes": "all",
+   "retrieval": "pgvector-bge-small-en-v1.5",
+   "prompt_caching": null,
+   "limits": {
+    "max_turns": 30,
+    "max_tool_calls": 70
+   },
+   "max_tokens_per_turn": 12400,
+   "termination": "completed",
+   "last_stop_reason": "end_turn",
+   "scorer_accepted": true,
+   "scorer_refusal_reason": null,
+   "turns": 12,
+   "tool_calls": 29,
+   "usage_totals": {
+    "input": 274562,
+    "output": 23260,
+    "cache_creation": 0,
+    "cache_read": 0
+   },
+   "system_prompt_chars": 4624,
+   "fields_not_in_manifest": [
+    "prompt_caching"
+   ]
+  },
+  {
+   "label": "run11-honest-cached",
+   "directory": "20260914T054131__REAL__toolsv2.0-populated-included-scopes-all-layer1__run11-honest-cached",
+   "model": "claude-sonnet-5",
+   "started": "2026-09-14T05:37:02",
+   "finished": "2026-09-14T05:41:31",
+   "canary": {
+    "present": false,
+    "established_by": "manifest field 'canary'",
+    "column": null
+   },
+   "tool_layer_version": "2.0",
+   "dictionary_populated_field": "included",
+   "coverage_scopes": "all",
+   "retrieval": "pgvector-bge-small-en-v1.5",
+   "prompt_caching": "moving-breakpoint",
+   "limits": {
+    "max_turns": 20,
+    "max_tool_calls": 70
+   },
+   "max_tokens_per_turn": 12400,
+   "termination": "completed",
+   "last_stop_reason": "end_turn",
+   "scorer_accepted": true,
+   "scorer_refusal_reason": null,
+   "turns": 11,
+   "tool_calls": 33,
+   "usage_totals": {
+    "input": 22,
+    "output": 21288,
+    "cache_creation": 39654,
+    "cache_read": 201623
+   },
+   "system_prompt_chars": 4624,
+   "fields_not_in_manifest": []
+  }
+ ]
+}

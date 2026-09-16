@@ -1,0 +1,1530 @@
+{
+ "true_positives": [
+  {
+   "column": "collection_recovery_fee",
+   "tier": "A",
+   "tier_label": "explicit post-outcome event",
+   "trigger_phrase": "charged off",
+   "description": "Fee charged on amounts recovered after the loan was charged off.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "debt_settlement_flag",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "settlement",
+   "description": "Indicator of whether the borrower is working with a debt settlement company on this loan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "debt_settlement_flag_date",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "settlement",
+   "description": "Date the debt settlement indicator was most recently set.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "deferral_term",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Number of months the borrower's payments are reduced under a hardship plan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "hardship_amount",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Interest payment owed each month while the hardship plan is in effect.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "hardship_dpd",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Days the borrower was past due as of the hardship plan start date.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "hardship_end_date",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Date the hardship plan ended or is scheduled to end.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "hardship_flag",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Indicator of whether a hardship plan applies to the loan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "hardship_last_payment_amount",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Amount of the last payment received as of the hardship plan start date.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "hardship_length",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Number of months of the hardship plan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "hardship_loan_status",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Status the loan held as of the hardship plan start date.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "hardship_payoff_balance_amount",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Payoff balance on the loan as of the hardship plan start date.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "hardship_reason",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Reason the borrower gave for requesting a hardship plan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "hardship_start_date",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Date the hardship plan began.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "hardship_status",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Status of the hardship plan, such as active, completed, or broken.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "hardship_type",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Type of hardship plan applied to the loan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "last_credit_pull_d",
+   "clean_under_suppression": true
+  },
+  {
+   "column": "last_fico_range_high",
+   "clean_under_suppression": true
+  },
+  {
+   "column": "last_fico_range_low",
+   "clean_under_suppression": true
+  },
+  {
+   "column": "last_pymnt_amnt",
+   "tier": "B",
+   "tier_label": "explicit in-life accumulation",
+   "trigger_phrase": "most recent payment",
+   "description": "Amount of the most recent payment received on the loan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "last_pymnt_d",
+   "tier": "B",
+   "tier_label": "explicit in-life accumulation",
+   "trigger_phrase": "most recent payment",
+   "description": "Month of the most recent payment received on the loan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "loan_status",
+   "tier": "A",
+   "tier_label": "explicit post-outcome event",
+   "trigger_phrase": "Charged Off",
+   "description": "Current status of the loan, such as Fully Paid, Charged Off, or Current.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "next_pymnt_d",
+   "tier": "B",
+   "tier_label": "explicit in-life accumulation",
+   "trigger_phrase": "next scheduled",
+   "description": "Month in which the next scheduled payment is due.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "orig_projected_additional_accrued_interest",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Interest projected to accrue over the course of the hardship plan, as estimated when the plan begins.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "out_prncp",
+   "tier": "B",
+   "tier_label": "explicit in-life accumulation",
+   "trigger_phrase": "Remaining",
+   "description": "Remaining outstanding principal on the loan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "out_prncp_inv",
+   "tier": "B",
+   "tier_label": "explicit in-life accumulation",
+   "trigger_phrase": "Remaining",
+   "description": "Remaining outstanding principal on the investor-funded portion of the loan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "payment_plan_start_date",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "hardship",
+   "description": "Date the borrower's revised payment schedule begins under a hardship plan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "pymnt_plan",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "payment plan",
+   "description": "Indicator of whether a payment plan is in place for the loan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "recoveries",
+   "tier": "A",
+   "tier_label": "explicit post-outcome event",
+   "trigger_phrase": "charged off",
+   "description": "Gross amount recovered on the loan after it was charged off.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "settlement_amount",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "settlement",
+   "description": "Loan amount the borrower agreed to pay under the settlement plan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "settlement_date",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "settlement",
+   "description": "Date the borrower agreed to the settlement plan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "settlement_percentage",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "Settlement",
+   "description": "Settlement amount as a percentage of the outstanding balance at the time of settlement.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "settlement_status",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "settlement",
+   "description": "Status of the borrower's settlement plan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "settlement_term",
+   "tier": "C",
+   "tier_label": "names a post-origination programme",
+   "trigger_phrase": "settlement",
+   "description": "Number of months the borrower is scheduled to pay under the settlement plan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "total_pymnt",
+   "tier": "B",
+   "tier_label": "explicit in-life accumulation",
+   "trigger_phrase": "to date",
+   "description": "Total payment received to date on the loan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "total_pymnt_inv",
+   "tier": "B",
+   "tier_label": "explicit in-life accumulation",
+   "trigger_phrase": "to date",
+   "description": "Total payment received to date on the investor-funded portion of the loan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "total_rec_int",
+   "tier": "B",
+   "tier_label": "explicit in-life accumulation",
+   "trigger_phrase": "to date",
+   "description": "Interest received to date on the loan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "total_rec_late_fee",
+   "tier": "B",
+   "tier_label": "explicit in-life accumulation",
+   "trigger_phrase": "to date",
+   "description": "Late fees received to date on the loan.",
+   "clean_under_suppression": false
+  },
+  {
+   "column": "total_rec_prncp",
+   "tier": "B",
+   "tier_label": "explicit in-life accumulation",
+   "trigger_phrase": "to date",
+   "description": "Principal received to date on the loan.",
+   "clean_under_suppression": false
+  }
+ ],
+ "out_of_scope": {
+  "desc": "removed because the column held no usable values, not because of when it is populated; its `populated` string places it at application or origination",
+  "member_id": "removed because the column held no usable values, not because of when it is populated; its `populated` string places it at application or origination"
+ },
+ "hard_negatives": [
+  "all_util",
+  "il_util",
+  "inq_fi",
+  "inq_last_12m",
+  "max_bal_bc",
+  "mths_since_rcnt_il",
+  "open_acc_6m",
+  "open_act_il",
+  "open_il_12m",
+  "open_il_24m",
+  "open_rv_12m",
+  "open_rv_24m",
+  "total_bal_il",
+  "total_cu_tl"
+ ],
+ "tier_labels": {
+  "A": "explicit post-outcome event",
+  "B": "explicit in-life accumulation",
+  "C": "names a post-origination programme"
+ },
+ "canary": {
+  "recoveries": {
+   "tier": "A",
+   "baseline_test_roc_auc": 0.7295752764137673,
+   "canary_test_roc_auc": 0.8730186207938789,
+   "n_features": 181
+  }
+ },
+ "counts": {
+  "true_positives": 39,
+  "out_of_scope": 2,
+  "hard_negatives": 14
+ },
+ "runs": [
+  {
+   "label": "firstlight",
+   "scored": false,
+   "reason": "This run ended as 'call_limit' (last stop_reason 'tool_use'), so the agent never signalled that it had finished. A partial answer is not an answer and is not scored.",
+   "flags": []
+  },
+  {
+   "label": "run1",
+   "scored": false,
+   "reason": "This run ended as 'truncated' (last stop_reason 'max_tokens'), so the agent never signalled that it had finished. A partial answer is not an answer and is not scored.",
+   "flags": []
+  },
+  {
+   "label": "run2",
+   "scored": false,
+   "reason": "This run ended as 'call_limit' (last stop_reason 'tool_use'), so the agent never signalled that it had finished. A partial answer is not an answer and is not scored.",
+   "flags": []
+  },
+  {
+   "label": "run3",
+   "scored": true,
+   "parse_warnings": [],
+   "score": {
+    "flagged_count": 2,
+    "scored_count": 2,
+    "true_positives": [],
+    "true_positive_count": 0,
+    "false_positives": [
+     "all_util_was_missing",
+     "open_acc_6m_was_missing"
+    ],
+    "false_positive_count": 2,
+    "false_negatives": [
+     "collection_recovery_fee",
+     "debt_settlement_flag",
+     "debt_settlement_flag_date",
+     "deferral_term",
+     "hardship_amount",
+     "hardship_dpd",
+     "hardship_end_date",
+     "hardship_flag",
+     "hardship_last_payment_amount",
+     "hardship_length",
+     "hardship_loan_status",
+     "hardship_payoff_balance_amount",
+     "hardship_reason",
+     "hardship_start_date",
+     "hardship_status",
+     "hardship_type",
+     "last_credit_pull_d",
+     "last_fico_range_high",
+     "last_fico_range_low",
+     "last_pymnt_amnt",
+     "last_pymnt_d",
+     "loan_status",
+     "next_pymnt_d",
+     "orig_projected_additional_accrued_interest",
+     "out_prncp",
+     "out_prncp_inv",
+     "payment_plan_start_date",
+     "pymnt_plan",
+     "recoveries",
+     "settlement_amount",
+     "settlement_date",
+     "settlement_percentage",
+     "settlement_status",
+     "settlement_term",
+     "total_pymnt",
+     "total_pymnt_inv",
+     "total_rec_int",
+     "total_rec_late_fee",
+     "total_rec_prncp"
+    ],
+    "false_negative_count": 39,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "out_of_scope_flagged": [],
+    "out_of_scope_flagged_count": 0,
+    "hard_negatives_flagged": [
+     "all_util_was_missing",
+     "open_acc_6m_was_missing"
+    ],
+    "hard_negatives_flagged_count": 2,
+    "canary": {
+     "planted": [
+      "recoveries"
+     ],
+     "caught": [],
+     "missed": [
+      "recoveries"
+     ],
+     "detected": false,
+     "detail": {
+      "recoveries": {
+       "tier": "A",
+       "baseline_test_roc_auc": 0.7295752764137673,
+       "canary_test_roc_auc": 0.8730186207938789,
+       "n_features": 181
+      }
+     }
+    },
+    "hard_negatives_flagged_raw": [],
+    "hard_negatives_flagged_via_derivative": [
+     "all_util_was_missing",
+     "open_acc_6m_was_missing"
+    ],
+    "hard_negatives_distinct_count": 2,
+    "derivative_resolutions": [
+     {
+      "flag": "all_util_was_missing",
+      "parent": "all_util",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     },
+     {
+      "flag": "open_acc_6m_was_missing",
+      "parent": "open_acc_6m",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     }
+    ],
+    "true_positives_by_residual_tier": {
+     "A": {
+      "label": "explicit post-outcome event",
+      "count": 0,
+      "of_possible": 3,
+      "features": []
+     },
+     "B": {
+      "label": "explicit in-life accumulation",
+      "count": 0,
+      "of_possible": 10,
+      "features": []
+     },
+     "C": {
+      "label": "names a post-origination programme",
+      "count": 0,
+      "of_possible": 23,
+      "features": []
+     }
+    },
+    "true_positives_clean_under_suppression": []
+   },
+   "flags": [
+    {
+     "flag": "all_util_was_missing",
+     "reason": "This feature (and the underlying all_util field it flags) was only collected by the credit bureau for loans issued from around December 2015 onward, so its \"missing\" state is really a proxy for loan vintage/cohort rather than a stable credit-risk signal, and both the 2016 validation period and the 2017 test period fall entirely after that cutoff, so neither evaluation can reveal whether the model's learned behavior for this feature (fitted mostly on the minority of training rows from Dec-2015–2016) generalizes.",
+     "evidence": "lookup_feature('all_util') states it is \"collected for loans issued from around December 2015 onward,\" and get_feature_shap_detail shows all_util_was_missing ranks 27th by mean |SHAP| with 99.98% of test rows getting the same small positive contribution, consistent with the flag being essentially constant (always \"not missing\") in the 2016/2017 evaluation windows.",
+     "confidence": "medium",
+     "verdict": "false_positive",
+     "hard_negative": true,
+     "scored_as_parent": {
+      "flag": "all_util_was_missing",
+      "parent": "all_util",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     }
+    },
+    {
+     "flag": "open_acc_6m_was_missing",
+     "reason": "Like all_util, the underlying open_acc_6m field was only collected from around December 2015 onward, making this missingness flag a stand-in for the pre/post-Dec-2015 cohort split within the 2014-2016 training data, a split that does not exist in either the 2016 validation set or the 2017 test set, so the close match between validation and test AUC cannot confirm this part of the model generalizes rather than reflecting a period-specific artifact.",
+     "evidence": "lookup_feature('open_acc_6m') states it is \"collected for loans issued from around December 2015 onward,\" and get_feature_shap_detail shows open_acc_6m_was_missing ranks 36th by mean |SHAP| with 99.99% of rows in the test set receiving a uniformly positive contribution, indicating the flag is essentially always in its \"not missing\" state in the periods being evaluated.",
+     "confidence": "medium",
+     "verdict": "false_positive",
+     "hard_negative": true,
+     "scored_as_parent": {
+      "flag": "open_acc_6m_was_missing",
+      "parent": "open_acc_6m",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     }
+    }
+   ]
+  },
+  {
+   "label": "run4-ablated",
+   "scored": true,
+   "parse_warnings": [],
+   "score": {
+    "flagged_count": 3,
+    "scored_count": 3,
+    "true_positives": [],
+    "true_positive_count": 0,
+    "false_positives": [
+     "all_util_was_missing",
+     "open_acc_6m_was_missing",
+     "term"
+    ],
+    "false_positive_count": 3,
+    "false_negatives": [
+     "collection_recovery_fee",
+     "debt_settlement_flag",
+     "debt_settlement_flag_date",
+     "deferral_term",
+     "hardship_amount",
+     "hardship_dpd",
+     "hardship_end_date",
+     "hardship_flag",
+     "hardship_last_payment_amount",
+     "hardship_length",
+     "hardship_loan_status",
+     "hardship_payoff_balance_amount",
+     "hardship_reason",
+     "hardship_start_date",
+     "hardship_status",
+     "hardship_type",
+     "last_credit_pull_d",
+     "last_fico_range_high",
+     "last_fico_range_low",
+     "last_pymnt_amnt",
+     "last_pymnt_d",
+     "loan_status",
+     "next_pymnt_d",
+     "orig_projected_additional_accrued_interest",
+     "out_prncp",
+     "out_prncp_inv",
+     "payment_plan_start_date",
+     "pymnt_plan",
+     "recoveries",
+     "settlement_amount",
+     "settlement_date",
+     "settlement_percentage",
+     "settlement_status",
+     "settlement_term",
+     "total_pymnt",
+     "total_pymnt_inv",
+     "total_rec_int",
+     "total_rec_late_fee",
+     "total_rec_prncp"
+    ],
+    "false_negative_count": 39,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "out_of_scope_flagged": [],
+    "out_of_scope_flagged_count": 0,
+    "hard_negatives_flagged": [
+     "all_util_was_missing",
+     "open_acc_6m_was_missing"
+    ],
+    "hard_negatives_flagged_count": 2,
+    "canary": {
+     "planted": [
+      "recoveries"
+     ],
+     "caught": [],
+     "missed": [
+      "recoveries"
+     ],
+     "detected": false,
+     "detail": {
+      "recoveries": {
+       "tier": "A",
+       "baseline_test_roc_auc": 0.7295752764137673,
+       "canary_test_roc_auc": 0.8730186207938789,
+       "n_features": 181
+      }
+     }
+    },
+    "hard_negatives_flagged_raw": [],
+    "hard_negatives_flagged_via_derivative": [
+     "all_util_was_missing",
+     "open_acc_6m_was_missing"
+    ],
+    "hard_negatives_distinct_count": 2,
+    "derivative_resolutions": [
+     {
+      "flag": "all_util_was_missing",
+      "parent": "all_util",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     },
+     {
+      "flag": "open_acc_6m_was_missing",
+      "parent": "open_acc_6m",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     }
+    ],
+    "true_positives_by_residual_tier": {
+     "A": {
+      "label": "explicit post-outcome event",
+      "count": 0,
+      "of_possible": 3,
+      "features": []
+     },
+     "B": {
+      "label": "explicit in-life accumulation",
+      "count": 0,
+      "of_possible": 10,
+      "features": []
+     },
+     "C": {
+      "label": "names a post-origination programme",
+      "count": 0,
+      "of_possible": 23,
+      "features": []
+     }
+    },
+    "true_positives_clean_under_suppression": []
+   },
+   "flags": [
+    {
+     "flag": "all_util_was_missing",
+     "reason": "This engineered indicator behaves as though it takes essentially one constant value across almost the entire 2017 holdout, meaning the \"missing\" branch of model logic that was presumably learned from a more heterogeneous 2014-2016 training population is barely exercised in the test set, so the held-out AUC does not meaningfully validate the model's behavior on this feature and may not reflect performance once data-availability patterns shift again.",
+     "evidence": "get_feature_shap_detail for all_util_was_missing shows pct_positive=99.98%, pct_negative=0.02%, pct_near_zero=0.0%, i.e. a near-uniform one-directional contribution across 30,000 sampled test rows.",
+     "confidence": "medium",
+     "verdict": "false_positive",
+     "hard_negative": true,
+     "scored_as_parent": {
+      "flag": "all_util_was_missing",
+      "parent": "all_util",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     }
+    },
+    {
+     "flag": "open_acc_6m_was_missing",
+     "reason": "Like all_util_was_missing, this indicator's contribution is almost perfectly one-directional across the 2017 test sample, indicating the feature is essentially constant in the holdout period even though the model assigns it real weight (rank 36), suggesting a train/test mismatch in data completeness rather than a stable risk signal the held-out score can be trusted to generalize.",
+     "evidence": "get_feature_shap_detail for open_acc_6m_was_missing shows pct_positive=99.99%, pct_negative=0.0%, pct_near_zero=0.013%, min=-0.00008 (essentially no negative cases) over 30,000 sampled test rows.",
+     "confidence": "medium",
+     "verdict": "false_positive",
+     "hard_negative": true,
+     "scored_as_parent": {
+      "flag": "open_acc_6m_was_missing",
+      "parent": "open_acc_6m",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     }
+    },
+    {
+     "flag": "term",
+     "reason": "As the model's single most influential feature, term's learned relationship with default risk could be distorted by differential outcome maturity: loans can run up to 60 months, and since loan_status (the presumed source of the default label) includes a non-terminal \"Current\" state, the 2017 holdout's longer-term loans may not yet have revealed their true final outcome the way the 2014-2016 training vintages had, making the held-out AUC an uncertain proxy for performance once those loans fully mature.",
+     "evidence": "lookup_feature shows term is \"either 36 or 60\" months and loan_status \"Current\" is listed alongside \"Fully Paid\" and \"Charged Off\" as possible statuses, while get_shap_ranking places term first with mean_abs_shap 0.189 (largest of all 180 features).",
+     "confidence": "low",
+     "verdict": "false_positive",
+     "hard_negative": false,
+     "scored_as_parent": null
+    }
+   ]
+  },
+  {
+   "label": "run5-canary",
+   "scored": true,
+   "parse_warnings": [],
+   "score": {
+    "flagged_count": 1,
+    "scored_count": 1,
+    "true_positives": [
+     "recoveries"
+    ],
+    "true_positive_count": 1,
+    "false_positives": [],
+    "false_positive_count": 0,
+    "false_negatives": [
+     "collection_recovery_fee",
+     "debt_settlement_flag",
+     "debt_settlement_flag_date",
+     "deferral_term",
+     "hardship_amount",
+     "hardship_dpd",
+     "hardship_end_date",
+     "hardship_flag",
+     "hardship_last_payment_amount",
+     "hardship_length",
+     "hardship_loan_status",
+     "hardship_payoff_balance_amount",
+     "hardship_reason",
+     "hardship_start_date",
+     "hardship_status",
+     "hardship_type",
+     "last_credit_pull_d",
+     "last_fico_range_high",
+     "last_fico_range_low",
+     "last_pymnt_amnt",
+     "last_pymnt_d",
+     "loan_status",
+     "next_pymnt_d",
+     "orig_projected_additional_accrued_interest",
+     "out_prncp",
+     "out_prncp_inv",
+     "payment_plan_start_date",
+     "pymnt_plan",
+     "settlement_amount",
+     "settlement_date",
+     "settlement_percentage",
+     "settlement_status",
+     "settlement_term",
+     "total_pymnt",
+     "total_pymnt_inv",
+     "total_rec_int",
+     "total_rec_late_fee",
+     "total_rec_prncp"
+    ],
+    "false_negative_count": 38,
+    "precision": 1.0,
+    "recall": 0.0256,
+    "f1": 0.05,
+    "out_of_scope_flagged": [],
+    "out_of_scope_flagged_count": 0,
+    "hard_negatives_flagged": [],
+    "hard_negatives_flagged_count": 0,
+    "canary": {
+     "planted": [
+      "recoveries"
+     ],
+     "caught": [
+      "recoveries"
+     ],
+     "missed": [],
+     "detected": true,
+     "detail": {
+      "recoveries": {
+       "tier": "A",
+       "baseline_test_roc_auc": 0.7295752764137673,
+       "canary_test_roc_auc": 0.8730186207938789,
+       "n_features": 181
+      }
+     }
+    },
+    "hard_negatives_flagged_raw": [],
+    "hard_negatives_flagged_via_derivative": [],
+    "hard_negatives_distinct_count": 0,
+    "derivative_resolutions": [],
+    "true_positives_by_residual_tier": {
+     "A": {
+      "label": "explicit post-outcome event",
+      "count": 1,
+      "of_possible": 3,
+      "features": [
+       "recoveries"
+      ]
+     },
+     "B": {
+      "label": "explicit in-life accumulation",
+      "count": 0,
+      "of_possible": 10,
+      "features": []
+     },
+     "C": {
+      "label": "names a post-origination programme",
+      "count": 0,
+      "of_possible": 23,
+      "features": []
+     }
+    },
+    "true_positives_clean_under_suppression": []
+   },
+   "flags": [
+    {
+     "flag": "recoveries",
+     "reason": "This column is only populated after a loan has already been charged off, so it encodes post-default outcome information that would not exist at the time a real default-risk prediction must be made, making the held-out AUC an inflated, non-deployable estimate of forward performance.",
+     "evidence": "The data dictionary states recoveries is \"set once the loan has been charged off and recovery activity begins,\" it has by far the largest SHAP contribution (mean_abs_shap 2.21, 44.6% of total attribution) of any of the 181 features, and removing it drops held-out ROC-AUC from 0.8730 to 0.7296 (delta -0.1434).",
+     "confidence": "high",
+     "verdict": "true_positive",
+     "hard_negative": false,
+     "scored_as_parent": null
+    }
+   ]
+  },
+  {
+   "label": "run6-canary-v2",
+   "scored": true,
+   "parse_warnings": [],
+   "score": {
+    "flagged_count": 1,
+    "scored_count": 1,
+    "true_positives": [
+     "recoveries"
+    ],
+    "true_positive_count": 1,
+    "false_positives": [],
+    "false_positive_count": 0,
+    "false_negatives": [
+     "collection_recovery_fee",
+     "debt_settlement_flag",
+     "debt_settlement_flag_date",
+     "deferral_term",
+     "hardship_amount",
+     "hardship_dpd",
+     "hardship_end_date",
+     "hardship_flag",
+     "hardship_last_payment_amount",
+     "hardship_length",
+     "hardship_loan_status",
+     "hardship_payoff_balance_amount",
+     "hardship_reason",
+     "hardship_start_date",
+     "hardship_status",
+     "hardship_type",
+     "last_credit_pull_d",
+     "last_fico_range_high",
+     "last_fico_range_low",
+     "last_pymnt_amnt",
+     "last_pymnt_d",
+     "loan_status",
+     "next_pymnt_d",
+     "orig_projected_additional_accrued_interest",
+     "out_prncp",
+     "out_prncp_inv",
+     "payment_plan_start_date",
+     "pymnt_plan",
+     "settlement_amount",
+     "settlement_date",
+     "settlement_percentage",
+     "settlement_status",
+     "settlement_term",
+     "total_pymnt",
+     "total_pymnt_inv",
+     "total_rec_int",
+     "total_rec_late_fee",
+     "total_rec_prncp"
+    ],
+    "false_negative_count": 38,
+    "precision": 1.0,
+    "recall": 0.0256,
+    "f1": 0.05,
+    "out_of_scope_flagged": [],
+    "out_of_scope_flagged_count": 0,
+    "hard_negatives_flagged": [],
+    "hard_negatives_flagged_count": 0,
+    "canary": {
+     "planted": [
+      "recoveries"
+     ],
+     "caught": [
+      "recoveries"
+     ],
+     "missed": [],
+     "detected": true,
+     "detail": {
+      "recoveries": {
+       "tier": "A",
+       "baseline_test_roc_auc": 0.7295752764137673,
+       "canary_test_roc_auc": 0.8730186207938789,
+       "n_features": 181
+      }
+     }
+    },
+    "hard_negatives_flagged_raw": [],
+    "hard_negatives_flagged_via_derivative": [],
+    "hard_negatives_distinct_count": 0,
+    "derivative_resolutions": [],
+    "true_positives_by_residual_tier": {
+     "A": {
+      "label": "explicit post-outcome event",
+      "count": 1,
+      "of_possible": 3,
+      "features": [
+       "recoveries"
+      ]
+     },
+     "B": {
+      "label": "explicit in-life accumulation",
+      "count": 0,
+      "of_possible": 10,
+      "features": []
+     },
+     "C": {
+      "label": "names a post-origination programme",
+      "count": 0,
+      "of_possible": 23,
+      "features": []
+     }
+    },
+    "true_positives_clean_under_suppression": []
+   },
+   "flags": [
+    {
+     "flag": "recoveries",
+     "reason": "This column is only populated after a loan has already been charged off and recovery activity begins, so it is a post-outcome artifact that leaks the label (default has already occurred) into a model meant to predict default before or at origination.",
+     "evidence": "lookup_feature reports recoveries is \"populated: set once the loan has been charged off and recovery activity begins,\" it is by far the most important feature (mean_abs_shap 2.21 vs 0.26 for the next feature), and removing it drops test ROC-AUC from 0.8730 to 0.7296 (delta -0.1434) per get_ablation_result, while get_feature_target_association shows an unusually high point-biserial correlation (0.498) with the outcome on its own.",
+     "confidence": "high",
+     "verdict": "true_positive",
+     "hard_negative": false,
+     "scored_as_parent": null
+    }
+   ]
+  },
+  {
+   "label": "run7-honest-v2",
+   "scored": true,
+   "parse_warnings": [],
+   "score": {
+    "flagged_count": 1,
+    "scored_count": 1,
+    "true_positives": [],
+    "true_positive_count": 0,
+    "false_positives": [
+     "term"
+    ],
+    "false_positive_count": 1,
+    "false_negatives": [
+     "collection_recovery_fee",
+     "debt_settlement_flag",
+     "debt_settlement_flag_date",
+     "deferral_term",
+     "hardship_amount",
+     "hardship_dpd",
+     "hardship_end_date",
+     "hardship_flag",
+     "hardship_last_payment_amount",
+     "hardship_length",
+     "hardship_loan_status",
+     "hardship_payoff_balance_amount",
+     "hardship_reason",
+     "hardship_start_date",
+     "hardship_status",
+     "hardship_type",
+     "last_credit_pull_d",
+     "last_fico_range_high",
+     "last_fico_range_low",
+     "last_pymnt_amnt",
+     "last_pymnt_d",
+     "loan_status",
+     "next_pymnt_d",
+     "orig_projected_additional_accrued_interest",
+     "out_prncp",
+     "out_prncp_inv",
+     "payment_plan_start_date",
+     "pymnt_plan",
+     "recoveries",
+     "settlement_amount",
+     "settlement_date",
+     "settlement_percentage",
+     "settlement_status",
+     "settlement_term",
+     "total_pymnt",
+     "total_pymnt_inv",
+     "total_rec_int",
+     "total_rec_late_fee",
+     "total_rec_prncp"
+    ],
+    "false_negative_count": 39,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "out_of_scope_flagged": [],
+    "out_of_scope_flagged_count": 0,
+    "hard_negatives_flagged": [],
+    "hard_negatives_flagged_count": 0,
+    "canary": {
+     "planted": [
+      "recoveries"
+     ],
+     "caught": [],
+     "missed": [
+      "recoveries"
+     ],
+     "detected": false,
+     "detail": {
+      "recoveries": {
+       "tier": "A",
+       "baseline_test_roc_auc": 0.7295752764137673,
+       "canary_test_roc_auc": 0.8730186207938789,
+       "n_features": 181
+      }
+     }
+    },
+    "hard_negatives_flagged_raw": [],
+    "hard_negatives_flagged_via_derivative": [],
+    "hard_negatives_distinct_count": 0,
+    "derivative_resolutions": [],
+    "true_positives_by_residual_tier": {
+     "A": {
+      "label": "explicit post-outcome event",
+      "count": 0,
+      "of_possible": 3,
+      "features": []
+     },
+     "B": {
+      "label": "explicit in-life accumulation",
+      "count": 0,
+      "of_possible": 10,
+      "features": []
+     },
+     "C": {
+      "label": "names a post-origination programme",
+      "count": 0,
+      "of_possible": 23,
+      "features": []
+     }
+    },
+    "true_positives_clean_under_suppression": []
+   },
+   "flags": [
+    {
+     "flag": "term",
+     "reason": "Loan term (36 vs 60 months) is mechanically tied to how long a loan needs to season before a default can be observed, so its measured relationship with the outcome weakening specifically in the most recent vintages suggests that longer-tenor loans from 2016-2017 are more likely to be right-censored (still \"Current,\" not yet resolved) than their 2014-2015 counterparts, meaning the 2017 test labels for these loans may not reflect their eventual true outcome and the reported AUC may not represent performance once those loans fully mature.",
+     "evidence": "get_feature_target_association showed term's univariate AUC falling from 0.614 (2014) and 0.624 (2015) to 0.576 (2016) and 0.566 (test/2017), a much sharper and differently-directioned decline than a correlated non-maturity feature, installment, which instead rose from 0.530/0.534/0.544 across the same years to 0.571 on test.",
+     "confidence": "medium",
+     "verdict": "false_positive",
+     "hard_negative": false,
+     "scored_as_parent": null
+    }
+   ]
+  },
+  {
+   "label": "run8-canary-splitonly",
+   "scored": true,
+   "parse_warnings": [],
+   "score": {
+    "flagged_count": 3,
+    "scored_count": 3,
+    "true_positives": [
+     "recoveries"
+    ],
+    "true_positive_count": 1,
+    "false_positives": [
+     "all_util_was_missing",
+     "open_acc_6m_was_missing"
+    ],
+    "false_positive_count": 2,
+    "false_negatives": [
+     "collection_recovery_fee",
+     "debt_settlement_flag",
+     "debt_settlement_flag_date",
+     "deferral_term",
+     "hardship_amount",
+     "hardship_dpd",
+     "hardship_end_date",
+     "hardship_flag",
+     "hardship_last_payment_amount",
+     "hardship_length",
+     "hardship_loan_status",
+     "hardship_payoff_balance_amount",
+     "hardship_reason",
+     "hardship_start_date",
+     "hardship_status",
+     "hardship_type",
+     "last_credit_pull_d",
+     "last_fico_range_high",
+     "last_fico_range_low",
+     "last_pymnt_amnt",
+     "last_pymnt_d",
+     "loan_status",
+     "next_pymnt_d",
+     "orig_projected_additional_accrued_interest",
+     "out_prncp",
+     "out_prncp_inv",
+     "payment_plan_start_date",
+     "pymnt_plan",
+     "settlement_amount",
+     "settlement_date",
+     "settlement_percentage",
+     "settlement_status",
+     "settlement_term",
+     "total_pymnt",
+     "total_pymnt_inv",
+     "total_rec_int",
+     "total_rec_late_fee",
+     "total_rec_prncp"
+    ],
+    "false_negative_count": 38,
+    "precision": 0.3333,
+    "recall": 0.0256,
+    "f1": 0.0476,
+    "out_of_scope_flagged": [],
+    "out_of_scope_flagged_count": 0,
+    "hard_negatives_flagged": [
+     "all_util_was_missing",
+     "open_acc_6m_was_missing"
+    ],
+    "hard_negatives_flagged_count": 2,
+    "canary": {
+     "planted": [
+      "recoveries"
+     ],
+     "caught": [
+      "recoveries"
+     ],
+     "missed": [],
+     "detected": true,
+     "detail": {
+      "recoveries": {
+       "tier": "A",
+       "baseline_test_roc_auc": 0.7295752764137673,
+       "canary_test_roc_auc": 0.8730186207938789,
+       "n_features": 181
+      }
+     }
+    },
+    "hard_negatives_flagged_raw": [],
+    "hard_negatives_flagged_via_derivative": [
+     "all_util_was_missing",
+     "open_acc_6m_was_missing"
+    ],
+    "hard_negatives_distinct_count": 2,
+    "derivative_resolutions": [
+     {
+      "flag": "open_acc_6m_was_missing",
+      "parent": "open_acc_6m",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     },
+     {
+      "flag": "all_util_was_missing",
+      "parent": "all_util",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     }
+    ],
+    "true_positives_by_residual_tier": {
+     "A": {
+      "label": "explicit post-outcome event",
+      "count": 1,
+      "of_possible": 3,
+      "features": [
+       "recoveries"
+      ]
+     },
+     "B": {
+      "label": "explicit in-life accumulation",
+      "count": 0,
+      "of_possible": 10,
+      "features": []
+     },
+     "C": {
+      "label": "names a post-origination programme",
+      "count": 0,
+      "of_possible": 23,
+      "features": []
+     }
+    },
+    "true_positives_clean_under_suppression": []
+   },
+   "flags": [
+    {
+     "flag": "recoveries",
+     "reason": "This column is only populated once a loan has already been charged off, so it directly encodes post-default information rather than data available at underwriting, meaning the model's headline discriminative power substantially reflects target leakage rather than genuine forward-looking risk assessment.",
+     "evidence": "lookup_feature shows recoveries is \"set once the loan has been charged off and recovery activity begins,\" it is the single largest SHAP contributor (44.6% of total absolute SHAP, mean_abs_shap 2.21 vs. 0.26 for the next feature), and get_ablation_result shows removing it drops the held-out 2017 ROC-AUC from 0.8730 to 0.7296.",
+     "confidence": "high",
+     "verdict": "true_positive",
+     "hard_negative": false,
+     "scored_as_parent": null
+    },
+    {
+     "flag": "open_acc_6m_was_missing",
+     "reason": "This feature's missingness indicator is essentially a proxy for the era/vintage of data collection rather than a stable risk signal, since it varies substantially during training but holds a single constant value in the 2017 evaluation set, so any structure the model learned around it cannot be validated by the held-out score and may reflect an artifact of the training period.",
+     "evidence": "get_feature_coverage shows pct_zero of 34.99% (i.e., 65% flagged missing) in train versus 100% zero (no missing rows at all) in test, and get_feature_target_association reports is_constant_test: true, meaning no association with the outcome could even be computed on the held-out data.",
+     "confidence": "medium",
+     "verdict": "false_positive",
+     "hard_negative": true,
+     "scored_as_parent": {
+      "flag": "open_acc_6m_was_missing",
+      "parent": "open_acc_6m",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     }
+    },
+    {
+     "flag": "all_util_was_missing",
+     "reason": "This feature shows the same kind of extreme train/test coverage shift (a ranking-relevant feature whose missingness pattern is not representative of the evaluation population), indicating the training population (2014-2016) differs structurally from the 2017 evaluation population in ways that could make the held-out AUC unrepresentative of genuinely new, future loans if data collection practices shift again.",
+     "evidence": "get_feature_coverage reports pct_flagged_missing of 65.02% in train versus 0.0124% in test for the underlying all_util field, and the companion missingness flag ranks 9th of 181 features by mean absolute SHAP per get_shap_ranking.",
+     "confidence": "low",
+     "verdict": "false_positive",
+     "hard_negative": true,
+     "scored_as_parent": {
+      "flag": "all_util_was_missing",
+      "parent": "all_util",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     }
+    }
+   ]
+  },
+  {
+   "label": "run9-honest-nopop",
+   "scored": false,
+   "reason": "This run ended as 'turn_limit' (last stop_reason 'tool_use'), so the agent never signalled that it had finished. A partial answer is not an answer and is not scored.",
+   "flags": []
+  },
+  {
+   "label": "run10-honest-nopop-30turns",
+   "scored": true,
+   "parse_warnings": [],
+   "score": {
+    "flagged_count": 3,
+    "scored_count": 3,
+    "true_positives": [],
+    "true_positive_count": 0,
+    "false_positives": [
+     "acc_open_past_24mths",
+     "all_util_was_missing",
+     "open_acc_6m_was_missing"
+    ],
+    "false_positive_count": 3,
+    "false_negatives": [
+     "collection_recovery_fee",
+     "debt_settlement_flag",
+     "debt_settlement_flag_date",
+     "deferral_term",
+     "hardship_amount",
+     "hardship_dpd",
+     "hardship_end_date",
+     "hardship_flag",
+     "hardship_last_payment_amount",
+     "hardship_length",
+     "hardship_loan_status",
+     "hardship_payoff_balance_amount",
+     "hardship_reason",
+     "hardship_start_date",
+     "hardship_status",
+     "hardship_type",
+     "last_credit_pull_d",
+     "last_fico_range_high",
+     "last_fico_range_low",
+     "last_pymnt_amnt",
+     "last_pymnt_d",
+     "loan_status",
+     "next_pymnt_d",
+     "orig_projected_additional_accrued_interest",
+     "out_prncp",
+     "out_prncp_inv",
+     "payment_plan_start_date",
+     "pymnt_plan",
+     "recoveries",
+     "settlement_amount",
+     "settlement_date",
+     "settlement_percentage",
+     "settlement_status",
+     "settlement_term",
+     "total_pymnt",
+     "total_pymnt_inv",
+     "total_rec_int",
+     "total_rec_late_fee",
+     "total_rec_prncp"
+    ],
+    "false_negative_count": 39,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "out_of_scope_flagged": [],
+    "out_of_scope_flagged_count": 0,
+    "hard_negatives_flagged": [
+     "all_util_was_missing",
+     "open_acc_6m_was_missing"
+    ],
+    "hard_negatives_flagged_count": 2,
+    "canary": {
+     "planted": [
+      "recoveries"
+     ],
+     "caught": [],
+     "missed": [
+      "recoveries"
+     ],
+     "detected": false,
+     "detail": {
+      "recoveries": {
+       "tier": "A",
+       "baseline_test_roc_auc": 0.7295752764137673,
+       "canary_test_roc_auc": 0.8730186207938789,
+       "n_features": 181
+      }
+     }
+    },
+    "hard_negatives_flagged_raw": [],
+    "hard_negatives_flagged_via_derivative": [
+     "all_util_was_missing",
+     "open_acc_6m_was_missing"
+    ],
+    "hard_negatives_distinct_count": 2,
+    "derivative_resolutions": [
+     {
+      "flag": "all_util_was_missing",
+      "parent": "all_util",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     },
+     {
+      "flag": "open_acc_6m_was_missing",
+      "parent": "open_acc_6m",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     }
+    ],
+    "true_positives_by_residual_tier": {
+     "A": {
+      "label": "explicit post-outcome event",
+      "count": 0,
+      "of_possible": 3,
+      "features": []
+     },
+     "B": {
+      "label": "explicit in-life accumulation",
+      "count": 0,
+      "of_possible": 10,
+      "features": []
+     },
+     "C": {
+      "label": "names a post-origination programme",
+      "count": 0,
+      "of_possible": 23,
+      "features": []
+     }
+    },
+    "true_positives_clean_under_suppression": []
+   },
+   "flags": [
+    {
+     "flag": "all_util_was_missing",
+     "reason": "This feature's missingness is entirely determined by loan vintage rather than borrower risk, so the model has effectively learned a calendar-time proxy whose apparent predictive value only \"transfers\" cleanly to 2017 because 2017 happens to share the same data-collection regime as the tail of the training period, meaning the held-out score does not test the model against a genuinely different missingness regime.",
+     "evidence": "get_feature_coverage shows this column's mean (share not-missing... actually share \"was_missing\") is 1.0 in 2014, 0.9496 in 2015, 0.0002 in 2016, and 0.0001 in 2017/test, while it ranks 27th by mean|SHAP| (0.0299) in get_shap_ranking, i.e. a feature the model weights heavily is a near-perfect step function of vintage rather than of credit behavior.",
+     "confidence": "medium",
+     "verdict": "false_positive",
+     "hard_negative": true,
+     "scored_as_parent": {
+      "flag": "all_util_was_missing",
+      "parent": "all_util",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     }
+    },
+    {
+     "flag": "open_acc_6m_was_missing",
+     "reason": "Like its sibling flag above, this column is missing for essentially 100% of 2014 loans, ~95% of 2015 loans, and 0% of 2016/2017 loans, so it and the \"additional credit-pull\" fields it gates encode when the loan was originated rather than a stable, generalizable borrower characteristic, and the 2016-vs-2017 similarity that makes the backtest look clean is a data-pipeline artifact, not evidence the model would cope with a further change in what fields are collected.",
+     "evidence": "get_feature_coverage returns pct_zero/mean = 100%/1.0 (2014), 94.95%/0.9496 (2015), then a hard drop to 99.98%/0.0002 (2016) and 100%/0.0 (2017/test), and the same cliff recurs identically for total_cu_tl_was_missing and inq_fi_was_missing, confirming a systemic schema change rather than a one-off data quirk.",
+     "confidence": "medium",
+     "verdict": "false_positive",
+     "hard_negative": true,
+     "scored_as_parent": {
+      "flag": "open_acc_6m_was_missing",
+      "parent": "open_acc_6m",
+      "kind": "was_missing",
+      "parent_set": "HARD_NEGATIVES"
+     }
+    },
+    {
+     "flag": "acc_open_past_24mths",
+     "reason": "This top-6-ranked feature's standalone ability to rank-order default outcomes is noticeably weaker on the 2017 test year than on any training year, which is a sign of feature-target drift that a single-year holdout AUC will not surface as a trend, even though in this instance the overall model is not very reliant on it.",
+     "evidence": "get_feature_target_association reports auc_2014=0.5685, auc_2015=0.5910, auc_2016=0.5724 versus auc_test(2017)=0.5337, a drop of roughly 0.04 AUC points that is not explained by training-year variance alone, though get_ablation_result shows removing the feature changes overall model ROC-AUC by only +0.0001, so this drift has not yet materially harmed the aggregate score.",
+     "confidence": "low",
+     "verdict": "false_positive",
+     "hard_negative": false,
+     "scored_as_parent": null
+    }
+   ]
+  },
+  {
+   "label": "run11-honest-cached",
+   "scored": true,
+   "parse_warnings": [],
+   "score": {
+    "flagged_count": 3,
+    "scored_count": 3,
+    "true_positives": [],
+    "true_positive_count": 0,
+    "false_positives": [
+     "acc_open_past_24mths",
+     "term",
+     "total_bal_il"
+    ],
+    "false_positive_count": 3,
+    "false_negatives": [
+     "collection_recovery_fee",
+     "debt_settlement_flag",
+     "debt_settlement_flag_date",
+     "deferral_term",
+     "hardship_amount",
+     "hardship_dpd",
+     "hardship_end_date",
+     "hardship_flag",
+     "hardship_last_payment_amount",
+     "hardship_length",
+     "hardship_loan_status",
+     "hardship_payoff_balance_amount",
+     "hardship_reason",
+     "hardship_start_date",
+     "hardship_status",
+     "hardship_type",
+     "last_credit_pull_d",
+     "last_fico_range_high",
+     "last_fico_range_low",
+     "last_pymnt_amnt",
+     "last_pymnt_d",
+     "loan_status",
+     "next_pymnt_d",
+     "orig_projected_additional_accrued_interest",
+     "out_prncp",
+     "out_prncp_inv",
+     "payment_plan_start_date",
+     "pymnt_plan",
+     "recoveries",
+     "settlement_amount",
+     "settlement_date",
+     "settlement_percentage",
+     "settlement_status",
+     "settlement_term",
+     "total_pymnt",
+     "total_pymnt_inv",
+     "total_rec_int",
+     "total_rec_late_fee",
+     "total_rec_prncp"
+    ],
+    "false_negative_count": 39,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "out_of_scope_flagged": [],
+    "out_of_scope_flagged_count": 0,
+    "hard_negatives_flagged": [
+     "total_bal_il"
+    ],
+    "hard_negatives_flagged_count": 1,
+    "canary": {
+     "planted": [
+      "recoveries"
+     ],
+     "caught": [],
+     "missed": [
+      "recoveries"
+     ],
+     "detected": false,
+     "detail": {
+      "recoveries": {
+       "tier": "A",
+       "baseline_test_roc_auc": 0.7295752764137673,
+       "canary_test_roc_auc": 0.8730186207938789,
+       "n_features": 181
+      }
+     }
+    },
+    "hard_negatives_flagged_raw": [
+     "total_bal_il"
+    ],
+    "hard_negatives_flagged_via_derivative": [],
+    "hard_negatives_distinct_count": 1,
+    "derivative_resolutions": [],
+    "true_positives_by_residual_tier": {
+     "A": {
+      "label": "explicit post-outcome event",
+      "count": 0,
+      "of_possible": 3,
+      "features": []
+     },
+     "B": {
+      "label": "explicit in-life accumulation",
+      "count": 0,
+      "of_possible": 10,
+      "features": []
+     },
+     "C": {
+      "label": "names a post-origination programme",
+      "count": 0,
+      "of_possible": 23,
+      "features": []
+     }
+    },
+    "true_positives_clean_under_suppression": []
+   },
+   "flags": [
+    {
+     "flag": "total_bal_il",
+     "reason": "This feature was structurally absent for almost all of 2014 and most of 2015 and only became reliably populated in 2016, so the model's learned relationship for it comes almost entirely from a data regime that happens to match the 2017 test year rather than from a range of conditions the test year would independently validate.",
+     "evidence": "get_feature_coverage showed pct_flagged_missing of 100.0 in 2014, 94.96 in 2015, 0.018 in 2016, and 0.0 in test/2017, with n_unique collapsing to 1 in 2014.",
+     "confidence": "medium",
+     "verdict": "false_positive",
+     "hard_negative": true,
+     "scored_as_parent": null
+    },
+    {
+     "flag": "term",
+     "reason": "As the single most heavily weighted feature in the model, its standalone ability to rank default risk declines noticeably from the training years to the held-out year, indicating temporal drift that a one-shot 2017 AUC does not capture and that may not persist at the same level going forward.",
+     "evidence": "get_feature_target_association reported rank-AUC of 0.614 (2014), 0.624 (2015), 0.576 (2016) versus 0.566 on the test set.",
+     "confidence": "medium",
+     "verdict": "false_positive",
+     "hard_negative": false,
+     "scored_as_parent": null
+    },
+    {
+     "flag": "acc_open_past_24mths",
+     "reason": "This top-6 SHAP feature shows a substantial drop in its own association with the outcome between the training years and the test year, suggesting the relationships the model relies on are not stationary and the 2017 score may not project cleanly onto later years.",
+     "evidence": "get_feature_target_association reported rank-AUC of 0.568 (2014), 0.591 (2015), 0.572 (2016) versus 0.534 on the test set.",
+     "confidence": "medium",
+     "verdict": "false_positive",
+     "hard_negative": false,
+     "scored_as_parent": null
+    }
+   ]
+  }
+ ],
+ "notes": [
+  "Each run's score is the scorer's own output, unchanged. Its score.canary block is computed against the planted column for every scored run, including runs where that column was not in the data. For those runs 'missed' means nothing was there to find. Whether the canary was present is in runs/index.json, under canary.present.",
+  "A flag's verdict is read from the scorer's lists: true_positives, false_positives and out_of_scope_flagged. hard_negative is true when the flag is in hard_negatives_flagged. scored_as_parent is the scorer's derivative_resolutions entry for that flag, or null."
+ ]
+}

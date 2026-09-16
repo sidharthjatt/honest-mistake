@@ -1,0 +1,334 @@
+{
+ "label": "run1",
+ "facts": {
+  "label": "run1",
+  "directory": "20260825T043215__REAL__toolsv1.0-populated-included__run1",
+  "model": "claude-sonnet-5",
+  "started": "2026-08-25T04:31:30",
+  "finished": "2026-08-25T04:32:15",
+  "canary": {
+   "present": false,
+   "established_by": "derived: this manifest has no 'canary' field, so presence is read from the feature count the run's own tool results report (180 without the canary, 181 with it)",
+   "feature_counts_seen_in_tool_results": [
+    180
+   ],
+   "column": null
+  },
+  "tool_layer_version": "1.0",
+  "dictionary_populated_field": "included",
+  "coverage_scopes": null,
+  "retrieval": null,
+  "prompt_caching": null,
+  "limits": {
+   "max_turns": 12,
+   "max_tool_calls": 40
+  },
+  "max_tokens_per_turn": 2000,
+  "termination": "truncated",
+  "last_stop_reason": "max_tokens",
+  "scorer_accepted": false,
+  "scorer_refusal_reason": "This run ended as 'truncated' (last stop_reason 'max_tokens'), so the agent never signalled that it had finished. A partial answer is not an answer and is not scored.",
+  "turns": 4,
+  "tool_calls": 10,
+  "usage_totals": {
+   "input": 36087,
+   "output": 3667,
+   "cache_creation": 0,
+   "cache_read": 0
+  },
+  "system_prompt_chars": 3544,
+  "fields_not_in_manifest": [
+   "canary",
+   "coverage_scopes",
+   "prompt_caching",
+   "retrieval"
+  ]
+ },
+ "final_answer_text": "========================================================================\nREAL RUN - LIVE API CALLS.\n========================================================================\nrun          20260825T043215__REAL__toolsv1.0-populated-included__run1\ngenerated    2026-08-25T04:31:30\nconfig_id    toolsv1.0-populated-included\ntermination  truncated  (usable: False)\n\nThe runner did not parse or alter the text below.\n----- VERBATIM MODEL TEXT BELOW THIS LINE -----\nLet me check ablation results for the top features to understand how much the model depends on them, and investigate whether any of these could behave differently across vintages (e.g., LendingClub's grade/rate assignment methodology is known to shift over time).\n",
+ "tool_calls_without_results": 4,
+ "ends_on_role": "assistant",
+ "per_turn_usage": null,
+ "per_turn_usage_note": "Not recorded for this run: its manifest holds usage totals only.",
+ "messages": [
+  {
+   "index": 0,
+   "role": "user",
+   "blocks": [
+    {
+     "type": "text",
+     "text": "Begin your review."
+    }
+   ]
+  },
+  {
+   "index": 1,
+   "role": "assistant",
+   "blocks": [
+    {
+     "type": "thinking",
+     "summary": "",
+     "summary_empty": true
+    },
+    {
+     "type": "text",
+     "text": "I'll start by examining which features the model relies on most heavily, since leakage or suspicious dependencies often show up there."
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01G9wuCttSGBuuh1CPiiVp93",
+     "tool": "get_shap_ranking",
+     "arguments": {
+      "top_n": 30
+     },
+     "result": "{\"total_features\": 180, \"returned\": 30, \"note\": \"mean_abs_shap is in log-odds units, averaged over 30,000 sampled test rows.\", \"ranking\": [{\"rank\": 1, \"feature\": \"term\", \"mean_abs_shap\": 0.18937306}, {\"rank\": 2, \"feature\": \"sub_grade\", \"mean_abs_shap\": 0.18281484}, {\"rank\": 3, \"feature\": \"grade\", \"mean_abs_shap\": 0.15663205}, {\"rank\": 4, \"feature\": \"dti\", \"mean_abs_shap\": 0.13494946}, {\"rank\": 5, \"feature\": \"int_rate\", \"mean_abs_shap\": 0.09148871}, {\"rank\": 6, \"feature\": \"acc_open_past_24mths\", \"mean_abs_shap\": 0.08298217}, {\"rank\": 7, \"feature\": \"home_ownership_RENT\", \"mean_abs_shap\": 0.06452696}, {\"rank\": 8, \"feature\": \"fico_range_low\", \"mean_abs_shap\": 0.064325}, {\"rank\": 9, \"feature\": \"loan_amnt\", \"mean_abs_shap\": 0.06066949}, {\"rank\": 10, \"feature\": \"annual_inc\", \"mean_abs_shap\": 0.056510087}, {\"rank\": 11, \"feature\": \"mo_sin_old_rev_tl_op\", \"mean_abs_shap\": 0.056148145}, {\"rank\": 12, \"feature\": \"mort_acc\", \"mean_abs_shap\": 0.05510395}, {\"rank\": 13, \"feature\": \"funded_amnt_inv\", \"mean_abs_shap\": 0.052919723}, {\"rank\": 14, \"feature\": \"emp_length_was_missing\", \"mean_abs_shap\": 0.0504323}, {\"rank\": 15, \"feature\": \"total_bc_limit\", \"mean_abs_shap\": 0.046520997}, {\"rank\": 16, \"feature\": \"avg_cur_bal\", \"mean_abs_shap\": 0.045390766}, {\"rank\": 17, \"feature\": \"total_rev_hi_lim\", \"mean_abs_shap\": 0.043933768}, {\"rank\": 18, \"feature\": \"mths_since_recent_inq\", \"mean_abs_shap\": 0.040535234}, {\"rank\": 19, \"feature\": \"home_ownership_MORTGAGE\", \"mean_abs_shap\": 0.03966826}, {\"rank\": 20, \"feature\": \"total_il_high_credit_limit\", \"mean_abs_shap\": 0.03794917}, {\"rank\": 21, \"feature\": \"percent_bc_gt_75\", \"mean_abs_shap\": 0.036892585}, {\"rank\": 22, \"feature\": \"num_rev_tl_bal_gt_0\", \"mean_abs_shap\": 0.035714973}, {\"rank\": 23, \"feature\": \"mths_since_recent_bc\", \"mean_abs_shap\": 0.035455823}, {\"rank\": 24, \"feature\": \"num_actv_rev_tl\", \"mean_abs_shap\": 0.03491027}, {\"rank\": 25, \"feature\": \"installment\", \"mean_abs_shap\": 0.03232999}, {\"rank\": 26, \"feature\": \"credit_history_months\", \"mean_abs_shap\": 0.031972263}, {\"rank\": 27, \"feature\": \"all_util_was_missing\", \"mean_abs_shap\": 0.029952029}, {\"rank\": 28, \"feature\": \"tot_hi_cred_lim\", \"mean_abs_shap\": 0.029239856}, {\"rank\": 29, \"feature\": \"open_rv_24m\", \"mean_abs_shap\": 0.027556917}, {\"rank\": 30, \"feature\": \"mths_since_last_delinq\", \"mean_abs_shap\": 0.02564759}]}",
+     "result_is_error": false,
+     "executed": true
+    }
+   ]
+  },
+  {
+   "index": 2,
+   "role": "user",
+   "blocks": [
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_01G9wuCttSGBuuh1CPiiVp93"
+    }
+   ]
+  },
+  {
+   "index": 3,
+   "role": "assistant",
+   "blocks": [
+    {
+     "type": "thinking",
+     "summary": "",
+     "summary_empty": true
+    },
+    {
+     "type": "text",
+     "text": "These look like legitimate origination-time features. Let me check for potential leakage features (post-origination info that wouldn't be available at prediction time) and look further down the ranking."
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01F8RRnX5Hn5jhK92x2r5tLH",
+     "tool": "search_data_dictionary",
+     "arguments": {
+      "query": "recover"
+     },
+     "result": "{\"query\": \"recover\", \"match_count\": 2, \"returned\": 2, \"results\": [{\"feature\": \"recoveries\", \"description\": \"Gross amount recovered on the loan after it was charged off.\", \"populated\": \"set once the loan has been charged off and recovery activity begins\", \"source\": \"Lending Club internal\"}, {\"feature\": \"collection_recovery_fee\", \"description\": \"Fee charged on amounts recovered after the loan was charged off.\", \"populated\": \"set once the loan has been charged off and recovery activity begins\", \"source\": \"Lending Club internal\"}]}",
+     "result_is_error": false,
+     "executed": true
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_019vWjEY3GiB3Q89sjSNSmHb",
+     "tool": "search_data_dictionary",
+     "arguments": {
+      "query": "pymnt"
+     },
+     "result": "{\"query\": \"pymnt\", \"match_count\": 6, \"returned\": 6, \"results\": [{\"feature\": \"pymnt_plan\", \"description\": \"Indicator of whether a payment plan is in place for the loan.\", \"populated\": \"set when a payment plan is arranged, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"total_pymnt\", \"description\": \"Total payment received to date on the loan.\", \"populated\": \"updated monthly during the loan term as the borrower makes payments\", \"source\": \"Lending Club internal\"}, {\"feature\": \"total_pymnt_inv\", \"description\": \"Total payment received to date on the investor-funded portion of the loan.\", \"populated\": \"updated monthly during the loan term as the borrower makes payments\", \"source\": \"Lending Club internal\"}, {\"feature\": \"last_pymnt_d\", \"description\": \"Month of the most recent payment received on the loan.\", \"populated\": \"updated monthly during the loan term as payments arrive\", \"source\": \"Lending Club internal\"}, {\"feature\": \"last_pymnt_amnt\", \"description\": \"Amount of the most recent payment received on the loan.\", \"populated\": \"updated monthly during the loan term as payments arrive\", \"source\": \"Lending Club internal\"}, {\"feature\": \"next_pymnt_d\", \"description\": \"Month in which the next scheduled payment is due.\", \"populated\": \"updated monthly during the loan term while the loan is in repayment\", \"source\": \"Lending Club internal\"}]}",
+     "result_is_error": false,
+     "executed": true
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01WYvtXaPCosoJuF3BLY1s8F",
+     "tool": "search_data_dictionary",
+     "arguments": {
+      "query": "settlement"
+     },
+     "result": "{\"query\": \"settlement\", \"match_count\": 7, \"returned\": 7, \"results\": [{\"feature\": \"debt_settlement_flag\", \"description\": \"Indicator of whether the borrower is working with a debt settlement company on this loan.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"debt_settlement_flag_date\", \"description\": \"Date the debt settlement indicator was most recently set.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"settlement_status\", \"description\": \"Status of the borrower's settlement plan.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"settlement_date\", \"description\": \"Date the borrower agreed to the settlement plan.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"settlement_amount\", \"description\": \"Loan amount the borrower agreed to pay under the settlement plan.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"settlement_percentage\", \"description\": \"Settlement amount as a percentage of the outstanding balance at the time of settlement.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"settlement_term\", \"description\": \"Number of months the borrower is scheduled to pay under the settlement plan.\", \"populated\": \"set when a settlement arrangement is recorded, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}]}",
+     "result_is_error": false,
+     "executed": true
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01N9ETVJkJt2HwwDF4B8sU1v",
+     "tool": "search_data_dictionary",
+     "arguments": {
+      "query": "hardship"
+     },
+     "result": "{\"query\": \"hardship\", \"match_count\": 15, \"returned\": 15, \"results\": [{\"feature\": \"hardship_flag\", \"description\": \"Indicator of whether a hardship plan applies to the loan.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"hardship_type\", \"description\": \"Type of hardship plan applied to the loan.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"hardship_reason\", \"description\": \"Reason the borrower gave for requesting a hardship plan.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"hardship_status\", \"description\": \"Status of the hardship plan, such as active, completed, or broken.\", \"populated\": \"set when the borrower enters a hardship plan and revised as the plan progresses\", \"source\": \"Lending Club internal\"}, {\"feature\": \"hardship_amount\", \"description\": \"Interest payment owed each month while the hardship plan is in effect.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"hardship_start_date\", \"description\": \"Date the hardship plan began.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"hardship_end_date\", \"description\": \"Date the hardship plan ended or is scheduled to end.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"hardship_length\", \"description\": \"Number of months of the hardship plan.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"hardship_dpd\", \"description\": \"Days the borrower was past due as of the hardship plan start date.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"hardship_loan_status\", \"description\": \"Status the loan held as of the hardship plan start date.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"hardship_payoff_balance_amount\", \"description\": \"Payoff balance on the loan as of the hardship plan start date.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"hardship_last_payment_amount\", \"description\": \"Amount of the last payment received as of the hardship plan start date.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"deferral_term\", \"description\": \"Number of months the borrower's payments are reduced under a hardship plan.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"payment_plan_start_date\", \"description\": \"Date the borrower's revised payment schedule begins under a hardship plan.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}, {\"feature\": \"orig_projected_additional_accrued_interest\", \"description\": \"Interest projected to accrue over the course of the hardship plan, as estimated when the plan begins.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}]}",
+     "result_is_error": false,
+     "executed": true
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01Em2rK5UgsPA8dEUtr8RxQ9",
+     "tool": "get_shap_ranking",
+     "arguments": {
+      "top_n": 180
+     },
+     "result": "{\"total_features\": 180, \"returned\": 180, \"note\": \"mean_abs_shap is in log-odds units, averaged over 30,000 sampled test rows.\", \"ranking\": [{\"rank\": 1, \"feature\": \"term\", \"mean_abs_shap\": 0.18937306}, {\"rank\": 2, \"feature\": \"sub_grade\", \"mean_abs_shap\": 0.18281484}, {\"rank\": 3, \"feature\": \"grade\", \"mean_abs_shap\": 0.15663205}, {\"rank\": 4, \"feature\": \"dti\", \"mean_abs_shap\": 0.13494946}, {\"rank\": 5, \"feature\": \"int_rate\", \"mean_abs_shap\": 0.09148871}, {\"rank\": 6, \"feature\": \"acc_open_past_24mths\", \"mean_abs_shap\": 0.08298217}, {\"rank\": 7, \"feature\": \"home_ownership_RENT\", \"mean_abs_shap\": 0.06452696}, {\"rank\": 8, \"feature\": \"fico_range_low\", \"mean_abs_shap\": 0.064325}, {\"rank\": 9, \"feature\": \"loan_amnt\", \"mean_abs_shap\": 0.06066949}, {\"rank\": 10, \"feature\": \"annual_inc\", \"mean_abs_shap\": 0.056510087}, {\"rank\": 11, \"feature\": \"mo_sin_old_rev_tl_op\", \"mean_abs_shap\": 0.056148145}, {\"rank\": 12, \"feature\": \"mort_acc\", \"mean_abs_shap\": 0.05510395}, {\"rank\": 13, \"feature\": \"funded_amnt_inv\", \"mean_abs_shap\": 0.052919723}, {\"rank\": 14, \"feature\": \"emp_length_was_missing\", \"mean_abs_shap\": 0.0504323}, {\"rank\": 15, \"feature\": \"total_bc_limit\", \"mean_abs_shap\": 0.046520997}, {\"rank\": 16, \"feature\": \"avg_cur_bal\", \"mean_abs_shap\": 0.045390766}, {\"rank\": 17, \"feature\": \"total_rev_hi_lim\", \"mean_abs_shap\": 0.043933768}, {\"rank\": 18, \"feature\": \"mths_since_recent_inq\", \"mean_abs_shap\": 0.040535234}, {\"rank\": 19, \"feature\": \"home_ownership_MORTGAGE\", \"mean_abs_shap\": 0.03966826}, {\"rank\": 20, \"feature\": \"total_il_high_credit_limit\", \"mean_abs_shap\": 0.03794917}, {\"rank\": 21, \"feature\": \"percent_bc_gt_75\", \"mean_abs_shap\": 0.036892585}, {\"rank\": 22, \"feature\": \"num_rev_tl_bal_gt_0\", \"mean_abs_shap\": 0.035714973}, {\"rank\": 23, \"feature\": \"mths_since_recent_bc\", \"mean_abs_shap\": 0.035455823}, {\"rank\": 24, \"feature\": \"num_actv_rev_tl\", \"mean_abs_shap\": 0.03491027}, {\"rank\": 25, \"feature\": \"installment\", \"mean_abs_shap\": 0.03232999}, {\"rank\": 26, \"feature\": \"credit_history_months\", \"mean_abs_shap\": 0.031972263}, {\"rank\": 27, \"feature\": \"all_util_was_missing\", \"mean_abs_shap\": 0.029952029}, {\"rank\": 28, \"feature\": \"tot_hi_cred_lim\", \"mean_abs_shap\": 0.029239856}, {\"rank\": 29, \"feature\": \"open_rv_24m\", \"mean_abs_shap\": 0.027556917}, {\"rank\": 30, \"feature\": \"mths_since_last_delinq\", \"mean_abs_shap\": 0.02564759}, {\"rank\": 31, \"feature\": \"funded_amnt\", \"mean_abs_shap\": 0.024950385}, {\"rank\": 32, \"feature\": \"bc_util\", \"mean_abs_shap\": 0.024025034}, {\"rank\": 33, \"feature\": \"il_util\", \"mean_abs_shap\": 0.022352336}, {\"rank\": 34, \"feature\": \"revol_bal\", \"mean_abs_shap\": 0.022292363}, {\"rank\": 35, \"feature\": \"mo_sin_rcnt_rev_tl_op\", \"mean_abs_shap\": 0.022261886}, {\"rank\": 36, \"feature\": \"open_acc_6m_was_missing\", \"mean_abs_shap\": 0.021924216}, {\"rank\": 37, \"feature\": \"all_util\", \"mean_abs_shap\": 0.02123931}, {\"rank\": 38, \"feature\": \"mths_since_rcnt_il\", \"mean_abs_shap\": 0.021212593}, {\"rank\": 39, \"feature\": \"num_actv_bc_tl\", \"mean_abs_shap\": 0.020910894}, {\"rank\": 40, \"feature\": \"num_il_tl\", \"mean_abs_shap\": 0.019964067}, {\"rank\": 41, \"feature\": \"total_acc\", \"mean_abs_shap\": 0.0193898}, {\"rank\": 42, \"feature\": \"pct_tl_nvr_dlq\", \"mean_abs_shap\": 0.019229265}, {\"rank\": 43, \"feature\": \"num_rev_accts\", \"mean_abs_shap\": 0.01907145}, {\"rank\": 44, \"feature\": \"emp_length\", \"mean_abs_shap\": 0.018260788}, {\"rank\": 45, \"feature\": \"num_tl_op_past_12m\", \"mean_abs_shap\": 0.01797988}, {\"rank\": 46, \"feature\": \"verification_status_Not Verified\", \"mean_abs_shap\": 0.01732532}, {\"rank\": 47, \"feature\": \"bc_open_to_buy\", \"mean_abs_shap\": 0.017242419}, {\"rank\": 48, \"feature\": \"max_bal_bc\", \"mean_abs_shap\": 0.016811514}, {\"rank\": 49, \"feature\": \"revol_util\", \"mean_abs_shap\": 0.016640313}, {\"rank\": 50, \"feature\": \"mo_sin_rcnt_tl\", \"mean_abs_shap\": 0.01640765}, {\"rank\": 51, \"feature\": \"fico_range_high\", \"mean_abs_shap\": 0.016297229}, {\"rank\": 52, \"feature\": \"inq_last_6mths\", \"mean_abs_shap\": 0.015595843}, {\"rank\": 53, \"feature\": \"num_bc_sats\", \"mean_abs_shap\": 0.014610104}, {\"rank\": 54, \"feature\": \"mo_sin_old_il_acct\", \"mean_abs_shap\": 0.014235762}, {\"rank\": 55, \"feature\": \"delinq_2yrs\", \"mean_abs_shap\": 0.013370024}, {\"rank\": 56, \"feature\": \"total_bal_il\", \"mean_abs_shap\": 0.013204667}, {\"rank\": 57, \"feature\": \"mths_since_recent_bc_dlq\", \"mean_abs_shap\": 0.012801755}, {\"rank\": 58, \"feature\": \"open_act_il_was_missing\", \"mean_abs_shap\": 0.012794906}, {\"rank\": 59, \"feature\": \"application_type_Individual\", \"mean_abs_shap\": 0.012291839}, {\"rank\": 60, \"feature\": \"addr_state_CO\", \"mean_abs_shap\": 0.01132956}, {\"rank\": 61, \"feature\": \"total_cu_tl\", \"mean_abs_shap\": 0.011220858}, {\"rank\": 62, \"feature\": \"addr_state_WA\", \"mean_abs_shap\": 0.0110832285}, {\"rank\": 63, \"feature\": \"mths_since_last_record\", \"mean_abs_shap\": 0.01038646}, {\"rank\": 64, \"feature\": \"addr_state_NY\", \"mean_abs_shap\": 0.010375172}, {\"rank\": 65, \"feature\": \"addr_state_OR\", \"mean_abs_shap\": 0.00933741}, {\"rank\": 66, \"feature\": \"mths_since_last_major_derog\", \"mean_abs_shap\": 0.009214688}, {\"rank\": 67, \"feature\": \"total_bal_ex_mort\", \"mean_abs_shap\": 0.008970546}, {\"rank\": 68, \"feature\": \"inq_fi\", \"mean_abs_shap\": 0.008816707}, {\"rank\": 69, \"feature\": \"verification_status_Source Verified\", \"mean_abs_shap\": 0.008393829}, {\"rank\": 70, \"feature\": \"tot_cur_bal\", \"mean_abs_shap\": 0.007887765}, {\"rank\": 71, \"feature\": \"addr_state_GA\", \"mean_abs_shap\": 0.007808553}, {\"rank\": 72, \"feature\": \"addr_state_CA\", \"mean_abs_shap\": 0.007726553}, {\"rank\": 73, \"feature\": \"num_bc_tl\", \"mean_abs_shap\": 0.007335229}, {\"rank\": 74, \"feature\": \"addr_state_SC\", \"mean_abs_shap\": 0.006380473}, {\"rank\": 75, \"feature\": \"purpose_debt_consolidation\", \"mean_abs_shap\": 0.0061648935}, {\"rank\": 76, \"feature\": \"num_op_rev_tl\", \"mean_abs_shap\": 0.006004798}, {\"rank\": 77, \"feature\": \"inq_last_12m\", \"mean_abs_shap\": 0.0058857715}, {\"rank\": 78, \"feature\": \"application_type_Joint App\", \"mean_abs_shap\": 0.005538437}, {\"rank\": 79, \"feature\": \"open_acc_6m\", \"mean_abs_shap\": 0.0054636956}, {\"rank\": 80, \"feature\": \"purpose_small_business\", \"mean_abs_shap\": 0.0052018934}, {\"rank\": 81, \"feature\": \"addr_state_IL\", \"mean_abs_shap\": 0.0050708195}, {\"rank\": 82, \"feature\": \"open_act_il\", \"mean_abs_shap\": 0.005025652}, {\"rank\": 83, \"feature\": \"open_il_12m\", \"mean_abs_shap\": 0.0046292422}, {\"rank\": 84, \"feature\": \"addr_state_NJ\", \"mean_abs_shap\": 0.0045035076}, {\"rank\": 85, \"feature\": \"mths_since_recent_revol_delinq\", \"mean_abs_shap\": 0.0040160012}, {\"rank\": 86, \"feature\": \"purpose_credit_card\", \"mean_abs_shap\": 0.00400414}, {\"rank\": 87, \"feature\": \"num_sats\", \"mean_abs_shap\": 0.0038929307}, {\"rank\": 88, \"feature\": \"open_il_24m\", \"mean_abs_shap\": 0.0038738416}, {\"rank\": 89, \"feature\": \"open_il_12m_was_missing\", \"mean_abs_shap\": 0.00387276}, {\"rank\": 90, \"feature\": \"num_accts_ever_120_pd\", \"mean_abs_shap\": 0.0035987515}, {\"rank\": 91, \"feature\": \"purpose_medical\", \"mean_abs_shap\": 0.0035252422}, {\"rank\": 92, \"feature\": \"addr_state_LA\", \"mean_abs_shap\": 0.0035220264}, {\"rank\": 93, \"feature\": \"addr_state_KS\", \"mean_abs_shap\": 0.003377093}, {\"rank\": 94, \"feature\": \"open_rv_12m\", \"mean_abs_shap\": 0.0033715523}, {\"rank\": 95, \"feature\": \"collections_12_mths_ex_med\", \"mean_abs_shap\": 0.0032501833}, {\"rank\": 96, \"feature\": \"addr_state_WI\", \"mean_abs_shap\": 0.003244226}, {\"rank\": 97, \"feature\": \"addr_state_CT\", \"mean_abs_shap\": 0.0031964825}, {\"rank\": 98, \"feature\": \"open_acc\", \"mean_abs_shap\": 0.003180849}, {\"rank\": 99, \"feature\": \"tot_coll_amt\", \"mean_abs_shap\": 0.0029917292}, {\"rank\": 100, \"feature\": \"addr_state_OK\", \"mean_abs_shap\": 0.002701895}, {\"rank\": 101, \"feature\": \"pub_rec_bankruptcies\", \"mean_abs_shap\": 0.0026650166}, {\"rank\": 102, \"feature\": \"verification_status_Verified\", \"mean_abs_shap\": 0.0025858504}, {\"rank\": 103, \"feature\": \"addr_state_MD\", \"mean_abs_shap\": 0.002567401}, {\"rank\": 104, \"feature\": \"addr_state_NH\", \"mean_abs_shap\": 0.0025579166}, {\"rank\": 105, \"feature\": \"addr_state_AL\", \"mean_abs_shap\": 0.002542943}, {\"rank\": 106, \"feature\": \"addr_state_AR\", \"mean_abs_shap\": 0.002429124}, {\"rank\": 107, \"feature\": \"open_il_24m_was_missing\", \"mean_abs_shap\": 0.0021298316}, {\"rank\": 108, \"feature\": \"home_ownership_OWN\", \"mean_abs_shap\": 0.0021011394}, {\"rank\": 109, \"feature\": \"il_util_was_missing\", \"mean_abs_shap\": 0.0017622984}, {\"rank\": 110, \"feature\": \"addr_state_ME\", \"mean_abs_shap\": 0.0017048348}, {\"rank\": 111, \"feature\": \"purpose_moving\", \"mean_abs_shap\": 0.0014613168}, {\"rank\": 112, \"feature\": \"initial_list_status_f\", \"mean_abs_shap\": 0.0014531608}, {\"rank\": 113, \"feature\": \"pub_rec\", \"mean_abs_shap\": 0.0014335857}, {\"rank\": 114, \"feature\": \"addr_state_MI\", \"mean_abs_shap\": 0.001426616}, {\"rank\": 115, \"feature\": \"addr_state_UT\", \"mean_abs_shap\": 0.0014138108}, {\"rank\": 116, \"feature\": \"addr_state_PA\", \"mean_abs_shap\": 0.001411697}, {\"rank\": 117, \"feature\": \"addr_state_VT\", \"mean_abs_shap\": 0.0013357488}, {\"rank\": 118, \"feature\": \"addr_state_FL\", \"mean_abs_shap\": 0.0013339337}, {\"rank\": 119, \"feature\": \"purpose_home_improvement\", \"mean_abs_shap\": 0.0013173325}, {\"rank\": 120, \"feature\": \"addr_state_VA\", \"mean_abs_shap\": 0.0012052803}, {\"rank\": 121, \"feature\": \"addr_state_TX\", \"mean_abs_shap\": 0.0010402169}, {\"rank\": 122, \"feature\": \"addr_state_MS\", \"mean_abs_shap\": 0.0009880781}, {\"rank\": 123, \"feature\": \"purpose_vacation\", \"mean_abs_shap\": 0.00094509317}, {\"rank\": 124, \"feature\": \"mths_since_rcnt_il_was_missing\", \"mean_abs_shap\": 0.0009187301}, {\"rank\": 125, \"feature\": \"purpose_house\", \"mean_abs_shap\": 0.0008825192}, {\"rank\": 126, \"feature\": \"addr_state_DC\", \"mean_abs_shap\": 0.000882208}, {\"rank\": 127, \"feature\": \"mths_since_last_record_was_missing\", \"mean_abs_shap\": 0.00084082194}, {\"rank\": 128, \"feature\": \"addr_state_MO\", \"mean_abs_shap\": 0.0008269441}, {\"rank\": 129, \"feature\": \"purpose_car\", \"mean_abs_shap\": 0.00080631924}, {\"rank\": 130, \"feature\": \"mths_since_last_major_derog_was_missing\", \"mean_abs_shap\": 0.0008033854}, {\"rank\": 131, \"feature\": \"mths_since_recent_inq_was_missing\", \"mean_abs_shap\": 0.0007865864}, {\"rank\": 132, \"feature\": \"mths_since_recent_revol_delinq_was_missing\", \"mean_abs_shap\": 0.00076132733}, {\"rank\": 133, \"feature\": \"total_bal_il_was_missing\", \"mean_abs_shap\": 0.00075810234}, {\"rank\": 134, \"feature\": \"addr_state_WV\", \"mean_abs_shap\": 0.000717803}, {\"rank\": 135, \"feature\": \"addr_state_HI\", \"mean_abs_shap\": 0.0007143528}, {\"rank\": 136, \"feature\": \"addr_state_NV\", \"mean_abs_shap\": 0.00071100844}, {\"rank\": 137, \"feature\": \"total_cu_tl_was_missing\", \"mean_abs_shap\": 0.0006997557}, {\"rank\": 138, \"feature\": \"purpose_major_purchase\", \"mean_abs_shap\": 0.000678457}, {\"rank\": 139, \"feature\": \"purpose_other\", \"mean_abs_shap\": 0.0006542181}, {\"rank\": 140, \"feature\": \"initial_list_status_w\", \"mean_abs_shap\": 0.00064094696}, {\"rank\": 141, \"feature\": \"mths_since_last_delinq_was_missing\", \"mean_abs_shap\": 0.0006296281}, {\"rank\": 142, \"feature\": \"addr_state_MT\", \"mean_abs_shap\": 0.0006129729}, {\"rank\": 143, \"feature\": \"num_tl_90g_dpd_24m\", \"mean_abs_shap\": 0.0005590095}, {\"rank\": 144, \"feature\": \"tax_liens\", \"mean_abs_shap\": 0.00049283094}, {\"rank\": 145, \"feature\": \"mths_since_recent_bc_dlq_was_missing\", \"mean_abs_shap\": 0.00049270084}, {\"rank\": 146, \"feature\": \"addr_state_RI\", \"mean_abs_shap\": 0.0004795559}, {\"rank\": 147, \"feature\": \"addr_state_MN\", \"mean_abs_shap\": 0.00040799656}, {\"rank\": 148, \"feature\": \"addr_state_OH\", \"mean_abs_shap\": 0.00036531218}, {\"rank\": 149, \"feature\": \"addr_state_ID\", \"mean_abs_shap\": 0.00033208838}, {\"rank\": 150, \"feature\": \"addr_state_AZ\", \"mean_abs_shap\": 0.00030095634}, {\"rank\": 151, \"feature\": \"chargeoff_within_12_mths\", \"mean_abs_shap\": 0.00028951882}, {\"rank\": 152, \"feature\": \"addr_state_NM\", \"mean_abs_shap\": 0.00027623598}, {\"rank\": 153, \"feature\": \"addr_state_IN\", \"mean_abs_shap\": 0.00026621102}, {\"rank\": 154, \"feature\": \"addr_state_ND\", \"mean_abs_shap\": 0.00023226932}, {\"rank\": 155, \"feature\": \"addr_state_TN\", \"mean_abs_shap\": 0.00023166413}, {\"rank\": 156, \"feature\": \"addr_state_NC\", \"mean_abs_shap\": 0.00022608659}, {\"rank\": 157, \"feature\": \"addr_state_WY\", \"mean_abs_shap\": 0.00022133473}, {\"rank\": 158, \"feature\": \"delinq_amnt\", \"mean_abs_shap\": 0.00021714086}, {\"rank\": 159, \"feature\": \"inq_last_12m_was_missing\", \"mean_abs_shap\": 0.0001723211}, {\"rank\": 160, \"feature\": \"addr_state_MA\", \"mean_abs_shap\": 0.0001425208}, {\"rank\": 161, \"feature\": \"addr_state_KY\", \"mean_abs_shap\": 0.00013207014}, {\"rank\": 162, \"feature\": \"addr_state_NE\", \"mean_abs_shap\": 0.0001312064}, {\"rank\": 163, \"feature\": \"open_rv_12m_was_missing\", \"mean_abs_shap\": 8.15793e-05}, {\"rank\": 164, \"feature\": \"addr_state_DE\", \"mean_abs_shap\": 6.951804e-05}, {\"rank\": 165, \"feature\": \"acc_now_delinq\", \"mean_abs_shap\": 6.880131e-05}, {\"rank\": 166, \"feature\": \"max_bal_bc_was_missing\", \"mean_abs_shap\": 5.3834414e-05}, {\"rank\": 167, \"feature\": \"num_tl_120dpd_2m\", \"mean_abs_shap\": 3.558226e-05}, {\"rank\": 168, \"feature\": \"purpose_renewable_energy\", \"mean_abs_shap\": 3.052865e-05}, {\"rank\": 169, \"feature\": \"disbursement_method_Cash\", \"mean_abs_shap\": 2.4315334e-05}, {\"rank\": 170, \"feature\": \"num_tl_30dpd\", \"mean_abs_shap\": 2.2938028e-05}, {\"rank\": 171, \"feature\": \"addr_state_AK\", \"mean_abs_shap\": 1.7805594e-05}, {\"rank\": 172, \"feature\": \"mths_since_recent_bc_was_missing\", \"mean_abs_shap\": 1.5903994e-05}, {\"rank\": 173, \"feature\": \"addr_state_SD\", \"mean_abs_shap\": 7.631372e-06}, {\"rank\": 174, \"feature\": \"inq_fi_was_missing\", \"mean_abs_shap\": 0.0}, {\"rank\": 175, \"feature\": \"open_rv_24m_was_missing\", \"mean_abs_shap\": 0.0}, {\"rank\": 176, \"feature\": \"addr_state_IA\", \"mean_abs_shap\": 0.0}, {\"rank\": 177, \"feature\": \"home_ownership_ANY\", \"mean_abs_shap\": 0.0}, {\"rank\": 178, \"feature\": \"purpose_educational\", \"mean_abs_shap\": 0.0}, {\"rank\": 179, \"feature\": \"disbursement_method_DirectPay\", \"mean_abs_shap\": 0.0}, {\"rank\": 180, \"feature\": \"purpose_wedding\", \"mean_abs_shap\": 0.0}]}",
+     "result_is_error": false,
+     "executed": true
+    }
+   ]
+  },
+  {
+   "index": 4,
+   "role": "user",
+   "blocks": [
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_01F8RRnX5Hn5jhK92x2r5tLH"
+    },
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_019vWjEY3GiB3Q89sjSNSmHb"
+    },
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_01WYvtXaPCosoJuF3BLY1s8F"
+    },
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_01N9ETVJkJt2HwwDF4B8sU1v"
+    },
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_01Em2rK5UgsPA8dEUtr8RxQ9"
+    }
+   ]
+  },
+  {
+   "index": 5,
+   "role": "assistant",
+   "blocks": [
+    {
+     "type": "thinking",
+     "summary": "",
+     "summary_empty": true
+    },
+    {
+     "type": "text",
+     "text": "No obvious post-origination leakage features (recoveries, settlement, hardship, pymnt) appear in the 180-feature list used by the model. Let me check for other subtler issues: target definition/censoring, and whether any origination-adjacent features are actually proxies for risk-grade set after partial underwriting information leaks in a different way, plus check ablation results on top features."
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_015NEpAA7ia7LbwgEHLhgHaM",
+     "tool": "search_data_dictionary",
+     "arguments": {
+      "query": "loan_status"
+     },
+     "result": "{\"query\": \"loan_status\", \"match_count\": 2, \"returned\": 2, \"results\": [{\"feature\": \"loan_status\", \"description\": \"Current status of the loan, such as Fully Paid, Charged Off, or Current.\", \"populated\": \"set once the loan is issued and revised as the loan progresses; reaches its final value when the loan resolves\", \"source\": \"Lending Club internal\"}, {\"feature\": \"hardship_loan_status\", \"description\": \"Status the loan held as of the hardship plan start date.\", \"populated\": \"set when the borrower enters a hardship plan, which happens after the loan is issued\", \"source\": \"Lending Club internal\"}]}",
+     "result_is_error": false,
+     "executed": true
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01BwRhaD5KBTw3XFEctFjHps",
+     "tool": "search_data_dictionary",
+     "arguments": {
+      "query": "issue_d"
+     },
+     "result": "{\"query\": \"issue_d\", \"match_count\": 1, \"returned\": 1, \"results\": [{\"feature\": \"issue_d\", \"description\": \"Month the loan was issued.\", \"populated\": \"at origination, when the loan is issued\", \"source\": \"Lending Club internal\"}]}",
+     "result_is_error": false,
+     "executed": true
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01JnipbzhLwuUT6Vc3PJMZJT",
+     "tool": "lookup_feature",
+     "arguments": {
+      "feature": "term"
+     },
+     "result": "{\"found\": true, \"feature\": \"term\", \"description\": \"Number of monthly payments scheduled for the loan, either 36 or 60; stored as an integer count of months.\", \"populated\": \"at origination, when the loan is issued\", \"source\": \"Lending Club internal\"}",
+     "result_is_error": false,
+     "executed": true
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_018cg46MW8i2YJvmMR52WEEi",
+     "tool": "lookup_feature",
+     "arguments": {
+      "feature": "funded_amnt_inv"
+     },
+     "result": "{\"found\": true, \"feature\": \"funded_amnt_inv\", \"description\": \"Portion of the loan amount funded by investors.\", \"populated\": \"at origination, when the loan is issued\", \"source\": \"Lending Club internal\"}",
+     "result_is_error": false,
+     "executed": true
+    }
+   ]
+  },
+  {
+   "index": 6,
+   "role": "user",
+   "blocks": [
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_015NEpAA7ia7LbwgEHLhgHaM"
+    },
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_01BwRhaD5KBTw3XFEctFjHps"
+    },
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_01JnipbzhLwuUT6Vc3PJMZJT"
+    },
+    {
+     "type": "tool_result_ref",
+     "tool_use_id": "toolu_018cg46MW8i2YJvmMR52WEEi"
+    }
+   ]
+  },
+  {
+   "index": 7,
+   "role": "assistant",
+   "blocks": [
+    {
+     "type": "thinking",
+     "summary": "",
+     "summary_empty": true
+    },
+    {
+     "type": "text",
+     "text": "Let me check ablation results for the top features to understand how much the model depends on them, and investigate whether any of these could behave differently across vintages (e.g., LendingClub's grade/rate assignment methodology is known to shift over time)."
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_019mYZN5fv31EAXG6C6uMzsi",
+     "tool": "get_ablation_result",
+     "arguments": {
+      "feature": "term"
+     },
+     "result": null,
+     "result_is_error": null,
+     "executed": false
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01NxEySRzj54MFdTE3vm54Ju",
+     "tool": "get_ablation_result",
+     "arguments": {
+      "feature": "sub_grade"
+     },
+     "result": null,
+     "result_is_error": null,
+     "executed": false
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_01KxRuHHpTAeHGeJwLbg3WKm",
+     "tool": "get_ablation_result",
+     "arguments": {
+      "feature": "grade"
+     },
+     "result": null,
+     "result_is_error": null,
+     "executed": false
+    },
+    {
+     "type": "tool_call",
+     "id": "toolu_013RwYoimXzxP8ZdSicxMRnE",
+     "tool": "get_ablation_result",
+     "arguments": {},
+     "result": null,
+     "result_is_error": null,
+     "executed": false
+    }
+   ]
+  }
+ ]
+}
