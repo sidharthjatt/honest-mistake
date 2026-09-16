@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Replay — Honest Mistake</title>
+<meta name="description" content="One recorded run of the leakage audit, turn by turn, with every tool call, its arguments and the full result the agent received.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="mast-row">
+      <p class="mast-title"><a href="index.html">Honest Mistake</a></p>
+      <nav class="mast-nav">
+        <a href="index.html">The benchmark</a>
+        <a href="runs.html">The runs</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="backlink"><a href="runs.html">← All runs</a></p>
+  <div id="run"><p class="status">Loading the run…</p></div>
+  <div id="prov"></div>
+</main>
+
+<script src="common.js"></script>
+<script>
+(async function () {
+  const mount = document.getElementById('run');
+  const label = new URLSearchParams(location.search).get('run');
+
+  /* bundle.json carries the provenance every page shows, and the reasons a
+     call can have no result. scoring.json carries the verdicts. Only the one
+     requested run's transcript is fetched. */
+  let bundle;
+  try {
+    bundle = await getJSON('bundle.json');
+  } catch (err) {
+    setStatus(mount, err.message, true);
+    return;
+  }
+  document.getElementById('prov').replaceChildren(renderProvenance(bundle));
+
+  const known = (bundle.files || [])
+    .filter(f => f.startsWith('runs/') && f !== 'runs/index.json')
+    .map(f => f.slice(5, -5));
+
+  if (!label || !known.includes(label)) {
+    mount.replaceChildren(
+      el('h1', { text: label ? 'No such run' : 'No run chosen' }),
+      el('p', {}, label
+        ? el('span', {}, 'There is no run called ', el('code', { text: label }), ' in this bundle.')
+        : 'Add a run to the address, or pick one from the list.'),
+      el('ul', { class: 'plain' }, known.map(name =>
+        el('li', {}, el('a', { href: replayHref(name) }, name)))));
+    return;
+  }
+
+  let run, scoring;
+  try {
+    [run, scoring] = await Promise.all([getJSON('runs/' + label + '.json'), getJSON('scoring.json')]);
+  } catch (err) {
+    setStatus(mount, err.message, true);
+    return;
+  }
+
+  const facts = run.facts;
+  const canary = facts.canary || {};
+  const scored = (scoring.runs || []).find(r => r.label === label) || {};
+
+  /* The bundle's own explanations for what is missing from this run. */
+  const cannot = bundle.cannot_carry || [];
+  const unrunCalls = cannot.find(c => c.by_run && c.by_run[label]);
+  const noFinalTurn = cannot.find(c => !c.by_run && c.ends_on_role && c.ends_on_role === run.ends_on_role);
+  const noSystemPrompt = cannot.find(c => /system prompt/i.test(c.what));
+  const noPerTurn = cannot.find(c => /per-turn token usage/i.test(c.what));
+
+  const out = el('div', {});
+
+  /* ---- header ---- */
+  /* Built through el(), which drops the branches that come back null.
+     Element.append() would render those as the string "null". */
+  out.append(el('div', {},
+    el('h1', { text: label }),
+    el('p', { class: 'lede' },
+      facts.model, ' · ', String(facts.turns), ' turns · ', String(facts.tool_calls),
+      ' tool calls · started ', asRecorded(facts.started), ', finished ', asRecorded(facts.finished), '.'),
+    el('p', {},
+      canary.present ? pill('present', 'canary present') : pill('absent', 'canary absent'),
+      ' ',
+      facts.scorer_accepted ? pill('scored', 'scored') : pill('refused', 'refused by the scorer'),
+      ' ',
+      el('span', { class: 'note' },
+        'tool layer v' + facts.tool_layer_version
+        + ' · populated ' + facts.dictionary_populated_field
+        + ' · scopes ' + (facts.coverage_scopes || 'not recorded')
+        + ' · retrieval ' + (facts.retrieval || 'not recorded')
+        + ' · caching ' + (facts.prompt_caching || 'not recorded')
+        + ' · ended as ' + facts.termination)),
+    canary.present && canary.column
+      ? el('p', { class: 'note' }, 'The planted column was ', el('code', { text: canary.column }), '.')
+      : null,
+    el('p', { class: 'note', text: canary.established_by || '' }),
+    facts.scorer_refusal_reason ? el('div', { class: 'caveat' },
+      el('b', { text: 'Not scored. ' }), facts.scorer_refusal_reason) : null));
+
+  /* ---- what is missing from this run, in the bundle's own words ---- */
+  const gaps = el('div', {});
+  if (run.tool_calls_without_results > 0 && unrunCalls) {
+    const per = unrunCalls.by_run[label];
+    gaps.append(el('div', { class: 'caveat' },
+      el('b', {}, per.tool_calls_without_results + ' tool calls in this run have no result. '),
+      unrunCalls.why, ' The last recorded message in this run has the role ',
+      per.ends_on_role, '.'));
+  }
+  if (noFinalTurn) {
+    gaps.append(el('div', { class: 'caveat' },
+      el('b', {}, 'This run has no final answer turn. '), noFinalTurn.why,
+      ' Every tool call it made did run and returned a result; what is missing is the turn that would have read them.'));
+  }
+  if (noSystemPrompt) {
+    gaps.append(el('div', { class: 'caveat' },
+      el('b', {}, 'The system prompt is not reproduced. '), noSystemPrompt.why,
+      ' The manifest records it as ', String(facts.system_prompt_chars), ' characters.'));
+  }
+  if (!run.per_turn_usage && noPerTurn) {
+    gaps.append(el('div', { class: 'caveat' },
+      el('b', {}, 'No per-turn token usage. '), run.per_turn_usage_note || noPerTurn.why));
+  }
+  if (gaps.children.length) {
+    out.append(el('h2', { text: 'What this record does not hold' }), gaps);
+  }
+
+  /* ---- flags and how the scorer read them ---- */
+  if (scored.scored && (scored.flags || []).length) {
+    out.append(el('h2', { text: 'The flags this run raised' }));
+    out.append(el('p', { class: 'note' },
+      'Parsed from the final answer below. The verdict on each is the scorer’s, unchanged. '
+      + 'A verdict of "not credited" means the column is not one of the answer key’s '
+      + scoring.counts.true_positives + ' leaking columns; it is not a judgement of the argument.'));
+
+    for (const f of scored.flags) {
+      const dl = el('dl', {},
+        el('dt', { text: 'The agent’s reason' }), el('dd', { text: f.reason }),
+        el('dt', { text: 'The evidence it cited' }), el('dd', { text: f.evidence }));
+      if (f.scored_as_parent) {
+        dl.append(el('dt', { text: 'Scored as' }),
+          el('dd', {}, 'Mapped to its parent column ',
+            el('code', { text: f.scored_as_parent.parent }), ' (', f.scored_as_parent.kind,
+            '), which is in ', el('code', { text: f.scored_as_parent.parent_set }), '.'));
+      }
+      out.append(el('div', {
+        class: 'flag' + (f.verdict === 'true_positive' ? ' is-credited' : ''),
+        id: flagAnchor(f.flag)
+      },
+        el('div', { class: 'flag-head' },
+          el('span', { class: 'flag-name', text: f.flag }),
+          f.verdict === 'true_positive' ? pill('credited', 'credited') : pill('uncredited', 'not credited'),
+          f.hard_negative ? pill('hardneg', 'hard negative') : null,
+          f.confidence ? el('span', { class: 'note', text: 'stated confidence: ' + f.confidence }) : null),
+        dl));
+    }
+  } else if (scored.reason) {
+    out.append(el('h2', { text: 'The flags this run raised' }),
+      el('p', { class: 'note' }, 'None were scored. ', scored.reason));
+  }
+
+  /* ---- the transcript ---- */
+  out.append(el('h2', { text: 'The run, turn by turn' }));
+  out.append(el('p', { class: 'note' },
+    'Messages are in the order they were recorded. Thinking blocks are summaries, '
+    + 'collapsed here; the API returned a summary rather than the raw reasoning. '
+    + 'A tool result appears on the call that produced it, and the turn where the '
+    + 'result was returned keeps its place in the order, pointing back at that call.'));
+
+  const callTool = new Map();
+  for (const m of run.messages) {
+    for (const b of m.blocks || []) if (b.type === 'tool_call') callTool.set(b.id, b.tool);
+  }
+
+  for (const m of run.messages) {
+    const body = el('div', { class: 'turn-body' });
+
+    for (const b of m.blocks || []) {
+      if (b.type === 'thinking') {
+        body.append(el('details', { class: 'block thinking' },
+          el('summary', { text: b.summary_empty ? 'Thinking — no summary in the record' : 'Thinking' }),
+          el('div', { class: 'inner' }, b.summary_empty
+            ? el('p', { class: 'note', text: 'The run recorded an empty summary for this block. Nothing was dropped here by the export.' })
+            : el('div', { class: 'thinking-summary', text: b.summary }))));
+
+      } else if (b.type === 'text') {
+        body.append(el('div', { class: 'block block-text', text: b.text }));
+
+      } else if (b.type === 'tool_call') {
+        const noResult = !b.executed || b.result === null || b.result === undefined;
+        const call = el('div', {
+          class: 'block call' + (b.result_is_error ? ' errored' : noResult ? ' no-result' : ''),
+          id: 'call-' + b.id
+        },
+          el('div', { class: 'call-head' },
+            el('span', { class: 'call-tool', text: b.tool }),
+            b.result_is_error ? pill('uncredited', 'returned an error') : null,
+            b.executed === false ? pill('hardneg', 'never ran') : null,
+            el('span', { class: 'call-id', text: b.id })),
+          el('pre', { text: prettyJSON(b.arguments) }));
+
+        if (noResult) {
+          const why = b.executed === false && unrunCalls
+            ? unrunCalls.why
+            : 'No result is recorded for this call.';
+          call.append(el('p', { class: 'missing', text: why }));
+        } else {
+          const text = formatResult(b.result);
+          call.append(el('details', Object.assign(
+            { class: 'result' }, text.length < 400 ? { open: 'open' } : {}),
+            el('summary', { text: (b.result_is_error ? 'Error result' : 'Result') + ' — ' + bytes(text.length) + ' characters' }),
+            el('div', { class: 'inner' }, el('pre', { class: 'tall', text }))));
+        }
+        body.append(call);
+
+      } else if (b.type === 'tool_result_ref') {
+        const tool = callTool.get(b.tool_use_id);
+        body.append(el('div', { class: 'block ref' },
+          'The result for ', tool ? el('b', { text: tool }) : 'a call',
+          ' was returned in this turn. It is shown on the call itself: ',
+          el('a', { href: '#call-' + b.tool_use_id, text: b.tool_use_id })));
+
+      } else {
+        body.append(el('div', { class: 'block' }, el('pre', { text: prettyJSON(b) })));
+      }
+    }
+
+    out.append(el('div', { class: 'turn' },
+      el('div', { class: 'turn-head' },
+        el('span', { text: 'Message ' + m.index }),
+        el('span', { text: m.role })),
+      body));
+  }
+
+  /* ---- per-turn usage, where the record holds it ---- */
+  if (run.per_turn_usage) {
+    out.append(el('h2', { text: 'Per-request usage' }),
+      el('p', { class: 'note' }, 'Recorded request by request for this run only.'),
+      el('div', { class: 'scroll' }, el('pre', { class: 'tall', text: prettyJSON(run.per_turn_usage) })));
+  }
+
+  if (run.final_answer_text) {
+    out.append(el('h2', { text: 'The run’s own output' }),
+      el('details', { class: 'raw' },
+        el('summary', { text: 'The console record this run wrote, unedited' }),
+        el('div', { class: 'inner' }, el('pre', { class: 'tall', text: run.final_answer_text }))));
+  }
+
+  mount.replaceChildren(out);
+
+  /* Open the flag an incoming link asked for, and scroll to it. */
+  if (location.hash) {
+    const target = document.getElementById(location.hash.slice(1));
+    if (target) target.scrollIntoView();
+  }
+})();
+</script>
+</body>
+</html>

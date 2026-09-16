@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Honest Mistake — a leakage audit benchmark</title>
+<meta name="description" content="An agent audits a credit default model for target leakage. Twelve real runs, replayable turn by turn, with the scorer's own output unchanged.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="mast-row">
+      <p class="mast-title"><a href="index.html">Honest Mistake</a></p>
+      <nav class="mast-nav">
+        <a href="index.html" aria-current="page">The benchmark</a>
+        <a href="runs.html">The runs</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h1>Can an agent find the leak?</h1>
+
+  <p class="lede">A credit default model was built clean: 180 features, a temporal
+  split, and every column that could only be known after the outcome removed
+  before training. Then a single leaking column was planted back into some of the
+  data, and an agent with eight read-only tools was asked to audit the model and
+  say what was wrong with it.</p>
+
+  <p>The agent never sees the data. It sees a fixed set of artefacts through eight
+  tools — a data dictionary it can search, a SHAP ranking, per-feature coverage and
+  association figures, ablation results — and it has to reason from those to a
+  verdict. Twelve real runs were recorded against live API calls. Every one of them
+  is replayable here, turn by turn, including the tool arguments and the full
+  results the agent got back.</p>
+
+  <div class="headline" id="headline"></div>
+
+  <p id="reachability-note" class="note"></p>
+
+  <h2>What the agent flagged</h2>
+
+  <p>Across the scorable runs the agent raised <span id="flag-total" class="mono"></span>
+  flags. The answer key credits <span id="credited-total" class="mono"></span> of
+  them. It is tempting to call the rest errors, and that would be wrong: the key
+  recognises exactly one kind of problem, the columns removed for carrying
+  post-application information. A flag it does not credit is a flag outside that
+  list, which is not the same as a flag that is mistaken.</p>
+
+  <h3 id="credited">Flags the answer key credits</h3>
+  <div id="credited-flags"></div>
+
+  <h3 id="uncredited">Flags the answer key does not credit</h3>
+  <p class="note">None of these claims leakage in the sense the key scores. They
+  argue distribution shift, missingness that tracks loan vintage, drift across
+  vintages, and whether the 2017 labels are final. Those arguments are ungraded:
+  the scorer cannot settle them. Each card links to the turn in the replay where
+  the agent produced it, so the evidence can be read rather than taken on trust.</p>
+  <div id="uncredited-flags"></div>
+
+  <h2 id="scorer">The scorer's output, unchanged</h2>
+
+  <p>Nothing above re-derives a verdict. Every figure is read from the scorer's own
+  output at page load, and that output is reproduced here in full — precision,
+  recall, the false negatives, the hard negatives, the derivative resolutions and
+  the per-run canary block — so that nothing looks hidden by the framing.</p>
+
+  <div id="scorer-note"></div>
+  <div id="scorer-output"></div>
+
+  <div id="prov"></div>
+
+</main>
+
+<script src="common.js"></script>
+<script>
+(async function () {
+  const headline = document.getElementById('headline');
+  mountProvenance(document.getElementById('prov'));
+
+  let index, scoring;
+  try {
+    [index, scoring] = await Promise.all([getJSON('runs/index.json'), getJSON('scoring.json')]);
+  } catch (err) {
+    setStatus(headline, err.message, true);
+    return;
+  }
+
+  const runs = index.runs;
+  const scoreByLabel = new Map(scoring.runs.map(r => [r.label, r]));
+
+  const present = runs.filter(r => r.canary && r.canary.present);
+  const absent = runs.filter(r => !(r.canary && r.canary.present));
+  const caught = present.filter(r => {
+    const s = scoreByLabel.get(r.label);
+    return s && s.scored && s.score && s.score.canary && s.score.canary.detected;
+  });
+  const absentScored = absent.filter(r => (scoreByLabel.get(r.label) || {}).scored);
+  const absentRefused = absent.filter(r => !(scoreByLabel.get(r.label) || {}).scored);
+  const plantedColumns = [...new Set(present.map(r => r.canary.column).filter(Boolean))];
+  const keySize = scoring.counts.true_positives;
+
+  headline.replaceChildren(
+    el('div', { class: 'card lead' },
+      el('h3', { text: 'Where there was something to find' }),
+      el('div', { class: 'figure', text: caught.length + ' of ' + present.length }),
+      el('p', {}, 'The leaking column ',
+        el('code', { text: plantedColumns.join(', ') }),
+        ' was planted into ', String(present.length), ' of the ', String(runs.length),
+        ' runs. The agent flagged it in every one of them.'),
+      el('p', {}, 'All ', String(present.length), ' were scored. They are not repeats of ',
+        'one setup: they differ in tool layer and in what the coverage tools were allowed to return.')),
+    el('div', { class: 'card counter' },
+      el('h3', { text: 'Where there was not' }),
+      el('div', { class: 'figure', text: 'none of ' + keySize }),
+      el('p', {}, 'In the other ', String(absent.length), ' runs the column was absent, and ',
+        'so was every one of the answer key’s ', String(keySize), ' leaking columns — none of ',
+        'them is in the 180-feature data the agent was given.'),
+      el('p', {}, 'No correct flag was reachable in those runs. ', String(absentScored.length),
+        ' were scored and ', String(absentRefused.length), ' were refused as unfinished. A zero there ',
+        'records an absence, not a miss.'))
+  );
+
+  document.getElementById('reachability-note').textContent =
+    'Whether the column was present is read from each run’s manifest where it records one, and for the '
+    + runs.filter(r => (r.fields_not_in_manifest || []).includes('canary')).length
+    + ' earliest runs from the feature count their own tool results report. Both are shown per run on the runs page.';
+
+  /* Flags, in run order, split by the scorer's verdict. */
+  const flags = [];
+  for (const run of runs) {
+    const s = scoreByLabel.get(run.label);
+    if (!s || !s.scored) continue;
+    for (const f of s.flags || []) flags.push({ run: run.label, f });
+  }
+  const credited = flags.filter(x => x.f.verdict === 'true_positive');
+  const uncredited = flags.filter(x => x.f.verdict !== 'true_positive');
+
+  document.getElementById('flag-total').textContent = flags.length;
+  document.getElementById('credited-total').textContent = credited.length;
+
+  function flagCard({ run, f }) {
+    const head = el('div', { class: 'flag-head' },
+      el('span', { class: 'flag-name', text: f.flag }),
+      f.verdict === 'true_positive' ? pill('credited', 'credited') : pill('uncredited', 'not credited'),
+      f.hard_negative ? pill('hardneg', 'hard negative') : null,
+      f.confidence ? el('span', { class: 'note', text: 'stated confidence: ' + f.confidence }) : null);
+
+    const dl = el('dl', {},
+      el('dt', { text: 'The agent’s reason' }), el('dd', { text: f.reason }),
+      el('dt', { text: 'The evidence it cited' }), el('dd', { text: f.evidence }));
+
+    if (f.scored_as_parent) {
+      dl.append(el('dt', { text: 'Scored as' }),
+        el('dd', {}, 'Mapped to its parent column ',
+          el('code', { text: f.scored_as_parent.parent }),
+          ' (', f.scored_as_parent.kind, '), which is in ',
+          el('code', { text: f.scored_as_parent.parent_set }), '.'));
+    }
+
+    return el('div', {
+      class: 'flag' + (f.verdict === 'true_positive' ? ' is-credited' : ''),
+      id: run + '--' + flagAnchor(f.flag)
+    }, head, dl,
+      el('p', { class: 'flag-run' },
+        el('a', { href: replayHref(run, '#' + flagAnchor(f.flag)) },
+          'Read this flag in the ' + run + ' replay →')));
+  }
+
+  document.getElementById('credited-flags').replaceChildren(...credited.map(flagCard));
+  document.getElementById('uncredited-flags').replaceChildren(...uncredited.map(flagCard));
+
+  document.getElementById('scorer-note').replaceChildren(
+    ...(scoring.notes || []).map(n => el('div', { class: 'caveat', text: n })));
+
+  const out = el('div', {});
+  for (const run of runs) {
+    const s = scoreByLabel.get(run.label);
+    if (!s) continue;
+    const body = s.scored
+      ? el('div', { class: 'inner' },
+          (s.parse_warnings || []).length
+            ? el('div', { class: 'caveat' }, 'Parse warnings: ' + s.parse_warnings.join(' | '))
+            : null,
+          el('pre', { class: 'tall', text: prettyJSON(s.score) }))
+      : el('div', { class: 'inner' },
+          el('p', { class: 'note' }, el('b', { text: 'Refused, not scored. ' }), s.reason));
+    out.append(el('details', { class: 'raw' },
+      el('summary', {}, s.label + ' — ' + (s.scored ? 'scored' : 'refused')), body));
+  }
+  document.getElementById('scorer-output').replaceChildren(out);
+})();
+</script>
+</body>
+</html>

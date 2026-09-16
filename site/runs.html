@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The runs — Honest Mistake</title>
+<meta name="description" content="Every recorded run of the leakage audit, with its configuration, how the canary's presence was established, and whether the scorer accepted it.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap wide">
+    <div class="mast-row">
+      <p class="mast-title"><a href="index.html">Honest Mistake</a></p>
+      <nav class="mast-nav">
+        <a href="index.html">The benchmark</a>
+        <a href="runs.html" aria-current="page">The runs</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="wrap wide">
+
+  <h1>The runs</h1>
+
+  <p class="lede" id="lede">Every recorded run, with the configuration that
+  distinguishes it and the scorer's decision on it.</p>
+
+  <p class="note">These are the real runs against live API calls. They were not all
+  configured alike: the tool surface changed between versions, the per-vintage
+  coverage scopes were withheld in one, the data dictionary's <code>populated</code>
+  field was suppressed in others, and the turn and call ceilings moved. A run the
+  scorer refused is one that stopped before the agent said it had finished; a
+  partial answer is not scored.</p>
+
+  <div class="scroll"><table id="runs-table">
+    <thead><tr>
+      <th>Run</th>
+      <th>Canary</th>
+      <th>Established by</th>
+      <th>Tools</th>
+      <th>Scopes</th>
+      <th>Retrieval</th>
+      <th>Caching</th>
+      <th>Termination</th>
+      <th>Scorer</th>
+      <th>Turns</th>
+      <th>Calls</th>
+    </tr></thead>
+    <tbody id="runs-body"><tr><td colspan="11"><p class="status">Loading the run index…</p></td></tr></tbody>
+  </table></div>
+
+  <h2>How the canary's presence was established</h2>
+  <p class="note">The wording below is the export's own, unedited. The short name in
+  the table points at one of these.</p>
+  <dl class="est-key" id="est-key"></dl>
+
+  <div id="prov"></div>
+
+</main>
+
+<script src="common.js"></script>
+<script>
+(async function () {
+  const body = document.getElementById('runs-body');
+  mountProvenance(document.getElementById('prov'));
+
+  let index, scoring;
+  try {
+    [index, scoring] = await Promise.all([getJSON('runs/index.json'), getJSON('scoring.json')]);
+  } catch (err) {
+    body.replaceChildren(el('tr', {}, el('td', { colspan: '11' },
+      el('p', { class: 'status error', text: err.message }))));
+    return;
+  }
+
+  const runs = index.runs;
+  const scoreByLabel = new Map(scoring.runs.map(r => [r.label, r]));
+
+  /* Name each distinct "established_by" wording once, and print it verbatim
+     below the table rather than paraphrasing it in eleven cells. */
+  const wordings = [...new Set(runs.map(r => (r.canary || {}).established_by).filter(Boolean))];
+  const shortName = w => w.startsWith('derived') ? 'derived' : 'manifest field';
+
+  document.getElementById('est-key').replaceChildren(
+    ...wordings.flatMap(w => {
+      const covered = runs.filter(r => (r.canary || {}).established_by === w).map(r => r.label);
+      return [
+        el('dt', {}, shortName(w) + ' — ' + covered.length + ' of ' + runs.length + ' runs'),
+        el('dd', { text: w }),
+        el('dd', { class: 'note', text: covered.join(', ') })
+      ];
+    }));
+
+  const rows = runs.map(run => {
+    const s = scoreByLabel.get(run.label) || {};
+    const canary = run.canary || {};
+    const counts = canary.feature_counts_seen_in_tool_results;
+
+    return el('tr', {},
+      el('td', { class: 'tight' },
+        el('a', { href: replayHref(run.label) }, run.label),
+        el('span', { class: 'note', style: 'display:block' }, run.model)),
+      el('td', { class: 'tight' },
+        canary.present ? pill('present', 'present') : pill('absent', 'absent'),
+        canary.column ? el('code', { style: 'margin-left:.4em', text: canary.column }) : null),
+      el('td', { class: 'tight' },
+        shortName(canary.established_by || ''),
+        counts ? el('span', { class: 'note', style: 'display:block' },
+          counts.join(', ') + ' features seen') : null),
+      el('td', { class: 'tight' }, 'v' + run.tool_layer_version,
+        el('span', { class: 'note', style: 'display:block' },
+          'populated ' + run.dictionary_populated_field)),
+      el('td', { class: 'tight' }, run.coverage_scopes || dash()),
+      el('td', { class: 'tight' }, run.retrieval || dash()),
+      el('td', { class: 'tight' }, run.prompt_caching || dash()),
+      el('td', { class: 'tight' }, run.termination,
+        el('span', { class: 'note', style: 'display:block' },
+          'stop: ' + run.last_stop_reason)),
+      el('td', { class: 'why' },
+        run.scorer_accepted ? pill('scored', 'scored') : pill('refused', 'refused'),
+        run.scorer_refusal_reason
+          ? el('span', { class: 'note', text: run.scorer_refusal_reason })
+          : el('span', { class: 'note' },
+              (((s.score || {}).flagged_count) || 0) + ' flags raised')),
+      el('td', { class: 'num' }, String(run.turns),
+        el('span', { class: 'note', style: 'display:block' }, 'max ' + run.limits.max_turns)),
+      el('td', { class: 'num' }, String(run.tool_calls),
+        el('span', { class: 'note', style: 'display:block' }, 'max ' + run.limits.max_tool_calls)));
+  });
+
+  body.replaceChildren(...rows);
+
+  const scored = runs.filter(r => r.scorer_accepted).length;
+  document.getElementById('lede').textContent =
+    runs.length + ' recorded runs. ' + scored + ' were scored and ' + (runs.length - scored)
+    + ' were refused as unfinished. Each row opens the run’s replay, turn by turn.';
+})();
+</script>
+</body>
+</html>
