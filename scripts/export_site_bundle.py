@@ -1,6 +1,6 @@
 """Export the static data bundle for the Honest Mistake site.
 
-Writes JSON under site/data/ and nothing else. It makes no network request
+Writes JSON under docs/data/ and nothing else. It makes no network request
 and needs no API key.
 
 What it writes:
@@ -45,7 +45,7 @@ import agent.eval_canary as ec  # noqa: E402
 
 RUNS_DIR = ROOT / "outputs" / "agent_runs"
 LEDGER = ROOT / "outputs" / "ledger" / "layer3_spend.jsonl"
-OUT = ROOT / "site" / "data"
+OUT = ROOT / "docs" / "data"
 
 SCORING_SOURCES = [
     "outputs/leakage_drop_log.txt",
