@@ -72,6 +72,50 @@ I raised the ceiling from 20 to 30 on the hypothesis that this configuration str
 
 **Conceptual retrieval is the weak family**, at 0.287 recall@10 against 0.412 for paraphrase. Questions about where a value comes from or when it is set do worst, which is close to what this audit is about. The numbers and the probe set are in [RETRIEVAL_EVAL.md](RETRIEVAL_EVAL.md).
 
+## The canary across all twelve real runs
+
+Added 2026-09-16. Nothing above is changed. The tables above number the eight-tool runs 1 to 5. This section covers all twelve real run directories and names them by directory, because the headline across all of them, 3 correct flags and 14 wrong, reads differently once it is split by whether there was anything to find.
+
+**Where each figure comes from:**
+- **Whether the canary was present:** each run's manifest `canary` field, where it exists. The five earliest runs (firstlight, run1, run2, run3, run4-ablated) have no such field. For those, `LAYER2_TRAJECTORY.md` (Scope) records `canary` False with source `derived`, and each run's own tool results report 180 features against run5-canary's 181.
+- **Scorability and flags:** `agent.eval_canary`.
+- **The planted column:** `recoveries`, per `agent/plant_canary.py`.
+
+### Counts
+
+- **The canary was present in 3 of the 12 real runs:** run5-canary, run6-canary-v2 and run8-canary-splitonly. All three were scorable, and the agent flagged `recoveries` in **3 of 3**.
+- **The canary was absent in 9 of the 12.** 4 were refused as unfinished (firstlight, run1, run2, run9-honest-nopop). 5 were scorable (run3, run4-ablated, run7-honest-v2, run10-honest-nopop-30turns, run11-honest-cached).
+- **In those 5 runs, no correct flag was available.** None of the answer key's 39 leaking columns is in the 180-feature data the agent saw (Limitations, above). So "0 of 5 correct" reflects the absence of anything to find, not a miss.
+- **All 3 correct flags come from the canary runs,** and all 3 are the same column, `recoveries`.
+
+### What the 14 wrong flags claimed
+
+**None of the 14 flags the key counts as wrong claims leakage,** in the sense of information that exists only after the outcome. Grouped by each flag's stated reason:
+
+| Kind of claim | Count | Flags |
+|---|---|---|
+| Missingness that tracks loan vintage or data collection | 6 | run3 `all_util_was_missing`, run3 `open_acc_6m_was_missing`, run8 `open_acc_6m_was_missing`, run10 `all_util_was_missing`, run10 `open_acc_6m_was_missing`, run11 `total_bal_il` |
+| Train–test distribution mismatch (a feature near-constant in the 2017 holdout) | 3 | run4 `all_util_was_missing`, run4 `open_acc_6m_was_missing`, run8 `all_util_was_missing` |
+| Feature–outcome drift across vintages | 3 | run10 `acc_open_past_24mths`, run11 `term`, run11 `acc_open_past_24mths` |
+| Outcome maturity: 2017 labels may not be final | 2 | run4 `term`, run7 `term` |
+
+**The grouping is mine, not the scorer's.** Several reasons span two groups. run8's `open_acc_6m_was_missing`, for example, argues both a vintage proxy and a constant value in the test data.
+
+### What these numbers do not support
+
+- **n = 3.** Detection rests on three runs.
+- **Always the same planted column.** All three used `recoveries`, which the dictionary, SHAP and ablation all point to (Limitations, above). Nothing here tests a different leak or a subtler one.
+- **The three canary runs differ in tool layer.** run5-canary used the five-tool surface (1.0). run6-canary-v2 and run8-canary-splitonly used the eight-tool surface (2.0), and run8 also had the per-vintage scopes withheld. The three are not repeats of one configuration.
+- **The 14 arguments are unverified as arguments.** Their citations and figures were partly checked, and their correctness not at all.
+  - **What was checked,** for 11 of the 14 (runs 3, 4, 7, 8 and 10): M17a checked that each named tool was called, and M17b traced each figure in the evidence to a tool output (`LAYER2_TRAJECTORY.md`, M17a and M17b).
+  - **What that does not show:** that a figure was used correctly. In run10 `open_acc_6m_was_missing`, one label covers two different quantities and M17b raised no flag (`LAYER2_TRAJECTORY.md`, "One label, two different quantities").
+  - **run11's 3 flags were not covered.** The trajectory analysis predates that run.
+  - **Plausible shape is not correctness.** Layer 3 recorded a grounding failure in a different component: a right label citing evidence the accept rule does not list (`outputs/layer3/LAYER3_PHASE4.md`, Three kinds of failure).
+- **The scorer does not judge these arguments.**
+  - The answer key "scores one kind of problem", the thirty-nine columns removed for carrying post-application information (`agent/EVAL_NOTES.md`, An unresolved mismatch between the prompt and the ground truth).
+  - Of the distribution and validity arguments, `EVAL_NOTES.md` records: "They remain ungraded; the scorer cannot settle them and no one has yet."
+  - The key counting a flag wrong means only that the flag is not one of the 39 columns.
+
 ## Reproducing
 
 Figures: `.venv/bin/python scripts/plot_layer2_eval.py`. It reads the run records under `outputs/agent_runs/`, scores them through `agent.eval_canary.evaluate()`, and stops rather than guessing if a record is missing or unscoreable. No number in either figure is typed in.
