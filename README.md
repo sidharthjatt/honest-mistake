@@ -8,6 +8,10 @@ Then it goes a step further. A second layer hands an autonomous agent eight read
 
 The name is deliberate. *Mistake* is the hidden leakage a model carries. *Honest* is the discipline of surfacing it instead of hiding behind a flattering metric — including when the honest result is a zero.
 
+**[Browse the benchmark →](https://sidharthjatt.github.io/honest-mistake/)**
+
+All twelve recorded runs are replayable there turn by turn — every tool call, its arguments, and the full result the agent got back — next to the scorer's own output, unchanged. The page reads its figures from the exported bundle as it loads; none of them is typed in.
+
 ---
 
 ## Layer 1: the model
