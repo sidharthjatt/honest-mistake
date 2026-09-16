@@ -40,3 +40,7 @@ __pycache__/
 # Local editor and preview config. launch.json holds the static preview
 # server for docs/, which is a local convenience and not part of the site.
 .claude/
+
+# Generated verification cases. The harnesses in verify/ are tracked; this
+# file is rebuilt by scripts/verify_js_tools.py and is 750 KB of derived data.
+verify/cases.json

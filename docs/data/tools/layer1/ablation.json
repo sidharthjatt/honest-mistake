@@ -1,0 +1,142 @@
+[
+ {
+  "feature": "term",
+  "roc_auc": 0.7293524124205776,
+  "pr_auc": 0.4391123116558468,
+  "delta_roc_auc": -0.0002228639931897,
+  "delta_pr_auc": -0.0012790352492784
+ },
+ {
+  "feature": "sub_grade",
+  "roc_auc": 0.7301259487590314,
+  "pr_auc": 0.4413354172861065,
+  "delta_roc_auc": 0.000550672345264,
+  "delta_pr_auc": 0.0009440703809812
+ },
+ {
+  "feature": "grade",
+  "roc_auc": 0.7297567271369003,
+  "pr_auc": 0.4408860347320666,
+  "delta_roc_auc": 0.000181450723133,
+  "delta_pr_auc": 0.0004946878269413
+ },
+ {
+  "feature": "dti",
+  "roc_auc": 0.7270405461597879,
+  "pr_auc": 0.4357583859766317,
+  "delta_roc_auc": -0.0025347302539794,
+  "delta_pr_auc": -0.0046329609284935
+ },
+ {
+  "feature": "int_rate",
+  "roc_auc": 0.729994944236134,
+  "pr_auc": 0.4409073335919703,
+  "delta_roc_auc": 0.0004196678223666,
+  "delta_pr_auc": 0.000515986686845
+ },
+ {
+  "feature": "acc_open_past_24mths",
+  "roc_auc": 0.7296787522308961,
+  "pr_auc": 0.4405426634359151,
+  "delta_roc_auc": 0.0001034758171287,
+  "delta_pr_auc": 0.0001513165307898
+ },
+ {
+  "feature": "home_ownership_RENT",
+  "roc_auc": 0.730051771650188,
+  "pr_auc": 0.4407946343174726,
+  "delta_roc_auc": 0.0004764952364206,
+  "delta_pr_auc": 0.0004032874123473
+ },
+ {
+  "feature": "fico_range_low",
+  "roc_auc": 0.7302628499211269,
+  "pr_auc": 0.4415228642567926,
+  "delta_roc_auc": 0.0006875735073595,
+  "delta_pr_auc": 0.0011315173516673
+ },
+ {
+  "feature": "loan_amnt",
+  "roc_auc": 0.7297485244995244,
+  "pr_auc": 0.4407175580314443,
+  "delta_roc_auc": 0.0001732480857571,
+  "delta_pr_auc": 0.000326211126319
+ },
+ {
+  "feature": "annual_inc",
+  "roc_auc": 0.7296971490896738,
+  "pr_auc": 0.4408906631215513,
+  "delta_roc_auc": 0.0001218726759064,
+  "delta_pr_auc": 0.000499316216426
+ },
+ {
+  "feature": "mo_sin_old_rev_tl_op",
+  "roc_auc": 0.7299613337165403,
+  "pr_auc": 0.4408914028685373,
+  "delta_roc_auc": 0.0003860573027729,
+  "delta_pr_auc": 0.000500055963412
+ },
+ {
+  "feature": "mort_acc",
+  "roc_auc": 0.7295421940392942,
+  "pr_auc": 0.4405812698997501,
+  "delta_roc_auc": -3.3082374473081266e-05,
+  "delta_pr_auc": 0.0001899229946248
+ },
+ {
+  "feature": "funded_amnt_inv",
+  "roc_auc": 0.7297340445698617,
+  "pr_auc": 0.4403147666830598,
+  "delta_roc_auc": 0.0001587681560943,
+  "delta_pr_auc": -7.658022206541437e-05
+ },
+ {
+  "feature": "emp_length_was_missing",
+  "roc_auc": 0.7292836743625454,
+  "pr_auc": 0.4394701923929046,
+  "delta_roc_auc": -0.0002916020512219,
+  "delta_pr_auc": -0.0009211545122206
+ },
+ {
+  "feature": "total_bc_limit",
+  "roc_auc": 0.7300847607994909,
+  "pr_auc": 0.4409232390814112,
+  "delta_roc_auc": 0.0005094843857236,
+  "delta_pr_auc": 0.0005318921762859
+ },
+ {
+  "feature": "avg_cur_bal",
+  "roc_auc": 0.7301247765751838,
+  "pr_auc": 0.4412165493153425,
+  "delta_roc_auc": 0.0005495001614165,
+  "delta_pr_auc": 0.0008252024102172
+ },
+ {
+  "feature": "total_rev_hi_lim",
+  "roc_auc": 0.729814463251032,
+  "pr_auc": 0.4411769003943904,
+  "delta_roc_auc": 0.0002391868372647,
+  "delta_pr_auc": 0.0007855534892651
+ },
+ {
+  "feature": "mths_since_recent_inq",
+  "roc_auc": 0.7297964969944079,
+  "pr_auc": 0.4406244030238994,
+  "delta_roc_auc": 0.0002212205806405,
+  "delta_pr_auc": 0.0002330561187741
+ },
+ {
+  "feature": "home_ownership_MORTGAGE",
+  "roc_auc": 0.7298295751492153,
+  "pr_auc": 0.441117186673346,
+  "delta_roc_auc": 0.000254298735448,
+  "delta_pr_auc": 0.0007258397682207
+ },
+ {
+  "feature": "total_il_high_credit_limit",
+  "roc_auc": 0.729858306754072,
+  "pr_auc": 0.4403656374613871,
+  "delta_roc_auc": 0.0002830303403047,
+  "delta_pr_auc": -2.5709443738142213e-05
+ }
+]

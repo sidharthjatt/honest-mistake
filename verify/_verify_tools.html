@@ -1,0 +1,103 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>JS/Python tool parity</title>
+<style>body{font-family:ui-monospace,Menlo,monospace;background:#14141a;color:#e8e6ee;padding:1rem}
+pre{white-space:pre-wrap;word-break:break-word;font-size:.75rem}</style></head><body>
+<pre id="out">running…</pre>
+<script type="module">
+import { ToolLayer, serialiseToolResult } from '../docs/agent/tools.js';
+
+const out = document.getElementById('out');
+const log = [];
+const say = s => { log.push(s); out.textContent = log.join('\n'); };
+
+async function j(p) {
+  const r = await fetch(p, { cache: 'no-cache' });
+  if (!r.ok) throw new Error(p + ' -> ' + r.status);
+  return r.json();
+}
+
+function deepEqual(a, b) {
+  if (a === b) return true;
+  if (a === null || b === null || typeof a !== typeof b) return false;
+  if (typeof a !== 'object') return Object.is(a, b);
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+  if (Array.isArray(a)) return a.length === b.length && a.every((v, i) => deepEqual(v, b[i]));
+  const ka = Object.keys(a), kb = Object.keys(b);
+  if (ka.length !== kb.length) return false;
+  return ka.every(k => kb.includes(k) && deepEqual(a[k], b[k]));
+}
+function keyOrder(v) {
+  if (Array.isArray(v)) return v.map(keyOrder);
+  if (v && typeof v === 'object') return Object.keys(v).map(k => [k, keyOrder(v[k])]);
+  return null;
+}
+
+try {
+  const cases = await j('./cases.json');
+  const variants = {};
+  for (const v of ['layer1', 'canary']) {
+    const [dictionary, shapGlobal, shapDetail, ablation, coverage, univariate, correlations] =
+      await Promise.all([
+        j('../docs/data/tools/dictionary.json'),
+        j(`../docs/data/tools/${v}/shap_global.json`),
+        j(`../docs/data/tools/${v}/shap_detail.json`),
+        j(`../docs/data/tools/${v}/ablation.json`),
+        j(`../docs/data/tools/${v}/coverage.json`),
+        j(`../docs/data/tools/${v}/univariate.json`),
+        j(`../docs/data/tools/${v}/correlations.json`),
+      ]);
+    variants[v] = { dictionary, shapGlobal, shapDetail, ablation, coverage, univariate, correlations };
+  }
+
+  const layers = new Map();
+  const layerFor = (v, p, s) => {
+    const key = `${v}|${p}|${s}`;
+    if (!layers.has(key)) {
+      layers.set(key, new ToolLayer(variants[v], { includePopulated: p, includeVintageScopes: s }));
+    }
+    return layers.get(key);
+  };
+
+  let valueMismatch = 0, wireMismatch = 0, orderMismatch = 0;
+  const details = [];
+
+  for (const c of cases.cases) {
+    const tl = layerFor(c.variant, c.include_populated, c.include_vintage_scopes);
+    const got = tl.dispatch(c.tool, c.arguments);
+    const okValue = deepEqual(got, c.result);
+    const gotWire = serialiseToolResult(got);
+    const okWire = gotWire === c.wire;
+    const okOrder = JSON.stringify(keyOrder(got)) === JSON.stringify(keyOrder(c.result));
+    if (!okValue) valueMismatch++;
+    if (!okWire) wireMismatch++;
+    if (!okOrder) orderMismatch++;
+    if ((!okValue || !okWire || !okOrder) && details.length < 12) {
+      details.push({
+        case: `${c.variant}/${c.switches} ${c.tool}(${JSON.stringify(c.arguments)})`,
+        okValue, okWire, okOrder,
+        python: c.wire.slice(0, 500),
+        js: gotWire.slice(0, 500),
+      });
+    }
+  }
+
+  say(`cases:              ${cases.cases.length}`);
+  say(`value mismatches:   ${valueMismatch}`);
+  say(`key-order mismatch: ${orderMismatch}`);
+  say(`wire-byte mismatch: ${wireMismatch}`);
+  say('');
+  if (details.length) {
+    say('--- first divergences ---');
+    for (const d of details) {
+      say(`\n${d.case}\n  value=${d.okValue} order=${d.okOrder} wire=${d.okWire}`);
+      say(`  PY: ${d.python}`);
+      say(`  JS: ${d.js}`);
+    }
+  } else {
+    say('No divergence on any case.');
+  }
+  window.__done = { cases: cases.cases.length, valueMismatch, wireMismatch, orderMismatch, details };
+} catch (err) {
+  say('HARNESS FAILED: ' + err.message + '\n' + err.stack);
+  window.__done = { error: err.message };
+}
+</script></body></html>

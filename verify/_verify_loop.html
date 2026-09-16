@@ -1,0 +1,85 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Loop dry run</title>
+<style>body{font-family:ui-monospace,Menlo,monospace;background:#14141a;color:#e8e6ee;padding:1rem}
+pre{white-space:pre-wrap;font-size:.75rem}</style></head><body><pre id="out">running…</pre>
+<script type="module">
+import { ToolLayer } from '../docs/agent/tools.js';
+import { runReactLoop, Events, renderSystemPrompt, COMPLETED, CALL_LIMIT, TURN_LIMIT, FAILED } from '../docs/agent/loop.js';
+import { buildRequest, ProviderError } from '../docs/agent/provider.js';
+import { MODELS, getModel, costOf, retirementWarning, DEFAULT_MODEL_ID } from '../docs/agent/models.js';
+
+const out=document.getElementById('out'); const log=[]; const say=s=>{log.push(s);out.textContent=log.join('\n')};
+const j=async p=>(await fetch(p)).json();
+
+const v='canary';
+const data={dictionary:await j('../docs/data/tools/dictionary.json'),shapGlobal:await j(`../docs/data/tools/${v}/shap_global.json`),shapDetail:await j(`../docs/data/tools/${v}/shap_detail.json`),ablation:await j(`../docs/data/tools/${v}/ablation.json`),coverage:await j(`../docs/data/tools/${v}/coverage.json`),univariate:await j(`../docs/data/tools/${v}/univariate.json`),correlations:await j(`../docs/data/tools/${v}/correlations.json`)};
+const schemas=await j('../docs/data/tools/tool_schemas.json');
+const promptTpl=await j('../docs/data/tools/system_prompt.json');
+
+const model=getModel(DEFAULT_MODEL_ID);
+say(`default model: ${model.id} (${model.label})`);
+say(`retirement warning: ${retirementWarning(model) || 'none'}`);
+say(`haiku warning: ${retirementWarning(getModel('claude-haiku-4-5-20251001'))}`);
+
+const system=renderSystemPrompt(promptTpl,{maxTurns:6,maxToolCalls:4,nFeatures:181,figures:promptTpl.figures_by_variant.canary});
+say(`\nsystem prompt rendered: ${system.length} chars; states "6" turns: ${system.includes('6 turns')||/\b6\b/.test(system)}`);
+say(`no placeholders left: ${!/\{(max_turns|max_tool_calls|n_features|test_roc_auc|val_roc_auc)\}/.test(system)}`);
+
+// --- request shaping per model ---
+const msgs=[{role:'user',content:'Begin your review.'}];
+const sonnetBody=buildRequest({model:getModel('claude-sonnet-5'),system,messages:msgs,tools:schemas,cache:true});
+const haikuBody=buildRequest({model:getModel('claude-haiku-4-5-20251001'),system,messages:msgs,tools:schemas,cache:true});
+say(`\nsonnet body: thinking=${JSON.stringify(sonnetBody.thinking)} output_config=${JSON.stringify(sonnetBody.output_config)}`);
+say(`haiku  body: thinking=${JSON.stringify(haikuBody.thinking)} output_config=${JSON.stringify(haikuBody.output_config)}`);
+const count=o=>JSON.stringify(o).split('"cache_control"').length-1;
+say(`cache breakpoints in sonnet request: ${count(sonnetBody)} (must be exactly 1)`);
+say(`marker on last block of newest user turn: ${!!sonnetBody.messages.at(-1).content.at(-1).cache_control}`);
+say(`caller's messages untouched: ${msgs[0].content==='Begin your review.' && typeof msgs[0].content==='string'}`);
+say(`system is one block, unmarked: ${Array.isArray(sonnetBody.system)&&sonnetBody.system.length===1&&!('cache_control' in sonnetBody.system[0])}`);
+say(`tools attached: ${sonnetBody.tools.length}`);
+
+// --- scripted transport: tool turn, then finish ---
+function scripted(replies){let i=0;return{buildRequest,send:async({body})=>{const r=replies[Math.min(i++,replies.length-1)];return{id:'x',model:body.model,stop_reason:r.stop,stop_details:null,content:r.content,text:r.content.filter(b=>b.type==='text').map(b=>b.text).join(''),thinking:r.content.filter(b=>b.type==='thinking').map(b=>b.summary).join('\n'),tool_calls:r.content.filter(b=>b.type==='tool_use').map(b=>({id:b.id,name:b.name,input:b.input})),usage:{input:10,output:20,cache_creation:100,cache_read:900}}}}}
+
+const tl=new ToolLayer(data,{});
+const events=new Events(); const seen=[];
+events.on('*',e=>{seen.push(e.type); (window.__evts=window.__evts||[]).push(e)});
+const rec=await runReactLoop({apiKey:'unused',model,tools:tl,toolSchemas:schemas,system,maxTurns:6,maxToolCalls:4,
+  events,transport:scripted([
+    {stop:'tool_use',content:[{type:'thinking',summary:'Checking the ranking first.'},{type:'tool_use',id:'t1',name:'get_shap_ranking',input:{top_n:3}}]},
+    {stop:'tool_use',content:[{type:'tool_use',id:'t2',name:'lookup_feature',input:{feature:'recoveries'}}]},
+    {stop:'end_turn',content:[{type:'text',text:'recoveries is post-outcome.'}]},
+  ])});
+say(`\n--- scripted run ---`);
+say(`termination: ${rec.termination} (expect ${COMPLETED})`);
+say(`turns=${rec.turns} toolCalls=${rec.toolCalls} finalText=${JSON.stringify(rec.finalText)}`);
+say(`usage: ${JSON.stringify(rec.usage)}  cost=$${costOf(model,rec.usage).toFixed(6)}`);
+say(`event order: ${seen.join(' > ')}`);
+say(`tool log: ${JSON.stringify(rec.toolCallLog.map(e=>[e.tool,e.outcome]))}`);
+
+// --- ceilings ---
+const spam={stop:'tool_use',content:[{type:'tool_use',id:'a',name:'get_shap_ranking',input:{top_n:1}},{type:'tool_use',id:'b',name:'get_shap_ranking',input:{top_n:1}},{type:'tool_use',id:'c',name:'get_shap_ranking',input:{top_n:1}}]};
+const r2=await runReactLoop({apiKey:'u',model,tools:new ToolLayer(data,{}),toolSchemas:schemas,system,maxTurns:9,maxToolCalls:4,transport:scripted([spam])});
+say(`\ncall ceiling: termination=${r2.termination} (expect ${CALL_LIMIT}) toolCalls=${r2.toolCalls} (must be <= 4)`);
+const r3=await runReactLoop({apiKey:'u',model,tools:new ToolLayer(data,{}),toolSchemas:schemas,system,maxTurns:2,maxToolCalls:99,transport:scripted([{stop:'tool_use',content:[{type:'tool_use',id:'a',name:'get_shap_ranking',input:{top_n:1}}]}])});
+say(`turn ceiling: termination=${r3.termination} (expect ${TURN_LIMIT}) turns=${r3.turns} (must be 2)`);
+
+// --- invalid model surfaces visibly ---
+const errs=[];
+const ev4=new Events(); ev4.on('error',e=>errs.push(e));
+const r4=await runReactLoop({apiKey:'u',model,tools:new ToolLayer(data,{}),toolSchemas:schemas,system,events:ev4,
+  transport:{buildRequest,send:async()=>{throw new ProviderError('invalid_model',"The model 'claude-gone' was not accepted: no such model. It may have been retired. Choose another model and run again.",{status:404})}}});
+say(`\ninvalid model: termination=${r4.termination} (expect ${FAILED})`);
+say(`  error event emitted: ${errs.length===1} fatal=${errs[0]?.fatal} kind=${errs[0]?.kind}`);
+say(`  message shown: ${JSON.stringify(r4.failure.message)}`);
+
+// --- the agent never sees the raw files ---
+const privateFields=Object.keys(tl);
+say(`\nToolLayer enumerable own properties: ${JSON.stringify(privateFields)}`);
+say(`raw tables reachable from outside: ${privateFields.some(k=>Array.isArray(tl[k]))}`);
+const src = (await (await fetch('../docs/agent/loop.js')).text()) + (await (await fetch('../docs/agent/tools.js')).text()) + (await (await fetch('../docs/agent/provider.js')).text());
+const stripped = src.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+say(`storage APIs used (comments stripped): ${/localStorage|sessionStorage|indexedDB/.test(stripped)}`);
+say(`key appears in any emitted event: ${seen.length>0 && JSON.stringify(window.__evts||[]).includes('unused')}`);
+
+window.__done={rec,r2:r2.termination,r3:r3.termination,r4:r4.termination,seen,errs:errs.length};
+</script></body></html>

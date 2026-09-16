@@ -1,0 +1,65 @@
+{
+ "exported_at": "2026-09-16T23:22:26+05:30",
+ "exported_from_commit": "1cb18cd0ffc8a48c3e2aaddb85d5334f4f4c7ed5",
+ "uncommitted_changes_in_source_paths": [],
+ "export_script_sha256": "11a1499181775a0f00fad2133e95eb265532f2aaed2b9a00930ddc2c4ba07f69",
+ "source_sha256": {
+  "agent/data_dictionary.py": "1f4903008e980676992d795965bd9e230eea33f2be37f337145694a72da95e50",
+  "agent/tools.py": "f1fa90c3d1c12079192daa87457e4bdd9e09a7c491b836bd46dac90d93f99765",
+  "layer1/shap_global.csv": "e92dcd49eb689a3323917efb7f01cd9576f9f15a69905fa06820e6dc78bb8cb8",
+  "layer1/ablation_cache.csv": "95dc31812aded8b65fe961d3b8d718bcd48441bf3b6af5d57526ac428786f990",
+  "layer1/coverage_profile.csv": "51e9e89632e083d1ea73da5d53abd78d73c94263f509738a63eb158349bbecc9",
+  "layer1/univariate_assoc.csv": "e0abade53d1eed87c7617c51a18afc0ca335d6e81b512d4d94cf52684101500a",
+  "layer1/correlation_topk.csv": "3309d88997c4d5012e344b97b3cca289590a85af18cd73c464e0dc747e6df593",
+  "canary/shap_global.csv": "2b8dc102d63eb8ec3b73de93b1fa8ac6c0474c91663742327178f9060961e9b8",
+  "canary/ablation_cache.csv": "288465e75bb78dacac52c38cfaf589e4d09c78c62eadfd95e6e0656e75070fae",
+  "canary/coverage_profile.csv": "36532bdc7015922e9b15d2061d36de6a59dbb482214b534a25a17a92cccace7b",
+  "canary/univariate_assoc.csv": "ed5a3915bdc8f5376ea3c38d52e9abfab7d7f06a38572ac0a1a4ac18dc5f953e",
+  "canary/correlation_topk.csv": "36a314b9fa1c569ae0b107833383328cdf439c04129f555e7665c7bc4958ec1b"
+ },
+ "variants": {
+  "layer1": {
+   "cache": "outputs/agent_cache",
+   "features": 180,
+   "canary": null
+  },
+  "canary": {
+   "cache": "outputs/agent_cache_canary",
+   "features": 181,
+   "canary": "recoveries"
+  }
+ },
+ "dictionary_entries": 224,
+ "tool_schemas_note": "tool_schemas.json is agent.tools.TOOL_SCHEMAS exported verbatim, so the definitions the browser sends are the ones the recorded runs sent.",
+ "system_prompt_note": "system_prompt.json carries the prompt as a template with five placeholders, not as a rendered instance, so the ceilings it states are always the ceilings the caller is enforcing.",
+ "tool_sources": {
+  "get_shap_ranking": "<variant>/shap_global.json",
+  "get_ablation_result": "<variant>/ablation.json",
+  "get_feature_coverage": "<variant>/coverage.json",
+  "get_feature_target_association": "<variant>/univariate.json",
+  "get_correlated_features": "<variant>/correlations.json",
+  "get_feature_shap_detail": "<variant>/shap_detail.json",
+  "lookup_feature": "dictionary.json",
+  "search_data_dictionary": "dictionary.json"
+ },
+ "shap_detail_note": "Computed once by calling ToolLayer.get_feature_shap_detail over shap_values.parquet (30 MB, not shipped). The values are the tool's own output, unchanged.",
+ "retrieval_note": "search_data_dictionary has two tiers. Tier 1, substring over column names, is carried in full. Tier 2 is semantic retrieval over description embeddings (pgvector, bge-small-en-v1.5) and is not carried: no embeddings and no model are exported. A browser port serves the substring-over-descriptions fallback that agent/data_dictionary.py already defines, so its retrieval differs from the recorded runs.",
+ "switches_note": "include_populated and include_vintage_scopes are not applied here. The dictionary ships with its `populated` field and coverage ships all six scopes; a caller drops them at serve time.",
+ "files": [
+  "canary/ablation.json",
+  "canary/correlations.json",
+  "canary/coverage.json",
+  "canary/shap_detail.json",
+  "canary/shap_global.json",
+  "canary/univariate.json",
+  "dictionary.json",
+  "layer1/ablation.json",
+  "layer1/correlations.json",
+  "layer1/coverage.json",
+  "layer1/shap_detail.json",
+  "layer1/shap_global.json",
+  "layer1/univariate.json",
+  "system_prompt.json",
+  "tool_schemas.json"
+ ]
+}
