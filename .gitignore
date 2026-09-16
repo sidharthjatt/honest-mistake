@@ -36,3 +36,7 @@ __pycache__/
 
 # macOS
 .DS_Store
+
+# Local editor and preview config. launch.json holds the static preview
+# server for site/, which is a local convenience and not part of the site.
+.claude/
