@@ -339,6 +339,19 @@
   "out_of_scope": 2,
   "hard_negatives": 14
  },
+ "derivative_rules": {
+  "was_missing_suffix": "_was_missing",
+  "one_hot_families": [
+   "addr_state",
+   "application_type",
+   "disbursement_method",
+   "home_ownership",
+   "initial_list_status",
+   "purpose",
+   "verification_status"
+  ],
+  "note": "A flag not itself in one of the three lists is scored as its parent where it has one and the parent is listed: NAME_was_missing resolves to NAME, and FAMILY_value resolves to FAMILY for the families above. Resolution never adds a column to a list."
+ },
  "runs": [
   {
    "label": "firstlight",

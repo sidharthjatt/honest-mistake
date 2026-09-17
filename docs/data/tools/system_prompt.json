@@ -21,5 +21,23 @@
    "val_roc_auc_text": "0.9020"
   }
  },
- "note": "Rendered from agent/prompts.py with sentinel ceilings, then the sentinels swapped for placeholders. Fill all five before sending; the ceilings in the prompt must match the ones the loop enforces."
+ "note": "Rendered from agent/prompts.py with sentinel ceilings, then the sentinels swapped for placeholders. Fill all five before sending; the ceilings in the prompt must match the ones the loop enforces.",
+ "answer_format": {
+  "start": "=== AUDIT FINDINGS ===",
+  "end": "=== END AUDIT FINDINGS ===",
+  "record_separator": "###",
+  "no_findings_marker": "NO FINDINGS",
+  "field_order": [
+   "FLAG",
+   "REASON",
+   "EVIDENCE",
+   "CONFIDENCE"
+  ],
+  "confidence_values": [
+   "high",
+   "medium",
+   "low"
+  ],
+  "verbatim_delimiter": "----- VERBATIM MODEL TEXT BELOW THIS LINE -----"
+ }
 }
