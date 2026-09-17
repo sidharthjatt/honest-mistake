@@ -41,6 +41,9 @@ __pycache__/
 # server for docs/, which is a local convenience and not part of the site.
 .claude/
 
-# Generated verification cases. The harnesses in verify/ are tracked; this
-# file is rebuilt by scripts/verify_js_tools.py and is 750 KB of derived data.
+# Generated verification cases. The harnesses in verify/ are tracked; these
+# three are rebuilt by the scripts/verify_js_*.py generators and are derived
+# data — 750 KB, 120 KB and 66 KB.
 verify/cases.json
+verify/scoring_cases.json
+verify/parse_cases.json

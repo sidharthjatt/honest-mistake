@@ -1,0 +1,100 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>JS/Python parser parity</title>
+<style>body{font-family:ui-monospace,Menlo,monospace;background:#14141a;color:#e8e6ee;padding:1rem}
+pre{white-space:pre-wrap;word-break:break-word;font-size:.75rem}</style></head><body>
+<pre id="out">running…</pre>
+<script type="module">
+import { parseFinalAnswer } from '../docs/agent/parse.js';
+
+const out = document.getElementById('out');
+const log = [];
+const say = s => { log.push(s); out.textContent = log.join('\n'); };
+
+async function j(p) {
+  const r = await fetch(p, { cache: 'no-cache' });
+  if (!r.ok) throw new Error(p + ' -> ' + r.status);
+  return r.json();
+}
+
+function deepEqual(a, b) {
+  if (a === b) return true;
+  if (a === null || b === null || typeof a !== typeof b) return false;
+  if (typeof a !== 'object') return Object.is(a, b);
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+  if (Array.isArray(a)) return a.length === b.length && a.every((v, i) => deepEqual(v, b[i]));
+  const ka = Object.keys(a), kb = Object.keys(b);
+  if (ka.length !== kb.length) return false;
+  return ka.every(k => kb.includes(k) && deepEqual(a[k], b[k]));
+}
+
+try {
+  const [bundle, prompt, dictionary] = await Promise.all([
+    j('./parse_cases.json'),
+    j('../docs/data/tools/system_prompt.json'),
+    j('../docs/data/tools/dictionary.json'),
+  ]);
+  const format = prompt.answer_format;
+  const documented = new Set(dictionary.map(e => e.feature));
+
+  let bad = 0;
+  const shown = [];
+
+  for (const c of bundle.cases) {
+    const r = parseFinalAnswer(c.text, format, documented);
+    const got = {
+      records: r.records,
+      warnings: r.warnings,
+      explicit_no_findings: r.explicitNoFindings,
+      block_found: r.blockFound,
+      flags: r.flags,
+      is_scoreable: r.isScoreable,
+    };
+    if (deepEqual(got, c.result)) continue;
+    bad += 1;
+    if (shown.length < 6) shown.push([c, got]);
+  }
+
+  const scoreable = bundle.cases.filter(c => c.result.is_scoreable).length;
+  say(`cases:              ${bundle.cases.length}`);
+  say(`  recorded runs:    ${bundle.recorded_count}`);
+  say(`  synthetic:        ${bundle.synthetic_count}`);
+  say(`scoreable / not:    ${scoreable} / ${bundle.cases.length - scoreable}`);
+  say(`mismatches:         ${bad}`);
+  say('');
+
+  if (!bad) {
+    say('No divergence on any case.');
+    say('');
+    /* Two properties asserted directly, because they are what the page
+       downstream actually branches on and a case list can drift away from
+       the thing it was meant to protect. */
+    const noBlock = parseFinalAnswer('I could not finish.', format, documented);
+    const noFind = parseFinalAnswer(
+      `${format.start}\n${format.no_findings_marker}\n${format.end}`, format, documented);
+    say(`a run with no block is not scoreable:      ` +
+        `${noBlock.isScoreable === false ? 'yes' : 'NO — regression'}`);
+    say(`a run declaring NO FINDINGS is scoreable:  ` +
+        `${noFind.isScoreable === true && noFind.flags.length === 0
+            ? 'yes' : 'NO — regression'}`);
+    say('');
+    say('Those two are opposite outcomes and must never collapse into one:');
+    say('  no block   -> nothing was answered, the run produced no verdict');
+    say('  NO FINDINGS-> the question was answered, and the answer was none');
+  } else {
+    say('--- first divergences ---');
+    for (const [c, got] of shown) {
+      say('');
+      say(`${c.name}`);
+      say(`  text: ${JSON.stringify(c.text.slice(0, 120))}${c.text.length > 120 ? '…' : ''}`);
+      for (const k of Object.keys(c.result)) {
+        if (deepEqual(c.result[k], got[k])) continue;
+        say(`  .${k}`);
+        say(`    PY: ${JSON.stringify(c.result[k])}`);
+        say(`    JS: ${JSON.stringify(got[k])}`);
+      }
+    }
+  }
+} catch (err) {
+  say('harness failed: ' + err.message);
+  throw err;
+}
+</script></body></html>
