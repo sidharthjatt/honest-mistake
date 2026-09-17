@@ -1477,7 +1477,7 @@
   }
  ],
  "notes": [
-  "Each run's score is the scorer's own output, unchanged. Its score.canary block is computed against the planted column for every scored run, including runs where that column was not in the data. For those runs 'missed' means nothing was there to find. Whether the canary was present is in runs/index.json, under canary.present.",
+  "Each run's score is the scorer's own output, unchanged. Its score.canary block is per-run: 'applicable' is true only where the planted column was in that run's data. Where it is false nothing was planted, 'planted' and 'missed' are empty, and 'detected' is null, because a run cannot miss a canary it was never given. 'detected' is false only where the canary was present and was not flagged. Whether the canary was present is also recorded in runs/index.json, under canary.present.",
   "A flag's verdict is read from the scorer's lists: true_positives, false_positives and out_of_scope_flagged. hard_negative is true when the flag is in hard_negatives_flagged. scored_as_parent is the scorer's derivative_resolutions entry for that flag, or null."
  ]
 }
