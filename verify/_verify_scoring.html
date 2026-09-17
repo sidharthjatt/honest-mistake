@@ -48,17 +48,26 @@ function* diffs(a, b, path = '') {
 }
 
 try {
-  const [bundle, scoring] = await Promise.all([
+  const [bundle, scoring, layer1, canary] = await Promise.all([
     j('./scoring_cases.json'),
     j('../docs/data/scoring.json'),
+    j('../docs/data/tools/layer1/shap_global.json'),
+    j('../docs/data/tools/canary/shap_global.json'),
   ]);
   const key = new AnswerKey(scoring);
+  /* The same feature lists the generator read, so a reachability
+     mismatch is the port's and not a difference in the inputs. */
+  const features = {
+    layer1: layer1.map(r => r.feature),
+    canary: canary.map(r => r.feature),
+  };
 
   let valueBad = 0, orderBad = 0;
   const firstFew = [];
 
   for (const c of bundle.cases) {
-    const got = score(c.flags, key, c.canary_present);
+    const got = score(c.flags, key, c.canary_present,
+                      c.variant ? features[c.variant] : null);
     const okValue = deepEqual(got, c.result);
     const okOrder = JSON.stringify(keyOrder(got)) === JSON.stringify(keyOrder(c.result));
     if (!okValue) valueBad += 1;
@@ -88,7 +97,7 @@ try {
     /* One property worth asserting directly rather than inferring from a
        case list: an honest run must never report a missed canary. It is
        the thing the scorer change existed to fix. */
-    const honest = score(['all_util', 'il_util'], key, false);
+    const honest = score(['all_util', 'il_util'], key, false, features.layer1);
     const ok = honest.canary.applicable === false
       && honest.canary.detected === null
       && honest.canary.missed.length === 0
@@ -98,6 +107,18 @@ try {
     say(`  applicable=${honest.canary.applicable} detected=${honest.canary.detected} ` +
         `planted=${JSON.stringify(honest.canary.planted)} ` +
         `missed=${JSON.stringify(honest.canary.missed)}`);
+    /* The case this field was added for: a leaking column named from the
+       dictionary, credited, on a model that never had it. */
+    const named = score(['int_rate', 'loan_status'], key, false, features.layer1);
+    const r = named.true_positive_reachability;
+    const okr = named.true_positives.length === 1 && r.known === true
+      && r.by_flag.loan_status === false && r.unreachable_count === 1;
+    say('');
+    say(`a credited name the model never read is marked unreachable: ` +
+        `${okr ? 'yes' : 'NO — regression'}`);
+    say(`  credited=${JSON.stringify(named.true_positives)} ` +
+        `reachable=${r.reachable_count} unreachable=${r.unreachable_count} ` +
+        `precision=${named.precision} (unchanged by this field)`);
   } else {
     say('--- first divergences ---');
     for (const [c, ds] of firstFew) {

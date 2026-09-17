@@ -26,6 +26,7 @@ Usage:
 """
 
 import argparse
+import csv
 import json
 import sys
 from collections import Counter
@@ -42,6 +43,8 @@ from agent.run_audit import VERBATIM_DELIMITER
 
 RULE = "=" * 72
 THIN = "-" * 72
+
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
 @dataclass
@@ -409,6 +412,30 @@ def _canary_present(manifest: dict) -> bool:
     return str(manifest.get("config_id", "")).endswith("-canary")
 
 
+def _model_columns(manifest: dict) -> list[str] | None:
+    """The audited model's feature list, from the cache the run read.
+
+    Taken from that cache's shap_global.csv, which lists every feature the
+    model has and is the same artefact get_shap_ranking serves. It is used
+    rather than data/processed/X_test.parquet because the parquet holds
+    the honest matrix only, and a canary run's model has a column the
+    honest matrix does not. Returns None when the cache cannot be located,
+    so reachability is reported as unknown rather than guessed at.
+    """
+    cache = manifest.get("cache_dir")
+    if not cache:
+        # The five v1.0 manifests predate the field. Which cache a run read
+        # follows from whether the canary was in it, and that is already
+        # established by the preregistered rule above, so this falls back
+        # to it rather than reporting the answer unknown for those runs.
+        cache = "agent_cache_canary" if _canary_present(manifest) else "agent_cache"
+    path = _PROJECT_ROOT / "outputs" / cache / "shap_global.csv"
+    if not path.is_file():
+        return None
+    with path.open(newline="") as fh:
+        return [row["feature"] for row in csv.DictReader(fh)]
+
+
 def evaluate(directory: Path, quiet: bool = False) -> dict | None:
     """Score one run directory, or refuse and explain why."""
     manifest, answer, calls = _read_run(directory)
@@ -436,7 +463,9 @@ def evaluate(directory: Path, quiet: bool = False) -> dict | None:
             print("NOT SCORED - the final answer could not be parsed.")
         return None
 
-    result = score(parsed.flags, canary_present=_canary_present(manifest))
+    result = score(parsed.flags,
+                   canary_present=_canary_present(manifest),
+                   model_columns=_model_columns(manifest))
     if not quiet:
         _print_canary(result, parsed.records)
         _print_score(result)

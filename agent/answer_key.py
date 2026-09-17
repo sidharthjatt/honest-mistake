@@ -278,7 +278,56 @@ def _canary_block(flags: list[str], resolved: dict,
     }
 
 
-def score(flagged: list[str], canary_present: bool | None = None) -> dict:
+def _reachability(tp: list[str], resolved: dict,
+                  model_columns: list[str] | None) -> dict:
+    """Whether each credited flag names a column the model actually read.
+
+    Scoring matches a flag against the key by name. It does not ask
+    whether the column was among the model's inputs, and for these runs
+    the two questions come apart: TRUE_POSITIVES is derived from the drop
+    log, so every member was removed during construction, while all 39
+    stay in the data dictionary the agent can search. An agent can
+    therefore name a leaking column, be credited for it, and have said
+    nothing about the model in front of it — the column was gone before
+    that model was built.
+
+    That gap is already documented, though only as a reason to distrust
+    the recall figure. PREREGISTRATION.md drops recall as a capability
+    score because "one is present in the canary feature matrix and none in
+    the honest one", and LAYER2_EVAL.md puts the reasoning plainly: "a
+    column the model never reads cannot make it untrustworthy". Neither
+    says the verdict should take it into account, and until now nothing
+    forced the question: all 17 flags across the twelve recorded runs were
+    model inputs, so name-matching and reachability-matching agreed on
+    every one.
+
+    This records the distinction without acting on it. No verdict moves:
+    a credited flag stays credited, and precision, recall and f1 are
+    unchanged. A reader who wants to know whether a find was a find can
+    now see it here rather than re-deriving it.
+
+    `model_columns` is passed in rather than read from disk. The key's own
+    _model_columns() reads data/processed/X_test.parquet, which holds the
+    honest matrix only and is not committed, so it can answer this for
+    neither variant reliably and for the canary one not at all. The caller
+    knows which variant ran and has its feature list.
+    """
+    if model_columns is None:
+        return {"known": False, "model_column_count": None, "by_flag": {},
+                "reachable_count": None, "unreachable_count": None}
+    columns = set(model_columns)
+    by_flag = {f: resolved[f][0] in columns for f in tp}
+    return {
+        "known": True,
+        "model_column_count": len(columns),
+        "by_flag": by_flag,
+        "reachable_count": sum(1 for v in by_flag.values() if v),
+        "unreachable_count": sum(1 for v in by_flag.values() if not v),
+    }
+
+
+def score(flagged: list[str], canary_present: bool | None = None,
+          model_columns: list[str] | None = None) -> dict:
     """Score a list of flagged column names against the answer key.
 
     `canary_present` says whether the planted column was in this run's
@@ -286,6 +335,12 @@ def score(flagged: list[str], canary_present: bool | None = None) -> dict:
     positive, out-of-scope or hard-negative classification depends on it,
     and neither do precision, recall or f1. Left unstated it reports the
     canary question as unanswered rather than guessing.
+
+    `model_columns` is the feature list of the model that was audited. It
+    affects only `true_positive_reachability`, which records whether each
+    credited flag names a column the model actually read. It changes no
+    verdict and no metric. Left unstated, reachability is reported as
+    unknown rather than guessed at. See _reachability.
 
     OUT_OF_SCOPE flags are removed before scoring — they count neither
     for nor against. Everything else flagged that is not a true positive
@@ -371,6 +426,9 @@ def score(flagged: list[str], canary_present: bool | None = None) -> dict:
         },
         "true_positives_clean_under_suppression": sorted(
             f for f in tp if f in CLEAN_UNDER_SUPPRESSION),
+        # Appended rather than placed among the counts, so that every key
+        # above it keeps the position it had in the published bundle.
+        "true_positive_reachability": _reachability(tp, resolved, model_columns),
     }
 
 

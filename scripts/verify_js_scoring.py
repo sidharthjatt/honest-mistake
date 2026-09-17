@@ -9,6 +9,24 @@ must match. The synthetic ones cover paths no recorded run exercises — the
 derivative resolutions, an out-of-scope flag, a hard negative reached
 through its missingness twin, and the three canary states.
 
+Each recorded case is also compared against the score the published
+bundle carries for that run, which puts a third party in the comparison:
+Python now, Python at export time, and the JavaScript port. Two faults
+can show up there and they look identical until they are separated.
+
+A key the bundle carries whose value has moved means the scorer and the
+published result disagree. That is what the check exists to catch, and it
+stops the run: a port verified against a bundle the scorer no longer
+reproduces is verified against nothing.
+
+A key the bundle does not carry at all means a field was added to the
+scorer since the last export. Nothing disagrees; the bundle is simply
+behind, and the fix is to re-export. Treating that as a disagreement
+would have reported all eight recorded runs as stale the moment
+true_positive_reachability was added, which is loud, wrong, and exactly
+the kind of noise that teaches people to ignore a check. The two are
+reported separately, and only the first is a failure.
+
     .venv/bin/python -m scripts.verify_js_scoring
 
 The interpreter is enforced for the same reason as scripts/verify_js_tools:
@@ -33,6 +51,20 @@ from scripts.verify_js_tools import _check_pinned_versions  # noqa: E402
 
 OUT = ROOT / "verify" / "scoring_cases.json"
 SCORING = ROOT / "docs" / "data" / "scoring.json"
+TOOLS = ROOT / "docs" / "data" / "tools"
+
+
+def _feature_lists() -> dict[str, list[str]]:
+    """Each variant's model features, from the exported SHAP ranking.
+
+    The same list the browser reads, so a reachability disagreement is
+    the port's and not a difference in what the two were told.
+    """
+    out = {}
+    for variant in ("layer1", "canary"):
+        path = TOOLS / variant / "shap_global.json"
+        out[variant] = [r["feature"] for r in json.loads(path.read_text())]
+    return out
 
 
 def _synthetic() -> list[dict]:
@@ -96,7 +128,13 @@ def _synthetic() -> list[dict]:
         ("mixed bag",
          [tp[0], hn[0], oos[0], "no_such_column", hn[1] + "_was_missing"], True),
     ]
-    return [{"name": name, "flags": flags, "canary_present": present}
+    # Reachability is checked against the variant a case implies: a case
+    # stating the canary was present is scored against the 181-feature
+    # list, one stating it was absent against the 180-feature one, and a
+    # case that does not say passes no list at all so the port must
+    # report reachability unknown.
+    return [{"name": name, "flags": flags, "canary_present": present,
+             "variant": None if present is None else ("canary" if present else "layer1")}
             for name, flags, present in cases]
 
 
@@ -121,6 +159,7 @@ def _recorded() -> list[dict]:
             "name": f"recorded: {label}",
             "flags": [f["flag"] for f in run["flags"]],
             "canary_present": present_by_label[label],
+            "variant": "canary" if present_by_label[label] else "layer1",
             # The score the published bundle carries for this run. The port
             # must reproduce it from the flags alone.
             "published_score": run["score"],
@@ -131,13 +170,17 @@ def _recorded() -> list[dict]:
 def main() -> None:
     _check_pinned_versions("scoring_cases.json")
 
+    features = _feature_lists()
     cases = []
     for case in _synthetic() + _recorded():
-        result = score(case["flags"], canary_present=case["canary_present"])
+        variant = case.get("variant")
+        result = score(case["flags"], canary_present=case["canary_present"],
+                       model_columns=features[variant] if variant else None)
         entry = {
             "name": case["name"],
             "flags": case["flags"],
             "canary_present": case["canary_present"],
+            "variant": case.get("variant"),
             "result": result,
         }
         if "published_score" in case:
@@ -145,12 +188,22 @@ def main() -> None:
             # time, and the JavaScript port. If these two disagree the
             # bundle is stale, which is a different fault from a bad port
             # and the harness should not report it as one.
-            entry["published_score"] = case["published_score"]
-            entry["matches_published"] = result == case["published_score"]
+            published = case["published_score"]
+            entry["published_score"] = published
+            # A key the published bundle does not carry is a field added
+            # since it was exported, which is a re-export waiting to
+            # happen and not a disagreement. A key it does carry whose
+            # value has moved is a disagreement, and is what this guard
+            # exists to catch. The two are reported separately.
+            entry["fields_added_since_export"] = sorted(
+                k for k in result if k not in published)
+            entry["matches_published"] = all(
+                result[k] == v for k, v in published.items())
         cases.append(entry)
 
     stale = [c["name"] for c in cases
              if "matches_published" in c and not c["matches_published"]]
+    added = sorted({k for c in cases for k in c.get("fields_added_since_export", [])})
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(
@@ -159,6 +212,7 @@ def main() -> None:
          "synthetic_count": len(_synthetic()),
          "recorded_count": len(cases) - len(_synthetic()),
          "stale_against_published": stale,
+         "fields_added_since_export": added,
          "cases": cases}, indent=1, ensure_ascii=False, allow_nan=False) + "\n")
 
     print(f"wrote {len(cases)} cases to {OUT.relative_to(ROOT)} "
@@ -168,7 +222,10 @@ def main() -> None:
             "The scorer no longer reproduces the published bundle for: "
             + ", ".join(stale)
             + ". Re-export before trusting the port against these cases.")
-    print("  every recorded case reproduces the published score")
+    if added:
+        print(f"  new since the last export, re-export to publish: {', '.join(added)}")
+    print("  every recorded case reproduces the published score on every "
+          "field that bundle carries")
 
 
 if __name__ == "__main__":

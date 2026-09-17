@@ -544,3 +544,88 @@ exist inside a frozen file.
 The claim that the answer key was written before the agent existed is
 unaffected. It is a statement about when the key was written, and this
 changes how one derived field is reported, not what the key says is true.
+
+## Correction, 2026-09-17: a credited flag need not name a model input
+
+`score()` matches a flag against the key by name. It does not ask whether
+the column was among the inputs of the model being audited, and for these
+runs the two questions come apart.
+
+`TRUE_POSITIVES` is derived from the drop log, so every one of the 39 was
+removed during dataset construction. All 39 remain in the data dictionary
+the agent can search. An agent can therefore read the dictionary, name a
+leaking column it never saw in the model, and be credited for it. On the
+honest cache that applies to all 39; on the canary cache to 38, the
+exception being the planted column. Of the 55 graded names, 41 are not
+inputs in the honest matrix and 40 in the canary one, so this is the
+common case rather than an edge.
+
+This was already documented, but only as a reason to distrust the recall
+figure, never as something the verdict takes into account.
+PREREGISTRATION.md drops recall as a capability score under Not definable:
+"Of the 39 columns in the scoring set, one is present in the canary
+feature matrix and none in the honest one ... A recall figure therefore
+reports whether the planted column was found and nothing more, and
+presenting it as a capability score would misrepresent it."
+`outputs/agent_cache/LAYER2_EVAL.md` states the reasoning plainly: "The
+agent is asked whether the held-out figure can be trusted, and a column
+the model never reads cannot make it untrustworthy." Neither passage says
+a credited flag should be qualified by whether the model read the column,
+and until now nothing forced the question. All 17 flags across the twelve
+recorded runs were model inputs, both as flagged and after derivative
+resolution, so name-matching and reachability-matching agreed on every one
+of them. A run made in the browser flagged `loan_status` — tier A, the
+loan's own outcome, found by reading the dictionary rather than the model
+— and was credited for it against a model that never had the column.
+
+`score()` now takes `model_columns` and reports
+`true_positive_reachability`: whether each credited flag names a column
+the model actually read, the count each way, and the size of the feature
+list it was checked against. Omit the argument and it reports itself
+unknown rather than guessing.
+
+`model_columns` is passed in rather than read from disk. The key's own
+`_model_columns()` reads `data/processed/X_test.parquet`, which holds the
+honest matrix only, so it cannot answer this for a canary run at all; it
+is also the one scoring source not committed, and so unavailable to anyone
+working from a clone. `eval_canary` supplies the list from the run's own
+cache directory, taken from `shap_global.csv` — the same artefact
+`get_shap_ranking` serves, committed, and per variant.
+
+The five v1.0 manifests have no `cache_dir` field, and how they are
+handled is a decision rather than a repair. Reporting reachability as
+unknown for them would have been defensible, and is what the first draft
+did; run3 and run4-ablated came back `known: false`. They are not
+genuinely unknown, though. Which cache a run read follows from whether
+the canary was in it, and that is already established for every run by
+the attribution rule written in PREREGISTRATION.md's canary attribution
+section — the manifest's `canary` field where it exists, the `config_id`
+suffix where it does not. `_model_columns` reuses that rule rather than
+introducing a second way of deciding which variant a run used, which
+would be a new rule invented after the fact for one field's convenience.
+Under it, run3 and run4-ablated resolve to the honest cache and are
+checked against its 180-feature list, and all eight scored runs report
+`known: true`.
+
+**Nothing is acted on.** A credited flag stays credited. No true positive,
+false positive, out-of-scope or hard-negative classification changes, and
+neither do precision, recall, f1 or the canary block. The reachability of
+a flag is recorded so that a reader, or a screen, can tell a find from a
+name without re-deriving it. Deciding the verdict on it would be a
+different change, and not one to make after seeing a single run that made
+the existing rule look bad.
+
+**No recorded run's numbers move.** Checked rather than assumed: every one
+of the 17 flags was resolved and tested against its own run's feature
+list, and no credited flag in any recorded run names a column outside it.
+A scratch export confirms it — all thirteen run records byte-identical,
+no key added at the top level of scoring.json, both notes unchanged, and
+of every guarded value across the eight scored runs none moved. The only
+difference is the new key.
+
+**Two published source hashes change with this.** `agent/answer_key.py`
+moves from `d1a2dd1e53a1f65431117a34acb97fe08c91394d5e3ba2c96851ce99811da5b7`
+and `agent/eval_canary.py` from
+`db86d9aac2a0b342cf986ce874a1dc243d57f15663d21a4637b9fd8dfe092a42`;
+`docs/data/bundle.json` records the new values, and the bundle must be
+re-exported from a clean tree for the same reason as last time.

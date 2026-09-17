@@ -133,9 +133,41 @@ function pyRound(value, digits) {
   return n / factor;
 }
 
+/* Whether each credited flag names a column the model actually read.
+
+   Scoring matches a flag against the key by name and never asks whether
+   the column was a model input. For these runs the two come apart: every
+   true positive was removed during construction, yet all 39 remain in the
+   dictionary the agent can search. So a flag can be credited for naming a
+   leaking column that the audited model never had — which says nothing
+   about that model.
+
+   Recorded, not acted on. No verdict and no metric changes. The caller
+   passes the variant's feature list because the Python key's own source
+   for it, X_test.parquet, holds the honest matrix only and is not
+   committed. Omit it and reachability reports itself unknown. */
+function reachability(tp, resolved, modelColumns) {
+  if (!modelColumns) {
+    return { known: false, model_column_count: null, by_flag: {},
+             reachable_count: null, unreachable_count: null };
+  }
+  const columns = modelColumns instanceof Set ? modelColumns : new Set(modelColumns);
+  const byFlag = {};
+  for (const f of tp) byFlag[f] = columns.has(resolved.get(f).name);
+  const values = Object.values(byFlag);
+  return {
+    known: true,
+    model_column_count: columns.size,
+    by_flag: byFlag,
+    reachable_count: values.filter(Boolean).length,
+    unreachable_count: values.filter(v => !v).length,
+  };
+}
+
 /* score(), ported. `canaryPresent` is three-valued exactly as in Python:
-   true, false, or null for not stated. */
-export function score(flagged, key, canaryPresent = null) {
+   true, false, or null for not stated. `modelColumns` is the audited
+   model's feature list, or null for unknown. */
+export function score(flagged, key, canaryPresent = null, modelColumns = null) {
   // dict.fromkeys: strip, drop empties, keep first occurrence order.
   const seen = new Set();
   const flags = [];
@@ -224,6 +256,8 @@ export function score(flagged, key, canaryPresent = null) {
     true_positives_by_residual_tier: byResidualTier,
     true_positives_clean_under_suppression:
       tp.filter(f => key.isCleanUnderSuppression(f)),
+    // Appended, so every key above keeps the position it had before.
+    true_positive_reachability: reachability(tp, resolved, modelColumns),
   };
 }
 
