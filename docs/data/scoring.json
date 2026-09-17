@@ -425,22 +425,12 @@
     ],
     "hard_negatives_flagged_count": 2,
     "canary": {
-     "planted": [
-      "recoveries"
-     ],
+     "applicable": false,
+     "planted": [],
      "caught": [],
-     "missed": [
-      "recoveries"
-     ],
-     "detected": false,
-     "detail": {
-      "recoveries": {
-       "tier": "A",
-       "baseline_test_roc_auc": 0.7295752764137673,
-       "canary_test_roc_auc": 0.8730186207938789,
-       "n_features": 181
-      }
-     }
+     "missed": [],
+     "detected": null,
+     "detail": {}
     },
     "hard_negatives_flagged_raw": [],
     "hard_negatives_flagged_via_derivative": [
@@ -583,22 +573,12 @@
     ],
     "hard_negatives_flagged_count": 2,
     "canary": {
-     "planted": [
-      "recoveries"
-     ],
+     "applicable": false,
+     "planted": [],
      "caught": [],
-     "missed": [
-      "recoveries"
-     ],
-     "detected": false,
-     "detail": {
-      "recoveries": {
-       "tier": "A",
-       "baseline_test_roc_auc": 0.7295752764137673,
-       "canary_test_roc_auc": 0.8730186207938789,
-       "n_features": 181
-      }
-     }
+     "missed": [],
+     "detected": null,
+     "detail": {}
     },
     "hard_negatives_flagged_raw": [],
     "hard_negatives_flagged_via_derivative": [
@@ -744,6 +724,7 @@
     "hard_negatives_flagged": [],
     "hard_negatives_flagged_count": 0,
     "canary": {
+     "applicable": true,
      "planted": [
       "recoveries"
      ],
@@ -863,6 +844,7 @@
     "hard_negatives_flagged": [],
     "hard_negatives_flagged_count": 0,
     "canary": {
+     "applicable": true,
      "planted": [
       "recoveries"
      ],
@@ -983,22 +965,12 @@
     "hard_negatives_flagged": [],
     "hard_negatives_flagged_count": 0,
     "canary": {
-     "planted": [
-      "recoveries"
-     ],
+     "applicable": false,
+     "planted": [],
      "caught": [],
-     "missed": [
-      "recoveries"
-     ],
-     "detected": false,
-     "detail": {
-      "recoveries": {
-       "tier": "A",
-       "baseline_test_roc_auc": 0.7295752764137673,
-       "canary_test_roc_auc": 0.8730186207938789,
-       "n_features": 181
-      }
-     }
+     "missed": [],
+     "detected": null,
+     "detail": {}
     },
     "hard_negatives_flagged_raw": [],
     "hard_negatives_flagged_via_derivative": [],
@@ -1106,6 +1078,7 @@
     ],
     "hard_negatives_flagged_count": 2,
     "canary": {
+     "applicable": true,
      "planted": [
       "recoveries"
      ],
@@ -1281,22 +1254,12 @@
     ],
     "hard_negatives_flagged_count": 2,
     "canary": {
-     "planted": [
-      "recoveries"
-     ],
+     "applicable": false,
+     "planted": [],
      "caught": [],
-     "missed": [
-      "recoveries"
-     ],
-     "detected": false,
-     "detail": {
-      "recoveries": {
-       "tier": "A",
-       "baseline_test_roc_auc": 0.7295752764137673,
-       "canary_test_roc_auc": 0.8730186207938789,
-       "n_features": 181
-      }
-     }
+     "missed": [],
+     "detected": null,
+     "detail": {}
     },
     "hard_negatives_flagged_raw": [],
     "hard_negatives_flagged_via_derivative": [
@@ -1447,22 +1410,12 @@
     ],
     "hard_negatives_flagged_count": 1,
     "canary": {
-     "planted": [
-      "recoveries"
-     ],
+     "applicable": false,
+     "planted": [],
      "caught": [],
-     "missed": [
-      "recoveries"
-     ],
-     "detected": false,
-     "detail": {
-      "recoveries": {
-       "tier": "A",
-       "baseline_test_roc_auc": 0.7295752764137673,
-       "canary_test_roc_auc": 0.8730186207938789,
-       "n_features": 181
-      }
-     }
+     "missed": [],
+     "detected": null,
+     "detail": {}
     },
     "hard_negatives_flagged_raw": [
      "total_bal_il"

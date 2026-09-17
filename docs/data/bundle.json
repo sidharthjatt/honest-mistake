@@ -1,13 +1,13 @@
 {
- "exported_at": "2026-09-16T02:24:25+05:30",
- "exported_from_commit": "916c69ab551b88c99e7f99805428e1f44a018c90",
+ "exported_at": "2026-09-17T14:05:12+05:30",
+ "exported_from_commit": "80486cfc5f90518c82e35f70fdacfcfec859dfdb",
  "uncommitted_changes_in_source_paths": [],
- "export_script_sha256": "a2da69bbc6639628e286efce205ade29a35ee421186afcfbe9c23cdba51cdd1e",
+ "export_script_sha256": "9e3d7f8fecd1796294430b6fa398d98299182299f37b0d37c650a1e6c399d964",
  "scoring_sources_sha256": {
   "outputs/leakage_drop_log.txt": "de4112f82ae2934f29328f32790ab8a57285e26426da785f41a985a84c4b24f1",
   "agent/data_dictionary.py": "1f4903008e980676992d795965bd9e230eea33f2be37f337145694a72da95e50",
-  "agent/answer_key.py": "10218308176c4bb1983e759951025ea41ab97a7a53bac97b9fd4767e32a1851e",
-  "agent/eval_canary.py": "cdabdf55049700d894e4fb5e9628f65ac85746041f46c287d1e8354ee24b2a17",
+  "agent/answer_key.py": "d1a2dd1e53a1f65431117a34acb97fe08c91394d5e3ba2c96851ce99811da5b7",
+  "agent/eval_canary.py": "db86d9aac2a0b342cf986ce874a1dc243d57f15663d21a4637b9fd8dfe092a42",
   "agent/prompts.py": "a8cde3f4e43bbf4562f0d2dc95570787d566da384ebd762eb4aca823095599db",
   "outputs/models/best_params_canary.json": "7f317709b261553949800720428443c91ee8420a1b6de9202e592c3ee4763781",
   "data/processed/X_test.parquet": "d39be39a9c5df23836e960051135e2927387b6e4abdf401549e065e0e7d005c5"
@@ -69,6 +69,22 @@
   "runs/run8-canary-splitonly.json",
   "runs/run9-honest-nopop.json",
   "scoring.json",
+  "tools/canary/ablation.json",
+  "tools/canary/correlations.json",
+  "tools/canary/coverage.json",
+  "tools/canary/shap_detail.json",
+  "tools/canary/shap_global.json",
+  "tools/canary/univariate.json",
+  "tools/dictionary.json",
+  "tools/layer1/ablation.json",
+  "tools/layer1/correlations.json",
+  "tools/layer1/coverage.json",
+  "tools/layer1/shap_detail.json",
+  "tools/layer1/shap_global.json",
+  "tools/layer1/univariate.json",
+  "tools/manifest.json",
+  "tools/system_prompt.json",
+  "tools/tool_schemas.json",
   "bundle.json"
  ]
 }
