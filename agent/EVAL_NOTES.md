@@ -474,3 +474,73 @@ reference to any run, what counts as a legitimate threat to the held-out
 figure — a specification that does not currently exist. Both directions
 change what is being measured, and neither should be taken on the
 evidence of a single run.
+
+## Correction, 2026-09-17: the canary block was not per-run
+
+`score()` reported the canary identically for every run it scored. The
+block was computed from `CANARY`, which names the planted column for the
+project as a whole, with no reference to whether that column was in the
+data the run actually saw. So run3, run4-ablated, run7-honest-v2,
+run10-honest-nopop-30turns and run11-honest-cached — five runs against
+the clean 180-feature model, with no canary in them at all — each
+reported:
+
+    "planted": ["recoveries"], "missed": ["recoveries"], "detected": false
+
+That reads as a run that was given a canary and failed to find it. The
+opposite is true: there was nothing there to find, and not flagging a
+column that was absent from the data is the correct outcome, not a miss.
+It is also the reverse of what those five runs are in the record to
+demonstrate.
+
+`score()` now takes `canary_present` and reports per-run.
+`eval_canary.evaluate` supplies it from the run's manifest, falling back
+to the `config_id` suffix where the field is absent, which is the rule
+already written in PREREGISTRATION.md's canary attribution section and
+covers the five v1.0 manifests that predate the field.
+
+`detected` is three-valued. `false` now means the canary was in the data
+and the agent did not flag it. `null` means the question does not apply,
+either because no canary was planted or because nobody said whether one
+was. A run cannot fail a test it was never given. `planted` is `[]` when
+the canary is known absent and `null` when its presence was not stated,
+for the same reason. A new `applicable` field states which case a reader
+is looking at without having to infer it.
+
+**No recorded run's classification moves.** Nothing outside the canary
+block depends on `canary_present`: true positives, false positives,
+out-of-scope and hard-negative classifications, precision, recall and f1
+are computed before it is consulted and are byte-identical across all
+twelve runs. The three canary runs gain `applicable: true` and change in
+no other way — `caught`, `missed` and `detected` are unchanged for each.
+The four unscored runs have no score block and are untouched.
+
+**No rendered figure on the site moves.** The site reads only
+`score.canary.detected`, and only for runs it has already filtered to
+those with a canary present, so the three canary runs are the only ones
+it consults. Recomputed against the new scoring: the headline is 3 of 3
+before and after, as are the planted-into count, the scored and refused
+counts for the no-canary runs, the answer-key size and the total number
+of flags rendered.
+
+**Two published source hashes change with this.** `docs/data/bundle.json`
+records a SHA-256 for every file the scoring was built from, so that a
+reader can check the chain from scorer to result. `agent/answer_key.py`
+moves from `10218308176c4bb1983e759951025ea41ab97a7a53bac97b9fd4767e32a1851e`
+to `d1a2dd1e53a1f65431117a34acb97fe08c91394d5e3ba2c96851ce99811da5b7`,
+and `agent/eval_canary.py` from `cdabdf55049700d894e4fb5e9628f65ac85746041f46c287d1e8354ee24b2a17`
+to `db86d9aac2a0b342cf986ce874a1dc243d57f15663d21a4637b9fd8dfe092a42`.
+The bundle must therefore be re-exported from a clean tree; a provenance
+record built from uncommitted source would defeat the purpose of
+publishing the hashes.
+
+This is recorded here rather than in PREREGISTRATION.md. Nothing in that
+file, or in the code that computes its metrics, reads `score.canary`:
+its canary attribution rule derives presence from the manifest and
+`config_id` independently, and M18 uses the `CANARY` constant, which is
+unchanged. An amendment there would assert a dependency that does not
+exist inside a frozen file.
+
+The claim that the answer key was written before the agent existed is
+unaffected. It is a statement about when the key was written, and this
+changes how one derived field is reported, not what the key says is true.

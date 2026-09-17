@@ -236,8 +236,56 @@ def tier_counts() -> dict[str, int]:
 # ----------------------------------------------------------------------
 # Scoring
 # ----------------------------------------------------------------------
-def score(flagged: list[str]) -> dict:
+def _canary_block(flags: list[str], resolved: dict,
+                  canary_present: bool | None) -> dict:
+    """What this run's flags say about the planted column.
+
+    CANARY describes a column that is planted into some runs and absent
+    from others. This block used to be computed identically for every run,
+    so an honest run — one with no canary in its data at all — reported
+    planted ["recoveries"] and missed ["recoveries"], which reads as a run
+    that had a canary and failed to find it. Those runs are the opposite
+    case: there was nothing there to find. The block is therefore per-run,
+    and says nothing where the question does not apply.
+
+    `detected` is three-valued on purpose. False means the canary was in
+    the data and the agent did not flag it. None means either that there
+    was no canary, or that nobody said whether there was; a run cannot
+    fail a test it was never given. The same distinction is why `planted`
+    is an empty list when the canary is known absent and None when its
+    presence was not stated.
+
+    The per-column description is dropped where it does not apply. Nothing
+    is lost: scoring.json carries the same description once at the top
+    level, for the key as a whole rather than for any one run.
+    """
+    if canary_present is False:
+        return {"applicable": False, "planted": [], "caught": [],
+                "missed": [], "detected": None, "detail": {}}
+    if canary_present is None:
+        return {"applicable": None, "planted": None, "caught": None,
+                "missed": None, "detected": None, "detail": {}}
+
+    caught = sorted(c for c in CANARY if any(resolved[f][0] == c for f in flags))
+    missed = sorted(c for c in CANARY if not any(resolved[f][0] == c for f in flags))
+    return {
+        "applicable": True,
+        "planted": sorted(CANARY),
+        "caught": caught,
+        "missed": missed,
+        "detected": bool(CANARY) and not missed,
+        "detail": dict(CANARY),
+    }
+
+
+def score(flagged: list[str], canary_present: bool | None = None) -> dict:
     """Score a list of flagged column names against the answer key.
+
+    `canary_present` says whether the planted column was in this run's
+    data. It affects only the `canary` block: no true positive, false
+    positive, out-of-scope or hard-negative classification depends on it,
+    and neither do precision, recall or f1. Left unstated it reports the
+    canary question as unanswered rather than guessing.
 
     OUT_OF_SCOPE flags are removed before scoring — they count neither
     for nor against. Everything else flagged that is not a true positive
@@ -307,16 +355,7 @@ def score(flagged: list[str]) -> dict:
         "out_of_scope_flagged_count": len(out_of_scope_flagged),
         "hard_negatives_flagged": hn_flagged,
         "hard_negatives_flagged_count": len(hn_flagged),
-        "canary": {
-            "planted": sorted(CANARY),
-            "caught": sorted(c for c in CANARY
-                             if any(resolved[f][0] == c for f in flags)),
-            "missed": sorted(c for c in CANARY
-                             if not any(resolved[f][0] == c for f in flags)),
-            "detected": bool(CANARY) and all(
-                any(resolved[f][0] == c for f in flags) for c in CANARY),
-            "detail": dict(CANARY),
-        },
+        "canary": _canary_block(flags, resolved, canary_present),
         "hard_negatives_flagged_raw": hn_raw,
         "hard_negatives_flagged_via_derivative": hn_derived,
         "hard_negatives_distinct_count": len(hn_distinct),

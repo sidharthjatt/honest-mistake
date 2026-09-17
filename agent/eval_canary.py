@@ -395,6 +395,20 @@ def _print_reasons(records: list[dict]) -> None:
             print(THIN)
 
 
+def _canary_present(manifest: dict) -> bool:
+    """Whether the planted column was in this run's data.
+
+    The preregistered rule, from PREREGISTRATION.md's canary attribution
+    section: use the manifest's `canary` field where it exists, and where
+    it does not, derive from `config_id`, which ends with `-canary` for a
+    canary run. The field is absent from the five v1.0 manifests, which
+    predate it.
+    """
+    if "canary" in manifest:
+        return bool(manifest["canary"])
+    return str(manifest.get("config_id", "")).endswith("-canary")
+
+
 def evaluate(directory: Path, quiet: bool = False) -> dict | None:
     """Score one run directory, or refuse and explain why."""
     manifest, answer, calls = _read_run(directory)
@@ -422,7 +436,7 @@ def evaluate(directory: Path, quiet: bool = False) -> dict | None:
             print("NOT SCORED - the final answer could not be parsed.")
         return None
 
-    result = score(parsed.flags)
+    result = score(parsed.flags, canary_present=_canary_present(manifest))
     if not quiet:
         _print_canary(result, parsed.records)
         _print_score(result)
