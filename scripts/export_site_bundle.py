@@ -264,11 +264,13 @@ def main() -> int:
         "runs": scoring_runs,
         "notes": [
             ("Each run's score is the scorer's own output, unchanged. Its "
-             "score.canary block is computed against the planted column for "
-             "every scored run, including runs where that column was not in "
-             "the data. For those runs 'missed' means nothing was there to "
-             "find. Whether the canary was present is in runs/index.json, "
-             "under canary.present."),
+             "score.canary block is per-run: 'applicable' is true only where "
+             "the planted column was in that run's data. Where it is false "
+             "nothing was planted, 'planted' and 'missed' are empty, and "
+             "'detected' is null, because a run cannot miss a canary it was "
+             "never given. 'detected' is false only where the canary was "
+             "present and was not flagged. Whether the canary was present is "
+             "also recorded in runs/index.json, under canary.present."),
             ("A flag's verdict is read from the scorer's lists: true_positives, "
              "false_positives and out_of_scope_flagged. hard_negative is true "
              "when the flag is in hard_negatives_flagged. scored_as_parent is "
@@ -322,6 +324,12 @@ def main() -> int:
              "ends_on_role": unexecuted_by_run.get("run9-honest-nopop", {}).get("ends_on_role")},
         ],
     }
+    # Derived from a directory scan, not from what this script wrote: the
+    # tool artefacts under tools/ come from export_tool_artefacts.py. So an
+    # export redirected at an empty scratch directory produces a short list
+    # and the diff shows sixteen entries vanishing, which is an artefact of
+    # the scratch and not a change. This list can only be diffed from a real
+    # export into docs/data.
     files = sorted(p for p in OUT.rglob("*.json") if p.name != "bundle.json")
     bundle["files"] = [str(p.relative_to(OUT)) for p in files] + ["bundle.json"]
     _write(OUT / "bundle.json", bundle)
