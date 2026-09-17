@@ -485,7 +485,14 @@
       "features": []
      }
     },
-    "true_positives_clean_under_suppression": []
+    "true_positives_clean_under_suppression": [],
+    "true_positive_reachability": {
+     "known": true,
+     "model_column_count": 180,
+     "by_flag": {},
+     "reachable_count": 0,
+     "unreachable_count": 0
+    }
    },
    "flags": [
     {
@@ -633,7 +640,14 @@
       "features": []
      }
     },
-    "true_positives_clean_under_suppression": []
+    "true_positives_clean_under_suppression": [],
+    "true_positive_reachability": {
+     "known": true,
+     "model_column_count": 180,
+     "by_flag": {},
+     "reachable_count": 0,
+     "unreachable_count": 0
+    }
    },
    "flags": [
     {
@@ -781,7 +795,16 @@
       "features": []
      }
     },
-    "true_positives_clean_under_suppression": []
+    "true_positives_clean_under_suppression": [],
+    "true_positive_reachability": {
+     "known": true,
+     "model_column_count": 181,
+     "by_flag": {
+      "recoveries": true
+     },
+     "reachable_count": 1,
+     "unreachable_count": 0
+    }
    },
    "flags": [
     {
@@ -901,7 +924,16 @@
       "features": []
      }
     },
-    "true_positives_clean_under_suppression": []
+    "true_positives_clean_under_suppression": [],
+    "true_positive_reachability": {
+     "known": true,
+     "model_column_count": 181,
+     "by_flag": {
+      "recoveries": true
+     },
+     "reachable_count": 1,
+     "unreachable_count": 0
+    }
    },
    "flags": [
     {
@@ -1009,7 +1041,14 @@
       "features": []
      }
     },
-    "true_positives_clean_under_suppression": []
+    "true_positives_clean_under_suppression": [],
+    "true_positive_reachability": {
+     "known": true,
+     "model_column_count": 180,
+     "by_flag": {},
+     "reachable_count": 0,
+     "unreachable_count": 0
+    }
    },
    "flags": [
     {
@@ -1151,7 +1190,16 @@
       "features": []
      }
     },
-    "true_positives_clean_under_suppression": []
+    "true_positives_clean_under_suppression": [],
+    "true_positive_reachability": {
+     "known": true,
+     "model_column_count": 181,
+     "by_flag": {
+      "recoveries": true
+     },
+     "reachable_count": 1,
+     "unreachable_count": 0
+    }
    },
    "flags": [
     {
@@ -1314,7 +1362,14 @@
       "features": []
      }
     },
-    "true_positives_clean_under_suppression": []
+    "true_positives_clean_under_suppression": [],
+    "true_positive_reachability": {
+     "known": true,
+     "model_column_count": 180,
+     "by_flag": {},
+     "reachable_count": 0,
+     "unreachable_count": 0
+    }
    },
    "flags": [
     {
@@ -1456,7 +1511,14 @@
       "features": []
      }
     },
-    "true_positives_clean_under_suppression": []
+    "true_positives_clean_under_suppression": [],
+    "true_positive_reachability": {
+     "known": true,
+     "model_column_count": 180,
+     "by_flag": {},
+     "reachable_count": 0,
+     "unreachable_count": 0
+    }
    },
    "flags": [
     {
