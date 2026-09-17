@@ -261,6 +261,21 @@ def main() -> int:
         "counts": {"true_positives": len(ak.TRUE_POSITIVES),
                    "out_of_scope": len(ak.OUT_OF_SCOPE),
                    "hard_negatives": len(ak.HARD_NEGATIVES)},
+        # The two rules that let a flag be scored as the column it derives
+        # from, so a browser port can resolve a flag the same way the Python
+        # scorer does rather than guessing at the naming conventions. They
+        # are read off the private names because making them public would
+        # change answer_key.py, whose hash this bundle publishes, for a
+        # rename that alters no behaviour.
+        "derivative_rules": {
+            "was_missing_suffix": ak._WAS_MISSING_SUFFIX,
+            "one_hot_families": sorted(ak._ONE_HOT_FAMILIES),
+            "note": ("A flag not itself in one of the three lists is scored "
+                     "as its parent where it has one and the parent is "
+                     "listed: NAME_was_missing resolves to NAME, and "
+                     "FAMILY_value resolves to FAMILY for the families "
+                     "above. Resolution never adds a column to a list."),
+        },
         "runs": scoring_runs,
         "notes": [
             ("Each run's score is the scorer's own output, unchanged. Its "

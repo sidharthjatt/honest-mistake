@@ -52,7 +52,10 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from agent.data_dictionary import FEATURE_DOCS  # noqa: E402
-from agent.prompts import build_system_prompt  # noqa: E402
+from agent.prompts import (ANSWER_END, ANSWER_START, CONFIDENCE_VALUES,  # noqa: E402
+                           FIELD_ORDER, NO_FINDINGS_MARKER,
+                           RECORD_SEPARATOR, build_system_prompt)
+from agent.run_audit import VERBATIM_DELIMITER  # noqa: E402
 from agent.tools import TOOL_SCHEMAS, ToolLayer  # noqa: E402
 
 OUT = ROOT / "docs" / "data" / "tools"
@@ -203,6 +206,24 @@ def _prompt_template() -> dict:
                 "the sentinels swapped for placeholders. Fill all five before "
                 "sending; the ceilings in the prompt must match the ones the "
                 "loop enforces.",
+        # The format the prompt above demands, as data rather than as
+        # strings a reader would have to pick back out of the prose. A
+        # browser parser reading these cannot drift from the instruction
+        # the agent was given, which is the same reason eval_canary.py
+        # imports them rather than writing them out.
+        "answer_format": {
+            "start": ANSWER_START,
+            "end": ANSWER_END,
+            "record_separator": RECORD_SEPARATOR,
+            "no_findings_marker": NO_FINDINGS_MARKER,
+            "field_order": list(FIELD_ORDER),
+            "confidence_values": list(CONFIDENCE_VALUES),
+            # Written by the runner ahead of the model's own text. A run
+            # made in a browser has no runner and no header, so a parser
+            # there will never see it; it is exported because the recorded
+            # final answers do carry it.
+            "verbatim_delimiter": VERBATIM_DELIMITER,
+        },
     }
 
 
