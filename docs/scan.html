@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run the audit — Honest Mistake</title>
+<meta name="description" content="Point the auditing agent at one of two candidates and watch it work, turn by turn, in your own browser.">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Scan-only styles. Scoped to this page so the other three are untouched. */
+
+/* ---- the one bounded thing to act on ---- */
+.startpanel { background: var(--panel); border: 1px solid var(--rule-firm);
+  border-left: 5px solid var(--accent); border-radius: 8px;
+  padding: 1.3rem 1.4rem; margin: 1.6rem 0 2.4rem; }
+.startpanel > h2 { margin: 0 0 .3rem; border: 0; padding: 0; font-size: 1.15rem; }
+.startpanel > .sub { font-family: var(--sans); font-size: .84rem; color: var(--ink-faint);
+  margin: 0 0 1.3rem; }
+
+.step { border-left: 3px solid var(--rule); padding: 0 0 0 1rem; margin: 0 0 1.5rem; }
+.step:last-of-type { margin-bottom: 1rem; }
+.step[data-step-state="missing"] { border-left-color: #b4432f; }
+.step-h { display: flex; align-items: baseline; gap: .55rem; flex-wrap: wrap; margin-bottom: .2rem; }
+.step-n { font-family: var(--sans); font-size: .68rem; font-weight: 700; letter-spacing: .1em;
+  color: var(--ink-faint); border: 1px solid var(--rule-firm); border-radius: 999px;
+  padding: .05em .5em; }
+.step[data-step-state="missing"] .step-n { color: #b4432f; border-color: #b4432f; }
+.step-t { font-family: var(--sans); font-size: .95rem; font-weight: 650; }
+.step-need { font-family: var(--sans); font-size: .72rem; font-weight: 600; color: #b4432f;
+  display: none; }
+.step[data-step-state="missing"] .step-need { display: inline; }
+.step-hint { font-family: var(--sans); font-size: .8rem; color: var(--ink-faint);
+  margin: 0 0 .7rem; line-height: 1.55; }
+
+/* ---- the two candidates ---- */
+.choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: .9rem; margin: 0 0 .3rem; }
+.choice { background: var(--bg); border: 1px dashed var(--rule-firm); border-radius: 6px;
+  padding: .9rem 1rem; cursor: pointer; text-align: left; font: inherit; color: inherit;
+  transition: border-color .12s, background .12s; }
+.choice:hover { border-color: var(--ink-faint); }
+.choice[aria-pressed="true"] { background: var(--panel-2); border-style: solid;
+  border-color: var(--rule-firm); border-left: 4px solid var(--accent); }
+.choice-top { display: flex; align-items: baseline; justify-content: space-between; gap: .6rem; }
+.choice h3 { margin: 0; font-size: 1rem; }
+.choice h3::before { content: "\25CB\00a0\00a0"; color: var(--ink-faint); }
+.choice[aria-pressed="true"] h3::before { content: "\25CF\00a0\00a0"; color: var(--accent); }
+.choice-state { font-family: var(--sans); font-size: .68rem; letter-spacing: .06em;
+  text-transform: uppercase; font-weight: 600; color: var(--ink-faint); white-space: nowrap; }
+.choice[aria-pressed="true"] .choice-state { color: var(--accent); }
+.choice .kind { font-family: var(--sans); font-size: .72rem; color: var(--ink-faint);
+  margin: .15rem 0 .5rem; }
+.choice p { margin: 0; font-size: .86rem; color: var(--ink-soft); }
+.choice dl { margin: .6rem 0 0; font-family: var(--sans); font-size: .76rem;
+  color: var(--ink-faint); display: grid; grid-template-columns: auto 1fr; gap: .1rem .6rem; }
+.choice dt { font-weight: 600; }
+.choice dd { margin: 0; }
+
+/* ---- controls ---- */
+.field { display: grid; gap: .3rem; max-width: 30rem; }
+.field input, .field select { font: inherit; font-size: .92rem; padding: .5rem .6rem;
+  background: var(--bg); color: var(--ink); border: 1px solid var(--rule-firm); border-radius: 4px; }
+.step[data-step-state="missing"] .field input { border-color: #b4432f; }
+
+button.go { font: inherit; font-weight: 600; padding: .6rem 1.4rem; border: 0; border-radius: 4px;
+  background: var(--credited); color: #fff; cursor: pointer; }
+button.go:hover { filter: brightness(1.08); }
+button.ghost { font: inherit; padding: .5rem 1rem; border: 1px solid var(--rule-firm);
+  border-radius: 4px; background: var(--panel); color: var(--ink); cursor: pointer; }
+button.stop { font: inherit; font-weight: 600; padding: .5rem 1.1rem; border: 1px solid #b4432f;
+  border-radius: 4px; background: var(--panel); color: #b4432f; cursor: pointer; }
+button.stop:hover { background: var(--panel-2); }
+button.stop[data-armed="hard"] { background: #b4432f; color: #fff; }
+
+.stop-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; margin: 0 0 1rem; }
+
+.ceiling { margin-top: .9rem; max-width: 30rem; }
+.ceiling label { font-family: var(--sans); font-size: .8rem; color: var(--ink-soft); }
+.ceiling-row { display: flex; align-items: center; gap: .35rem; }
+.ceiling-unit { font-family: var(--sans); font-size: .92rem; color: var(--ink-faint); }
+.ceiling-row input { width: 7rem; }
+.step[data-step-state="missing"] .ceiling-row input { border-color: #b4432f; }
+
+.go-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap;
+  border-top: 1px solid var(--rule); padding-top: 1.1rem; }
+.go-why { font-family: var(--sans); font-size: .82rem; margin: 0; }
+.go-why[data-state="blocked"] { color: var(--uncredited); }
+.go-why[data-state="ready"] { color: var(--credited); }
+.go-why[data-state="busy"] { color: var(--ink-faint); }
+.go-why[data-state="refused"] { color: #b4432f; font-weight: 600; }
+
+.keynote { font-family: var(--sans); font-size: .78rem; color: var(--ink-faint); line-height: 1.6;
+  margin: .7rem 0 0; padding-left: 1.05rem; }
+.keynote li { margin-bottom: .2rem; }
+
+/* ---- the thesis, below the panel and compact ---- */
+.thesis { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 1rem 1.15rem; margin: 1rem 0 0;
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 1.2rem;
+  align-items: center; }
+.thesis svg { width: 100%; height: auto; display: block; }
+.thesis-cap { font-family: var(--sans); font-size: .82rem; color: var(--ink-soft);
+  margin: 0; line-height: 1.6; }
+@media (max-width: 640px) { .thesis { grid-template-columns: 1fr; } }
+
+/* ---- screen 2 ---- */
+.meters { display: grid; grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr)); gap: .8rem;
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 6px;
+  padding: .9rem 1rem; position: sticky; top: 0; z-index: 5; }
+.meter .k { font-family: var(--sans); font-size: .66rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-faint); font-weight: 600; }
+.meter .v { font-family: var(--sans); font-size: 1.25rem; font-weight: 650; font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em; }
+.meter .s { font-family: var(--sans); font-size: .7rem; color: var(--ink-faint); }
+
+.evt { border: 1px solid var(--rule); border-radius: 6px; background: var(--panel);
+  margin: .9rem 0; overflow: hidden; }
+.evt-head { display: flex; gap: .7rem; align-items: baseline; flex-wrap: wrap;
+  padding: .45rem .9rem; background: var(--panel-2); border-bottom: 1px solid var(--rule);
+  font-family: var(--sans); font-size: .72rem; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--ink-faint); font-weight: 600; }
+.evt-body { padding: .9rem; display: grid; gap: .8rem; }
+
+.think { border: 1px dashed var(--rule-firm); border-radius: 5px; background: var(--bg);
+  padding: .6rem .75rem; font-style: italic; color: var(--ink-soft); font-size: .92rem;
+  white-space: pre-wrap; }
+.say { white-space: pre-wrap; font-size: .97rem; }
+
+.call { border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 5px;
+  background: var(--bg); padding: .7rem .8rem; }
+.call-head { display: flex; gap: .5rem; align-items: baseline; flex-wrap: wrap; margin-bottom: .55rem; }
+.call-name { font-family: var(--mono); font-weight: 600; font-size: .9rem; }
+.call-args { font-family: var(--mono); font-size: .76rem; color: var(--ink-faint); }
+.call-wait { font-family: var(--sans); font-size: .76rem; color: var(--ink-faint); }
+
+.viz svg { width: 100%; height: auto; display: block; }
+.viz-note { font-family: var(--sans); font-size: .74rem; color: var(--ink-faint); margin-top: .4rem; }
+
+.defn dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .3rem .7rem; font-size: .9rem; }
+.defn dt { font-family: var(--sans); font-size: .68rem; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--ink-faint); font-weight: 600; padding-top: .15rem; }
+.defn dd { margin: 0; color: var(--ink-soft); }
+.defn .name { font-family: var(--mono); font-weight: 600; color: var(--ink); }
+
+.hits { display: grid; gap: .5rem; }
+.hit { border-left: 2px solid var(--rule-firm); padding-left: .7rem; font-size: .88rem; }
+.hit b { font-family: var(--mono); font-size: .85rem; }
+.hit span { color: var(--ink-soft); }
+
+.kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap: .5rem .9rem;
+  font-family: var(--sans); font-size: .8rem; }
+.kv div { border-top: 1px solid var(--rule); padding-top: .25rem; }
+.kv .k { color: var(--ink-faint); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; }
+.kv .v { font-variant-numeric: tabular-nums; }
+
+.banner { border-left: 3px solid var(--uncredited); background: var(--uncredited-soft);
+  padding: .7rem .9rem; border-radius: 0 4px 4px 0; font-family: var(--sans); font-size: .85rem;
+  color: var(--ink-soft); }
+.banner.bad { border-left-color: #b4432f; background: var(--panel-2); }
+.banner b { color: var(--ink); }
+/* A run with no verdict has to stop the eye. It is the one outcome a
+   visitor could otherwise mistake for a result. */
+.banner.verdictless { border-left-width: 5px; padding: .9rem 1.1rem; font-size: .9rem; }
+.banner.verdictless > b:first-child { color: #b4432f; font-size: 1.05rem; }
+.banner.verdictless .viz-note { margin: .6rem 0 0; }
+
+/* ---- screen 3 ---- */
+.s3-actions { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap;
+  border-top: 1px solid var(--rule); padding-top: 1.1rem; margin-top: 1.4rem; }
+.s3-block { margin: 0 0 2rem; }
+.s3-block h2 { font-size: 1.35rem; margin: 0 0 .6rem; border: 0; padding: 0; }
+.s3-block h3 { font-size: 1.02rem; margin: 0 0 .5rem; border: 0; padding: 0; }
+.s3-block p { font-size: .95rem; line-height: 1.65; margin: 0 0 .7rem; }
+.s3-reveal { border-left: 5px solid var(--accent); padding-left: 1.1rem; }
+.s3-framing { font-family: var(--sans); font-size: .85rem; color: var(--ink-soft);
+  background: var(--panel); border: 1px solid var(--rule); border-radius: 6px;
+  padding: .8rem .95rem; }
+
+.s3-cards { display: grid; gap: .9rem; }
+.s3-card { border: 1px solid var(--rule); border-left: 4px solid var(--rule-firm);
+  border-radius: 6px; background: var(--panel); padding: .9rem 1rem; }
+.s3-card.v-credited { border-left-color: var(--credited); }
+.s3-card.v-credited_unreachable { border-left-color: var(--accent); }
+.s3-card.v-hard_negative { border-left-color: #b4432f; }
+.s3-card.v-out_of_scope { border-left-color: var(--rule-firm); opacity: .85; }
+.s3-card-head { display: flex; align-items: baseline; justify-content: space-between;
+  gap: .7rem; flex-wrap: wrap; margin-bottom: .5rem; }
+.s3-flag { font-family: var(--mono); font-size: .95rem; font-weight: 600; }
+.s3-conf { font-family: var(--sans); font-size: .68rem; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--ink-faint); font-weight: 600; }
+.s3-verdict { font-size: .92rem; }
+.s3-said { border-top: 1px solid var(--rule); margin-top: .6rem; padding-top: .55rem; }
+.s3-said-k { font-family: var(--sans); font-size: .64rem; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink-faint); font-weight: 600; margin-bottom: .2rem; }
+.s3-said p { font-size: .87rem; color: var(--ink-soft); margin: 0; }
+
+.s3-canary-line { border-left: 3px solid var(--rule-firm); padding: .6rem .9rem;
+  background: var(--panel); border-radius: 0 5px 5px 0; }
+.s3-canary-line.found { border-left-color: var(--credited); }
+.s3-canary-line.missed { border-left-color: #b4432f; }
+.s3-canary-line.na { border-left-color: var(--rule-firm); }
+
+.s3-noverdict { border-left: 5px solid #b4432f; padding-left: 1.1rem; }
+.s3-yours { font-family: var(--sans); font-variant-numeric: tabular-nums; }
+.s3-smallprint { border-top: 1px solid var(--rule); padding-top: 1.1rem; }
+.s3-smallprint p { font-size: .82rem; color: var(--ink-faint); line-height: 1.6; }
+.s3-figures { font-family: var(--sans); font-variant-numeric: tabular-nums;
+  font-size: .95rem !important; color: var(--ink) !important; font-weight: 650; }
+
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="mast-row">
+      <p class="mast-title"><a href="index.html">Honest Mistake</a></p>
+      <nav class="mast-nav">
+        <a href="index.html">The benchmark</a>
+        <a href="runs.html">The runs</a>
+        <a href="scan.html" aria-current="page">Run the audit</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============================ screen 1 ============================ -->
+  <section id="screen1">
+    <h1>Run the audit yourself</h1>
+    <p class="lede">Give the agent something to audit and an API key, and it works
+    in your browser while you watch: it forms a hypothesis, calls its tools, and
+    reports what it finds.</p>
+
+    <div class="startpanel">
+      <h2>Start here</h2>
+      <p class="sub">Three steps. Nothing is sent until you press the button.</p>
+
+      <div class="step" data-step="candidate" data-step-state="ok">
+        <div class="step-h">
+          <span class="step-n">1</span>
+          <span class="step-t">Choose what to audit</span>
+          <span class="step-need">needed</span>
+        </div>
+        <p class="step-hint">Two candidates, described identically on purpose:
+        <b>you are not told which is which.</b> One of them may be reading the
+        answer off the back of the page.</p>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="step" data-step="auditor" data-step-state="ok">
+        <div class="step-h">
+          <span class="step-n">2</span>
+          <span class="step-t">Choose the auditor</span>
+        </div>
+        <p class="step-hint">Which Claude model runs the agent. This is the auditor,
+        not the thing being audited.</p>
+        <div class="field">
+          <label for="model" class="sr-label" hidden>Auditor model</label>
+          <select id="model" aria-label="Claude model that runs the auditing agent"></select>
+        </div>
+        <p class="viz-note" id="price-note"></p>
+        <div class="banner" id="retire" hidden></div>
+
+        <div class="field ceiling">
+          <label for="ceiling">Stop the run if it costs more than</label>
+          <div class="ceiling-row">
+            <span class="ceiling-unit">$</span>
+            <input id="ceiling" type="number" step="0.05"
+                   aria-label="Spend ceiling for this run, in US dollars">
+          </div>
+        </div>
+        <p class="viz-note" id="ceiling-note"></p>
+      </div>
+
+      <div class="step" data-step="key" data-step-state="ok">
+        <div class="step-h">
+          <span class="step-n">3</span>
+          <span class="step-t">Your API key</span>
+          <span class="step-need">needed</span>
+        </div>
+        <div class="field">
+          <label for="key" hidden>Your Anthropic API key</label>
+          <input id="key" type="password" autocomplete="off" spellcheck="false"
+                 aria-label="Your Anthropic API key" placeholder="sk-ant-…">
+        </div>
+        <ul class="keynote plain">
+          <li><b>Your key is never stored.</b> Not in storage, not in a cookie, not in
+            a URL, and not in the run this page keeps. It is held in memory and goes
+            when you close the tab.</li>
+          <li><b>The finished run is kept in this tab,</b> so reloading does not lose
+            it. It holds the transcript, the tool results and the token counts, and
+            never the key. It goes when the tab closes.</li>
+          <li><b>Sent to one place:</b> <code>api.anthropic.com</code>, straight from
+            your browser. No backend here, no key of mine.</li>
+          <li><b>Check it yourself:</b> the only file that builds or sends a request is
+            <a href="https://github.com/sidharthjatt/honest-mistake/blob/main/docs/agent/provider.js">agent/provider.js</a>,
+            and this page is
+            <a href="https://github.com/sidharthjatt/honest-mistake/blob/main/docs/scan.html">scan.html</a>.</li>
+        </ul>
+      </div>
+
+      <div class="go-row">
+        <button id="go" class="go">Start the audit</button>
+        <p class="go-why" id="go-why" data-state="blocked"></p>
+      </div>
+    </div>
+
+    <h2>Why this is worth auditing</h2>
+    <div class="thesis">
+      <div id="thesis-chart"></div>
+      <p class="thesis-cap" id="thesis-cap"></p>
+    </div>
+  </section>
+
+  <!-- ============================ screen 2 ============================ -->
+  <section id="screen2" hidden>
+    <p class="backlink"><button class="ghost" id="back">← Back</button></p>
+    <h1 id="run-title">Auditing…</h1>
+    <p class="note" id="run-sub"></p>
+
+    <div class="stop-row" id="stop-row" hidden>
+      <button id="stop" class="stop">Stop the run</button>
+      <p class="go-why" id="stop-why"></p>
+    </div>
+
+    <div class="meters" id="meters"></div>
+    <div id="stream"></div>
+
+    <div class="s3-actions" id="s3-actions" hidden>
+      <button id="see-score" class="go">See how it scored</button>
+      <button id="download-run" class="ghost">Download this run</button>
+      <p class="go-why" id="keep-note"></p>
+    </div>
+  </section>
+
+  <!-- ============================ screen 3 ============================ -->
+  <section id="screen3" hidden>
+    <p class="backlink"><button class="ghost" id="back-to-run">← Back to the run</button></p>
+    <div id="s3-body"></div>
+    <div class="s3-actions">
+      <button id="download-run-2" class="ghost">Download this run</button>
+      <p class="go-why" id="keep-note-2"></p>
+    </div>
+  </section>
+
+</main>
+
+<script type="module" src="scan.js"></script>
+</body>
+</html>

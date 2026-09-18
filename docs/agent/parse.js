@@ -57,10 +57,11 @@ export class ParseResult {
 }
 
 /* `format` is the answer_format block from data/tools/system_prompt.json.
-   `documentedColumns` is a Set of the dictionary's column names, used only
-   for the warning that a FLAG is not a documented name; pass null to skip
-   that check, which is what a caller without the dictionary loaded should
-   do rather than guess. */
+   `documentedColumns` is anything with a has(name) method over the
+   dictionary's column names — a Set, or the read-only view scan.js passes.
+   It is used only for the warning that a FLAG is not a documented name.
+   Pass null to skip that check, which is what a caller without the
+   dictionary loaded should do rather than guess. */
 export function parseFinalAnswer(text, format, documentedColumns = null) {
   const out = new ParseResult();
   const ANSWER_START = format.start;
