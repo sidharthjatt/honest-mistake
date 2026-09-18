@@ -294,6 +294,7 @@ Stated plainly, because hiding them would defeat the purpose.
 - **Probabilities are not calibrated.** Class weighting shifts predicted probabilities upward to favour recall, which inflates the Brier score by construction. Ranking metrics are unaffected. Calibration is not addressed anywhere in this repository.
 - **The canary establishes a floor, not a ceiling.** Tier A detection only. Nothing here shows the agent would catch a leak without a descriptive giveaway.
 - **The timing ablation cannot answer its own question** on this dictionary, for the reason given above.
+- **Three answer-key columns reach the site without a description.** `last_credit_pull_d`, `last_fico_range_high` and `last_fico_range_low` have no tier, because nothing in their descriptions matched a lifecycle phrase. The key holds their descriptions in `CLEAN_UNDER_SUPPRESSION`, but `scripts/export_site_bundle.py` only copies fields from `RESIDUAL_TIMING_LEAK`, so `docs/data/scoring.json` carries the column name and nothing else. The scan page says they have no tier and quotes nothing for them. Fixing it means changing the export and re-exporting the bundle, which changes its provenance hashes. That hasn't been worth doing for this alone.
 - **This is a research pipeline, not a service.** Single scripts and no packaging. Beyond each module's self-check, the tests are three scripts under `scripts/`: for the trajectory metrics, for the caching and ledger code, and for the Phase 4 runner on mocks.
 
 ## Layer 3: generated tools
