@@ -11,7 +11,11 @@
 
 import { MODELS, getModel, costOf, retirementWarning, DEFAULT_MODEL_ID } from './agent/models.js';
 import { ToolLayer } from './agent/tools.js';
-import { runReactLoop, Events, renderSystemPrompt, TERMINATION_SENTENCE } from './agent/loop.js';
+import {
+  runReactLoop, Events, renderSystemPrompt, TERMINATION_SENTENCE,
+  COMPLETED, TRUNCATED, REFUSAL, PAUSED, STOP_SEQUENCE, UNKNOWN_STOP,
+  TURN_LIMIT, CALL_LIMIT, COST_LIMIT, STOPPED, ABORTED, FAILED,
+} from './agent/loop.js';
 import { buildRequest } from './agent/provider.js';
 import { thesisChart, renderResult } from './agent/viz.js';
 import { scoreRun, render as renderScreen3 } from './agent/screen3.js';
@@ -184,9 +188,9 @@ function selectCard(letter) {
    right shape to price. */
 function representativeUsage() {
   const runs = runIndex.runs;
-  const run11 = runs.find(r => r.prompt_caching && r.termination === 'completed');
+  const run11 = runs.find(r => r.prompt_caching && r.termination === COMPLETED);
   if (run11) return { usage: run11.usage_totals, label: run11.label };
-  const done = runs.filter(r => r.termination === 'completed');
+  const done = runs.filter(r => r.termination === COMPLETED);
   return done.length ? { usage: done[0].usage_totals, label: done[0].label } : null;
 }
 
@@ -477,7 +481,7 @@ function closeOpenTurns(e) {
     if (t.waiting) { t.waiting.remove(); t.waiting = null; }
     const status = t.head.querySelector('.status');
     if (status && status.textContent === 'working') {
-      status.textContent = e.termination === 'aborted' ? 'cancelled' : 'not finished';
+      status.textContent = e.termination === ABORTED ? 'cancelled' : 'not finished';
     }
   }
 }
@@ -622,7 +626,7 @@ function attach(events) {
       el('b', { text: 'No verdict. ' }),
       noVerdictCause(e),
       ' ',
-      e.termination === 'completed'
+      e.termination === COMPLETED
         ? 'The agent stopped of its own accord but never wrote its findings in ' +
           'the required form, so there is no result to read. What is above is an ' +
           'investigation without a conclusion.'
@@ -638,8 +642,8 @@ function attach(events) {
             `refuses a run like this one — a partial answer is not an answer, and is ` +
             `not scored. `) +
         `${bits.join(' · ')}.` +
-        (e.termination === 'aborted' ? ` ${NOT_COUNTED}` : '') })));
-    $('run-title').textContent = e.termination === 'completed'
+        (e.termination === ABORTED ? ` ${NOT_COUNTED}` : '') })));
+    $('run-title').textContent = e.termination === COMPLETED
       ? `Candidate ${chosenCard} — audit produced no findings`
       : e.turns === 0
         ? `Candidate ${chosenCard} — no turn completed`
@@ -661,11 +665,11 @@ function attach(events) {
    finished", "cancelled"). What it never got was a reply, which is the true
    thing to say in both cases, and for a request that was never built. */
 const NO_REPLY = {
-  failed: 'The agent never got a reply to its first request, so it never looked ' +
+  [FAILED]: 'The agent never got a reply to its first request, so it never looked ' +
     'at anything and this run produced no result.',
-  aborted: 'That was the agent’s first request, so it never got a reply, never ' +
+  [ABORTED]: 'That was the agent’s first request, so it never got a reply, never ' +
     'looked at anything, and this run produced no result.',
-  stopped: 'That was before its first request was sent, so nothing was sent and ' +
+  [STOPPED]: 'That was before its first request was sent, so nothing was sent and ' +
     'nothing was spent.',
 };
 
@@ -680,32 +684,32 @@ const NOT_COUNTED = 'The cancelled request is not in that figure, and may still 
 function noVerdictCause(e) {
   const c = e.config || {};
   switch (e.termination) {
-    case 'turn_limit':
+    case TURN_LIMIT:
       return `The run was stopped at its ceiling of ${count(c.maxTurns, 'turn')}, ` +
         `before it could send another request.`;
-    case 'call_limit':
+    case CALL_LIMIT:
       return `The run was stopped at its ceiling of ${count(c.maxToolCalls, 'tool call')}.`;
-    case 'cost_limit':
+    case COST_LIMIT:
       return `The run was stopped at your spend ceiling of ${money(c.maxCost)}, ` +
         `before it could send another request.`;
-    case 'stopped':
+    case STOPPED:
       return 'You stopped the run.';
-    case 'aborted':
+    case ABORTED:
       return 'You cancelled the run while a request was in flight.';
-    case 'truncated':
+    case TRUNCATED:
       return `One turn hit the per-request output ceiling of ` +
         `${num(model.maxTokens)} tokens and was cut off mid-sentence.`;
-    case 'refusal':
+    case REFUSAL:
       return 'The model declined to continue.';
-    case 'paused':
+    case PAUSED:
       return 'The model paused the turn and the run was not resumed.';
-    case 'stop_sequence':
+    case STOP_SEQUENCE:
       return 'The model stopped on a stop sequence.';
-    case 'unknown_stop_reason':
+    case UNKNOWN_STOP:
       return 'The model stopped for a reason this page does not recognise.';
-    case 'failed':
+    case FAILED:
       return 'The run stopped on an error, which is shown above.';
-    case 'completed':
+    case COMPLETED:
       return 'The agent ended its turn without writing the findings block its brief asks for.';
     default:
       return e.reason;

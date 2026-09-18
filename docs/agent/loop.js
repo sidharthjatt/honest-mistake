@@ -40,6 +40,9 @@ export const TURN_LIMIT = 'turn_limit';
 export const CALL_LIMIT = 'call_limit';
 export const COST_LIMIT = 'cost_limit';
 export const STOPPED = 'stopped';
+/* A visitor's second Stop, which abandons the request in flight. agent.py
+   has no counterpart: the Python loop has no way to abort a request. */
+export const ABORTED = 'aborted';
 export const FAILED = 'failed';
 
 /* What each ending means, in a sentence. The loop records the enum; a
@@ -55,7 +58,7 @@ export const TERMINATION_SENTENCE = {
   [CALL_LIMIT]: 'The run hit its tool-call ceiling and was stopped.',
   [COST_LIMIT]: 'The run reached the spend ceiling and was stopped before it could send another request.',
   [STOPPED]: 'You stopped the run.',
-  aborted: 'The run was cancelled mid-request.',
+  [ABORTED]: 'The run was cancelled mid-request.',
   [FAILED]: 'The run stopped on an error.',
 };
 
@@ -211,7 +214,7 @@ export async function runReactLoop({
       reply = await transport.send({ apiKey, body, signal });
     } catch (err) {
       if (err && err.name === 'AbortError') {
-        termination = 'aborted';
+        termination = ABORTED;
         events.emit('run:aborted', { turn });
         break;
       }

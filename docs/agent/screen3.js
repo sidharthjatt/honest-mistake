@@ -25,6 +25,7 @@ import { parseFinalAnswer } from './parse.js';
 import { costOf } from './models.js';
 import { TEST_YEAR } from './pipeline.js';
 import { count, word } from './words.js';
+import { COMPLETED, TURN_LIMIT, ABORTED } from './loop.js';
 
 const $n = (tag, attrs = {}, ...kids) => {
   const n = document.createElement(tag);
@@ -405,7 +406,7 @@ function sectionNoVerdict(record, data) {
   const box = $n('section', { class: 's3-block s3-noverdict' });
   box.append($n('h3', { text: 'No verdict, so nothing to score.' }));
   box.append($n('p', {},
-    record.termination === 'completed'
+    record.termination === COMPLETED
       ? 'The agent ended its turn without writing the findings block its brief ' +
         'asks for, so it stopped of its own accord but left nothing to read. ' +
         'What is on the previous screen is an investigation without a conclusion.'
@@ -413,7 +414,7 @@ function sectionNoVerdict(record, data) {
          /* With turns, the billing note sits on the comparison line next to
             the dollar figure. At zero turns there is no comparison, so it
             goes here instead, and only here. */
-         noReply && record.termination === 'aborted'
+         noReply && record.termination === ABORTED
            ? ' The cancelled request may still be billed by Anthropic.' : '',
          noReply
            ? ' The model never replied, so there is no investigation on the previous ' +
@@ -444,12 +445,12 @@ function sectionCompare(record, data) {
 
   const runs = data.index.runs;
   const finished = v => runs
-    .filter(r => !!r.canary.present === v && r.termination === 'completed')
+    .filter(r => !!r.canary.present === v && r.termination === COMPLETED)
     .map(r => r.turns).sort((a, b) => a - b);
   const honestTurns = finished(false);
   const canaryTurns = finished(true);
-  const stopped = runs.filter(r => !r.canary.present && r.termination === 'turn_limit');
-  const maxCalls = Math.max(...runs.filter(r => r.termination === 'completed')
+  const stopped = runs.filter(r => !r.canary.present && r.termination === TURN_LIMIT);
+  const maxCalls = Math.max(...runs.filter(r => r.termination === COMPLETED)
     .map(r => r.tool_calls));
 
   box.append($n('p', { class: 's3-yours' },
@@ -457,7 +458,7 @@ function sectionCompare(record, data) {
     `${count(record.turns, 'turn')}, ${count(record.toolCalls, 'tool call')}, ${money(record.spend)}.`,
     /* Priced from reported usage, which a request cancelled in flight never
        gets. Same sentence as Screen 2. */
-    record.termination === 'aborted'
+    record.termination === ABORTED
       ? ' The cancelled request is not in that figure, and may still be billed.' : ''));
 
   /* Every count here comes from the run index. A sentence that names one
