@@ -603,71 +603,88 @@ function attach(events) {
       el('b', { text: 'The run stopped. ' }), e.message));
   });
 
+  /* Anything that throws while the ending is drawn is shown, not left to
+     the console. Events.emit catches a handler's error and logs it, which
+     on its own would leave the stream with no banner and the title still
+     saying the audit is running. */
   events.on('run:finished', e => {
-    meters.spend = e.spend;
-    meters.usage = { ...e.usage };
-    paintMeters();
-    closeOpenTurns(e);
-    const bits = [count(e.turns, 'turn'), count(e.toolCalls, 'tool call'),
-      `${money(e.spend)} spent of a ${money(e.config.maxCost)} ceiling`];
-
-    /* The same call Screen 3 makes, on the same final answer, so the banner
-       can't announce a result that the score then refuses. */
-    const verdict = readVerdict(e.finalText, e.termination, prompts.answer_format);
-    if (verdict.scoreable) {
-      $('stream').append(el('div', { class: 'banner' },
-        el('b', { text: 'Run finished. ' }),
-        // The sentence, not the enum. "turn_limit" is a value in a record,
-        // not something to put in front of a visitor on its own.
-        `${e.reason} ${bits.join(' · ')}. `,
-        'Press “See how it scored” below to find out which candidate this was.'));
-      $('run-title').textContent = runTitle(chosenCard, e);
-      return;
+    try {
+      showEnding(e);
+    } catch (err) {
+      $('stream').append(el('div', { class: 'banner bad' },
+        el('b', { text: 'This run’s ending could not be shown. ' }),
+        `The page refused rather than guess: ${err.message} `,
+        el('b', { text: 'Nothing here is a verdict on this candidate.' })));
+      $('run-title').textContent = `Candidate ${chosenCard} — ending not shown`;
     }
-
-    /* No findings block. The run bought an investigation and not an answer,
-       and the two look almost identical on screen — a wall of turns, then a
-       banner. The difference has to be stated, not implied, or a visitor
-       reads a truncation as a result. The scorer that graded the twelve
-       recorded runs draws exactly this line. */
-    $('stream').append(el('div', { class: 'banner bad verdictless' },
-      el('b', { text: 'No verdict. ' }),
-      noVerdictCause(e, verdict.missing),
-      e.termination === COMPLETED
-        /* True whether or not a block appeared in an earlier turn. With no
-           final answer there is no "before it" to speak of. */
-        ? verdict.missing === NO_TEXT ? ''
-          : ' Only the final answer is scored, as it was for the recorded runs, so ' +
-            'anything written before it, above, does not count.'
-        : ' ' + (e.turns === 0
-          ? NO_REPLY[e.termination] ?? 'The model never replied, so this run produced no result.'
-          /* Not "never reached its findings": a run cut off after writing a
-             complete block has them, and they still don't count. */
-          : 'The run did not finish, so it produced no result. Only a run the agent ' +
-            'ends itself is scored, as it was for the recorded runs, so nothing above ' +
-            'counts, including any findings it wrote.'),
-      el('b', { text: ' It is not a verdict on this candidate and must not be read as one.' }),
-      el('p', { class: 'viz-note', text:
-        /* The scorer refuses these two kinds of run for different reasons, in
-           different words (agent/eval_canary.py). A run that finished but left
-           no block is a parse failure. A run that didn't finish is refused
-           before parsing. */
-        (e.turns === 0
-          ? 'With no reply from the model there is nothing for the scorer to grade. '
-          : e.termination === COMPLETED
-            ? `The scorer that graded the ${word(runIndex.runs.length)} recorded runs ` +
-              `does not score a run like this one: ` +
-              (verdict.missing === NO_TEXT
-                ? `with no final answer there was nothing to parse, `
-                : `the final answer could not be parsed, `) +
-              `which it calls a parse failure, not a finding of nothing to report. `
-            : `The scorer that graded the ${word(runIndex.runs.length)} recorded runs ` +
-              `refuses a run like this one — a partial answer is not an answer, and is ` +
-              `not scored. `) +
-        `${bits.join(' · ')}.` +
-        (e.termination === ABORTED ? ` ${NOT_COUNTED}` : '') })));
-    $('run-title').textContent = runTitle(chosenCard, e);
   });
+}
+
+/* The banner and title for a run that has ended. */
+function showEnding(e) {
+  meters.spend = e.spend;
+  meters.usage = { ...e.usage };
+  paintMeters();
+  closeOpenTurns(e);
+  const bits = [count(e.turns, 'turn'), count(e.toolCalls, 'tool call'),
+    `${money(e.spend)} spent of a ${money(e.config.maxCost)} ceiling`];
+
+  /* The same call Screen 3 makes, on the same final answer, so the banner
+     can't announce a result that the score then refuses. */
+  const verdict = readVerdict(e.finalText, e.termination, prompts.answer_format);
+  if (verdict.scoreable) {
+    $('stream').append(el('div', { class: 'banner' },
+      el('b', { text: 'Run finished. ' }),
+      // The sentence, not the enum. "turn_limit" is a value in a record,
+      // not something to put in front of a visitor on its own.
+      `${e.reason} ${bits.join(' · ')}. `,
+      'Press “See how it scored” below to find out which candidate this was.'));
+    $('run-title').textContent = runTitle(chosenCard, e);
+    return;
+  }
+
+  /* No findings block. The run bought an investigation and not an answer,
+     and the two look almost identical on screen — a wall of turns, then a
+     banner. The difference has to be stated, not implied, or a visitor
+     reads a truncation as a result. The scorer that graded the twelve
+     recorded runs draws exactly this line. */
+  $('stream').append(el('div', { class: 'banner bad verdictless' },
+    el('b', { text: 'No verdict. ' }),
+    noVerdictCause(e, verdict.missing),
+    e.termination === COMPLETED
+      /* True whether or not a block appeared in an earlier turn. With no
+         final answer there is no "before it" to speak of. */
+      ? verdict.missing === NO_TEXT ? ''
+        : ' Only the final answer is scored, as it was for the recorded runs, so ' +
+          'anything written before it, above, does not count.'
+      : ' ' + (e.turns === 0
+        ? NO_REPLY[e.termination] ?? 'The model never replied, so this run produced no result.'
+        /* Not "never reached its findings": a run cut off after writing a
+           complete block has them, and they still don't count. */
+        : 'The run did not finish, so it produced no result. Only a run the agent ' +
+          'ends itself is scored, as it was for the recorded runs, so nothing above ' +
+          'counts, including any findings it wrote.'),
+    el('b', { text: ' It is not a verdict on this candidate and must not be read as one.' }),
+    el('p', { class: 'viz-note', text:
+      /* The scorer refuses these two kinds of run for different reasons, in
+         different words (agent/eval_canary.py). A run that finished but left
+         no block is a parse failure. A run that didn't finish is refused
+         before parsing. */
+      (e.turns === 0
+        ? 'With no reply from the model there is nothing for the scorer to grade. '
+        : e.termination === COMPLETED
+          ? `The scorer that graded the ${word(runIndex.runs.length)} recorded runs ` +
+            `does not score a run like this one: ` +
+            (verdict.missing === NO_TEXT
+              ? `with no final answer there was nothing to parse, `
+              : `the final answer could not be parsed, `) +
+            `which it calls a parse failure, not a finding of nothing to report. `
+          : `The scorer that graded the ${word(runIndex.runs.length)} recorded runs ` +
+            `refuses a run like this one — a partial answer is not an answer, and is ` +
+            `not scored. `) +
+      `${bits.join(' · ')}.` +
+      (e.termination === ABORTED ? ` ${NOT_COUNTED}` : '') })));
+  $('run-title').textContent = runTitle(chosenCard, e);
 }
 
 /* Screen 2's title for a finished run, live or restored after a reload.
@@ -856,10 +873,21 @@ function readOnlySet(items) {
 /* The record is the only thing passed in. screen3.js cannot see the current
    assignment, and the reveal reads record.variant. */
 async function showScreen3(record) {
-  const data = await loadScoringData();
-  const run = view(record);
-  const scored = scoreRun(run, data);
-  $('s3-body').replaceChildren(renderScreen3(run, data, scored, { turnViewShown }));
+  /* A check that refuses to render (the canary columns, the key columns,
+     a no-verdict kind with no sentence) throws. Uncaught, that was a click
+     on "See how it scored" that did nothing at all. It has to be seen. */
+  let body;
+  try {
+    const data = await loadScoringData();
+    const run = view(record);
+    const scored = scoreRun(run, data);
+    body = renderScreen3(run, data, scored, { turnViewShown });
+  } catch (err) {
+    body = el('div', { class: 'banner bad' },
+      el('b', { text: 'This run was not scored. ' }),
+      `The page checks its own data before it scores anything, and it refused: ${err.message}`);
+  }
+  $('s3-body').replaceChildren(body);
   $('screen1').hidden = true;
   $('screen2').hidden = true;
   $('screen3').hidden = false;
