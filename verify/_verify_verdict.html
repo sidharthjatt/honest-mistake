@@ -1,0 +1,354 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Verdict agreement</title>
+<style>body{font-family:ui-monospace,Menlo,monospace;background:#14141a;color:#e8e6ee;padding:1rem}
+pre{white-space:pre-wrap;word-break:break-word;font-size:.75rem}
+#stage iframe{width:1000px;height:600px;border:1px solid #444;background:#fff}</style></head><body>
+<pre id="out">running…</pre>
+<div id="stage"></div>
+<script type="module">
+/* Four checks on whether a run gets a verdict.
+ *
+ * 1. Screen 2 and Screen 3 agree, and agree with the scorer's rule. The
+ *    real scan page runs in an iframe. An import map points its dev
+ *    transport at a test transport built here, holding this page's own
+ *    copy of each transcript, so the check doesn't depend on which
+ *    scenarios verify/dev-transport.js happens to have. Every turn of every
+ *    transcript carries MARK in its thinking, and the test transport
+ *    counts its own requests, so a case whose stream lacks MARK or whose
+ *    count is zero ran on some other transport and fails. ?broken=1
+ *    misspells the map's key, to show that failure.
+ *
+ * 2. The loop's spend ceiling and Stop, on a mock transport. ?mutate=1
+ *    loads a copy of loop.js with those two gates removed, to show the
+ *    checks fail without them.
+ *
+ * 3. screen3.js's scoreRun over the twelve recorded runs, against what
+ *    data/scoring.json publishes for each: scored or not, the parse
+ *    warnings, and the whole score.
+ *
+ * 4. With ?baseline=<path to another scan.js>, every case in 1 runs again
+ *    on that scan.js, and its banners and title must match the shipped
+ *    one's word for word. This is for a change meant to move code without
+ *    changing what it draws. Without ?baseline it does not run.
+ *
+ * A module loaded from a blob can't resolve relative imports, so parts 2
+ * and 4 rewrite them to absolute URLs first. absolutize checks its own
+ * work: it lists every line it changed and refuses if any of them is not
+ * an import, so the file under test is the shipped file.
+ *
+ * The expected verdict for each case is the rule in agent/eval_canary.py:
+ * a run that did not complete is refused before parsing, and a completed
+ * run has a verdict only if its final answer holds a findings block.
+ */
+const out = document.getElementById('out');
+const log = [];
+const say = s => { log.push(s); out.textContent = log.join('\n'); };
+const PARAMS = new URLSearchParams(location.search);
+const BROKEN = PARAMS.has('broken');
+const MUTATE = PARAMS.has('mutate');
+const ORIGIN = location.origin;
+const BASELINE = PARAMS.get('baseline');
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const j = async p => { const r = await fetch(p, { cache: 'no-cache' }); if (!r.ok) throw new Error(`${p} -> ${r.status}`); return r.json(); };
+
+function deepEqual(a, b) {
+  if (a === b) return true;
+  if (a === null || b === null || typeof a !== typeof b) return false;
+  if (typeof a !== 'object') return Object.is(a, b);
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+  if (Array.isArray(a)) return a.length === b.length && a.every((v, i) => deepEqual(v, b[i]));
+  const ka = Object.keys(a), kb = Object.keys(b);
+  return ka.length === kb.length && ka.every(k => kb.includes(k) && deepEqual(a[k], b[k]));
+}
+
+let failures = 0;
+const check = (ok, line) => { if (!ok) failures += 1; say(`${ok ? 'PASS' : 'FAIL'}  ${line}`); };
+
+/* Relative import specifiers, static and dynamic, made absolute against
+   the module's own URL. Nothing else in the file may change. */
+function absolutize(src, moduleUrl) {
+  const abs = rel => new URL(rel, moduleUrl).href;
+  const out = src
+    .replace(/(\bfrom\s*')(\.{1,2}\/[^']*)'/g, (_, a, rel) => `${a}${abs(rel)}'`)
+    .replace(/(\bimport\(\s*')(\.{1,2}\/[^']*)'/g, (_, a, rel) => `${a}${abs(rel)}'`);
+  const before = src.split('\n'), after = out.split('\n');
+  if (before.length !== after.length) throw new Error(`absolutize changed the line count of ${moduleUrl}.`);
+  const changed = before.map((l, i) => [i + 1, l, after[i]]).filter(([, a, b]) => a !== b);
+  const stray = changed.filter(([, a]) => !/\bfrom\s*'\.{1,2}\/|\bimport\(\s*'\.{1,2}\//.test(a));
+  say(`absolutize ${new URL(moduleUrl).pathname}: ${changed.length} line(s) changed, ` +
+    `${stray.length} of them not an import`);
+  for (const [n, a, b] of changed) say(`  ${n}: ${a.trim()}\n  ${' '.repeat(String(n).length)}  -> ${b.trim()}`);
+  if (stray.length) throw new Error(`absolutize touched a line that is not an import in ${moduleUrl}.`);
+  return out;
+}
+const blobOf = src => URL.createObjectURL(new Blob([src], { type: 'text/javascript' }));
+
+/* ------------------------------------------------------ 1. the two screens */
+
+const MARK = 'VERDICT-HARNESS-FIXTURE';
+const START = '=== AUDIT FINDINGS ===';
+const END = '=== END AUDIT FINDINGS ===';
+const BLOCK = `${START}\nFLAG: recoveries\nREASON: harness fixture text, not a real finding.\n` +
+  `EVIDENCE: harness fixture text; no tool output is described.\nCONFIDENCE: high\n${END}`;
+const CALL = ['get_shap_ranking', { top_n: 3 }];
+const toolTurn = n => ({ stop: 'tool_use', thinking: `${MARK} turn ${n}.`, calls: [CALL] });
+const FIVE = [1, 2, 3, 4, 5].map(toolTurn);
+const HEAVY = { input: 0, output: 9000, cache_creation: 60000, cache_read: 120000 };
+
+/* `dev` is the scenario name in the URL. It matches the name of the same
+   case in verify/dev-transport.js where there is one, so that a broken map
+   would quietly run that scenario instead of failing to start. */
+const CASES = [
+  { dev: '1', label: 'six turns, block in the last', expect: true,
+    turns: [...FIVE, { stop: 'end_turn', thinking: `${MARK} turn 6.`, text: `Harness fixture.\n\n${BLOCK}`, calls: [] }] },
+  { dev: 'noblock', label: 'six turns, no block', expect: false,
+    turns: [...FIVE, { stop: 'end_turn', thinking: `${MARK} turn 6.`, text: 'Harness fixture, no block.', calls: [] }] },
+  { dev: 'late', label: 'block in turn 5 with a tool call, none in turn 6', expect: false,
+    turns: [...FIVE.slice(0, 4),
+      { stop: 'tool_use', thinking: `${MARK} turn 5.`, text: `Harness fixture.\n\n${BLOCK}`, calls: [CALL] },
+      { stop: 'end_turn', thinking: `${MARK} turn 6.`, text: 'Harness fixture, one more sentence.', calls: [] }] },
+  { dev: 'unclosed', label: 'block with no end marker', expect: false,
+    turns: [...FIVE, { stop: 'end_turn', thinking: `${MARK} turn 6.`,
+      text: `Harness fixture.\n\n${BLOCK.slice(0, BLOCK.indexOf(END))}`, calls: [] }] },
+  { dev: 'empty', label: 'no text in any turn', expect: false,
+    turns: [...FIVE, { stop: 'end_turn', thinking: `${MARK} turn 6.`, calls: [] }] },
+  { dev: 'blockstop', label: 'complete block every turn, Stop pressed', expect: false, stop: true,
+    repeat: true, latencyMs: 1500,
+    turns: [{ stop: 'tool_use', thinking: `${MARK} every turn.`, text: `Harness fixture.\n\n${BLOCK}`, calls: [CALL] }] },
+  { dev: 'blockturns', label: 'complete block every turn, turn ceiling', expect: false, repeat: true,
+    turns: [{ stop: 'tool_use', thinking: `${MARK} every turn.`, text: `Harness fixture.\n\n${BLOCK}`, calls: [CALL] }] },
+  { dev: 'blockcost', label: 'complete block every turn, spend ceiling', expect: false, repeat: true,
+    usage: HEAVY,
+    turns: [{ stop: 'tool_use', thinking: `${MARK} every turn.`, text: `Harness fixture.\n\n${BLOCK}`, calls: [CALL] }] },
+];
+
+function transportSource(c) {
+  const script = { turns: c.turns, repeat: !!c.repeat, latencyMs: c.latencyMs ?? 20, usage: c.usage ?? null };
+  return `import { buildRequest } from '${ORIGIN}/docs/agent/provider.js';
+const S = ${JSON.stringify(script)};
+export function scriptedTransport() {
+  let i = 0;
+  return {
+    buildRequest,
+    async send({ body }) {
+      const t = S.repeat ? S.turns[0] : S.turns[Math.min(i, S.turns.length - 1)];
+      i += 1;
+      globalThis.__harnessSends = i;
+      await new Promise(r => setTimeout(r, S.latencyMs));
+      const content = [];
+      if (t.thinking) content.push({ type: 'thinking', summary: t.thinking });
+      if (t.text) content.push({ type: 'text', text: t.text });
+      t.calls.forEach(([name, input], n) => content.push({ type: 'tool_use', id: 'h' + i + '_' + n, name, input }));
+      return {
+        id: 'harness_' + i, model: body.model, stop_reason: t.stop, stop_details: null, content,
+        text: t.text || '', thinking: t.thinking || '',
+        tool_calls: content.filter(b => b.type === 'tool_use').map(b => ({ id: b.id, name: b.name, input: b.input })),
+        usage: S.usage ? { ...S.usage } : { input: 100, output: 200, cache_creation: 0, cache_read: 0 },
+      };
+    },
+  };
+}`;
+}
+
+async function mount(c, scanBlob = null) {
+  let html = await (await fetch('/docs/scan.html', { cache: 'no-store' })).text();
+  if (scanBlob) {
+    // An import map doesn't apply to a script tag's src, so the tag is
+    // pointed at the other scan.js directly.
+    if (html.split('src="scan.js"').length !== 2) throw new Error('scan.html no longer loads scan.js as expected.');
+    html = html.replace('src="scan.js"', `src="${scanBlob}"`);
+  }
+  const url = URL.createObjectURL(new Blob([transportSource(c)], { type: 'text/javascript' }));
+  const key = `${ORIGIN}/verify/dev-transport.js${BROKEN ? 'X' : ''}`;
+  const map = { imports: { [key]: url } };
+  try { sessionStorage.clear(); } catch { /* nothing kept */ }
+  const stage = document.getElementById('stage');
+  stage.replaceChildren();
+  const f = document.createElement('iframe');
+  stage.append(f);
+  const w = f.contentWindow;
+  w.document.open();
+  w.history.replaceState(null, '', `/docs/scan.html?dev=${c.dev}`);
+  w.document.write(html.replace(/<head>/i,
+    `<head><script type="importmap">${JSON.stringify(map)}<\/script>`));
+  w.document.close();
+  return w;
+}
+
+async function until(test, ms) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < ms) { const v = test(); if (v) return v; await sleep(200); }
+  return null;
+}
+
+/* A verdict read off the page: true, false, or what was there instead. */
+function screen2(d) {
+  const b = [...d.querySelectorAll('#stream .banner')].map(x => x.textContent).find(t =>
+    /^(Run finished|No verdict|This run’s ending)/.test(t));
+  if (!b) return 'no banner';
+  return b.startsWith('Run finished') ? true : b.startsWith('No verdict') ? false : 'refused';
+}
+const title = d => d.getElementById('run-title').textContent.startsWith('Audited Candidate');
+function screen3(d) {
+  if (d.getElementById('screen3').hidden) return 'not shown';
+  if (d.querySelector('#s3-body .s3-noverdict')) return false;
+  if ([...d.querySelectorAll('#s3-body h3')].some(h => h.textContent === 'What the scorer made of your flags')) return true;
+  return 'neither';
+}
+
+/* One run of case c on the page, read back. `scanBlob` swaps in another
+   scan.js; null runs the shipped one. */
+async function runCase(c, scanBlob = null) {
+  const w = await mount(c, scanBlob);
+  const d = () => w.document;
+  const ready = await until(() => d().getElementById('go') && !d().getElementById('go').disabled
+    && d().querySelector('.choice[aria-pressed="true"]'), 20000);
+  if (!ready) return null;
+  d().getElementById('go').click();
+  if (c.stop) {
+    await until(() => w.__harnessSends >= 1 || d().querySelector('#stream .banner'), 20000);
+    d().getElementById('stop').click();
+  }
+  const s2 = await until(() => { const v = screen2(d()); return v === 'no banner' ? null : { v }; }, 120000);
+  const r = {
+    v2: s2 ? s2.v : 'no banner',
+    vt: title(d()),
+    titleText: d().getElementById('run-title').textContent,
+    banners: [...d().querySelectorAll('#stream .banner')].map(b => b.textContent),
+    sends: w.__harnessSends || 0,
+  };
+  r.ran = r.sends > 0 && d().getElementById('stream').textContent.includes(MARK);
+  d().getElementById('see-score').click();
+  const s3 = await until(() => { const v = screen3(d()); return v === 'not shown' ? null : { v }; }, 20000);
+  r.v3 = s3 ? s3.v : 'not shown';
+  return r;
+}
+
+say(`--- 1. Screen 2, the title and Screen 3 against the scorer's rule${BROKEN ? ' (map deliberately broken)' : ''}`);
+const shipped = new Map();
+for (const c of CASES) {
+  const r = await runCase(c);
+  if (!r) { check(false, `${c.dev}: the page never became ready`); continue; }
+  shipped.set(c.dev, r);
+  const ok = r.ran && r.v2 === c.expect && r.vt === c.expect && r.v3 === c.expect;
+  check(ok, `${c.dev.padEnd(10)} ${c.label}: expect ${c.expect}; screen2=${r.v2} title=${r.vt} ` +
+    `screen3=${r.v3}; test transport ran=${r.ran} (${r.sends} requests)`);
+}
+
+/* ------------------------------------------------ 2. the loop's two gates */
+
+say(`\n--- 2. spend ceiling and Stop on a mock transport${MUTATE ? ' (loop.js with both gates removed)' : ''}`);
+const GATE_STOP = 'if (shouldStop && shouldStop()) { termination = STOPPED; break; }';
+const GATE_COST = 'if (maxCost !== null && spend() >= maxCost) { termination = COST_LIMIT; break; }';
+let loopUrl = `${ORIGIN}/docs/agent/loop.js`;
+if (MUTATE) {
+  let src = await (await fetch(loopUrl, { cache: 'no-store' })).text();
+  const found = [GATE_STOP, GATE_COST].map(g => src.split(g).length - 1);
+  say(`mutation: stop gate found ${found[0]} time(s), cost gate ${found[1]} time(s)`);
+  if (found[0] !== 1 || found[1] !== 1) throw new Error('loop.js has changed; the mutation no longer applies.');
+  src = absolutize(src, loopUrl).replace(GATE_STOP, '').replace(GATE_COST, '');
+  loopUrl = blobOf(src);
+}
+const L = await import(loopUrl);
+const { ToolLayer } = await import(`${ORIGIN}/docs/agent/tools.js`);
+const { buildRequest } = await import(`${ORIGIN}/docs/agent/provider.js`);
+const { getModel, DEFAULT_MODEL_ID } = await import(`${ORIGIN}/docs/agent/models.js`);
+
+const v = 'layer1';
+const toolData = {
+  dictionary: await j('../docs/data/tools/dictionary.json'),
+  shapGlobal: await j(`../docs/data/tools/${v}/shap_global.json`),
+  shapDetail: await j(`../docs/data/tools/${v}/shap_detail.json`),
+  ablation: await j(`../docs/data/tools/${v}/ablation.json`),
+  coverage: await j(`../docs/data/tools/${v}/coverage.json`),
+  univariate: await j(`../docs/data/tools/${v}/univariate.json`),
+  correlations: await j(`../docs/data/tools/${v}/correlations.json`),
+};
+const schemas = await j('../docs/data/tools/tool_schemas.json');
+const model = getModel(DEFAULT_MODEL_ID);
+
+function mock() {
+  const m = { sends: 0 };
+  m.transport = { buildRequest, send: async ({ body }) => {
+    m.sends += 1;
+    return { id: 'm' + m.sends, model: body.model, stop_reason: 'tool_use', stop_details: null,
+      content: [{ type: 'tool_use', id: 't' + m.sends, name: CALL[0], input: CALL[1] }], text: '', thinking: '',
+      tool_calls: [{ id: 't' + m.sends, name: CALL[0], input: CALL[1] }],
+      usage: { input: 0, output: 20, cache_creation: 0, cache_read: 0 } };
+  } };
+  return m;
+}
+const base = { apiKey: 'unused', model, toolSchemas: schemas, system: 'harness', maxTurns: 20, maxToolCalls: 99 };
+
+/* $0.02 a turn against a $0.05 ceiling: over it after turn 3, so the gate
+   must stop the run before a fourth request is sent. */
+const mc = mock();
+const rc = await L.runReactLoop({ ...base, tools: new ToolLayer(toolData, {}), transport: mc.transport,
+  maxCost: 0.05, priceUsage: u => u.output * 0.001 });
+check(rc.termination === L.COST_LIMIT && rc.turns === 3 && mc.sends === 3 && rc.spend >= 0.05,
+  `spend ceiling: termination=${rc.termination} (expect ${L.COST_LIMIT}) turns=${rc.turns} ` +
+  `requests=${mc.sends} (expect 3 and 3) spend=$${rc.spend.toFixed(2)} of $0.05`);
+
+/* Stop is asked for once two requests have gone. The gate runs before the
+   next request is built, so exactly two are sent. */
+const ms = mock();
+const rs = await L.runReactLoop({ ...base, tools: new ToolLayer(toolData, {}), transport: ms.transport,
+  shouldStop: () => ms.sends >= 2 });
+check(rs.termination === L.STOPPED && rs.turns === 2 && ms.sends === 2,
+  `Stop: termination=${rs.termination} (expect ${L.STOPPED}) turns=${rs.turns} requests=${ms.sends} (expect 2 and 2)`);
+
+/* ------------------------------------ 3. scoreRun over the recorded runs */
+
+say('\n--- 3. screen3.scoreRun over the recorded runs, against data/scoring.json');
+const { scoreRun } = await import(`${ORIGIN}/docs/agent/screen3.js`);
+const [scoring, index, prompts, dictionary, l1, ca] = await Promise.all([
+  j('../docs/data/scoring.json'), j('../docs/data/runs/index.json'), j('../docs/data/tools/system_prompt.json'),
+  j('../docs/data/tools/dictionary.json'), j('../docs/data/tools/layer1/shap_global.json'),
+  j('../docs/data/tools/canary/shap_global.json')]);
+const documented = new Set(dictionary.map(e => e.feature));
+/* What scan.js's loadScoringData hands scoreRun, minus what scoreRun
+   doesn't read. */
+const data = { scoring, answerFormat: prompts.answer_format, documented: { has: x => documented.has(x) },
+  features: { layer1: l1.map(r => r.feature), canary: ca.map(r => r.feature) } };
+const published = new Map(scoring.runs.map(r => [r.label, r]));
+say(`recorded runs: ${index.runs.length}; published results: ${published.size}`);
+for (const entry of index.runs) {
+  const run = await j(`../docs/data/runs/${entry.label}.json`);
+  const present = !!run.facts.canary.present;
+  const got = scoreRun({ finalText: run.final_answer_text, termination: run.facts.termination,
+    variant: present ? 'canary' : 'layer1', canaryPresent: present }, data);
+  const pub = published.get(entry.label);
+  const same = pub && got.scoreable === pub.scored && (!pub.scored ||
+    (deepEqual(got.result, pub.score) && deepEqual(got.parsed.warnings, pub.parse_warnings)));
+  check(!!same, `${entry.label.padEnd(26)} ${run.facts.termination.padEnd(10)} scored: page=${got.scoreable} ` +
+    `published=${pub ? pub.scored : 'missing'}${pub && pub.scored ? `; score and warnings ${same ? 'match' : 'DIFFER'}` : ''}`);
+}
+
+/* ---------------------------- 4. the ending, against another scan.js */
+
+say('\n--- 4. banners and title against a baseline scan.js');
+if (!BASELINE) {
+  say('not run: pass ?baseline=<same-origin path to a scan.js> to compare against it');
+} else {
+  const baseUrl = new URL(BASELINE, location.href).href;
+  const src = await (await fetch(baseUrl, { cache: 'no-store' })).text();
+  // Made absolute as if it sat where the shipped scan.js does, so its
+  // imports reach the same modules.
+  const blob = blobOf(absolutize(src, `${ORIGIN}/docs/scan.js`));
+  say(`baseline: ${new URL(baseUrl).pathname}`);
+  for (const c of CASES) {
+    const a = shipped.get(c.dev);
+    const b = await runCase(c, blob);
+    if (!a || !b) { check(false, `${c.dev}: a run did not complete`); continue; }
+    const same = a.titleText === b.titleText && deepEqual(a.banners, b.banners);
+    check(same && a.ran && b.ran, `${c.dev.padEnd(10)} title and ${a.banners.length} banner(s) ` +
+      `${same ? 'identical' : 'DIFFER'}; test transport ran on both=${a.ran && b.ran}`);
+    if (!same) {
+      say(`  shipped:  ${a.titleText} | ${a.banners.join(' | ')}`);
+      say(`  baseline: ${b.titleText} | ${b.banners.join(' | ')}`);
+    }
+  }
+}
+
+say(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILED`}`);
+window.__done = { failures };
+</script></body></html>
