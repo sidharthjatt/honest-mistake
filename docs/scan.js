@@ -20,6 +20,7 @@ import { buildRequest } from './agent/provider.js';
 import { thesisChart, renderResult } from './agent/viz.js';
 import { scoreRun, render as renderScreen3 } from './agent/screen3.js';
 import { buildRecord, remember, recall, forget, download, view } from './agent/runfile.js';
+import { readVerdict, finishedWithout, NO_TEXT } from './agent/verdict.js';
 import { TRAIN_YEARS, TEST_YEAR } from './agent/pipeline.js';
 import { count, word } from './agent/words.js';
 
@@ -92,6 +93,11 @@ let scoringData = null;
    built from them. The loop's return value carries less. */
 let captured = null;
 let lastRecord = null;
+/* Whether Screen 2 holds lastRecord's turn-by-turn view. A run started on
+   this page streams into it; a run restored after a reload does not, and
+   Screen 2 says so. Screen 3 reads this same flag, so it never points the
+   visitor at a view that isn't there. */
+let turnViewShown = false;
 /* Which card is which model is decided here, once, at random, and is never
    written to the page. The visitor is not told, and neither is anything
    they could read without opening the console on purpose. */
@@ -281,10 +287,9 @@ function wireControls() {
   const kept = recall();
   if (kept) {
     lastRecord = kept;
+    turnViewShown = false;
     $('screen2').hidden = false;
-    $('run-title').textContent = kept.facts.turns === 0
-      ? `Candidate ${kept.facts.candidate} \u2014 no turn completed`
-      : `Audited Candidate ${kept.facts.candidate}`;
+    $('run-title').textContent = runTitle(kept.facts.candidate, view(kept));
     $('run-sub').textContent =
       `Restored from this tab \u2014 the turn-by-turn view is not re-shown.`;
     $('stream').replaceChildren(el('p', { class: 'note', text:
@@ -606,14 +611,17 @@ function attach(events) {
     const bits = [count(e.turns, 'turn'), count(e.toolCalls, 'tool call'),
       `${money(e.spend)} spent of a ${money(e.config.maxCost)} ceiling`];
 
-    if (e.hasFindings) {
+    /* The same call Screen 3 makes, on the same final answer, so the banner
+       can't announce a result that the score then refuses. */
+    const verdict = readVerdict(e.finalText, e.termination, prompts.answer_format);
+    if (verdict.scoreable) {
       $('stream').append(el('div', { class: 'banner' },
         el('b', { text: 'Run finished. ' }),
         // The sentence, not the enum. "turn_limit" is a value in a record,
         // not something to put in front of a visitor on its own.
         `${e.reason} ${bits.join(' · ')}. `,
         'Press “See how it scored” below to find out which candidate this was.'));
-      $('run-title').textContent = `Audited Candidate ${chosenCard}`;
+      $('run-title').textContent = runTitle(chosenCard, e);
       return;
     }
 
@@ -624,31 +632,55 @@ function attach(events) {
        recorded runs draws exactly this line. */
     $('stream').append(el('div', { class: 'banner bad verdictless' },
       el('b', { text: 'No verdict. ' }),
-      noVerdictCause(e),
-      ' ',
+      noVerdictCause(e, verdict.missing),
       e.termination === COMPLETED
-        ? 'The agent stopped of its own accord but never wrote its findings in ' +
-          'the required form, so there is no result to read. What is above is an ' +
-          'investigation without a conclusion.'
-        : e.turns === 0
+        /* True whether or not a block appeared in an earlier turn. With no
+           final answer there is no "before it" to speak of. */
+        ? verdict.missing === NO_TEXT ? ''
+          : ' Only the final answer is scored, as it was for the recorded runs, so ' +
+            'anything written before it, above, does not count.'
+        : ' ' + (e.turns === 0
           ? NO_REPLY[e.termination] ?? 'The model never replied, so this run produced no result.'
-          : 'The agent never reached its findings, so this run produced no result. ' +
-            'What is above is a partial investigation, cut off mid-thought.',
+          /* Not "never reached its findings": a run cut off after writing a
+             complete block has them, and they still don't count. */
+          : 'The run did not finish, so it produced no result. Only a run the agent ' +
+            'ends itself is scored, as it was for the recorded runs, so nothing above ' +
+            'counts, including any findings it wrote.'),
       el('b', { text: ' It is not a verdict on this candidate and must not be read as one.' }),
       el('p', { class: 'viz-note', text:
+        /* The scorer refuses these two kinds of run for different reasons, in
+           different words (agent/eval_canary.py). A run that finished but left
+           no block is a parse failure. A run that didn't finish is refused
+           before parsing. */
         (e.turns === 0
           ? 'With no reply from the model there is nothing for the scorer to grade. '
-          : `The scorer that graded the ${word(runIndex.runs.length)} recorded runs ` +
-            `refuses a run like this one — a partial answer is not an answer, and is ` +
-            `not scored. `) +
+          : e.termination === COMPLETED
+            ? `The scorer that graded the ${word(runIndex.runs.length)} recorded runs ` +
+              `does not score a run like this one: ` +
+              (verdict.missing === NO_TEXT
+                ? `with no final answer there was nothing to parse, `
+                : `the final answer could not be parsed, `) +
+              `which it calls a parse failure, not a finding of nothing to report. `
+            : `The scorer that graded the ${word(runIndex.runs.length)} recorded runs ` +
+              `refuses a run like this one — a partial answer is not an answer, and is ` +
+              `not scored. `) +
         `${bits.join(' · ')}.` +
         (e.termination === ABORTED ? ` ${NOT_COUNTED}` : '') })));
-    $('run-title').textContent = e.termination === COMPLETED
-      ? `Candidate ${chosenCard} — audit produced no findings`
-      : e.turns === 0
-        ? `Candidate ${chosenCard} — no turn completed`
-        : `Candidate ${chosenCard} — audit cut off`;
+    $('run-title').textContent = runTitle(chosenCard, e);
   });
+}
+
+/* Screen 2's title for a finished run, live or restored after a reload.
+   Whether there was a verdict is readVerdict's answer, the same one the
+   banner and Screen 3 act on, so a restored run can't be titled as audited
+   when it has no verdict. */
+function runTitle(card, { termination, turns, finalText }) {
+  if (readVerdict(finalText, termination, prompts.answer_format).scoreable) {
+    return `Audited Candidate ${card}`;
+  }
+  if (termination === COMPLETED) return `Candidate ${card} — no verdict`;
+  if (turns === 0) return `Candidate ${card} — no turn completed`;
+  return `Candidate ${card} — audit cut off`;
 }
 
 /* A run can end before the model has replied once in three ways and no
@@ -681,7 +713,7 @@ const NOT_COUNTED = 'The cancelled request is not in that figure, and may still 
 /* Why this run has no verdict, naming the ceiling that actually stopped it
    with the number that was in force. A visitor who hit a limit should be
    able to see which one and what it was set to, without reading a record. */
-function noVerdictCause(e) {
+function noVerdictCause(e, missing) {
   const c = e.config || {};
   switch (e.termination) {
     case TURN_LIMIT:
@@ -710,7 +742,7 @@ function noVerdictCause(e) {
     case FAILED:
       return 'The run stopped on an error, which is shown above.';
     case COMPLETED:
-      return 'The agent ended its turn without writing the findings block its brief asks for.';
+      return finishedWithout(missing);
     default:
       return e.reason;
   }
@@ -827,7 +859,7 @@ async function showScreen3(record) {
   const data = await loadScoringData();
   const run = view(record);
   const scored = scoreRun(run, data);
-  $('s3-body').replaceChildren(renderScreen3(run, data, scored));
+  $('s3-body').replaceChildren(renderScreen3(run, data, scored, { turnViewShown }));
   $('screen1').hidden = true;
   $('screen2').hidden = true;
   $('screen3').hidden = false;
@@ -893,6 +925,7 @@ async function start() {
   $('screen1').hidden = true;
   $('screen2').hidden = false;
   $('stream').replaceChildren(el('p', { class: 'status', text: 'Loading the model’s artefacts…' }));
+  turnViewShown = true;
 
   model = getModel($('model').value);
   const variant = assignment[chosenCard === 'A' ? 0 : 1];

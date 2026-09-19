@@ -112,21 +112,6 @@ export function renderSystemPrompt(template, { maxTurns, maxToolCalls, nFeatures
   return filled;
 }
 
-/* The markers the system prompt tells the agent to wrap its answer in.
-   Their presence is the only evidence that a run produced a verdict rather
-   than being cut off mid-investigation, and the scorer treats it the same
-   way: a run that never signalled it had finished is not scored, because a
-   partial answer is not an answer. */
-const FINDINGS_OPEN = '=== AUDIT FINDINGS ===';
-const FINDINGS_CLOSE = '=== END AUDIT FINDINGS ===';
-
-export function hasFindingsBlock(text) {
-  if (!text) return false;
-  const open = text.indexOf(FINDINGS_OPEN);
-  if (open === -1) return false;
-  return text.indexOf(FINDINGS_CLOSE, open + FINDINGS_OPEN.length) !== -1;
-}
-
 /* The assistant turn as it must be echoed back. Thinking blocks are
    returned unchanged, signature and all: the API rejects a replayed
    thinking block that has been edited. */
@@ -171,11 +156,6 @@ export async function runReactLoop({
   let turns = 0;
   let callsMade = 0;
   let finalText = '';
-  /* Every text block the model wrote, in order. Kept only so the findings
-     block can be looked for across the whole run rather than in the last
-     turn alone: a run that wrote its answer and then said one more thing
-     still produced a verdict. */
-  let allText = '';
   let lastStopReason = '';
   let termination = TURN_LIMIT;
   let failure = null;
@@ -233,7 +213,7 @@ export async function runReactLoop({
     turns += 1;
     for (const k of Object.keys(usage)) usage[k] += reply.usage[k] || 0;
     lastStopReason = reply.stop_reason;
-    if (reply.text) { finalText = reply.text; allText += reply.text + '\n'; }
+    if (reply.text) finalText = reply.text;
 
     if (reply.thinking) events.emit('reasoning', { turn, text: reply.thinking });
     if (reply.text) events.emit('text', { turn, text: reply.text });
@@ -327,11 +307,6 @@ export async function runReactLoop({
     toolCalls: callsMade,
     usage,
     spend: spend(),
-    /* Whether the agent produced a verdict at all. This is not the same
-       question as whether the run ended cleanly: a run can reach its last
-       turn and still have written nothing an answer could be read from.
-       The page must not let a visitor mistake one for the other. */
-    hasFindings: hasFindingsBlock(allText),
     reason: TERMINATION_SENTENCE[termination] || `The run ended (${termination}).`,
     failure,
     config: { maxTurns, maxToolCalls, maxCost, cache, model: model.id, ...tools.config },

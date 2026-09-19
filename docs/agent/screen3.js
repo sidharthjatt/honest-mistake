@@ -21,7 +21,7 @@
  */
 
 import { AnswerKey, score } from './scoring.js';
-import { parseFinalAnswer } from './parse.js';
+import { readVerdict, finishedWithout, NO_TEXT } from './verdict.js';
 import { costOf } from './models.js';
 import { TEST_YEAR } from './pipeline.js';
 import { count, word } from './words.js';
@@ -58,10 +58,11 @@ const listOf = xs => xs.length < 2 ? String(xs[0] ?? '')
 export function scoreRun(record, data) {
   const key = new AnswerKey(data.scoring);
   const features = data.features[record.variant];
-  const parsed = parseFinalAnswer(record.finalText, data.answerFormat, data.documented);
+  const { scoreable, parsed, missing } = readVerdict(
+    record.finalText, record.termination, data.answerFormat, data.documented);
 
-  if (!parsed.isScoreable) {
-    return { scoreable: false, parsed, key, features };
+  if (!scoreable) {
+    return { scoreable: false, parsed, missing, key, features };
   }
   const result = score(parsed.flags, key, record.canaryPresent, features);
   return { scoreable: true, parsed, key, features, result };
@@ -88,14 +89,17 @@ function verdictOf(flag, result, key, featureSet) {
 
 /* ---------------------------------------------------------------- render */
 
-export function render(record, data, scored) {
+/* `turnViewShown` is scan.js's word on whether the previous screen holds
+   this run's turn-by-turn view. After a reload it doesn't, and nothing here
+   may point the visitor at it. */
+export function render(record, data, scored, { turnViewShown }) {
   const out = $n('div', { class: 's3' });
   const honest = !record.canaryPresent;
 
   out.append(sectionReveal(record, data, honest));
 
   if (!scored.scoreable) {
-    out.append(sectionNoVerdict(record, data));
+    out.append(sectionNoVerdict(record, data, scored, turnViewShown));
     /* A run with no reply has nothing to compare. */
     if (record.turns > 0) out.append(sectionCompare(record, data));
     return out;
@@ -401,31 +405,54 @@ function sectionCanary(result, data) {
    investigation to point at and no partial answer for the scorer to
    refuse, and a visitor who stopped it before the first request paid
    nothing. scan.js holds the same rule for Screen 2. */
-function sectionNoVerdict(record, data) {
+function sectionNoVerdict(record, data, scored, turnViewShown) {
   const noReply = record.turns === 0;
   const box = $n('section', { class: 's3-block s3-noverdict' });
   box.append($n('h3', { text: 'No verdict, so nothing to score.' }));
   box.append($n('p', {},
     record.termination === COMPLETED
-      ? 'The agent ended its turn without writing the findings block its brief ' +
-        'asks for, so it stopped of its own accord but left nothing to read. ' +
-        'What is on the previous screen is an investigation without a conclusion.'
-      : [record.terminationSentence || 'The run ended before the agent wrote its findings.',
+      /* True whether or not a block appeared in an earlier turn: the final
+         answer is the only text that is scored. With no final answer there
+         is no "before it" to speak of. */
+      ? [finishedWithout(scored.missing),
+         scored.missing === NO_TEXT ? ''
+           : turnViewShown
+             ? ' Only the final answer is scored, so anything it wrote before that, on ' +
+               'the previous screen, does not count.'
+             : ' Only the final answer is scored, so anything it wrote before that does ' +
+               'not count.']
+      : [record.terminationSentence || 'The run ended before the agent finished.',
          /* With turns, the billing note sits on the comparison line next to
             the dollar figure. At zero turns there is no comparison, so it
             goes here instead, and only here. */
          noReply && record.termination === ABORTED
            ? ' The cancelled request may still be billed by Anthropic.' : '',
          noReply
-           ? ' The model never replied, so there is no investigation on the previous ' +
-             'screen, partial or otherwise.'
-           : ' What is on the previous screen is a partial investigation, not a conclusion.']));
+           ? turnViewShown
+             ? ' The model never replied, so there is no investigation on the previous ' +
+               'screen, partial or otherwise.'
+             : ' The model never replied, so there was no investigation, partial or otherwise.'
+           /* Not "no findings": a run cut off after writing a complete block
+              has one, and it still doesn't count. */
+           : turnViewShown
+             ? ' Only a run the agent ends itself is scored, so nothing on the previous ' +
+               'screen counts, including any findings it wrote.'
+             : ' Only a run the agent ends itself is scored, so nothing it wrote counts, ' +
+               'including any findings.']));
   /* On a run with no reply the heading already says there is nothing to
      score, so this line would only repeat it. */
+  /* Quoted from agent/eval_canary.py, and the quote has to match the rule
+     that actually applied: a finished run with no block fails to parse, and
+     a run that didn't finish is refused before that. */
   if (!noReply) {
     box.append($n('p', {}, 'The scorer that graded the ', word(data.index.runs.length),
-      ' recorded runs refuses a run like this one, in its own words: a partial answer ' +
-      'is not an answer, and is not scored.'));
+      ' recorded runs ',
+      record.termination === COMPLETED
+        ? 'does not score a run like this one, in its own words: “the answer could ' +
+          'not be parsed. This is a parse failure, not a finding of ‘nothing to ' +
+          'report’.”'
+        : 'refuses a run like this one, in its own words: a partial answer is not an ' +
+          'answer, and is not scored.'));
   }
   /* The heading and the reveal above have already said which candidate it
      was. What they don't say is why a run with no verdict is told at all. */

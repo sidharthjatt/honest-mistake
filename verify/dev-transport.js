@@ -139,12 +139,57 @@ const OUT_OF_SCOPE_FINAL = {
   calls: [],
 };
 
+/* The findings block comes one turn too early. Turn 5 writes it and also
+   calls a tool, so the run goes on, and turn 6 says one more sentence and
+   ends. Only the final answer is scored, as it was for the recorded runs,
+   so this run has no verdict even though a block appears in the stream.
+   That's the case where a check over all of the run's text and the parser
+   over the last turn would disagree. */
+const LATE_BLOCK = [
+  {
+    stop: 'tool_use',
+    text: 'Synthetic fixture text, not a real finding.\n\n' +
+      '=== AUDIT FINDINGS ===\n' +
+      'FLAG: loan_status\n' +
+      'REASON: synthetic fixture text; this block is written a turn too early on purpose.\n' +
+      'EVIDENCE: synthetic fixture text; no tool output is being described.\n' +
+      'CONFIDENCE: low\n' +
+      '=== END AUDIT FINDINGS ===',
+    calls: [['lookup_feature', { feature: 'loan_status' }]],
+  },
+  {
+    stop: 'end_turn',
+    text: 'Synthetic fixture text: one more sentence after the block, and no block in this turn.',
+    calls: [],
+  },
+];
+
 /* Ends cleanly on end_turn but never writes the block, which is the one
    case that is neither a truncation nor a result. */
 const NO_BLOCK_FINAL = {
   stop: 'end_turn',
   text: 'Scripted reply that deliberately stops without emitting the findings ' +
     'block, to exercise the completed-but-verdictless path.',
+  calls: [],
+};
+
+/* The final answer opens the findings block and never closes it. The
+   parser's second early exit: a start marker with no end marker after it. */
+const UNCLOSED_FINAL = {
+  stop: 'end_turn',
+  text: 'Synthetic fixture text, not a real finding.\n\n' +
+    '=== AUDIT FINDINGS ===\n' +
+    'FLAG: loan_status\n' +
+    'REASON: synthetic fixture text; this block is left open on purpose.\n' +
+    'EVIDENCE: synthetic fixture text; no tool output is being described.\n' +
+    'CONFIDENCE: low\n',
+  calls: [],
+};
+
+/* Ends on end_turn with no text at all. The first five turns of the script
+   carry thinking but no text, so this run never wrote a final answer. */
+const EMPTY_FINAL = {
+  stop: 'end_turn',
   calls: [],
 };
 
@@ -171,13 +216,42 @@ const NO_BLOCK_FINAL = {
  *                    on a canary deal, recoveries is the plain credited card
  *   ?dev=oos      the six-turn script, ending on member_id
  *                 -> the out_of_scope card, on either variant
+ *   ?dev=late     the findings block in turn 5, alongside a tool call, then
+ *                 a sixth turn with text and no block
+ *                 -> no verdict, because only the final answer is scored
+ *   ?dev=unclosed the six-turn script, ending on a findings block with no
+ *                 end marker                       -> completed, no verdict
+ *   ?dev=empty    the six-turn script, ending with no text, and no turn
+ *                 before it wrote any              -> completed, no verdict
+ *   ?dev=blockstop    as slow, but every turn also writes a complete
+ *                     findings block               -> press Stop: stopped
+ *   ?dev=blockturns   as endless, with the block   -> turn ceiling
+ *   ?dev=blockcost    as costly, with the block    -> spend ceiling
+ *                 -> all three: no verdict, though the last text holds a
+ *                    complete block, because the run did not finish
  */
+/* A complete, well-formed findings block, written on every turn of the
+   block* scenarios alongside a tool call, so the run never ends itself.
+   Whatever ends it, the block must not be scored: only a completed run is,
+   and the page has to say so without claiming there were no findings. */
+const EVERY_TURN_BLOCK = 'Synthetic fixture text, not a real finding.\n\n' +
+  '=== AUDIT FINDINGS ===\n' +
+  'FLAG: recoveries\n' +
+  'REASON: synthetic fixture text; this block is complete but the run is not.\n' +
+  'EVIDENCE: synthetic fixture text; no tool output is being described.\n' +
+  'CONFIDENCE: high\n' +
+  '=== END AUDIT FINDINGS ===';
+
 const SCENARIOS = {
   endless: { callsPerTurn: 1, endless: true },
   calls: { callsPerTurn: 4, endless: true },
   costly: { callsPerTurn: 1, endless: true,
             usage: { input: 0, output: 9000, cache_creation: 60000, cache_read: 120000 } },
   slow: { callsPerTurn: 1, endless: true, latencyMs: 8000 },
+  blockstop: { callsPerTurn: 1, endless: true, latencyMs: 8000, text: EVERY_TURN_BLOCK },
+  blockturns: { callsPerTurn: 1, endless: true, text: EVERY_TURN_BLOCK },
+  blockcost: { callsPerTurn: 1, endless: true, text: EVERY_TURN_BLOCK,
+               usage: { input: 0, output: 9000, cache_creation: 60000, cache_read: 120000 } },
 };
 
 export function scriptedTransport({ latencyMs = 700, scenario = '1' } = {}) {
@@ -188,6 +262,9 @@ export function scriptedTransport({ latencyMs = 700, scenario = '1' } = {}) {
     : scenario === 'named' ? [...TURNS.slice(0, -1), NAMED_FINAL]
     : scenario === 'credited' ? [...TURNS.slice(0, -1), CREDITED_FINAL]
     : scenario === 'oos' ? [...TURNS.slice(0, -1), OUT_OF_SCOPE_FINAL]
+    : scenario === 'late' ? [...TURNS.slice(0, 4), ...LATE_BLOCK]
+    : scenario === 'unclosed' ? [...TURNS.slice(0, -1), UNCLOSED_FINAL]
+    : scenario === 'empty' ? [...TURNS.slice(0, -1), EMPTY_FINAL]
     : TURNS;
 
   let i = 0;
@@ -231,7 +308,7 @@ export function scriptedTransport({ latencyMs = 700, scenario = '1' } = {}) {
 /* A transport that never volunteers an ending, so the only thing that can
    stop it is a ceiling in the loop or the visitor pressing Stop. If a run
    against this one finishes, something enforced it. */
-function cappedTransport({ callsPerTurn, latencyMs, usage }) {
+function cappedTransport({ callsPerTurn, latencyMs, usage, text = '' }) {
   let i = 0;
   return {
     buildRequest,
@@ -244,6 +321,7 @@ function cappedTransport({ callsPerTurn, latencyMs, usage }) {
         summary: `Scripted turn ${i}. This transport never returns end_turn, so ` +
           `whatever ends this run is a ceiling and not the model.`,
       }];
+      if (text) content.push({ type: 'text', text });
       for (let n = 0; n < callsPerTurn; n += 1) {
         content.push({
           type: 'tool_use', id: `dev_${i}_${n}`,
@@ -257,7 +335,7 @@ function cappedTransport({ callsPerTurn, latencyMs, usage }) {
         stop_reason: 'tool_use',
         stop_details: null,
         content,
-        text: '',
+        text,
         thinking: content[0].summary,
         tool_calls: content.filter(b => b.type === 'tool_use')
           .map(b => ({ id: b.id, name: b.name, input: b.input })),

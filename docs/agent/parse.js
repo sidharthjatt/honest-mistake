@@ -46,6 +46,15 @@ export class ParseResult {
     this.warnings = [];
     this.explicitNoFindings = false;
     this.blockFound = false;
+    /* Which of the two early exits was taken when no block was found:
+       'missing_start' or 'unclosed'. Null once a block is found. A page
+       that has to say why there was no verdict reads this instead of
+       matching on the warning text. The Python parser has no such field;
+       it only prints the warning. */
+    this.noBlock = null;
+    /* Whether the text held the runner's verbatim delimiter, so that only
+       what follows it was read. */
+    this.cutAtDelimiter = false;
   }
   get flags() {
     return this.records.filter(r => 'FLAG' in r).map(r => r.FLAG);
@@ -79,6 +88,7 @@ export function parseFinalAnswer(text, format, documentedColumns = null) {
   // passing raw text, which is always the case in a browser run.
   if (DELIMITER && body_text.includes(DELIMITER)) {
     body_text = body_text.slice(body_text.indexOf(DELIMITER) + DELIMITER.length);
+    out.cutAtDelimiter = true;
   }
 
   const starts = countOccurrences(body_text, ANSWER_START);
@@ -87,6 +97,7 @@ export function parseFinalAnswer(text, format, documentedColumns = null) {
   if (starts === 0) {
     out.warnings.push(
       `missing start marker: no ${pyRepr(ANSWER_START)} in the answer`);
+    out.noBlock = 'missing_start';
     return out;
   }
   if (starts > 1) {
@@ -97,6 +108,7 @@ export function parseFinalAnswer(text, format, documentedColumns = null) {
   if (ends === 0) {
     out.warnings.push(
       `unclosed block: no ${pyRepr(ANSWER_END)} after the start marker`);
+    out.noBlock = 'unclosed';
     return out;
   }
   if (ends > 1) {
