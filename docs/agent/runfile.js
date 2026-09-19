@@ -210,6 +210,8 @@ export function view(record) {
     turns: f.turns,
     toolCalls: f.tool_calls,
     spend: f.cost_usd_estimated,
+    // Null on a record saved before the ceiling was written into it.
+    maxCost: f.limits?.max_cost_usd ?? null,
     termination: f.termination,
     terminationSentence: record.termination_sentence || null,
   };

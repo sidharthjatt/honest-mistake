@@ -1,7 +1,11 @@
 /* The models a visitor may choose, and how each one's request differs.
  *
- * Prices are $ per million tokens, from the pricing page. They are here so
- * a run can be costed from its own usage numbers rather than guessed at.
+ * Prices are $ per million tokens, as platform.claude.com/docs/en/about-
+ * claude/pricing listed them when it was checked on PRICES_CHECKED. They
+ * are here so a run can be costed from its own usage numbers rather than
+ * guessed at. That page also says Sonnet 5's $2/$10, introductory at
+ * launch, is now its standard price. The tool-use system prompt counts
+ * below come from the same page.
  *
  * `shape` is the part that is not cosmetic. Sonnet 5 takes adaptive
  * thinking and an effort level; Haiku 4.5 takes neither and wants the
@@ -9,6 +13,8 @@
  * other is a 400, so the shape travels with the model rather than being
  * decided at the call site.
  */
+
+export const PRICES_CHECKED = '2026-09-19';
 
 export const MODELS = [
   {

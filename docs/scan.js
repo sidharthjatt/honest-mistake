@@ -9,7 +9,7 @@
  * when the tab closes. No storage, no URL, no event.
  */
 
-import { MODELS, getModel, costOf, retirementWarning, DEFAULT_MODEL_ID } from './agent/models.js';
+import { MODELS, getModel, costOf, retirementWarning, DEFAULT_MODEL_ID, PRICES_CHECKED } from './agent/models.js';
 import { ToolLayer } from './agent/tools.js';
 import {
   runReactLoop, Events, renderSystemPrompt, TERMINATION_SENTENCE,
@@ -23,6 +23,7 @@ import { buildRecord, remember, recall, forget, download, view } from './agent/r
 import { readVerdict, finishedWithout, NO_TEXT } from './agent/verdict.js';
 import { TRAIN_YEARS, TEST_YEAR } from './agent/pipeline.js';
 import { count, word } from './agent/words.js';
+import { spendStopSentence, spentApart } from './agent/ceilings.js';
 
 const DATA = 'data/tools';
 const PARAMS = new URLSearchParams(location.search);
@@ -75,6 +76,10 @@ const money = v => {
   return `$${v.toFixed(2)}`;
 };
 const num = v => Number(v).toLocaleString('en-US');
+/* "2026-09-19" as "19 September 2026". Read and written in UTC, so the day
+   shown is the day in the string whatever the visitor's time zone. */
+const longDate = iso => new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-GB',
+  { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
 async function getJSON(path) {
   const res = await fetch(path, { cache: 'no-cache' });
@@ -220,13 +225,15 @@ function updateModelNote() {
   if (rep) {
     note.textContent =
       `${m.label}: $${m.price.input}/MTok in, $${m.price.output}/MTok out, ` +
-      `$${m.price.cacheRead}/MTok on cache hits. The figure above prices ` +
+      `$${m.price.cacheRead}/MTok on cache hits, as Anthropic's pricing page listed ` +
+      `them on ${longDate(PRICES_CHECKED)}. The figure above prices ` +
       `${rep.label}, a recorded run of this agent, at those rates — ` +
       `${num(rep.usage.input + rep.usage.cache_creation + rep.usage.cache_read)} input ` +
       `and ${num(rep.usage.output)} output tokens. Your run will differ. ` +
       `You are billed by Anthropic directly.`;
   } else {
-    note.textContent = `${m.label}: $${m.price.input}/MTok in, $${m.price.output}/MTok out.`;
+    note.textContent = `${m.label}: $${m.price.input}/MTok in, $${m.price.output}/MTok out, ` +
+      `as Anthropic's pricing page listed them on ${longDate(PRICES_CHECKED)}.`;
   }
   const warn = retirementWarning(m);
   const banner = $('retire');
@@ -366,10 +373,15 @@ function updateCeilingNote() {
     ? ` A recorded run of this agent costs about ${money(typical)} at these rates, ` +
       `so this is roughly ${(v / typical).toFixed(1)}× a normal run.`
     : '';
+  /* The gate is spend >= ceiling, tested between turns. A turn in flight
+     is never cut short, so the run can only stop after the total has
+     reached the ceiling, never before. */
   note.textContent =
-    `Checked after every turn, before the next request is sent. The run stops as ` +
-    `soon as the total reaches ${money(v)}, so the final figure can pass it by ` +
-    `at most the cost of the turn that crossed it.${compare}`;
+    `Checked after every turn, before the next request is sent. A turn already ` +
+    `under way is always finished, so the run stops at the first check where the ` +
+    `total has reached ${money(v)}, and the final figure can pass it by up to the ` +
+    `cost of that last turn. The total is an estimate, priced from the token counts ` +
+    `the API reports at the rates above. Anthropic's bill is the real figure.${compare}`;
 }
 
 /* Mark the incomplete steps in the panel, or clear every mark. */
@@ -466,7 +478,7 @@ function paintMeters() {
     ['tool calls', meters.calls, `of ${MAX_CALLS}`],
     ['input tokens', num(inputSide), `${num(meters.usage.cache_read)} from cache`],
     ['output tokens', num(meters.usage.output), ''],
-    ['cost so far', money(meters.spend), `of ${money(ceiling)} ceiling`],
+    ['estimated cost', spentApart(meters.spend, ceiling, money), `ceiling ${money(ceiling)}`],
   ];
   $('meters').replaceChildren(...cells.map(([k, v, s]) =>
     el('div', { class: 'meter' },
@@ -627,7 +639,8 @@ function showEnding(e) {
   paintMeters();
   closeOpenTurns(e);
   const bits = [count(e.turns, 'turn'), count(e.toolCalls, 'tool call'),
-    `${money(e.spend)} spent of a ${money(e.config.maxCost)} ceiling`];
+    `${spentApart(e.spend, e.config.maxCost, money)} spent against a ` +
+    `${money(e.config.maxCost)} ceiling`];
 
   /* The same call Screen 3 makes, on the same final answer, so the banner
      can't announce a result that the score then refuses. */
@@ -680,7 +693,7 @@ function showEnding(e) {
               : `the final answer could not be parsed, `) +
             `which it calls a parse failure, not a finding of nothing to report. `
           : `The scorer that graded the ${word(runIndex.runs.length)} recorded runs ` +
-            `refuses a run like this one — a partial answer is not an answer, and is ` +
+            `refuses a run like this one: a partial answer is not an answer and is ` +
             `not scored. `) +
       `${bits.join(' · ')}.` +
       (e.termination === ABORTED ? ` ${NOT_COUNTED}` : '') })));
@@ -736,11 +749,17 @@ function noVerdictCause(e, missing) {
     case TURN_LIMIT:
       return `The run was stopped at its ceiling of ${count(c.maxTurns, 'turn')}, ` +
         `before it could send another request.`;
+    /* The call gate runs before a batch, so a run can stop short of the
+       ceiling: ?dev=calls stops at 68 of 70, because its next batch asks
+       for four. */
     case CALL_LIMIT:
-      return `The run was stopped at its ceiling of ${count(c.maxToolCalls, 'tool call')}.`;
+      return `The run stopped at ${count(e.toolCalls, 'tool call')}: the model asked ` +
+        `for a batch that would have taken it past the ceiling of ${c.maxToolCalls}, ` +
+        `so that batch was not run.`;
+    /* The spend gate runs after a turn, so the total is at or past the
+       ceiling by the time it stops, never short of it. */
     case COST_LIMIT:
-      return `The run was stopped at your spend ceiling of ${money(c.maxCost)}, ` +
-        `before it could send another request.`;
+      return spendStopSentence(e.spend, c.maxCost, money);
     case STOPPED:
       return 'You stopped the run.';
     case ABORTED:
@@ -992,7 +1011,7 @@ async function start() {
       events: captured, result, model, card: chosenCard, variant,
       canaryPresent: variant === 'canary',
       system, toolConfig: tools.config,
-      limits: { max_turns: MAX_TURNS, max_tool_calls: MAX_CALLS },
+      limits: { max_turns: MAX_TURNS, max_tool_calls: MAX_CALLS, max_cost_usd: ceiling },
       startedAt,
     });
     record.termination_sentence = result.reason;

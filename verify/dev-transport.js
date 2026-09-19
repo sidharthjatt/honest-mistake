@@ -223,6 +223,10 @@ const EMPTY_FINAL = {
  *                 end marker                       -> completed, no verdict
  *   ?dev=empty    the six-turn script, ending with no text, and no turn
  *                 before it wrote any              -> completed, no verdict
+ *   ?dev=costexact  one turn costs exactly $1.00 on Sonnet 5 -> spend
+ *                   ceiling, spend equal to it
+ *   ?dev=costnear   one turn costs $1.002 on Sonnet 5 -> spend ceiling,
+ *                   past it by less than a cent
  *   ?dev=blockstop    as slow, but every turn also writes a complete
  *                     findings block               -> press Stop: stopped
  *   ?dev=blockturns   as endless, with the block   -> turn ceiling
@@ -248,6 +252,13 @@ const SCENARIOS = {
   costly: { callsPerTurn: 1, endless: true,
             usage: { input: 0, output: 9000, cache_creation: 60000, cache_read: 120000 } },
   slow: { callsPerTurn: 1, endless: true, latencyMs: 8000 },
+  /* One turn priced at exactly $1.00 at Sonnet 5's $10/MTok output rate,
+     and one at $1.002, which rounds to $1.00. Against the default $1.00
+     ceiling they show the "at" and the near-miss "past" spend sentences. */
+  costexact: { callsPerTurn: 1, endless: true,
+               usage: { input: 0, output: 100000, cache_creation: 0, cache_read: 0 } },
+  costnear: { callsPerTurn: 1, endless: true,
+              usage: { input: 0, output: 100200, cache_creation: 0, cache_read: 0 } },
   blockstop: { callsPerTurn: 1, endless: true, latencyMs: 8000, text: EVERY_TURN_BLOCK },
   blockturns: { callsPerTurn: 1, endless: true, text: EVERY_TURN_BLOCK },
   blockcost: { callsPerTurn: 1, endless: true, text: EVERY_TURN_BLOCK,

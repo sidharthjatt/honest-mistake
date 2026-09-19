@@ -25,7 +25,8 @@ import { readVerdict, finishedWithout, NO_TEXT } from './verdict.js';
 import { costOf } from './models.js';
 import { TEST_YEAR } from './pipeline.js';
 import { count, word } from './words.js';
-import { COMPLETED, TURN_LIMIT, ABORTED } from './loop.js';
+import { spendStopSentence, spentApart } from './ceilings.js';
+import { COMPLETED, TURN_LIMIT, COST_LIMIT, ABORTED } from './loop.js';
 
 const $n = (tag, attrs = {}, ...kids) => {
   const n = document.createElement(tag);
@@ -421,7 +422,12 @@ function sectionNoVerdict(record, data, scored, turnViewShown) {
                'the previous screen, does not count.'
              : ' Only the final answer is scored, so anything it wrote before that does ' +
                'not count.']
-      : [record.terminationSentence || 'The run ended before the agent finished.',
+      /* The spend sentence Screen 2 gives, from the same two figures. A
+         record saved before the ceiling was kept in it has only the
+         general sentence, which is true without the figure. */
+      : [record.termination === COST_LIMIT && record.maxCost !== null
+           ? spendStopSentence(record.spend, record.maxCost, money)
+           : record.terminationSentence || 'The run ended before the agent finished.',
          /* With turns, the billing note sits on the comparison line next to
             the dollar figure. At zero turns there is no comparison, so it
             goes here instead, and only here. */
@@ -451,8 +457,8 @@ function sectionNoVerdict(record, data, scored, turnViewShown) {
         ? 'does not score a run like this one, in its own words: “the answer could ' +
           'not be parsed. This is a parse failure, not a finding of ‘nothing to ' +
           'report’.”'
-        : 'refuses a run like this one, in its own words: a partial answer is not an ' +
-          'answer, and is not scored.'));
+        : 'refuses a run like this one, in its own words: “A partial answer is not an ' +
+          'answer and is not scored.”'));
   }
   /* The heading and the reveal above have already said which candidate it
      was. What they don't say is why a run with no verdict is told at all. */
@@ -482,7 +488,8 @@ function sectionCompare(record, data) {
 
   box.append($n('p', { class: 's3-yours' },
     $n('b', { text: 'Your run: ' }),
-    `${count(record.turns, 'turn')}, ${count(record.toolCalls, 'tool call')}, ${money(record.spend)}.`,
+    `${count(record.turns, 'turn')}, ${count(record.toolCalls, 'tool call')}, ` +
+    `${record.maxCost === null ? money(record.spend) : spentApart(record.spend, record.maxCost, money)}.`,
     /* Priced from reported usage, which a request cancelled in flight never
        gets. Same sentence as Screen 2. */
     record.termination === ABORTED
