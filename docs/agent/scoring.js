@@ -1,3 +1,4 @@
+export const BUILD = 'ed6b67583fac';
 /* The scorer, ported from agent/answer_key.py.
  *
  * Scores a list of flagged column names against the answer key exported in

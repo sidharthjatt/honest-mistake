@@ -1,3 +1,4 @@
+export const BUILD = 'ed6b67583fac';
 /* Whether a run produced a verdict. Screen 2's banner and title and Screen
  * 3's score all ask this question, and they call this one function so that
  * they can't disagree.

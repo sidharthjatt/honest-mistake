@@ -1,3 +1,4 @@
+export const BUILD = 'ed6b67583fac';
 /* Keeping a finished run, and writing it out.
  *
  * Two different failures, two mechanisms. sessionStorage survives a reload

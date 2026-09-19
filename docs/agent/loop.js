@@ -1,3 +1,4 @@
+export const BUILD = 'ed6b67583fac';
 /* The ReAct loop, ported from agent/agent.py.
  *
  * Every turn emits events as it happens rather than returning a transcript

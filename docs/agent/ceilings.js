@@ -1,3 +1,4 @@
+export const BUILD = 'ed6b67583fac';
 /* The spend beside its ceiling, and the sentence for a run the spend
  * ceiling stopped, shared by Screen 2 and Screen 3 so they write the same
  * figures the same way.

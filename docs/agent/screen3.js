@@ -1,8 +1,9 @@
+export const BUILD = 'ed6b67583fac';
 /* Screen 3: score the run, reveal the candidate, compare against the twelve.
  *
  * This module renders from one record and nothing else. That is deliberate
  * and it is the point of the file boundary: the candidate a run audited is
- * a property of the run, and the assignment scan.js deals at boot belongs
+ * a property of the run, and the assignment scan-page.js deals at boot belongs
  * to the *next* run. A restored run rendered against the current deal would
  * name the wrong candidate half the time and look entirely correct doing
  * it — a silent failure, in the worst way.
@@ -90,7 +91,7 @@ function verdictOf(flag, result, key, featureSet) {
 
 /* ---------------------------------------------------------------- render */
 
-/* `turnViewShown` is scan.js's word on whether the previous screen holds
+/* `turnViewShown` is scan-page.js's word on whether the previous screen holds
    this run's turn-by-turn view. After a reload it doesn't, and nothing here
    may point the visitor at it. */
 export function render(record, data, scored, { turnViewShown }) {
@@ -405,7 +406,7 @@ function sectionCanary(result, data) {
    model answered once) investigated nothing. It has no partial
    investigation to point at and no partial answer for the scorer to
    refuse, and a visitor who stopped it before the first request paid
-   nothing. scan.js holds the same rule for Screen 2. */
+   nothing. scan-page.js holds the same rule for Screen 2. */
 function sectionNoVerdict(record, data, scored, turnViewShown) {
   const noReply = record.turns === 0;
   const box = $n('section', { class: 's3-block s3-noverdict' });

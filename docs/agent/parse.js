@@ -1,3 +1,4 @@
+export const BUILD = 'ed6b67583fac';
 /* The final-answer parser, ported from agent/eval_canary.parse_final_answer.
  *
  * Strict on purpose, and the reason is worth keeping in view: malformed
@@ -67,7 +68,7 @@ export class ParseResult {
 
 /* `format` is the answer_format block from data/tools/system_prompt.json.
    `documentedColumns` is anything with a has(name) method over the
-   dictionary's column names — a Set, or the read-only view scan.js passes.
+   dictionary's column names — a Set, or the read-only view scan-page.js passes.
    It is used only for the warning that a FLAG is not a documented name.
    Pass null to skip that check, which is what a caller without the
    dictionary loaded should do rather than guess. */
