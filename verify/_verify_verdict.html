@@ -5,7 +5,8 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:.75rem}
 <pre id="out">running…</pre>
 <div id="stage"></div>
 <script type="module">
-/* Five checks on how a run ended and whether it gets a verdict.
+/* Six checks on how a run ended, whether it gets a verdict, and whether the
+ * page refuses modules from different builds.
  *
  * 1. Screen 2 and Screen 3 agree, and agree with the scorer's rule. The
  *    real scan page runs in an iframe. An import map points its dev
@@ -40,6 +41,17 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:.75rem}
  *    model, Sonnet 5, at $10 per million output tokens, and the default
  *    $1.00 ceiling.
  *
+ * 6. Modules from different builds. scan.js loads every module and compares
+ *    build stamps before the page starts. With one module forced to an old
+ *    copy (verify/stale/, checked byte for byte against git by
+ *    scripts/check_stale_copies.py), to a copy with a different stamp, or to
+ *    one that can't load, the page must refuse with the sentence for that
+ *    cause and must not run. It must fix a mixed set itself with one reload,
+ *    at most once per tab, never when storage is unavailable, and without
+ *    losing a kept run: after that reload the kept run's Screen 3 must read
+ *    exactly as it does on a healthy load. A healthy load, and a correctly stamped module
+ *    served with CRLF line endings and a byte-order mark, must not refuse.
+ *
  * A module loaded from a blob can't resolve relative imports, so parts 2
  * and 4 rewrite them to absolute URLs first. absolutize checks its own
  * work: it lists every line it changed and refuses if any of them is not
@@ -57,6 +69,8 @@ const BROKEN = PARAMS.has('broken');
 const MUTATE = PARAMS.has('mutate');
 const ORIGIN = location.origin;
 const BASELINE = PARAMS.get('baseline');
+/* The key scan.js records its one self-fix attempt under. */
+const FIX_TRIED = 'honest-mistake:stale-fix-tried';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const j = async p => { const r = await fetch(p, { cache: 'no-cache' }); if (!r.ok) throw new Error(`${p} -> ${r.status}`); return r.json(); };
 
@@ -159,7 +173,13 @@ export function scriptedTransport() {
 }`;
 }
 
-async function mount(c, scanBlob = null) {
+/* opts.overrides maps a module file under docs/agent/ to the URL the page
+   must load in its place. opts.keepStorage leaves the tab's storage as it
+   is; opts.fixTried records that the self-fix was already tried;
+   opts.blockStorage makes sessionStorage throw on the page, as it does
+   when a browser blocks it. The window is marked, so a reload shows up as
+   a window without the mark. */
+async function mount(c, scanBlob = null, opts = {}) {
   let html = await (await fetch('/docs/scan.html', { cache: 'no-store' })).text();
   if (scanBlob) {
     // An import map doesn't apply to a script tag's src, so the tag is
@@ -170,12 +190,19 @@ async function mount(c, scanBlob = null) {
   const url = URL.createObjectURL(new Blob([transportSource(c)], { type: 'text/javascript' }));
   const key = `${ORIGIN}/verify/dev-transport.js${BROKEN ? 'X' : ''}`;
   const map = { imports: { [key]: url } };
-  try { sessionStorage.clear(); } catch { /* nothing kept */ }
+  for (const [file, to] of Object.entries(opts.overrides || {})) map.imports[`${ORIGIN}/docs/agent/${file}`] = to;
+  if (!opts.keepStorage) { try { sessionStorage.clear(); } catch { /* nothing kept */ } }
+  if (opts.fixTried) sessionStorage.setItem(FIX_TRIED, 'harness');
   const stage = document.getElementById('stage');
   stage.replaceChildren();
   const f = document.createElement('iframe');
   stage.append(f);
   const w = f.contentWindow;
+  w.__mounted = true;
+  if (opts.blockStorage) {
+    Object.defineProperty(w, 'sessionStorage', { configurable: true,
+      get() { throw new DOMException('blocked by the harness', 'SecurityError'); } });
+  }
   w.document.open();
   w.history.replaceState(null, '', `/docs/scan.html?dev=${c.dev}`);
   w.document.write(html.replace(/<head>/i,
@@ -320,7 +347,7 @@ const [scoring, index, prompts, dictionary, l1, ca] = await Promise.all([
   j('../docs/data/tools/dictionary.json'), j('../docs/data/tools/layer1/shap_global.json'),
   j('../docs/data/tools/canary/shap_global.json')]);
 const documented = new Set(dictionary.map(e => e.feature));
-/* What scan.js's loadScoringData hands scoreRun, minus what scoreRun
+/* What scan-page.js's loadScoringData hands scoreRun, minus what scoreRun
    doesn't read. */
 const data = { scoring, answerFormat: prompts.answer_format, documented: { has: x => documented.has(x) },
   features: { layer1: l1.map(r => r.feature), canary: ca.map(r => r.feature) } };
@@ -414,6 +441,134 @@ for (const c of SPEND_CASES) {
       (bad.length ? `wrong in: ${bad.join(', ')}` : 'stopped at 68 of 70, said so on both screens') +
       `; test transport ran=${r.ran}`);
     if (bad.length) { say(`  screen 2: ${banner}`); say(`  screen 3: ${r.s3NoVerdict}`); }
+  }
+}
+
+/* ------------------------------------ 6. modules from different builds */
+
+say('\n--- 6. modules from different builds');
+const REFUSAL = {
+  mixed: 'This page didn’t load properly. It can’t confirm all of its files are from the same ' +
+    'version, so it won’t run. Copies of its files can be kept for up to ten minutes, so this ' +
+    'can clear on its own — come back in a few minutes and it should load.',
+  unreachable: 'This page couldn’t load one of its files. Check your connection and reload.',
+  cannotStart: 'This page couldn’t start. Reloading may not help.',
+};
+const stageFrame = () => document.querySelector('#stage iframe');
+
+/* What the page settled into: a refusal, a started page, or neither. Then
+   two more seconds, to catch a second reload or a late refusal. */
+async function settle() {
+  const read = () => {
+    const w = stageFrame().contentWindow, d = w.document;
+    if (!d || !d.body) return null;
+    const r = d.querySelector('[data-refusal]');
+    if (r) return { state: 'refused', kind: r.dataset.refusal, text: r.textContent, w };
+    if (d.querySelectorAll('.choice').length) return { state: 'started', w };
+    return null;
+  };
+  const first = await until(read, 20000) || { state: 'neither', w: stageFrame().contentWindow };
+  await sleep(2000);
+  const again = read() || { state: 'neither', w: stageFrame().contentWindow };
+  const d = again.w.document;
+  return {
+    ...again,
+    reloads: again.w.__mounted === true ? 0 : 1,
+    steady: first.w === again.w && first.state === again.state,
+    goDisabled: !!d.getElementById('go')?.disabled,
+    flag: (() => { try { return sessionStorage.getItem(FIX_TRIED); } catch { return 'unreadable'; } })(),
+    kept: d.getElementById('stream')?.textContent.includes('This run was kept when the page reloaded') ?? false,
+  };
+}
+
+async function textOf(path) { return (await fetch(path, { cache: 'no-store' })).text(); }
+const STALE_PARSE = `${ORIGIN}/verify/stale/parse.js`;
+const STALE_MODELS = `${ORIGIN}/verify/stale/models.js`;
+const parseNow = await textOf('/docs/agent/parse.js');
+const stampMatch = parseNow.match(/^export const BUILD = '([0-9a-f]{12})';\n/);
+const reStamped = stampMatch && parseNow.replace(stampMatch[0], "export const BUILD = 'ffffffffffff';\n");
+const wordsNow = await textOf('/docs/agent/words.js');
+const refused = kind => r => r.state === 'refused' && r.kind === kind && r.text === REFUSAL[kind]
+  && r.reloads === 0 && r.steady && r.goDisabled;
+const startedClean = r => r.state === 'started' && r.reloads === 0 && r.steady;
+
+const SIX = [
+  { label: 'healthy load', opts: {}, pass: startedClean },
+  { label: 'old parse.js, fix already tried', opts: { overrides: { 'parse.js': STALE_PARSE }, fixTried: true },
+    pass: refused('mixed') },
+  { label: 'old parse.js, storage blocked', opts: { overrides: { 'parse.js': STALE_PARSE }, blockStorage: true },
+    pass: refused('mixed') },
+  { label: 'old parse.js, first time: one reload fixes it', opts: { overrides: { 'parse.js': STALE_PARSE } },
+    pass: r => r.state === 'started' && r.reloads === 1 && r.steady && r.flag === null },
+  { label: 'old models.js, fix already tried', opts: { overrides: { 'models.js': STALE_MODELS }, fixTried: true },
+    pass: refused('mixed') },
+  { label: 'parse.js with a different stamp, fix already tried',
+    opts: reStamped ? { overrides: { 'parse.js': blobOf(reStamped) }, fixTried: true } : null,
+    pass: refused('mixed') },
+  { label: 'stamped parse.js served with CRLF and a byte-order mark',
+    opts: { overrides: { 'parse.js': blobOf('\uFEFF' + parseNow.replace(/\n/g, '\r\n')) } }, pass: startedClean },
+  { label: 'words.js unreachable', opts: { overrides: { 'words.js': 'http://localhost:1/words.js' } },
+    pass: refused('unreachable') },
+  { label: 'words.js answered 404', opts: { overrides: { 'words.js': `${ORIGIN}/docs/agent/no-such-module.js` } },
+    pass: refused('cannotStart') },
+  { label: 'words.js throws while running',
+    opts: { overrides: { 'words.js': blobOf("throw new TypeError('harness: thrown at top level');") } },
+    pass: refused('cannotStart') },
+  { label: 'words.js cut short', opts: { overrides: { 'words.js': blobOf(wordsNow.slice(0, 200)) } },
+    pass: refused('cannotStart') },
+];
+for (const t of SIX) {
+  if (!t.opts) { check(false, `${t.label}: no stamp in parse.js to change`); continue; }
+  await mount(CASES[0], null, t.opts);
+  const r = await settle();
+  check(t.pass(r), `${t.label}: ${r.state}${r.kind ? ` (${r.kind})` : ''}, reloads=${r.reloads}, ` +
+    `steady=${r.steady}, start disabled=${r.goDisabled}, flag after=${JSON.stringify(r.flag)}`);
+  if (r.state === 'refused' && r.text !== REFUSAL[r.kind]) say(`  text: ${r.text}`);
+}
+
+/* A kept run survives the self-fix reload and is restored once the page
+   starts. The run is made on a healthy load first, in this tab. A restored
+   run goes on to Screen 3, so the case opens it and reads what the visitor
+   would see. The reference is the same kept run restored on a healthy
+   load: after the self-fix, Screen 3 must say exactly what it says there,
+   and give the verdict the scorer's rule gives the run. The unclosed run is
+   the one 1e4df5d's parse.js describes falsely, so it is the one whose
+   Screen 3 would differ if the old module were still in use. */
+for (const kc of [CASES[0], CASES.find(c => c.dev === 'unclosed')]) {
+  const made = await runCase(kc);
+  let before = null;
+  try { before = sessionStorage.getItem('honest-mistake:last-run'); } catch { /* checked below */ }
+  async function screen3After(w) {
+    const d = w.document;
+    d.getElementById('see-score')?.click();
+    const s3 = await until(() => { const v = screen3(d); return v === 'not shown' ? null : { v }; }, 20000);
+    return {
+      v3: s3 ? s3.v : 'not shown',
+      vt: title(d),
+      body: d.getElementById('s3-body')?.innerText ?? '',
+    };
+  }
+  await mount(kc, null, { keepStorage: true });
+  const ref = await settle();
+  const refS3 = ref.state === 'started' && ref.kept ? await screen3After(ref.w) : null;
+  await mount(kc, null, { overrides: { 'parse.js': STALE_PARSE }, keepStorage: true });
+  const r = await settle();
+  const s3 = r.state === 'started' ? await screen3After(r.w) : null;
+  let after = null;
+  try { after = sessionStorage.getItem('honest-mistake:last-run'); } catch { /* checked below */ }
+  const sameScreen3 = !!refS3 && !!s3 && s3.body.length > 0 && s3.body === refS3.body;
+  check(!!made && !!before && after === before && r.state === 'started' && r.reloads === 1 && r.kept
+    && !!refS3 && refS3.v3 === kc.expect && sameScreen3 && s3.v3 === kc.expect
+    && s3.vt === kc.expect,
+    `old parse.js with a kept run (${kc.dev}): kept before=${!!before}, same record after=${after === before}, ` +
+    `${r.state}, reloads=${r.reloads}, restored on the page=${r.kept}; ` +
+    `screen 3 expect ${kc.expect}: reference=${refS3 ? refS3.v3 : 'not reached'}, ` +
+    `old parse.js load=${s3 ? s3.v3 : 'not reached'}, title=${s3 ? s3.vt : 'not reached'}, ` +
+    `same text as the reference=${sameScreen3} (${s3 ? s3.body.length : 0} characters)`);
+  if (s3 && refS3 && !sameScreen3) {
+    const a = refS3.body.split('\n'), b = s3.body.split('\n');
+    const i = a.findIndex((l, n) => l !== b[n]);
+    say(`  first difference, line ${i + 1}:\n  healthy load:      ${a[i]}\n  old parse.js load: ${b[i]}`);
   }
 }
 
