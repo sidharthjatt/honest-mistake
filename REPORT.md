@@ -280,3 +280,9 @@ Claims that were written, then corrected against the records.
 - **Whether thinking blocks are inside the cached span** (`PREREGISTRATION_PHASE2.md` A6).
 - **Whether structured outputs constrain turns that should call a tool** (`LAYER3_PHASE4.md`, The format failure has no request-level fix).
 - **The 16 Phase 4 and 4b judgements that were never adjudicated** (`PREREGISTRATION_PHASE5.md` A7).
+
+## Amendments
+
+### A1. 2026-09-20. The D numbering continues in `SCAN_DEFECTS.md`
+
+`SCAN_DEFECTS.md` now exists, and the D numbering continues in it, from D19. No finding in this report is changed.
