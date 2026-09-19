@@ -1,4 +1,4 @@
-export const BUILD = 'ed6b67583fac';
+export const BUILD = '0e79a15923b6';
 /* Tool results as pictures. Inline SVG, hand-built: no chart library, no
  * external request, nothing loaded at runtime. Colours come from the
  * stylesheet's custom properties so both themes work without a second

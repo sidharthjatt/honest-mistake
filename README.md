@@ -300,6 +300,7 @@ Stated plainly, because hiding them would defeat the purpose.
 - **Ten minutes is a stated maximum, not a measured one.** The scan page's refusal says copies of its files can be kept for up to ten minutes. That figure comes from the `max-age=600` header GitHub Pages sends on every file. How long Pages' CDN actually keeps an old copy hasn't been measured.
 - **The first deploy of the build stamps is unprotected.** That deploy went out on 19 September 2026. A visitor whose browser still holds the `scan.js` from before it has no loader, so nothing checks their modules. They run the same code as before: apart from the stamp line and four comments, every module under `docs/agent/` is unchanged from the build before. That was checked on the diff. By the header's stated maximum, no browser uses that old `scan.js` more than ten minutes after the deploy, and from then on this is past. How long a copy held by Pages' CDN lasts hasn't been measured, as the entry above says.
 - **Nothing tests Screen 3 for that visitor.** The verdict harness ran the old `scan.js` over the new modules and got the same banners and title in all eight cases, but it doesn't read Screen 3. That Screen 3 was unchanged rests on the diff: `docs/agent/screen3.js` changed only in its stamp and comments.
+- **Nothing enforces the pre-push checks.** The hook in `.githooks/` is an opt-in local guard (see Reproducing). What would enforce them is branch protection on `main` requiring them to pass, run by GitHub Actions, with bypassing turned off for admins, since by default it doesn't apply to them. It would mean pushing each change to another branch and merging it once the checks pass, so the site would deploy only after each merge.
 - **This is a research pipeline, not a service.** Single scripts and no packaging. Beyond each module's self-check, the tests are three scripts under `scripts/`: for the trajectory metrics, for the caching and ledger code, and for the Phase 4 runner on mocks.
 
 ## Layer 3: generated tools
@@ -361,5 +362,15 @@ python -m agent.precompute --canary   # ~13 min
 Roughly 50 minutes after the download, dominated by the tuning study and the two SHAP passes. Tuning is seeded, so the 0.7296 baseline should reproduce exactly.
 
 A live agent run additionally needs `ANTHROPIC_API_KEY` in `.env`. Scoring the committed runs does not.
+
+Pushes to `main` deploy the site. A pre-push hook checks the commit being pushed: the module stamps, the stale test copies, and that every import in the build on `main` still resolves in the new one. It is off until you turn it on in your clone:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+A fresh clone has it off, `git push --no-verify` and commits made in GitHub's web editor skip it, and nothing on the repo side can change that.
+
+The hook checks the commit being pushed, never the working tree. Uncommitted changes are neither checked nor pushed, so a push from a working tree with uncommitted edits can pass without those edits ever having been looked at.
 
 Built with Python 3.11, pandas, scikit-learn, XGBoost, SHAP, Optuna, and the Anthropic API.

@@ -1,0 +1,59 @@
+#!/bin/sh
+# An opt-in local guard for pushes to main. It is not enforcement.
+#
+# It runs only on a clone where it has been turned on with
+#     git config core.hooksPath .githooks
+# and a push can skip it: `git push --no-verify`, a clone where it isn't
+# turned on, or a commit made in GitHub's web editor. Nothing on the repo side
+# can change that. See the README.
+#
+# For each push that updates refs/heads/main, it checks out the commit being
+# pushed as a temporary detached worktree, not the working tree, and runs
+# there:
+#     scripts/stamp_modules.py --check
+#     scripts/check_stale_copies.py
+#     scripts/check_export_diff.py <what main is on the remote now> <the pushed commit>
+# Any failure, or anything it can't do (no python3, no worktree, a remote
+# commit this clone hasn't fetched), refuses the push. It runs no browser
+# harness; those are run by hand.
+
+zero=0000000000000000000000000000000000000000
+refuse() { echo "pre-push: $1 Refusing the push." >&2; exit 1; }
+
+py=$(command -v python3) || refuse "python3 not found, so nothing can be checked."
+root=$(git rev-parse --show-toplevel) || refuse "not inside the repository."
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [ "$remote_ref" = "refs/heads/main" ] || continue
+  if [ "$local_sha" = "$zero" ]; then
+    echo "pre-push: deleting main on the remote; there is no commit to check." >&2
+    continue
+  fi
+
+  tmp=$(mktemp -d "${TMPDIR:-/tmp}/honest-mistake-prepush.XXXXXX") || refuse "couldn't make a temporary directory."
+  wt="$tmp/wt"
+  if ! git -C "$root" worktree add --detach --quiet "$wt" "$local_sha" </dev/null; then
+    rm -rf "$tmp"
+    refuse "couldn't check out $local_sha to check it."
+  fi
+
+  echo "pre-push: checking $local_sha for main" >&2
+  (
+    cd "$wt" || exit 1
+    "$py" -m scripts.stamp_modules --check || exit 1
+    "$py" -m scripts.check_stale_copies || exit 1
+    if [ "$remote_sha" = "$zero" ]; then
+      echo "pre-push: main doesn't exist on the remote yet, so there is no earlier build for check_export_diff." >&2
+    else
+      "$py" -m scripts.check_export_diff "$remote_sha" "$local_sha" || exit 1
+    fi
+  ) </dev/null
+  result=$?
+
+  git -C "$root" worktree remove --force "$wt" </dev/null 2>/dev/null
+  rm -rf "$tmp"
+  git -C "$root" worktree prune </dev/null
+
+  [ "$result" -eq 0 ] || refuse "a check failed on $local_sha."
+done
+exit 0

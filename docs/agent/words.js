@@ -1,4 +1,4 @@
-export const BUILD = 'ed6b67583fac';
+export const BUILD = '0e79a15923b6';
 /* A count and its noun, agreeing: "1 turn", "2 turns", "0 tool calls".
  * Every count of turns or tool calls the pages print goes through here, so
  * that a run which happens to make exactly one of something doesn't read

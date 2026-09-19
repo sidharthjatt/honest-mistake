@@ -1,0 +1,165 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Self-fix against a stale cache</title>
+<style>body{font-family:ui-monospace,Menlo,monospace;background:#14141a;color:#e8e6ee;padding:1rem}
+pre{white-space:pre-wrap;word-break:break-word;font-size:.75rem}
+#stage iframe{width:1000px;height:300px;border:1px solid #444;background:#fff}</style></head><body>
+<pre id="out">running…</pre>
+<div id="stage"></div>
+<script type="module">
+/* Does the scan page's self-fix cure a stale module in the browser's cache?
+ *
+ * Run it by hand. It needs a browser and its own server, so the pre-push
+ * hook can't run it, and nothing in the hook covers it. Like Parts 1-6 of
+ * _verify_verdict.html, it is run by hand:
+ *
+ *     python3 verify/selffix_server.py 8350
+ *     open http://127.0.0.1:8350/verify/_verify_selffix.html   (?n= sets the cure trials, default 10)
+ *
+ * verify/selffix_server.py serves docs/ as two builds, A (every stamp
+ * rewritten) and B (as on disk), with Pages-like caching: an ETag from the
+ * content, a 304 on a match, max-age=600 on agent/parse.js and max-age=0 on
+ * everything else. Each trial loads A in a frame and waits for it to start,
+ * switches the server to B, and reloads the frame the way a visitor would.
+ * Every file but parse.js revalidates to B, and parse.js stays in the
+ * browser's cache as A. The page now holds a genuinely mixed set.
+ *
+ * Three kinds of trial. Every one must give its expected result, and any
+ * that doesn't fails the page.
+ * - Cure: the shipped loader. It must start, having run the B parse.js. The
+ *   server must see two page loads (the visitor's reload and the loader's)
+ *   and exactly one request for parse.js: the loader's refetch, sent
+ *   no-cache with no If-None-Match. That shows the visitor's reload never
+ *   asked for parse.js, so the stale copy really was in the cache.
+ * - The no-refetch mutant: the loader with its refetch deleted, so it only
+ *   reloads. It must refuse as mixed, still running the A parse.js, with no
+ *   request for parse.js at all. If it ever starts, this page can't tell a
+ *   working self-fix from a broken one, and it fails.
+ * - CDN: the server keeps sending A's parse.js even to the refetch, as a CDN
+ *   still holding the old copy would. It must refuse as mixed, running the
+ *   A parse.js. If it starts, that fails too.
+ *
+ * Page loads and requests are counted by the server, so they are exact. The
+ * parse.js the page is running is read by a module script put into the page
+ * itself, which resolves against the page's own URL and shares its modules.
+ *
+ * What this does not prove:
+ * - The headers imitate Pages. Real Pages and its CDN (Fastly) aren't used:
+ *   no edge cache, no Age or Vary handling, none of their heuristics.
+ * - It runs in one Chromium build, the one this page is opened in. Safari,
+ *   Firefox and mobile browsers aren't tested.
+ * - The mix is forced by giving parse.js a longer max-age than everything
+ *   else. On Pages every file gets max-age=600, and a mix comes from files
+ *   being fetched at different times. The mechanism is the same, a cached
+ *   file that isn't requested, but mixes that arise from timing aren't
+ *   reproduced.
+ * - Back/forward navigation isn't tested. The browser can restore the page
+ *   from its back/forward cache without running the loader at all.
+ * - Expiry isn't tested: max-age running out, which is the other way a
+ *   stale copy clears.
+ * - Once, on a local server, a refetch like this one failed to cure a stale
+ *   models.js, and why was never found. It didn't recur in the 30 cure
+ *   trials of the throwaway test that came before this page, and that
+ *   doesn't show it can't.
+ */
+const out = document.getElementById('out');
+const lines = [];
+const say = s => { lines.push(s); out.textContent = lines.join('\n'); };
+let failures = 0;
+const check = (ok, line) => { if (!ok) failures += 1; say(`${ok ? 'PASS' : 'FAIL'}  ${line}`); };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const ctl = async path => { const r = await fetch(path, { cache: 'no-store' }); if (!r.ok) throw new Error(`${path} -> ${r.status}`); return r; };
+const N = Number(new URLSearchParams(location.search).get('n') || 10);
+const { stampA, stampB } = await (await ctl('/ctl/info')).json();
+say(`build A stamp ${stampA}, build B stamp ${stampB}`);
+
+function pageState(w) {
+  try {
+    const d = w.document;
+    if (!d || !d.body) return null;
+    const r = d.querySelector('[data-refusal]');
+    if (r) return `refused:${r.dataset.refusal}`;
+    if (d.querySelectorAll('.choice').length) return 'started';
+  } catch { return null; }
+  return null;
+}
+
+/* A final state, held on the same window for two seconds. */
+async function settle(f) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < 20000) {
+    const w = f.contentWindow, s = pageState(w);
+    if (s) {
+      await sleep(2000);
+      if (f.contentWindow === w && pageState(w) === s) return s;
+    }
+    await sleep(200);
+  }
+  return 'neither';
+}
+
+/* The BUILD of the parse.js the page is running. */
+async function runningParse(f) {
+  const d = f.contentDocument, sc = d.createElement('script');
+  sc.type = 'module';
+  sc.textContent = 'import("./agent/parse.js").then(' +
+    'm => { window.__parseBuild = m.BUILD ?? "NO STAMP"; }, ' +
+    'e => { window.__parseBuild = "FAILED " + e.message; });';
+  d.body.append(sc);
+  for (let k = 0; k < 30 && !f.contentWindow.__parseBuild; k++) await sleep(100);
+  return f.contentWindow.__parseBuild ?? 'no answer';
+}
+
+async function trial(kind, i) {
+  const nonce = `${kind}-${Date.now()}-${i}`;
+  try { sessionStorage.clear(); } catch { /* checked by the result */ }
+  await ctl('/ctl/set?to=A');
+  const f = document.createElement('iframe');
+  document.getElementById('stage').replaceChildren(f);
+  f.src = `/r/${nonce}/honest-mistake/scan.html`;
+  const first = await settle(f);
+  await ctl('/ctl/log');
+  await ctl('/ctl/set?to=B');
+  if (kind === 'mutant') await ctl('/ctl/loader?to=mutant');
+  if (kind === 'cdn') await ctl('/ctl/pin?parse=A');
+  f.contentWindow.location.reload();
+  await sleep(300);
+  const final = await settle(f);
+  const log = await (await ctl('/ctl/log')).json();
+  const running = await runningParse(f);
+  const loads = log.filter(e => e.path === 'scan.html').length;
+  const parse = log.filter(e => e.path === 'agent/parse.js');
+  f.remove();
+  return { first, final, loads, parse, running };
+}
+
+const describe = r => `first=${r.first} final=${r.final} page loads=${r.loads} ` +
+  `parse.js requests=[${r.parse.map(e => `${e.status} ${e.build} cc=${e.cc} inm=${e.inm}`).join('; ')}] ` +
+  `running parse.js=${r.running}`;
+
+say(`\n--- cure: the shipped loader, ${N} trials`);
+for (let i = 0; i < N; i++) {
+  const r = await trial('cure', i);
+  const refetch = r.parse.length === 1 && r.parse[0].status === 200 && r.parse[0].build === 'B'
+    && /no-cache/.test(r.parse[0].cc || '') && !r.parse[0].inm;
+  check(r.first === 'started' && r.final === 'started' && r.loads === 2 && refetch && r.running === stampB,
+    `cure ${i}: ${describe(r)}`);
+}
+
+say('\n--- the no-refetch mutant, 3 trials: must refuse, or this page proves nothing');
+for (let i = 0; i < 3; i++) {
+  const r = await trial('mutant', i);
+  if (r.final === 'started') say('  THE MUTANT STARTED: this page cannot tell a working self-fix from a broken one.');
+  check(r.first === 'started' && r.final === 'refused:mixed' && r.loads === 2 && r.parse.length === 0
+    && r.running === stampA, `mutant ${i}: ${describe(r)}`);
+}
+
+say('\n--- CDN still holding the old parse.js, 3 trials: must refuse');
+for (let i = 0; i < 3; i++) {
+  const r = await trial('cdn', i);
+  if (r.final === 'started') say('  THE CDN CASE STARTED on an old parse.js the loader should have refused.');
+  check(r.first === 'started' && r.final === 'refused:mixed' && r.loads === 2 && r.parse.length === 1
+    && r.parse[0].build === 'A' && r.running === stampA, `cdn ${i}: ${describe(r)}`);
+}
+
+say(`\n${failures === 0 ? 'ALL PASS' : `${failures} FAILED`}`);
+window.__done = { failures };
+</script></body></html>

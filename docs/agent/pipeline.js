@@ -1,4 +1,4 @@
-export const BUILD = 'ed6b67583fac';
+export const BUILD = '0e79a15923b6';
 /* Facts about the Layer 1 pipeline that the pages state but the bundle does
  * not carry. Layer 1 is closed, so these never move. They are defined once
  * here so that no two sentences on the site can disagree about them.

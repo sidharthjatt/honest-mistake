@@ -1,4 +1,4 @@
-export const BUILD = 'ed6b67583fac';
+export const BUILD = '0e79a15923b6';
 /* The scan page: choose a model, run the agent, watch it work.
  *
  * Loaded and started by scan.js, which first checks that this file and

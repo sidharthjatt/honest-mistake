@@ -1,4 +1,4 @@
-export const BUILD = 'ed6b67583fac';
+export const BUILD = '0e79a15923b6';
 /* The eight tools, in the browser, over the exported JSON.
  *
  * A port of agent/tools.py. The tables are the ones that file reads,

@@ -1,4 +1,4 @@
-export const BUILD = 'ed6b67583fac';
+export const BUILD = '0e79a15923b6';
 /* The scan page's loader. It has no static imports on purpose.
  *
  * GitHub Pages lets a browser keep each file for up to ten minutes, and it
@@ -29,10 +29,19 @@ export const BUILD = 'ed6b67583fac';
  *   together. The page tries to fix it itself once (below), and says so
  *   only if it can't.
  * - A module failed to load and can't be fetched at all: a network failure.
- * - A module failed to load for any other reason: a server error on the
- *   file, a file that is cut short or corrupt, or a module that throws. The
- *   browser's error doesn't tell these apart reliably, so the page says only
- *   that it couldn't start.
+ * - A module failed to load for any other reason: a 404 or a server error
+ *   on the file, a file that is cut short or corrupt, a module that throws,
+ *   a blip during load that has cleared by the time the page checks, or a
+ *   stale copy of a module that imports a name the new build no longer
+ *   exports. That last one is a version mismatch, but it lands here, not in
+ *   the branch above: the stale module fails to link, so its stamp is never
+ *   read, and the modules that did load all agree. The browser's error
+ *   doesn't tell these causes apart reliably, so the page says only that a
+ *   file failed to load, that it can't tell why, and that coming back later
+ *   may or may not help. scripts/check_export_diff.py finds the deploy that
+ *   would make the stale-module case possible. The opt-in pre-push hook in
+ *   .githooks/ runs it and refuses such a push to main, on a clone where the
+ *   hook is turned on and the push doesn't skip it.
  *
  * Nothing here runs after startPage(). The only reload is in selfFix(), which
  * is reached only from load(), before the page has started, so it can't
@@ -67,7 +76,10 @@ const SAY = {
     'own — come back in a few minutes and it should load.'],
   unreachable: ['This page couldn’t load one of its files.',
     'Check your connection and reload.'],
-  cannotStart: ['This page couldn’t start.', 'Reloading may not help.'],
+  cannotStart: ['This page couldn’t start.',
+    'One of its files failed to load, and the page can’t tell why. Some causes clear up ' +
+    'on their own and some need the site to be fixed, so coming back later may or may ' +
+    'not help.'],
 };
 
 /* A module's URL as the browser resolves it for import(), import maps

@@ -46,11 +46,22 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:.75rem}
  *    copy (verify/stale/, checked byte for byte against git by
  *    scripts/check_stale_copies.py), to a copy with a different stamp, or to
  *    one that can't load, the page must refuse with the sentence for that
- *    cause and must not run. It must fix a mixed set itself with one reload,
- *    at most once per tab, never when storage is unavailable, and without
- *    losing a kept run: after that reload the kept run's Screen 3 must read
- *    exactly as it does on a healthy load. A healthy load, and a correctly stamped module
- *    served with CRLF line endings and a byte-order mark, must not refuse.
+ *    cause and must not run. On a mixed set it must reload, not when the
+ *    attempt is already recorded in the tab, never when storage is
+ *    unavailable, and without losing a kept run: after the reload the kept
+ *    run's Screen 3 must read exactly as it does on a healthy load. A healthy
+ *    load, and a correctly stamped module served with CRLF line endings and
+ *    a byte-order mark, must not refuse.
+ *
+ *    What this part can and can't see. The old module comes from an import
+ *    map written into the frame, and the loader's reload fetches scan.html
+ *    again without that map. So when a case here starts after the reload, it
+ *    shows that the loader reloaded and then started on a consistent set. It
+ *    does not show that the reload cured a stale browser cache: the map is
+ *    simply gone. verify/_verify_selffix.html tests the cure. And a reload is
+ *    seen only as the frame's window being replaced, so this part can tell
+ *    whether the page reloaded, not how many times; the two-second wait
+ *    catches a later reload or change, not an earlier second one.
  *
  * A module loaded from a blob can't resolve relative imports, so parts 2
  * and 4 rewrite them to absolute URLs first. absolutize checks its own
@@ -452,12 +463,15 @@ const REFUSAL = {
     'version, so it won’t run. Copies of its files can be kept for up to ten minutes, so this ' +
     'can clear on its own — come back in a few minutes and it should load.',
   unreachable: 'This page couldn’t load one of its files. Check your connection and reload.',
-  cannotStart: 'This page couldn’t start. Reloading may not help.',
+  cannotStart: 'This page couldn’t start. One of its files failed to load, and the page can’t tell ' +
+    'why. Some causes clear up on their own and some need the site to be fixed, so coming back ' +
+    'later may or may not help.',
 };
 const stageFrame = () => document.querySelector('#stage iframe');
 
 /* What the page settled into: a refusal, a started page, or neither. Then
-   two more seconds, to catch a second reload or a late refusal. */
+   two more seconds, to catch a later reload or a late refusal. `reloaded`
+   is whether the frame's window was replaced; it can't count reloads. */
 async function settle() {
   const read = () => {
     const w = stageFrame().contentWindow, d = w.document;
@@ -473,7 +487,7 @@ async function settle() {
   const d = again.w.document;
   return {
     ...again,
-    reloads: again.w.__mounted === true ? 0 : 1,
+    reloaded: again.w.__mounted !== true,
     steady: first.w === again.w && first.state === again.state,
     goDisabled: !!d.getElementById('go')?.disabled,
     flag: (() => { try { return sessionStorage.getItem(FIX_TRIED); } catch { return 'unreadable'; } })(),
@@ -489,8 +503,8 @@ const stampMatch = parseNow.match(/^export const BUILD = '([0-9a-f]{12})';\n/);
 const reStamped = stampMatch && parseNow.replace(stampMatch[0], "export const BUILD = 'ffffffffffff';\n");
 const wordsNow = await textOf('/docs/agent/words.js');
 const refused = kind => r => r.state === 'refused' && r.kind === kind && r.text === REFUSAL[kind]
-  && r.reloads === 0 && r.steady && r.goDisabled;
-const startedClean = r => r.state === 'started' && r.reloads === 0 && r.steady;
+  && !r.reloaded && r.steady && r.goDisabled;
+const startedClean = r => r.state === 'started' && !r.reloaded && r.steady;
 
 const SIX = [
   { label: 'healthy load', opts: {}, pass: startedClean },
@@ -498,8 +512,9 @@ const SIX = [
     pass: refused('mixed') },
   { label: 'old parse.js, storage blocked', opts: { overrides: { 'parse.js': STALE_PARSE }, blockStorage: true },
     pass: refused('mixed') },
-  { label: 'old parse.js, first time: one reload fixes it', opts: { overrides: { 'parse.js': STALE_PARSE } },
-    pass: r => r.state === 'started' && r.reloads === 1 && r.steady && r.flag === null },
+  { label: 'old parse.js, first time: the loader reloads, then starts on a consistent set',
+    opts: { overrides: { 'parse.js': STALE_PARSE } },
+    pass: r => r.state === 'started' && r.reloaded && r.steady && r.flag === null },
   { label: 'old models.js, fix already tried', opts: { overrides: { 'models.js': STALE_MODELS }, fixTried: true },
     pass: refused('mixed') },
   { label: 'parse.js with a different stamp, fix already tried',
@@ -521,16 +536,16 @@ for (const t of SIX) {
   if (!t.opts) { check(false, `${t.label}: no stamp in parse.js to change`); continue; }
   await mount(CASES[0], null, t.opts);
   const r = await settle();
-  check(t.pass(r), `${t.label}: ${r.state}${r.kind ? ` (${r.kind})` : ''}, reloads=${r.reloads}, ` +
+  check(t.pass(r), `${t.label}: ${r.state}${r.kind ? ` (${r.kind})` : ''}, reloaded=${r.reloaded}, ` +
     `steady=${r.steady}, start disabled=${r.goDisabled}, flag after=${JSON.stringify(r.flag)}`);
   if (r.state === 'refused' && r.text !== REFUSAL[r.kind]) say(`  text: ${r.text}`);
 }
 
-/* A kept run survives the self-fix reload and is restored once the page
+/* A kept run survives the loader's reload and is restored once the page
    starts. The run is made on a healthy load first, in this tab. A restored
    run goes on to Screen 3, so the case opens it and reads what the visitor
    would see. The reference is the same kept run restored on a healthy
-   load: after the self-fix, Screen 3 must say exactly what it says there,
+   load: after the reload, Screen 3 must say exactly what it says there,
    and give the verdict the scorer's rule gives the run. The unclosed run is
    the one 1e4df5d's parse.js describes falsely, so it is the one whose
    Screen 3 would differ if the old module were still in use. */
@@ -557,11 +572,11 @@ for (const kc of [CASES[0], CASES.find(c => c.dev === 'unclosed')]) {
   let after = null;
   try { after = sessionStorage.getItem('honest-mistake:last-run'); } catch { /* checked below */ }
   const sameScreen3 = !!refS3 && !!s3 && s3.body.length > 0 && s3.body === refS3.body;
-  check(!!made && !!before && after === before && r.state === 'started' && r.reloads === 1 && r.kept
+  check(!!made && !!before && after === before && r.state === 'started' && r.reloaded && r.kept
     && !!refS3 && refS3.v3 === kc.expect && sameScreen3 && s3.v3 === kc.expect
     && s3.vt === kc.expect,
     `old parse.js with a kept run (${kc.dev}): kept before=${!!before}, same record after=${after === before}, ` +
-    `${r.state}, reloads=${r.reloads}, restored on the page=${r.kept}; ` +
+    `${r.state}, reloaded=${r.reloaded}, restored on the page=${r.kept}; ` +
     `screen 3 expect ${kc.expect}: reference=${refS3 ? refS3.v3 : 'not reached'}, ` +
     `old parse.js load=${s3 ? s3.v3 : 'not reached'}, title=${s3 ? s3.vt : 'not reached'}, ` +
     `same text as the reference=${sameScreen3} (${s3 ? s3.body.length : 0} characters)`);

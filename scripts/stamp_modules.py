@@ -15,7 +15,9 @@ so a module added under docs/agent/ can't be left out of the check.
 
 Every new file is computed before any is written. --check writes nothing and
 exits 1 if any file differs from what this would write: a stale stamp, a
-missing one, or a stale list. It runs in the pre-push gate.
+missing one, or a stale list. The opt-in pre-push hook in .githooks/ runs it
+on pushes to main, on a clone where the hook is turned on. A push can skip the
+hook, so this is a local guard, not enforcement (see the README).
 
 This is its own step on purpose. scripts/export_site_bundle.py writes
 docs/data/ and carries provenance hashes; nothing here touches either.

@@ -1,4 +1,4 @@
-export const BUILD = 'ed6b67583fac';
+export const BUILD = '0e79a15923b6';
 /* The final-answer parser, ported from agent/eval_canary.parse_final_answer.
  *
  * Strict on purpose, and the reason is worth keeping in view: malformed

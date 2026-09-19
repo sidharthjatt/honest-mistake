@@ -1,4 +1,4 @@
-export const BUILD = 'ed6b67583fac';
+export const BUILD = '0e79a15923b6';
 /* Screen 3: score the run, reveal the candidate, compare against the twelve.
  *
  * This module renders from one record and nothing else. That is deliberate
