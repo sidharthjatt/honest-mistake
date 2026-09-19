@@ -5,7 +5,7 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:.75rem}
 <pre id="out">running…</pre>
 <div id="stage"></div>
 <script type="module">
-/* Four checks on whether a run gets a verdict.
+/* Five checks on how a run ended and whether it gets a verdict.
  *
  * 1. Screen 2 and Screen 3 agree, and agree with the scorer's rule. The
  *    real scan page runs in an iframe. An import map points its dev
@@ -29,6 +29,16 @@ pre{white-space:pre-wrap;word-break:break-word;font-size:.75rem}
  *    on that scan.js, and its banners and title must match the shipped
  *    one's word for word. This is for a change meant to move code without
  *    changing what it draws. Without ?baseline it does not run.
+ *
+ * 5. How each ceiling ended a run, in the words both screens use. For the
+ *    spend ceiling at exactly $1.00, well past it and less than a cent past
+ *    it, the sentence on both screens, the banner's footer, the meter and
+ *    Screen 3's "Your run" line must all give the same figure and the right
+ *    relation to the ceiling. For the tool-call ceiling, Screen 2 must give
+ *    the count it stopped at and the ceiling, and Screen 3 must say the run
+ *    was stopped before that batch. The spend figures assume the default
+ *    model, Sonnet 5, at $10 per million output tokens, and the default
+ *    $1.00 ceiling.
  *
  * A module loaded from a blob can't resolve relative imports, so parts 2
  * and 4 rewrite them to absolute URLs first. absolutize checks its own
@@ -217,9 +227,14 @@ async function runCase(c, scanBlob = null) {
     sends: w.__harnessSends || 0,
   };
   r.ran = r.sends > 0 && d().getElementById('stream').textContent.includes(MARK);
+  r.meterCost = [...d().querySelectorAll('#meters .meter')]
+    .map(m => [m.querySelector('.k')?.textContent, m.querySelector('.v')?.textContent])
+    .find(([k]) => /cost/i.test(k || ''))?.[1] ?? null;
   d().getElementById('see-score').click();
   const s3 = await until(() => { const v = screen3(d()); return v === 'not shown' ? null : { v }; }, 20000);
   r.v3 = s3 ? s3.v : 'not shown';
+  r.s3NoVerdict = d().querySelector('#s3-body .s3-noverdict')?.textContent ?? '';
+  r.s3Yours = d().querySelector('#s3-body .s3-yours')?.textContent ?? '';
   return r;
 }
 
@@ -346,6 +361,59 @@ if (!BASELINE) {
       say(`  shipped:  ${a.titleText} | ${a.banners.join(' | ')}`);
       say(`  baseline: ${b.titleText} | ${b.banners.join(' | ')}`);
     }
+  }
+}
+
+/* ------------------------------------------- 5. how the ceilings ended it */
+
+say(`\n--- 5. the ceiling sentences, figures and relation${BROKEN ? ' (map deliberately broken)' : ''}`);
+const costTurn = output => ({ repeat: true, usage: { input: 0, output, cache_creation: 0, cache_read: 0 },
+  turns: [{ stop: 'tool_use', thinking: `${MARK} every turn.`, calls: [CALL] }] });
+const SPEND_CASES = [
+  { dev: 'costexact', label: 'one turn at exactly $1.00', spent: '$1.00', rel: 'at', ...costTurn(100000) },
+  { dev: 'costly', label: 'one turn at $1.06', spent: '$1.06', rel: 'past', ...costTurn(106000) },
+  { dev: 'costnear', label: 'one turn at $1.002, which rounds to $1.00', spent: '$1.002', rel: 'past',
+    ...costTurn(100200) },
+];
+for (const c of SPEND_CASES) {
+  const r = await runCase(c);
+  if (!r) { check(false, `${c.dev}: the page never became ready`); continue; }
+  const sentence = `The run had spent ${c.spent} when its last turn ended, ${c.rel} your ceiling of $1.00`;
+  const banner = r.banners.find(b => b.startsWith('No verdict')) || '';
+  const parts = {
+    'screen 2 sentence': banner.includes(sentence),
+    'screen 3 sentence': r.s3NoVerdict.includes(sentence),
+    footer: banner.includes(`${c.spent} spent against a $1.00 ceiling`),
+    meter: r.meterCost === c.spent,
+    'your run': r.s3Yours.includes(`${c.spent}.`),
+  };
+  const bad = Object.entries(parts).filter(([, ok]) => !ok).map(([k]) => k);
+  check(r.ran && bad.length === 0, `${c.dev.padEnd(10)} ${c.label}: expect "${c.spent}", "${c.rel}"; ` +
+    (bad.length ? `wrong in: ${bad.join(', ')}` : 'right in all five places') +
+    `; test transport ran=${r.ran}`);
+  if (bad.length) {
+    say(`  screen 2: ${banner}`);
+    say(`  screen 3: ${r.s3NoVerdict}`);
+    say(`  meter: ${r.meterCost}; your run: ${r.s3Yours}`);
+  }
+}
+{
+  const c = { dev: 'calls', label: 'four calls a turn, 70-call ceiling', repeat: true,
+    turns: [{ stop: 'tool_use', thinking: `${MARK} every turn.`, calls: [CALL, CALL, CALL, CALL] }] };
+  const r = await runCase(c);
+  if (!r) { check(false, `${c.dev}: the page never became ready`); } else {
+    const banner = r.banners.find(b => b.startsWith('No verdict')) || '';
+    const parts = {
+      'screen 2 count and ceiling': banner.includes('The run stopped at 68 tool calls: the model asked for a ' +
+        'batch that would have taken it past the ceiling of 70, so that batch was not run.'),
+      'screen 3 sentence': r.s3NoVerdict.includes('The run was stopped before a batch of tool calls that ' +
+        'would have taken it past its tool-call ceiling.'),
+    };
+    const bad = Object.entries(parts).filter(([, ok]) => !ok).map(([k]) => k);
+    check(r.ran && bad.length === 0, `${c.dev.padEnd(10)} ${c.label}: ` +
+      (bad.length ? `wrong in: ${bad.join(', ')}` : 'stopped at 68 of 70, said so on both screens') +
+      `; test transport ran=${r.ran}`);
+    if (bad.length) { say(`  screen 2: ${banner}`); say(`  screen 3: ${r.s3NoVerdict}`); }
   }
 }
 
