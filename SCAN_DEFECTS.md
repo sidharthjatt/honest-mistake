@@ -30,3 +30,12 @@ This is recorded because the advice, followed, doesn't work in one of the cases 
 - **What is untested:** `classify` itself. The loop page's invalid-model case (`verify/_verify_loop.html:70`) throws a ready-made error with the retired-model sentence, so it tests how the loop shows an error, not how a response is classified.
 
 This is recorded because it tells a visitor to change a setting that may have nothing to do with the failure.
+
+**D22. 2026-09-20.** `docs/README.md` says the site has three pages, and it now has four.
+- **What the file says:** `docs/README.md:5` reads "`index.html` is the landing page; it and the other two pages read the exported JSON under `data/` at load." That was written on 2026-09-16 (1cb18cd), when `docs/` held `index.html`, `runs.html` and `replay.html`.
+- **What is there now:** `docs/scan.html` was added on 2026-09-19 (f8d3df0), so `index.html` has three other pages, not two. The scan page also reads the exported JSON under `data/` at load: `docs/scan-page.js:129-132` fetches the system prompt, the tool schemas, the manifest and the run index, and `:799-803` fetches the scoring, the run index, both SHAP exports and the dictionary. So the count is wrong, and the page it leaves out is one the sentence would otherwise have covered.
+- **Where it shows:** in the repository, and in GitHub's rendering of the `docs/` folder. It is not part of the published site, which serves `index.html` rather than this file.
+- **What it does not affect:** nothing the pages themselves say, and nothing the scan page does. No code reads this file.
+- **What is not known:** whether anyone has read it since the scan page was added. Nothing reports readers.
+
+This is recorded rather than fixed because the sentence is a claim, and changing a claim is a decision of its own, not part of a design pass.
