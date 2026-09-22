@@ -783,3 +783,29 @@ The example is the `par-utilisation` probe in `scripts/retrieval_probes.py`, who
 ## Deadline
 
 2026-09-23. Anything not done by then is recorded at the bottom of this file as not done, and the pass closes.
+
+## Closed 2026-09-23
+
+The pass closed on its deadline, with all seven checks passing on the tree at 24e3075.
+
+| Check | Result | How it was run |
+|---|---|---|
+| 1. No paragraph over 4 lines at 1280px | PASS, 50 of 50 states | `verify/_verify_design.html` |
+| 2. First screen shows what the page does and a control | PASS, 32 of 32 states | `verify/_verify_design.html` |
+| 3. Banned phrases, em-dash density, README paragraph length | PASS, 6 files | `verify/check_design_text.py` |
+| 4. Both READMEs say what it is and how to run it | PASS, 2 files | `verify/check_design_text.py`, under the rule as tightened on 2026-09-23 |
+| 5. No horizontal scroll and no overlap at 390px | PASS, 50 of 50 states | `verify/_verify_design.html` |
+| 6. Manifest claim sentences unchanged since 62f8d3e | PASS, 753 of 753 units | `verify/check_design_text.py` |
+| 7. Every rewritten README claim re-verified | PASS, entries E1 to E9 | By reading, recorded above |
+
+The first baseline, taken at ff8e639 before any page was touched, failed checks 1 and 2. Check 1 failed in 3 of 50 states: `scan.html`'s intro and Screen 3's verdict paragraph. Check 2 failed in 2 of 32: `index.html` had no control inside `<main>` on its first screen. Both were fixed in 0262a14 without changing a claim byte. Check 4 passed at that baseline only because a code span counted. When the rule was tightened, both READMEs failed, and b97a473 fixed them. The verdict harness (`verify/_verify_verdict.html`) and the self-fix harness (`verify/_verify_selffix.html`) were re-run after the module stamp changed to 91493d637f81. Both report ALL PASS.
+
+Before and after screenshots of each page's first screen, at 1280px and 390px, are outside the repository, in `~/Downloads/track/scratch/design-shots/`.
+
+### Not done
+
+- **The landing page's long paragraphs keep their full width.** A narrower measure would read better, but the paragraph under the lede, the scan intro and the Screen 3 verdict paragraphs already sit at exactly four lines at 1280px. Narrowing them, or enlarging their type, would fail check 1. The visual pass changed no paragraph's size or width for that reason.
+- **The runs table still scrolls sideways at 1280px.** It has more columns than the page is wide. The pass shortened its rows but did not restructure it.
+- **`scan.html` keeps its own inline styles.** The visual pass covered `style.css` only, so the scan page's components, including the intro and Screen 3, look as they did apart from the shared headings, links and spacing.
+- **The README's harness table does not list the two design-check scripts.** `README.md` track 1 names the six older harnesses under `verify/` and not `check_design_text.py` or `_verify_design.html`.
+- **The open defects stay open.** D19, D20, D21, D23 and D26 are outside this pass. D26's decision, whether to fix `plot_layer2_eval.py` or mark its figures as committed-only, was deferred until after this pass and is now due.
