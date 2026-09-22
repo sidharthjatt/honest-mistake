@@ -50,6 +50,10 @@ The pass is done when all seven checks below pass, run in this order:
 
 **Em-dashes (check 3)** are measured by density, not by total. The rule is at most 1 per paragraph, and 0 in each README's first three lines. Claim sentences are exempt, and the check skips them.
 
+**Paragraph length (check 3)** applies to the two READMEs: no paragraph in `README.md` or `docs/README.md` exceeds 360 characters. Table rows are excluded. `check_design_text.py` enforces it.
+
+**A punctuation-only change to a claim sentence is allowed (check 7).** Replacing an em-dash with a comma, colon or full stop, with no word added, removed or reordered, cannot change what the sentence asserts, so it needs no re-verification. All such changes are recorded together as a single check 7 entry listing the file and line of each. Any change that touches a word is not punctuation-only and follows the normal check 7 rule.
+
 **"What it is" (check 4)** is the first non-heading line, and it must not be empty. "How to run it" is a code span, a code fence or a known run command within the first three non-blank lines.
 
 ## The check
@@ -729,7 +733,44 @@ P25. `README.md:192` So the dictionary stayed accurate and the ablation ran know
 
 ## Check 7 entries
 
-None yet. Each rewritten claim sentence gets one: the sentence as it now reads, the file and line that establishes it, and what was checked.
+Each rewritten claim sentence gets one: the sentence as it now reads, the file and line that establishes it, and what was checked.
+
+**E1. 2026-09-20. Punctuation only, thirteen claim sentences in `README.md`.** Each em-dash in a claim sentence in the lead and in Layers 1 and 2 was replaced by a comma or a colon. No word was added, removed or reordered, so no re-verification was needed. The six em-dashes in the run register table are the "no canary" marker rather than punctuation and were left alone, as were the three in image alt text. The sentences, at their new lines:
+
+- `README.md:13` "behind a flattering metric, including when the honest result is a zero."
+- `README.md:17` "replayable there turn by turn:" (was an em-dash pair; now a colon and a comma)
+- `README.md:33` "chosen deliberately: earlier vintages"
+- `README.md:43` "settlement family: anything matching"
+- `README.md:45` "already on a hardship plan, a leak"
+- `README.md:71` "*Baseline models only: Logistic Regression"
+- `README.md:101` "dead weight at test time: Lending Club"
+- `README.md:115` "not wrong to call that risky: grade G loans"
+- `README.md:191` "about outcome maturity, that 60-month loans"
+- `README.md:201` "into the feature matrix, a column whose value" (was an em-dash pair; now two commas)
+- `README.md:208` "with probability 1.0, genuinely leaking"
+- `README.md:214` "`int_rate`, rank 5 in the honest model, falls" (was an em-dash pair; now two commas)
+- `README.md:224` "one-directional: it could only ever undercount" (was an em-dash pair; now a colon and a comma)
+
+The line numbers above are those of the commit that adds this entry. Seven of them, from `README.md:101` on, were first written as the lines of an earlier draft, four to eight lines too low, and were corrected before commit by finding each quoted fragment in the file.
+
+**E2. 2026-09-22. `README.md:149`, the sentence that opens the retrieval section's case for semantic search.** Manifest entry 96 (`README.md:131` at 62f8d3e) read "Asking it about utilisation returned nothing, because no description contains that word." It was false at every version checked from 97a339c, where it was written, to HEAD: `revol_util`'s description is "Revolving line utilisation: percent of available revolving credit the borrower is using.", and the old substring tier returns `revol_util` for the query `utilisation`. It now reads:
+
+> Asking it how much of their available credit a borrower is using returned nothing, because a substring match needs the whole question to appear inside a description, and none contains it.
+
+The example is the `par-utilisation` probe in `scripts/retrieval_probes.py`, whose query is "how much of their available credit is the borrower using". What was checked: `RETRIEVAL_EVAL.md` records the keyword backend as empty on all 7 paraphrase probes, this one included; `_substring_description_hits` in `agent/data_dictionary.py` tests `q_lower in entry["description"].lower()`, so the whole query has to appear; and on 2026-09-22 that tier, run on the probe's query, returned no name hits and no description hits. A first rewrite gave the reason as "no description uses those words". That was also false, since `revol_util`'s description uses most of them, and it was replaced before this entry was written.
+
+**E3. 2026-09-22. `RETRIEVAL_EVAL.md` is loose on the same probe, and is not edited.** Its summary says substring matching returns nothing on the paraphrase probes "because the question does not reuse the dictionary's vocabulary". For `par-utilisation` that is loose: `revol_util`'s description shares most of the question's words, and the empty result comes from matching the whole query as one substring. The file is a frozen record and is out of this pass's scope, so it stays as it is. This entry is the note.
+
+**E4. 2026-09-22. `README.md:155`, the latency sentence, recorded rather than rewritten.** "A sequential scan over 224 vectors of 384 dimensions runs in well under a millisecond and returns the true nearest neighbours every time." The plan for the query `search_descriptions` sends is Limit, Sort, Seq Scan, so the neighbours are exact, and the table holds 224 rows at dimension 384. Over 50 warm executions of that query (five questions, ten times each, via `EXPLAIN ANALYZE`), the median was 0.10 ms. Two cold first queries on a fresh connection measured 1.06 ms and 1.76 ms. The sentence holds for warm queries and not for a cold first one. It is left unchanged, and the cold figures are recorded here.
+
+**E5. 2026-09-22. Where the retrieval section was verified.** Every sentence of the two retrieval sections (`README.md` "Dictionary search is semantic now" and "The semantic tier of the dictionary search") was checked against the main working copy's existing index, not against a clean clone. The clone made for this on 2026-09-20 was lost with its session scratchpad. A second clone could not have used the README's commands unaltered on this machine either: `docker/docker-compose.yml` hardcodes the container name `honest-mistake-pgvector`, the project name `honest-mistake` and the volume `honest-mistake-pgdata`, and those collide with the instance already running for this working copy. A reader cloning fresh has no such instance and does not meet the collision. On the existing index, `retrieval.index_stats()` reported 224 rows, 224 embeddings, dimension 384, and a mock run stamped `toolsv2.0-populated-included-scopes-all-retrieval-pgvector-bge-small-en-v1.5-layer1`, against `retrieval-keyword-fallback` on the clone with no database on 2026-09-20.
+
+**E6. 2026-09-22. What the retrieval check did not cover.**
+- That `scripts/build_dict_index.py` embeds the description field alone. The claim was checked on the query side, where no `WHERE` clause and no index touches `populated`, but the build script was not read.
+- `docker compose up -d --wait`, `down` and `down -v`. None was run, because each would have acted on the existing container.
+- The 28-probe results in `RETRIEVAL_EVAL.md`. They were not re-run on 2026-09-22.
+
+**E7. 2026-09-22. `README.md:234`, one word: "below" became "above".** Manifest entry 167 (`README.md:210` at 62f8d3e) said the result was what "I predicted from the description scan below". The scan ("Before running it, I scanned every true positive's description") comes before that sentence, at line 190 against 210 at HEAD, and at line 175 against 234 now, so the pointer was false at HEAD and not made false by this pass. What was checked: the two line positions, by reading, in both versions. No other word changed. The README's four other above/below pointers, at lines 143, 159, 445 and 501, were read and point the right way.
 
 ## Deadline
 
