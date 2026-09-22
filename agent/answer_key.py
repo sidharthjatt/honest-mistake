@@ -27,6 +27,7 @@ Run the self-check:
     .venv/bin/python -m agent.answer_key
 """
 
+import csv
 import json
 import re
 from pathlib import Path
@@ -35,7 +36,7 @@ from agent.data_dictionary import FEATURE_DOCS
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 _DROP_LOG = _PROJECT_ROOT / "outputs" / "leakage_drop_log.txt"
-_X_TEST = _PROJECT_ROOT / "data" / "processed" / "X_test.parquet"
+_SHAP_GLOBAL = _PROJECT_ROOT / "outputs" / "agent_cache" / "shap_global.csv"
 
 # A column removed during construction is a lifecycle removal unless its
 # `populated` string says it is known at application or origination.
@@ -71,8 +72,22 @@ def _removed_columns() -> list[str]:
 
 
 def _model_columns() -> list[str]:
-    import pandas as pd
-    return pd.read_parquet(_X_TEST).columns.tolist()
+    """The honest model's feature names, read from a committed artefact.
+
+    This used to read data/processed/X_test.parquet, which is gitignored,
+    so importing this module failed on a fresh clone and took the scorer
+    with it. shap_global.csv is committed and carries one row per model
+    feature. Neither use depends on the SHAP rank order it comes in:
+    HARD_NEGATIVES filters the list and sorts the result, and the
+    self-check turns it into a set.
+    """
+    if not _SHAP_GLOBAL.exists():
+        raise FileNotFoundError(
+            "The model's feature list comes from outputs/agent_cache/"
+            "shap_global.csv, which is missing from this checkout."
+        )
+    with _SHAP_GLOBAL.open(newline="") as fh:
+        return [row["feature"] for row in csv.DictReader(fh)]
 
 
 def _assign_tier(description: str) -> tuple[str, str, str] | None:
@@ -307,10 +322,10 @@ def _reachability(tp: list[str], resolved: dict,
     now see it here rather than re-deriving it.
 
     `model_columns` is passed in rather than read from disk. The key's own
-    _model_columns() reads data/processed/X_test.parquet, which holds the
-    honest matrix only and is not committed, so it can answer this for
-    neither variant reliably and for the canary one not at all. The caller
-    knows which variant ran and has its feature list.
+    _model_columns() reads the honest model's feature list from
+    outputs/agent_cache/shap_global.csv, so it cannot answer this for the
+    canary variant, which has one column more. The caller knows which
+    variant ran and has its feature list.
     """
     if model_columns is None:
         return {"known": False, "model_column_count": None, "by_flag": {},
