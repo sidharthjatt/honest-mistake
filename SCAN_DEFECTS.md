@@ -1,4 +1,4 @@
-# Scan page defect register
+# Defect register: the scan pages and the repository's presentation files
 
 Written 2026-09-20. This is a defect register and nothing else. It freezes nothing and specifies nothing.
 
@@ -39,3 +39,35 @@ This is recorded because it tells a visitor to change a setting that may have no
 - **What is not known:** whether anyone has read it since the scan page was added. Nothing reports readers.
 
 This is recorded rather than fixed because the sentence is a claim, and changing a claim is a decision of its own, not part of a design pass.
+
+## Scope note, 2026-09-20
+
+From today this register also covers the repository's presentation files, `README.md` and `docs/README.md`. No preregistration covers them either, for the same reason the scan pages are uncovered: they were written after Layer 3 closed. D22 already belongs to this class. The numbering continues unbroken across both, so a D number identifies one defect whichever kind of file it is in.
+
+**D23. 2026-09-20.** `README.md` displays a figure that nothing in the repository produces.
+- **What the file says:** `README.md:178 at 0790309` shows `outputs/figures/shap_bar_top20_canary_model.png`, captioned as the canary model's mean absolute SHAP, in a section that reads as part of the canary result.
+- **What produces the other figures:** `src/05_baseline.py` writes `roc_pr_curves.png`, `src/07_audit.py` writes `shap_bar_top20.png`, `shap_beeswarm_top20.png` and the three waterfalls, and `scripts/plot_layer2_eval.py` writes the two Layer 2 figures.
+- **What produces this one:** nothing. No file under `src/`, `agent/` or `scripts/` contains the string `canary_model.png`, and `07_audit.py`, the script that writes every other SHAP figure, has no `--canary` option and no argument parser at all. The figure is a committed artefact presented as a reproducible output.
+- **What it does not affect:** the figure itself, which is not claimed to be wrong, and no number in the README depends on regenerating it. The canary's AUC figures come from `best_params_canary.json`, which is committed.
+- **What is not known:** how it was produced. It entered the repository in eb89b98 on 2026-08-27, the commit that added the agent layer, and `git log -S` finds no commit in any branch that added or removed code writing that filename. No notes file under `outputs/` mentions it. Whether it came from a local edit of `07_audit.py` or from a session that was never committed cannot be told from the record.
+
+This is recorded because a figure a reader cannot regenerate sits among figures they can, with nothing marking the difference.
+
+**D24. 2026-09-20.** The reproduce list does not produce the figures the README shows.
+- **What the file says:** `README.md` gives an ordered command list under "Then, in order": `02_build_dataset.py`, `03_split.py`, `04_features.py`, `06_tune.py`, `agent.precompute`, `agent.plant_canary` and `agent.precompute --canary`.
+- **What it leaves out:** `01_data_exploration.py`, `05_baseline.py`, `07_audit.py` and `08_fairness_ablation.py`. All four exist in `src/`, and all four are named in the README's Pipeline table; `07_audit.py` and `08_fairness_ablation.py` are also named in the prose of "The audit".
+- **What follows:** a reader who follows the list exactly never runs the baseline or the audit, so none of `roc_pr_curves.png`, `shap_bar_top20.png` or `shap_waterfall_confident_wrong.png` is produced by the path the README gives, though each is displayed in it. The same reader never produces `outputs/audit_notes.txt` or the fairness ablation's result, which the README quotes as **0.0003 ROC-AUC**.
+- **What it does not affect:** the code. The four scripts exist and are not reported as broken; the defect is in the documentation. The list's own steps are also unaffected: `06_tune.py` reads the feature matrices from `04_features.py` and does not depend on `05_baseline.py`.
+- **What is not known:** whether the omission was deliberate, for instance to keep the list to the steps the agent layer needs. Nothing in the README or the commit history says either way.
+
+This is recorded because the README's own figures and one of its numbers are unreachable by its own instructions.
+
+**D25. 2026-09-20.** The scorer does not run on a fresh clone.
+- **What the code does:** `agent/answer_key.py:118` builds `HARD_NEGATIVES` at import time from `_model_columns()`, and that function, at line 75, reads `data/processed/X_test.parquet`. `data/processed/` is gitignored and does not exist in a fresh clone, so importing `agent.answer_key` raises `FileNotFoundError`. `agent/eval_canary.py:36` imports it at module level, so both `python -m agent.eval_canary --run <dir>` and `--compare <dir> <dir>` fail before doing any work.
+- **How it was found:** a clone of `main` at 0790309 into an empty directory, with a fresh virtualenv and `pip install -r requirements.txt`, on 2026-09-20. Both commands failed the same way, in 15.9 seconds, with the traceback ending at `data/processed/X_test.parquet`.
+- **What it falsifies:** three sentences. Two are in the committed README: "The scorer runs on a fresh clone with no regeneration and no API key", and "Every number in `EVAL_NOTES.md` can be re-derived from what is in the repository". The third is in the uncommitted design-pass draft, added on 2026-09-20 near the top of the file: "Scoring the committed agent runs takes one command and no API key". The first two are the older claims and are the reason this entry exists; the third repeated them without checking.
+- **What was observed about the data, not proposed as a fix:** the model's column list is present in the repository in at least two committed files, `outputs/agent_cache/shap_global.csv` and `outputs/agent_cache/coverage_profile.csv`. `answer_key.py` reads a different file, one that is not committed. Whether the derivation could use a committed file instead has not been tested and is not decided here.
+- **What it does not affect:** the site, which reads the exported bundle under `docs/data/` and has its own copy of the scoring; the `verify/_verify_verdict.html` harness, which passed all 28 of its cases on the same clone; and the committed run records themselves, which are complete.
+- **What is not known:** whether the claim was ever true. Nothing in the record shows the scorer being run from a clone. The gitignore rule for `data/processed/` was added in e063b86 on 2026-07-03, and the claim entered the README in eb89b98 on 2026-08-27, so the path the scorer needs was already untracked when the claim was written. Whether the file was once committed, or once derived differently, has not been established.
+
+This is recorded because it is the first thing a reader is told they can do for free, and it is the one thing that does not work.
