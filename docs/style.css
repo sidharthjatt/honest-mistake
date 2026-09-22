@@ -1,4 +1,4 @@
-/* Honest Mistake — one stylesheet for all three pages. */
+/* Honest Mistake — one stylesheet for all four pages. */
 
 :root {
   --bg: #fbfaf8;
@@ -54,7 +54,11 @@ body {
   font-family: var(--serif);
   font-size: 17px;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
+
+::selection { background: var(--accent-soft); color: var(--ink); }
 
 .wrap {
   max-width: 62rem;
@@ -69,10 +73,10 @@ body {
 header.mast {
   border-bottom: 1px solid var(--rule);
   background: var(--panel);
-  margin-bottom: 2.5rem;
+  margin-bottom: 3.25rem;
 }
 
-header.mast .wrap { padding-top: 1.1rem; padding-bottom: 1.1rem; }
+header.mast .wrap { padding-top: 1rem; padding-bottom: 1rem; }
 
 .mast-row {
   display: flex;
@@ -98,32 +102,69 @@ nav.mast-nav {
   font-size: 0.85rem;
 }
 
-nav.mast-nav a { color: var(--ink-soft); text-decoration: none; }
-nav.mast-nav a:hover { color: var(--accent); text-decoration: underline; }
-nav.mast-nav a[aria-current="page"] { color: var(--ink); font-weight: 600; }
+nav.mast-nav a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding-bottom: 0.2rem;
+  border-bottom: 2px solid transparent;
+}
+nav.mast-nav a:hover { color: var(--ink); border-bottom-color: var(--rule-firm); }
+nav.mast-nav a[aria-current="page"] {
+  color: var(--ink);
+  font-weight: 600;
+  border-bottom-color: var(--accent);
+}
 
 /* ---- prose ---- */
 
 h1 {
-  font-size: 2.1rem;
-  line-height: 1.2;
-  margin: 0 0 0.6rem;
-  letter-spacing: -0.015em;
+  font-size: 2.3rem;
+  line-height: 1.15;
+  margin: 0 0 0.85rem;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
 h2 {
-  font-size: 1.35rem;
-  margin: 3rem 0 0.8rem;
-  padding-bottom: 0.35rem;
+  font-size: 1.4rem;
+  line-height: 1.3;
+  margin: 3.5rem 0 1rem;
+  padding-bottom: 0.45rem;
   border-bottom: 1px solid var(--rule);
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
-h3 { font-size: 1.05rem; margin: 2rem 0 0.5rem; }
+h3 {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: 0.005em;
+  margin: 2.25rem 0 0.6rem;
+}
 
-p { margin: 0 0 1rem; }
+p { margin: 0 0 1.1rem; }
 
-.lede { font-size: 1.12rem; color: var(--ink-soft); max-width: 44rem; }
+.lede { font-size: 1.12rem; color: var(--ink-soft); max-width: 44rem; margin-bottom: 1.25rem; }
+
+/* Where to go next, set under the lede on the landing page. */
+.jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.6rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  margin: 0 0 2rem;
+}
+
+.jump a {
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 0.1rem;
+}
+
+.jump a:hover { border-bottom-width: 2px; }
 
 .note {
   font-family: var(--sans);
@@ -132,15 +173,27 @@ p { margin: 0 0 1rem; }
   line-height: 1.55;
 }
 
-a { color: var(--accent); }
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+a:hover { text-decoration-thickness: 2px; }
+
+a:focus-visible, button:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
 
 code, .mono { font-family: var(--mono); font-size: 0.87em; }
 
 p code, td code, li code {
   background: var(--panel-2);
   border: 1px solid var(--rule);
-  border-radius: 3px;
-  padding: 0.05em 0.3em;
+  border-radius: 4px;
+  padding: 0.05em 0.32em;
 }
 
 /* ---- headline cards ---- */
@@ -148,22 +201,22 @@ p code, td code, li code {
 .headline {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
-  gap: 1rem;
-  margin: 2rem 0;
+  gap: 1.25rem;
+  margin: 2.5rem 0 1.5rem;
 }
 
 .card {
   background: var(--panel);
   border: 1px solid var(--rule);
-  border-radius: 6px;
-  padding: 1.15rem 1.25rem;
+  border-radius: 8px;
+  padding: 1.3rem 1.4rem 1.35rem;
 }
 
 .card.lead { border-color: var(--rule-firm); border-left: 4px solid var(--credited); }
 .card.counter { border-left: 4px solid var(--absent); }
 
 .card h3 {
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.6rem;
   font-family: var(--sans);
   font-size: 0.72rem;
   letter-spacing: 0.09em;
@@ -201,7 +254,7 @@ table {
 
 th, td {
   text-align: left;
-  padding: 0.5rem 0.65rem;
+  padding: 0.6rem 0.7rem;
   border-bottom: 1px solid var(--rule);
   vertical-align: top;
 }
@@ -251,9 +304,9 @@ td.tight { white-space: nowrap; }
   background: var(--panel);
   border: 1px solid var(--rule);
   border-left: 4px solid var(--uncredited);
-  border-radius: 5px;
-  padding: 0.9rem 1.1rem;
-  margin: 0.8rem 0;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
 }
 
 .flag.is-credited { border-left-color: var(--credited); }
@@ -296,9 +349,9 @@ td.tight { white-space: nowrap; }
 
 .turn {
   border: 1px solid var(--rule);
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--panel);
-  margin: 0.9rem 0;
+  margin: 1.1rem 0;
   overflow: hidden;
 }
 
@@ -317,7 +370,7 @@ td.tight { white-space: nowrap; }
   font-weight: 600;
 }
 
-.turn-body { padding: 0.9rem; }
+.turn-body { padding: 1rem 1.05rem; }
 
 .block + .block { margin-top: 0.85rem; }
 
@@ -416,10 +469,10 @@ pre.tall { max-height: 26rem; overflow-y: auto; }
 /* ---- provenance ---- */
 
 .prov {
-  margin: 2.5rem 0 0;
+  margin: 3.5rem 0 0;
   border: 1px solid var(--rule);
   border-top: 3px solid var(--rule-firm);
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--panel);
 }
 
@@ -463,8 +516,8 @@ pre.tall { max-height: 26rem; overflow-y: auto; }
 .caveat {
   border-left: 3px solid var(--uncredited);
   background: var(--uncredited-soft);
-  padding: 0.6rem 0.8rem;
-  border-radius: 0 4px 4px 0;
+  padding: 0.7rem 0.95rem;
+  border-radius: 0 6px 6px 0;
   font-family: var(--sans);
   font-size: 0.82rem;
   color: var(--ink-soft);
@@ -487,21 +540,26 @@ pre.tall { max-height: 26rem; overflow-y: auto; }
 .backlink {
   font-family: var(--sans);
   font-size: 0.82rem;
-  margin-bottom: 0.8rem;
+  margin-bottom: 1rem;
 }
+
+.backlink a { text-decoration: none; }
+.backlink a:hover { text-decoration: underline; }
 
 ul.plain { padding-left: 1.1rem; }
 ul.plain li { margin-bottom: 0.4rem; }
 
 @media (max-width: 640px) {
   body { font-size: 16px; }
-  h1 { font-size: 1.65rem; }
+  h1 { font-size: 1.75rem; }
+  h2 { margin-top: 2.75rem; }
   .figure { font-size: 1.7rem; }
   .wrap { padding-bottom: 3rem; }
+  header.mast { margin-bottom: 2.25rem; }
 }
 
 /* runs table: the refusal reason needs room to sit beside its verdict. */
-td.why { min-width: 17rem; }
+td.why { min-width: 24rem; }
 td.why .note { margin-top: 0.25rem; display: block; }
 
 .est-key {
