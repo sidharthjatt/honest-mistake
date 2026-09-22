@@ -1,4 +1,4 @@
-export const BUILD = '0e79a15923b6';
+export const BUILD = '91493d637f81';
 /* Screen 3: score the run, reveal the candidate, compare against the twelve.
  *
  * This module renders from one record and nothing else. That is deliberate
@@ -229,9 +229,17 @@ function flagCard(rec, verdict, record, data, result) {
     $n('code', { class: 's3-flag', text: rec.FLAG }),
     rec.CONFIDENCE ? $n('span', { class: 's3-conf', text: `confidence: ${rec.CONFIDENCE}` }) : null));
 
-  card.append($n('p', { class: 's3-verdict' },
-    $n('b', { text: VERDICT_LABEL[verdict.kind] }), ' ',
-    ...verdictBody(rec, verdict, record, data, result)));
+  /* A body that breaks into parts with a pair of <br>s is one paragraph
+     per part. Each break falls between sentences, so the words are the
+     same; only the element around them changes. */
+  const parts = [[$n('b', { text: VERDICT_LABEL[verdict.kind] }), ' ']];
+  const body = verdictBody(rec, verdict, record, data, result);
+  for (let i = 0; i < body.length; i++) {
+    const isBr = x => x instanceof Element && x.tagName === 'BR';
+    if (isBr(body[i]) && isBr(body[i + 1])) { parts.push([]); i++; continue; }
+    parts[parts.length - 1].push(body[i]);
+  }
+  for (const part of parts) card.append($n('p', { class: 's3-verdict' }, ...part));
 
   if (rec.REASON) {
     card.append($n('div', { class: 's3-said' },

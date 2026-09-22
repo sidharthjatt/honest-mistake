@@ -1,4 +1,4 @@
-export const BUILD = '0e79a15923b6';
+export const BUILD = '91493d637f81';
 /* The ReAct loop, ported from agent/agent.py.
  *
  * Every turn emits events as it happens rather than returning a transcript

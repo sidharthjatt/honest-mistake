@@ -1,4 +1,4 @@
-export const BUILD = '0e79a15923b6';
+export const BUILD = '91493d637f81';
 /* The scan page: choose a model, run the agent, watch it work.
  *
  * Loaded and started by scan.js, which first checks that this file and
@@ -159,7 +159,8 @@ function renderThesis() {
     `One credit-default model, scored the same way on the same held-out ${TEST_YEAR} ` +
     `loans, with and without a single column that could only be known after ` +
     `the loan had already gone bad. ${f.canary.test_roc_auc_text} is what ` +
-    `leakage buys you; ${f.layer1.test_roc_auc_text} is what it is actually worth. ` +
+    `leakage buys you; ${f.layer1.test_roc_auc_text} is what it is actually worth. `;
+  $('thesis-cap-2').textContent =
     `That is the difference a candidate below may be hiding.`;
 }
 

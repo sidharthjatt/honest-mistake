@@ -1,4 +1,4 @@
-export const BUILD = '0e79a15923b6';
+export const BUILD = '91493d637f81';
 /* The scan page's loader. It has no static imports on purpose.
  *
  * GitHub Pages lets a browser keep each file for up to ten minutes, and it
