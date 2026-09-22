@@ -11,7 +11,8 @@ none in each README's first three lines, and no README paragraph over 360
 characters with table rows left out.
 
 Check 4: each README's first three non-blank lines hold a non-heading line
-(what it is) and a code span, a code fence or a run command (how to run it).
+(what it is), and a shell line, a fenced command, or an instruction to open
+or serve something (how to run it). A code span alone does not count.
 
 Check 6: every sentence in the claim manifest is still in its file. Page
 text is compared with runs of whitespace collapsed and tags kept; a
@@ -427,20 +428,42 @@ def check3(tree: str | None) -> list[str]:
 # ---------------------------------------------------------------- check 4
 
 RUN_COMMAND = re.compile(r"^\s*(\$ )?(python3?|pip3?|docker|npm|npx|node|git|make|uv|bash|sh)\b")
+OPEN_OR_SERVE = re.compile(r"\b(open|serve|visit)\b", re.I)
+
+
+def how_to_run(lines: list[str], head: int) -> str | None:
+    """Why the first `head` non-blank lines say how to run the thing, or None.
+
+    A code span alone does not count, since `index.html` names a file and
+    runs nothing. What counts: a shell line, meaning a line that is itself a
+    command; a fenced block that opens in those lines and holds a command;
+    or an instruction to open or serve something, with an address or a
+    command in the same line."""
+    for i, line in enumerate(lines[:head]):
+        if RUN_COMMAND.match(line.strip().removeprefix("    ")) and not line.lstrip().startswith("#"):
+            return f"shell line {i + 1}"
+        if line.lstrip().startswith("```"):
+            body = next((x for x in lines[i + 1:] if x.strip()), "")
+            if RUN_COMMAND.match(body):
+                return f"fenced command opening on line {i + 1}"
+        spans = re.findall(r"`([^`]+)`", line)
+        if OPEN_OR_SERVE.search(line) and (re.search(r"https?://", line)
+                                           or any(RUN_COMMAND.match(s) for s in spans)):
+            return f"open or serve instruction on line {i + 1}"
+    return None
 
 
 def check4(tree: str | None) -> list[str]:
     fails = []
     for path in READMES:
-        head = [line for line in read(path, tree).splitlines() if line.strip()][:3]
+        lines = [line for line in read(path, tree).splitlines() if line.strip()]
+        head = lines[:3]
         what = next((line for line in head if not line.lstrip().startswith("#")), None)
-        how = any("`" in line or line.lstrip().startswith("```") or RUN_COMMAND.match(line)
-                  for line in head)
         if not what:
             fails.append(f"{path}: no non-heading line in the first three")
-        if not how:
-            fails.append(f"{path}: no code span, code fence or run command in the "
-                         "first three lines")
+        if not how_to_run(lines, 3):
+            fails.append(f"{path}: no shell line, fenced command, or open or serve "
+                         "instruction in the first three lines")
     print(f"check 4: {len(READMES)} files, {len(fails)} failing")
     return fails
 

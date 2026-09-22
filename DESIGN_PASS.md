@@ -54,11 +54,11 @@ The pass is done when all seven checks below pass, run in this order:
 
 **A punctuation-only change to a claim sentence is allowed (check 7).** Replacing an em-dash with a comma, colon or full stop, with no word added, removed or reordered, cannot change what the sentence asserts, so it needs no re-verification. All such changes are recorded together as a single check 7 entry listing the file and line of each. Any change that touches a word is not punctuation-only and follows the normal check 7 rule.
 
-**"What it is" (check 4)** is the first non-heading line, and it must not be empty. "How to run it" is a code span, a code fence or a known run command within the first three non-blank lines.
+**"What it is" (check 4)** is the first non-heading line, and it must not be empty. "How to run it", within the first three non-blank lines, is a shell line, a fenced block that opens there and holds a command, or an instruction to open or serve something with an address or a command on the same line. A code span alone does not count. This was tightened on 2026-09-23, after the first baseline: a code span let `docs/README.md` pass on `` `index.html` ``, which runs nothing.
 
 ## The check
 
-Each check passes or fails; none is a judgement. Two scripts under `verify/` run them, and neither is written yet:
+Each check passes or fails; none is a judgement. Two scripts under `verify/` run them, both added in ff8e639:
 
 - `verify/check_design_text.py` runs checks 3 and 4, and check 6 against the manifest. It is plain Python with nothing to install.
 - `verify/_verify_design.html` runs checks 1, 2 and 5 in the browser. It loads each page in a same-origin frame at 1280×800 and at 390×844.
@@ -771,6 +771,14 @@ The example is the `par-utilisation` probe in `scripts/retrieval_probes.py`, who
 - The 28-probe results in `RETRIEVAL_EVAL.md`. They were not re-run on 2026-09-22.
 
 **E7. 2026-09-22. `README.md:234`, one word: "below" became "above".** Manifest entry 167 (`README.md:210` at 62f8d3e) said the result was what "I predicted from the description scan below". The scan ("Before running it, I scanned every true positive's description") comes before that sentence, at line 190 against 210 at HEAD, and at line 175 against 234 now, so the pointer was false at HEAD and not made false by this pass. What was checked: the two line positions, by reading, in both versions. No other word changed. The README's four other above/below pointers, at lines 143, 159, 445 and 501, were read and point the right way.
+
+**E8. 2026-09-23. `docs/README.md`, the opening rewritten and D22's sentence corrected.** The first sentence, "This folder is the static site published at <https://sidharthjatt.github.io/honest-mistake/>.", is unchanged except that its line break was removed. Three sentences are new. Each one was checked:
+
+- "Run that from the repository root and open the address it prints." The fenced command above it, `python3 -m http.server -d docs 8000`, run from the repository root on 2026-09-23, printed "Serving HTTP on :: port 8391 (http://[::]:8391/) ..." on a spare port.
+- "There is no build step." `docs/` holds the four pages, their scripts, `style.css`, `data/` and `.nojekyll`, with no package manifest or build configuration, and Pages serves the folder as committed.
+- D22's sentence now reads: "`index.html` is the landing page; it and the other three pages, `runs.html`, `replay.html` and `scan.html`, read the exported JSON under `data/` at load." `index.html:87` and `runs.html:72` fetch `runs/index.json` and `scoring.json` at load. `replay.html:41` fetches `bundle.json`, and `:65` fetches the run and `scoring.json`. `scan-page.js` `boot()` (lines 128 to 133) fetches `data/tools/` and `data/runs/index.json`, and `startPage()` (line 1041) calls it once `scan.js:153` has checked the build. D22 gets a dated resolution line.
+
+**E9. 2026-09-23. `README.md:5`, the scoring command moved into a fence.** "Scoring the committed agent runs takes one command and no API key: `python -m agent.eval_canary …`" became the same command as a fenced block, followed by "Scoring the committed agent runs takes that one command and no API key." The words changed from "one command" to "that one command" and the colon went, and nothing else changed. The claim is the one D25's fix made true: on 2026-09-20 `eval_canary --run` and `--compare` ran on a clone with no `data/` directory and no key. The fence adds four lines, so the `README.md` line numbers in E2, E4 and E7 are those at eebc26d, and each is now four higher.
 
 ## Deadline
 

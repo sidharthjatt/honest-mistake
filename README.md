@@ -2,7 +2,11 @@
 
 A credit-default model built the honest way, and an agent that tries to catch it cheating.
 
-Scoring the committed agent runs takes one command and no API key: `python -m agent.eval_canary --run outputs/agent_runs/<run_directory>`.
+```bash
+python -m agent.eval_canary --run outputs/agent_runs/<run_directory>
+```
+
+Scoring the committed agent runs takes that one command and no API key.
 
 Most public models on the Lending Club data report AUCs above 0.90. Almost all of them are wrong: they train on columns that only exist *after* a loan's outcome is known, so the model is quietly reading the answer off the back of the page.
 

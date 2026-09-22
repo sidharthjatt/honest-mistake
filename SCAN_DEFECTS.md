@@ -40,6 +40,8 @@ This is recorded because it tells a visitor to change a setting that may have no
 
 This is recorded rather than fixed because the sentence is a claim, and changing a claim is a decision of its own, not part of a design pass.
 
+**Resolved 2026-09-23.** The sentence now reads "`index.html` is the landing page; it and the other three pages, `runs.html`, `replay.html` and `scan.html`, read the exported JSON under `data/` at load." It was rewritten and re-verified under check 7 of the design pass (entry E8 in `DESIGN_PASS.md`), which is where `docs/README.md`'s claims are handled. The entry above stands as written, because it records what was true.
+
 ## Scope note, 2026-09-20
 
 From today this register also covers the repository's presentation files, `README.md` and `docs/README.md`. No preregistration covers them either, for the same reason the scan pages are uncovered: they were written after Layer 3 closed. D22 already belongs to this class. The numbering continues unbroken across both, so a D number identifies one defect whichever kind of file it is in.
