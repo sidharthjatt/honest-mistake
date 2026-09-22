@@ -1,0 +1,313 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Design checks</title>
+<style>body{font-family:ui-monospace,Menlo,monospace;background:#14141a;color:#e8e6ee;padding:1rem}
+pre{white-space:pre-wrap;word-break:break-word;font-size:.75rem}
+#stage iframe{border:1px solid #444;background:#fff;display:block}</style></head><body>
+<pre id="out">running…</pre>
+<div id="stage"></div>
+<script type="module">
+/* Design pass checks 1, 2 and 5, as DESIGN_PASS.md defines them. Serve the
+ * repository root and open verify/_verify_design.html.
+ *
+ * 1. No rendered paragraph is longer than 4 lines at 1280px. A paragraph is
+ *    a visible <p>; its lines are its text's line boxes, counted from the
+ *    client rects of a range over its contents.
+ * 2. Each page's first screen, before any scrolling, shows what the page
+ *    does and at least one control. Measured at load, at 1280×800 and at
+ *    390×844: a visible <p> inside <main> with at least 40 characters that
+ *    lies wholly on the first screen, and a visible a[href], button, input,
+ *    select, textarea or summary inside <main> that is at least partly on
+ *    it. This proves a paragraph is there, not that it says what the page
+ *    does; the spec says as much.
+ * 5. No horizontal scroll and no overlap at 390px. Horizontal scroll is the
+ *    document being wider than the frame. Overlap is two different text
+ *    nodes whose line boxes intersect by more than 2px each way, after
+ *    clipping each to any ancestor that hides overflow. The contents of a
+ *    closed <details> are not visible, whatever box Chrome gives them. On
+ *    scan.html the run screens are measured scrolled to the top, because
+ *    the meters row is sticky and text scrolling under it is by design.
+ *
+ * Pages: index.html, runs.html, replay.html with no run and with each of
+ * the twelve runs in data/runs/index.json, and scan.html at load. On
+ * scan.html checks 1 and 5 also cover the 17 ?dev= scenarios that exist at
+ * 62f8d3e, each run to its end and measured on Screen 2, then on Screen 3.
+ *
+ * ?only=<substring> limits the run to states whose name contains it.
+ */
+const out = document.getElementById('out');
+const log = [];
+const say = s => { log.push(s); out.textContent = log.join('\n'); };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const ONLY = new URLSearchParams(location.search).get('only');
+
+const WIDE = { w: 1280, h: 800 };
+const NARROW = { w: 390, h: 844 };
+const SCENARIOS = ['1', 'endless', 'calls', 'costly', 'slow', 'costexact', 'costnear',
+  'blockstop', 'blockturns', 'blockcost', 'noblock', 'named', 'credited', 'oos',
+  'late', 'unclosed', 'empty'];
+const NEEDS_STOP = new Set(['slow', 'blockstop']);
+
+async function until(test, ms) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < ms) { const v = test(); if (v) return v; await sleep(200); }
+  return null;
+}
+
+async function mount(url, size) {
+  const stage = document.getElementById('stage');
+  stage.replaceChildren();
+  const f = document.createElement('iframe');
+  f.style.width = size.w + 'px';
+  f.style.height = size.h + 'px';
+  stage.append(f);
+  try { sessionStorage.clear(); } catch { /* nothing kept */ }
+  f.src = url;
+  await new Promise(r => f.addEventListener('load', r, { once: true }));
+  return f.contentWindow;
+}
+
+/* Loaded means the page's text has stopped changing for a second and no
+   "Loading" status is left. */
+async function settled(w) {
+  let last = '', since = Date.now();
+  const ok = await until(() => {
+    const t = w.document.body ? w.document.body.innerText : '';
+    if (t !== last) { last = t; since = Date.now(); return false; }
+    return Date.now() - since > 1000 && !/Loading/.test(t);
+  }, 30000);
+  return !!ok;
+}
+
+/* Chrome gives the contents of a closed <details> a layout box without
+   painting it, so a box alone does not mean visible. */
+function visible(el) {
+  const w = el.ownerDocument.defaultView;
+  if (el.checkVisibility && !el.checkVisibility({ opacityProperty: true, visibilityProperty: true,
+    contentVisibilityAuto: true })) return false;
+  for (let e = el; e && e.nodeType === 1; e = e.parentElement) {
+    const det = e.parentElement && e.parentElement.closest('details');
+    if (det && !det.open && !e.closest('summary')) return false;
+    const cs = w.getComputedStyle(e);
+    if (cs.display === 'none' || cs.visibility === 'hidden' || cs.opacity === '0') return false;
+  }
+  const r = el.getBoundingClientRect();
+  return r.width > 0 && r.height > 0;
+}
+
+const label = el => {
+  const id = el.id ? '#' + el.id : '';
+  const cls = el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/).join('.') : '';
+  return el.tagName.toLowerCase() + id + cls;
+};
+const snippet = el => (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 70);
+
+/* ---------------------------------------------------------------- check 1 */
+function lineCount(p) {
+  const d = p.ownerDocument;
+  const range = d.createRange();
+  range.selectNodeContents(p);
+  const tops = [];
+  for (const r of range.getClientRects()) {
+    if (r.width < 1 || r.height < 1) continue;
+    const mid = r.top + r.height / 2;
+    if (!tops.some(t => Math.abs(t - mid) < r.height / 2)) tops.push(mid);
+  }
+  return tops.length;
+}
+function check1(w) {
+  const fails = [];
+  for (const p of w.document.querySelectorAll('p')) {
+    if (!visible(p)) continue;
+    const n = lineCount(p);
+    if (n > 4) fails.push(`${label(p)} has ${n} lines: "${snippet(p)}"`);
+  }
+  return fails;
+}
+
+/* ---------------------------------------------------------------- check 2 */
+function check2(w, size) {
+  const d = w.document;
+  const scope = d.querySelector('main') || d.body;
+  const onScreen = (r, whole) => whole
+    ? r.top >= 0 && r.bottom <= size.h && r.left >= 0 && r.right <= size.w
+    : r.bottom > 0 && r.top < size.h && r.right > 0 && r.left < size.w;
+  const para = [...scope.querySelectorAll('p')].find(p => visible(p)
+    && p.textContent.replace(/\s+/g, ' ').trim().length >= 40
+    && onScreen(p.getBoundingClientRect(), true));
+  const control = [...scope.querySelectorAll('a[href], button, input, select, textarea, summary')]
+    .find(c => visible(c) && onScreen(c.getBoundingClientRect(), false));
+  const fails = [];
+  if (!para) fails.push('no paragraph of 40+ characters wholly on the first screen');
+  if (!control) fails.push('no control on the first screen');
+  return fails;
+}
+
+/* ---------------------------------------------------------------- check 5 */
+function clipRectFor(node) {
+  const w = node.ownerDocument.defaultView;
+  let clip = { left: -Infinity, top: -Infinity, right: Infinity, bottom: Infinity };
+  for (let e = node.parentElement; e; e = e.parentElement) {
+    const cs = w.getComputedStyle(e);
+    if (cs.overflowX !== 'visible' || cs.overflowY !== 'visible') {
+      const r = e.getBoundingClientRect();
+      clip = { left: Math.max(clip.left, r.left), top: Math.max(clip.top, r.top),
+               right: Math.min(clip.right, r.right), bottom: Math.min(clip.bottom, r.bottom) };
+    }
+  }
+  return clip;
+}
+function check5(w, size) {
+  const d = w.document;
+  const fails = [];
+  const sw = d.documentElement.scrollWidth, cw = d.documentElement.clientWidth;
+  if (sw > cw) {
+    const wide = [...d.body.querySelectorAll('*')].filter(e => visible(e)
+      && e.getBoundingClientRect().right > cw + 1
+      && clipRectFor(e).right >= e.getBoundingClientRect().right)
+      .slice(0, 3).map(e => `${label(e)} to ${Math.round(e.getBoundingClientRect().right)}px`);
+    fails.push(`horizontal scroll: document is ${sw}px in a ${cw}px frame (${wide.join('; ')})`);
+  }
+  const boxes = [];
+  const walker = d.createTreeWalker(d.body, NodeFilter.SHOW_TEXT);
+  for (let t = walker.nextNode(); t; t = walker.nextNode()) {
+    if (!t.textContent.trim() || !visible(t.parentElement)) continue;
+    const range = d.createRange();
+    range.selectNodeContents(t);
+    const clip = clipRectFor(t);
+    for (const r of range.getClientRects()) {
+      const b = { left: Math.max(r.left, clip.left), top: Math.max(r.top, clip.top),
+                  right: Math.min(r.right, clip.right), bottom: Math.min(r.bottom, clip.bottom) };
+      if (b.right - b.left > 1 && b.bottom - b.top > 1) boxes.push({ ...b, t });
+    }
+  }
+  boxes.sort((a, b) => a.top - b.top);
+  const seen = new Set();
+  for (let i = 0; i < boxes.length; i++) {
+    const a = boxes[i];
+    for (let j = i + 1; j < boxes.length && boxes[j].top < a.bottom - 2; j++) {
+      const b = boxes[j];
+      if (a.t === b.t) continue;
+      const ox = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+      const oy = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+      if (ox > 2 && oy > 2) {
+        const key = [a.t, b.t].map(x => snippet(x.parentElement)).join(' / ');
+        if (seen.has(key)) continue;
+        seen.add(key);
+        fails.push(`overlap: ${label(a.t.parentElement)} "${snippet(a.t.parentElement).slice(0, 40)}" ` +
+          `and ${label(b.t.parentElement)} "${snippet(b.t.parentElement).slice(0, 40)}"`);
+      }
+    }
+  }
+  return fails;
+}
+
+/* ---------------------------------------------------------------- driver */
+const tally = { 1: [0, 0], 2: [0, 0], 5: [0, 0] };
+function report(state, n, fails) {
+  tally[n][fails.length ? 1 : 0]++;
+  say(`${fails.length ? 'FAIL' : 'PASS'}  check ${n}  ${state}${fails.length ? '' : ''}`);
+  for (const f of fails.slice(0, 6)) say(`        ${f}`);
+  if (fails.length > 6) say(`        … and ${fails.length - 6} more`);
+}
+const wanted = name => !ONLY || name.includes(ONLY);
+
+async function staticPage(name, url) {
+  if (!wanted(name)) return;
+  let w = await mount(url, WIDE);
+  if (!await settled(w)) say(`NOTE  ${name} at 1280 never settled; measured as it stood`);
+  report(`${name} @1280`, 1, check1(w));
+  report(`${name} @1280`, 2, check2(w, WIDE));
+  w = await mount(url, NARROW);
+  if (!await settled(w)) say(`NOTE  ${name} at 390 never settled; measured as it stood`);
+  report(`${name} @390`, 2, check2(w, NARROW));
+  report(`${name} @390`, 5, check5(w, NARROW));
+}
+
+async function scenario(dev) {
+  const name = `scan.html?dev=${dev}`;
+  if (!wanted(name)) return;
+  for (const size of [WIDE, NARROW]) {
+    const w = await mount(`/docs/scan.html?dev=${dev}`, size);
+    const d = () => w.document;
+    const ready = await until(() => d().getElementById('go') && !d().getElementById('go').disabled
+      && d().querySelector('.choice[aria-pressed="true"]'), 30000);
+    if (!ready) { say(`FAIL  ${name} @${size.w}: the page never became ready`); tally[size === WIDE ? 1 : 5][1]++; continue; }
+    d().getElementById('go').click();
+    if (NEEDS_STOP.has(dev)) {
+      await until(() => d().querySelector('#stream .banner') || d().querySelectorAll('#stream > *').length > 1, 30000);
+      d().getElementById('stop').click();
+    }
+    const ended = await until(() => !d().getElementById('s3-actions').hidden, 240000);
+    if (!ended) { say(`FAIL  ${name} @${size.w}: the run never ended`); tally[size === WIDE ? 1 : 5][1]++; continue; }
+    await sleep(500);
+    const n = size === WIDE ? 1 : 5;
+    /* The meters row is sticky and the stream scrolls itself as turns
+       arrive, so text passing under the meters would read as overlap.
+       Measured from the top, where sticky sits in its own place. */
+    const run = () => { w.scrollTo(0, 0); return n === 1 ? check1(w) : check5(w, size); };
+    report(`${name} screen 2 @${size.w}`, n, run());
+    d().getElementById('see-score').click();
+    const s3 = await until(() => !d().getElementById('screen3').hidden, 20000);
+    if (!s3) { say(`FAIL  ${name} @${size.w}: Screen 3 never showed`); tally[n][1]++; continue; }
+    await settled(w);
+    report(`${name} screen 3 @${size.w}`, n, run());
+  }
+}
+
+/* Before measuring the site, each check is run on a page built to fail it
+   and on one built to pass, so a check that cannot fail is caught. */
+async function selfTest() {
+  const bad = `<main><p style="width:200px">${'word '.repeat(80)}</p>
+    <p>A paragraph long enough to count as saying something on screen.</p>
+    <div style="width:900px">too wide</div>
+    <p style="margin:0">overlapped text here</p><p style="margin:-18px 0 0 0">overlapping text here</p>
+    <details><summary>closed</summary><p style="margin-top:-40px">hidden text under the summary</p></details>
+    <a href="#">a control</a></main>`;
+  const good = `<main><p>A paragraph long enough to count as saying something on screen.</p>
+    <details><summary>closed</summary><p style="margin-top:-40px">hidden text under the summary</p></details>
+    <a href="#">a control</a></main>`;
+  const load = async (body, size) => {
+    const w = await mount('about:blank', size);
+    w.document.open(); w.document.write(`<!DOCTYPE html><body style="margin:0;font:16px/1.2 serif">${body}</body>`); w.document.close();
+    await sleep(100);
+    return w;
+  };
+  const results = [];
+  let w = await load(bad, WIDE);
+  results.push(['check 1 catches a six-line paragraph', check1(w).length === 1]);
+  w = await load(bad, NARROW);
+  const f5 = check5(w, NARROW);
+  results.push(['check 5 catches the overflow', f5.some(f => f.startsWith('horizontal scroll'))]);
+  results.push(['check 5 catches the overlap', f5.some(f => f.includes('overlapped text'))]);
+  results.push(['check 5 ignores a closed <details>', !f5.some(f => f.includes('hidden text'))]);
+  w = await load('<main><div style="height:900px"></div><p>A paragraph long enough to count as saying something on screen.</p></main>', WIDE);
+  results.push(['check 2 fails a page with nothing on its first screen', check2(w, WIDE).length === 2]);
+  w = await load(good, WIDE);
+  results.push(['a clean page passes checks 1 and 2', !check1(w).length && !check2(w, WIDE).length]);
+  w = await load(good, NARROW);
+  results.push(['a clean page passes check 5', !check5(w, NARROW).length]);
+  for (const [what, ok] of results) say(`${ok ? 'ok  ' : 'FAIL'}  self-test: ${what}`);
+  if (results.some(([, ok]) => !ok)) throw new Error('the self-test failed, so no site result would mean anything');
+  say('');
+}
+
+try {
+  await selfTest();
+  const index = await (await fetch('/docs/data/runs/index.json', { cache: 'no-cache' })).json();
+  const labels = index.runs.map(r => r.label);
+  say(`${labels.length} runs in the index; ${SCENARIOS.length} dev scenarios\n`);
+  await staticPage('index.html', '/docs/index.html');
+  await staticPage('runs.html', '/docs/runs.html');
+  await staticPage('replay.html (no run)', '/docs/replay.html');
+  for (const l of labels) await staticPage(`replay.html?run=${l}`, `/docs/replay.html?run=${encodeURIComponent(l)}`);
+  await staticPage('scan.html', '/docs/scan.html');
+  for (const s of SCENARIOS) await scenario(s);
+  say('');
+  for (const n of [1, 2, 5]) say(`check ${n}: ${tally[n][0]} states pass, ${tally[n][1]} fail -> ${tally[n][1] ? 'FAIL' : 'PASS'}`);
+  const measured = Object.values(tally).reduce((s, [p, f]) => s + p + f, 0);
+  say(!measured ? 'DESIGN CHECKS: NOTHING MEASURED'
+    : Object.values(tally).some(([, f]) => f) ? 'DESIGN CHECKS: FAIL' : 'DESIGN CHECKS: ALL PASS');
+} catch (err) {
+  say(`HARNESS FAILED: ${err.message}`);
+}
+document.getElementById('stage').replaceChildren();
+</script></body></html>

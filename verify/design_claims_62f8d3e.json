@@ -1,0 +1,3137 @@
+{
+ "frozen_at": "62f8d3e",
+ "entries": [
+  {
+   "n": 1,
+   "file": "docs/index.html",
+   "first": 7,
+   "last": 7,
+   "excerpt": "meta description: \"An agent audits a credit default model for target leakage. Twelve real runs, replayable turn by turn, with the scorer’s own output unchanged.\"",
+   "kind": "text",
+   "unit": "An agent audits a credit default model for target leakage. Twelve real runs, replayable turn by turn, with the scorer's own output unchanged.",
+   "text": "An agent audits a credit default model for target leakage. Twelve real runs, replayable turn by turn, with the scorer's own output unchanged."
+  },
+  {
+   "n": 2,
+   "file": "docs/index.html",
+   "first": 28,
+   "last": 32,
+   "excerpt": "A credit default model was built clean: 180 features, a temporal split, and every column that could only be kn",
+   "kind": "text",
+   "unit": "A credit default model was built clean: 180 features, a temporal split, and every column that could only be known after the outcome removed before training.",
+   "text": "A credit default model was built clean: 180 features, a temporal split, and every column that could only be known after the outcome removed before training."
+  },
+  {
+   "n": 3,
+   "file": "docs/index.html",
+   "first": 28,
+   "last": 32,
+   "excerpt": "Then a single leaking column was planted back into some of the data, and an agent with eight read-only tools w",
+   "kind": "text",
+   "unit": "Then a single leaking column was planted back into some of the data, and an agent with eight read-only tools was asked to audit the model and say what was wrong with it.",
+   "text": "Then a single leaking column was planted back into some of the data, and an agent with eight read-only tools was asked to audit the model and say what was wrong with it."
+  },
+  {
+   "n": 4,
+   "file": "docs/index.html",
+   "first": 34,
+   "last": 39,
+   "excerpt": "The agent never sees the data.",
+   "kind": "text",
+   "unit": "The agent never sees the data.",
+   "text": "The agent never sees the data."
+  },
+  {
+   "n": 5,
+   "file": "docs/index.html",
+   "first": 34,
+   "last": 39,
+   "excerpt": "It sees a fixed set of artefacts through eight tools — a data dictionary it can search, a SHAP ranking, per-fe",
+   "kind": "text",
+   "unit": "It sees a fixed set of artefacts through eight tools — a data dictionary it can search, a SHAP ranking, per-feature coverage and association figures, ablation results — and it has to reason from those to a verdict.",
+   "text": "It sees a fixed set of artefacts through eight tools — a data dictionary it can search, a SHAP ranking, per-feature coverage and association figures, ablation results — and it has to reason from those to a verdict."
+  },
+  {
+   "n": 6,
+   "file": "docs/index.html",
+   "first": 34,
+   "last": 39,
+   "excerpt": "Twelve real runs were recorded against live API calls.",
+   "kind": "text",
+   "unit": "Twelve real runs were recorded against live API calls.",
+   "text": "Twelve real runs were recorded against live API calls."
+  },
+  {
+   "n": 7,
+   "file": "docs/index.html",
+   "first": 34,
+   "last": 39,
+   "excerpt": "Every one of them is replayable here, turn by turn, including the tool arguments and the full results the agen",
+   "kind": "text",
+   "unit": "Every one of them is replayable here, turn by turn, including the tool arguments and the full results the agent got back.",
+   "text": "Every one of them is replayable here, turn by turn, including the tool arguments and the full results the agent got back."
+  },
+  {
+   "n": 8,
+   "file": "docs/index.html",
+   "first": 47,
+   "last": 52,
+   "excerpt": "Across the scorable runs the agent raised flags.",
+   "kind": "text",
+   "unit": "Across the scorable runs the agent raised <span id=\"flag-total\" class=\"mono\"></span> flags.",
+   "text": "Across the scorable runs the agent raised flags."
+  },
+  {
+   "n": 9,
+   "file": "docs/index.html",
+   "first": 47,
+   "last": 52,
+   "excerpt": "The answer key credits of them.",
+   "kind": "text",
+   "unit": "The answer key credits <span id=\"credited-total\" class=\"mono\"></span> of them.",
+   "text": "The answer key credits of them."
+  },
+  {
+   "n": 10,
+   "file": "docs/index.html",
+   "first": 47,
+   "last": 52,
+   "excerpt": "It is tempting to call the rest errors, and that would be wrong: the key recognises exactly one kind of proble",
+   "kind": "text",
+   "unit": "It is tempting to call the rest errors, and that would be wrong: the key recognises exactly one kind of problem, the columns removed for carrying post-application information.",
+   "text": "It is tempting to call the rest errors, and that would be wrong: the key recognises exactly one kind of problem, the columns removed for carrying post-application information."
+  },
+  {
+   "n": 11,
+   "file": "docs/index.html",
+   "first": 47,
+   "last": 52,
+   "excerpt": "A flag it does not credit is a flag outside that list, which is not the same as a flag that is mistaken.",
+   "kind": "text",
+   "unit": "A flag it does not credit is a flag outside that list, which is not the same as a flag that is mistaken.",
+   "text": "A flag it does not credit is a flag outside that list, which is not the same as a flag that is mistaken."
+  },
+  {
+   "n": 12,
+   "file": "docs/index.html",
+   "first": 58,
+   "last": 62,
+   "excerpt": "None of these claims leakage in the sense the key scores.",
+   "kind": "text",
+   "unit": "None of these claims leakage in the sense the key scores.",
+   "text": "None of these claims leakage in the sense the key scores."
+  },
+  {
+   "n": 13,
+   "file": "docs/index.html",
+   "first": 58,
+   "last": 62,
+   "excerpt": "They argue distribution shift, missingness that tracks loan vintage, drift across vintages, and whether the 20",
+   "kind": "text",
+   "unit": "They argue distribution shift, missingness that tracks loan vintage, drift across vintages, and whether the 2017 labels are final.",
+   "text": "They argue distribution shift, missingness that tracks loan vintage, drift across vintages, and whether the 2017 labels are final."
+  },
+  {
+   "n": 14,
+   "file": "docs/index.html",
+   "first": 58,
+   "last": 62,
+   "excerpt": "Those arguments are ungraded: the scorer cannot settle them.",
+   "kind": "text",
+   "unit": "Those arguments are ungraded: the scorer cannot settle them.",
+   "text": "Those arguments are ungraded: the scorer cannot settle them."
+  },
+  {
+   "n": 15,
+   "file": "docs/index.html",
+   "first": 58,
+   "last": 62,
+   "excerpt": "Each card links to the turn in the replay where the agent produced it, so the evidence can be read rather than",
+   "kind": "text",
+   "unit": "Each card links to the turn in the replay where the agent produced it, so the evidence can be read rather than taken on trust.",
+   "text": "Each card links to the turn in the replay where the agent produced it, so the evidence can be read rather than taken on trust."
+  },
+  {
+   "n": 16,
+   "file": "docs/index.html",
+   "first": 65,
+   "last": 65,
+   "excerpt": "The scorer's output, unchanged",
+   "kind": "text",
+   "unit": "The scorer's output, unchanged",
+   "text": "The scorer's output, unchanged"
+  },
+  {
+   "n": 17,
+   "file": "docs/index.html",
+   "first": 67,
+   "last": 70,
+   "excerpt": "Nothing above re-derives a verdict.",
+   "kind": "text",
+   "unit": "Nothing above re-derives a verdict.",
+   "text": "Nothing above re-derives a verdict."
+  },
+  {
+   "n": 18,
+   "file": "docs/index.html",
+   "first": 67,
+   "last": 70,
+   "excerpt": "Every figure is read from the scorer's own output at page load, and that output is reproduced here in full — p",
+   "kind": "text",
+   "unit": "Every figure is read from the scorer's own output at page load, and that output is reproduced here in full — precision, recall, the false negatives, the hard negatives, the derivative resolutions and the per-run canary block — so that nothing looks hidden by the framing.",
+   "text": "Every figure is read from the scorer's own output at page load, and that output is reproduced here in full — precision, recall, the false negatives, the hard negatives, the derivative resolutions and the per-run canary block — so that nothing looks hidden by the framing."
+  },
+  {
+   "n": 19,
+   "file": "docs/runs.html",
+   "first": 28,
+   "last": 29,
+   "excerpt": "Every recorded run, with the configuration that distinguishes it and the scorer's decision on it.",
+   "kind": "text",
+   "unit": "Every recorded run, with the configuration that distinguishes it and the scorer's decision on it.",
+   "text": "Every recorded run, with the configuration that distinguishes it and the scorer's decision on it."
+  },
+  {
+   "n": 20,
+   "file": "docs/runs.html",
+   "first": 31,
+   "last": 36,
+   "excerpt": "These are the real runs against live API calls.",
+   "kind": "text",
+   "unit": "These are the real runs against live API calls.",
+   "text": "These are the real runs against live API calls."
+  },
+  {
+   "n": 21,
+   "file": "docs/runs.html",
+   "first": 31,
+   "last": 36,
+   "excerpt": "They were not all configured alike: the tool surface changed between versions, the per-vintage coverage scopes",
+   "kind": "text",
+   "unit": "They were not all configured alike: the tool surface changed between versions, the per-vintage coverage scopes were withheld in one, the data dictionary's <code>populated</code> field was suppressed in others, and the turn and call ceilings moved.",
+   "text": "They were not all configured alike: the tool surface changed between versions, the per-vintage coverage scopes were withheld in one, the data dictionary's populated field was suppressed in others, and the turn and call ceilings moved."
+  },
+  {
+   "n": 22,
+   "file": "docs/runs.html",
+   "first": 31,
+   "last": 36,
+   "excerpt": "A run the scorer refused is one that stopped before the agent said it had finished; a partial answer is not sc",
+   "kind": "text",
+   "unit": "A run the scorer refused is one that stopped before the agent said it had finished; a partial answer is not scored.",
+   "text": "A run the scorer refused is one that stopped before the agent said it had finished; a partial answer is not scored."
+  },
+  {
+   "n": 23,
+   "file": "docs/runs.html",
+   "first": 56,
+   "last": 57,
+   "excerpt": "The wording below is the export's own, unedited.",
+   "kind": "text",
+   "unit": "The wording below is the export's own, unedited.",
+   "text": "The wording below is the export's own, unedited."
+  },
+  {
+   "n": 24,
+   "file": "docs/runs.html",
+   "first": 56,
+   "last": 57,
+   "excerpt": "The short name in the table points at one of these.",
+   "kind": "text",
+   "unit": "The short name in the table points at one of these.",
+   "text": "The short name in the table points at one of these."
+  },
+  {
+   "n": 25,
+   "file": "docs/scan.html",
+   "first": 233,
+   "last": 235,
+   "excerpt": "Give the agent something to audit and an API key, and it works in your browser while you watch: it forms a hyp",
+   "kind": "text",
+   "unit": "Give the agent something to audit and an API key, and it works in your browser while you watch: it forms a hypothesis, calls its tools, and reports what it finds.",
+   "text": "Give the agent something to audit and an API key, and it works in your browser while you watch: it forms a hypothesis, calls its tools, and reports what it finds."
+  },
+  {
+   "n": 26,
+   "file": "docs/scan.html",
+   "first": 239,
+   "last": 239,
+   "excerpt": "Three steps.",
+   "kind": "text",
+   "unit": "Three steps.",
+   "text": "Three steps."
+  },
+  {
+   "n": 27,
+   "file": "docs/scan.html",
+   "first": 239,
+   "last": 239,
+   "excerpt": "Nothing is sent until you press the button.",
+   "kind": "text",
+   "unit": "Nothing is sent until you press the button.",
+   "text": "Nothing is sent until you press the button."
+  },
+  {
+   "n": 28,
+   "file": "docs/scan.html",
+   "first": 247,
+   "last": 249,
+   "excerpt": "Two candidates, described identically on purpose: you are not told which is which.",
+   "kind": "text",
+   "unit": "Two candidates, described identically on purpose: <b>you are not told which is which.",
+   "text": "Two candidates, described identically on purpose: you are not told which is which."
+  },
+  {
+   "n": 29,
+   "file": "docs/scan.html",
+   "first": 247,
+   "last": 249,
+   "excerpt": "One of them may be reading the answer off the back of the page.",
+   "kind": "text",
+   "unit": "One of them may be reading the answer off the back of the page.",
+   "text": "One of them may be reading the answer off the back of the page."
+  },
+  {
+   "n": 30,
+   "file": "docs/scan.html",
+   "first": 258,
+   "last": 259,
+   "excerpt": "Which Claude model runs the agent.",
+   "kind": "text",
+   "unit": "Which Claude model runs the agent.",
+   "text": "Which Claude model runs the agent."
+  },
+  {
+   "n": 31,
+   "file": "docs/scan.html",
+   "first": 258,
+   "last": 259,
+   "excerpt": "This is the auditor, not the thing being audited.",
+   "kind": "text",
+   "unit": "This is the auditor, not the thing being audited.",
+   "text": "This is the auditor, not the thing being audited."
+  },
+  {
+   "n": 32,
+   "file": "docs/scan.html",
+   "first": 268,
+   "last": 268,
+   "excerpt": "Stop the run once its cost reaches",
+   "kind": "text",
+   "unit": "Stop the run once its cost reaches",
+   "text": "Stop the run once its cost reaches"
+  },
+  {
+   "n": 33,
+   "file": "docs/scan.html",
+   "first": 290,
+   "last": 292,
+   "excerpt": "Your key is never stored.",
+   "kind": "text",
+   "unit": "Your key is never stored.",
+   "text": "Your key is never stored."
+  },
+  {
+   "n": 34,
+   "file": "docs/scan.html",
+   "first": 290,
+   "last": 292,
+   "excerpt": "Not in storage, not in a cookie, not in a URL, and not in the run this page keeps.",
+   "kind": "text",
+   "unit": "Not in storage, not in a cookie, not in a URL, and not in the run this page keeps.",
+   "text": "Not in storage, not in a cookie, not in a URL, and not in the run this page keeps."
+  },
+  {
+   "n": 35,
+   "file": "docs/scan.html",
+   "first": 290,
+   "last": 292,
+   "excerpt": "It is held in memory and goes when you close the tab.",
+   "kind": "text",
+   "unit": "It is held in memory and goes when you close the tab.",
+   "text": "It is held in memory and goes when you close the tab."
+  },
+  {
+   "n": 36,
+   "file": "docs/scan.html",
+   "first": 293,
+   "last": 295,
+   "excerpt": "The finished run is kept in this tab, so reloading does not lose it.",
+   "kind": "text",
+   "unit": "The finished run is kept in this tab,</b> so reloading does not lose it.",
+   "text": "The finished run is kept in this tab, so reloading does not lose it."
+  },
+  {
+   "n": 37,
+   "file": "docs/scan.html",
+   "first": 293,
+   "last": 295,
+   "excerpt": "It holds the transcript, the tool results and the token counts, and never the key.",
+   "kind": "text",
+   "unit": "It holds the transcript, the tool results and the token counts, and never the key.",
+   "text": "It holds the transcript, the tool results and the token counts, and never the key."
+  },
+  {
+   "n": 38,
+   "file": "docs/scan.html",
+   "first": 293,
+   "last": 295,
+   "excerpt": "It goes when the tab closes.",
+   "kind": "text",
+   "unit": "It goes when the tab closes.",
+   "text": "It goes when the tab closes."
+  },
+  {
+   "n": 39,
+   "file": "docs/scan.html",
+   "first": 296,
+   "last": 297,
+   "excerpt": "Sent to one place: api.anthropic.com, straight from your browser.",
+   "kind": "text",
+   "unit": "Sent to one place:</b> <code>api.anthropic.com</code>, straight from your browser.",
+   "text": "Sent to one place: api.anthropic.com, straight from your browser."
+  },
+  {
+   "n": 40,
+   "file": "docs/scan.html",
+   "first": 296,
+   "last": 297,
+   "excerpt": "No backend here, no key of mine.",
+   "kind": "text",
+   "unit": "No backend here, no key of mine.",
+   "text": "No backend here, no key of mine."
+  },
+  {
+   "n": 41,
+   "file": "docs/scan.html",
+   "first": 298,
+   "last": 301,
+   "excerpt": "Check it yourself: the only file that builds or sends a request is agent/provider.js, and this page is scan.ht",
+   "kind": "text",
+   "unit": "Check it yourself:</b> the only file that builds or sends a request is <a href=\"https://github.com/sidharthjatt/honest-mistake/blob/main/docs/agent/provider.js\">agent/provider.js</a>, and this page is <a href=\"https://github.com/sidharthjatt/honest-mistake/blob/main/docs/scan.html\">scan.html</a>.",
+   "text": "Check it yourself: the only file that builds or sends a request is agent/provider.js, and this page is scan.html."
+  },
+  {
+   "n": 42,
+   "file": "docs/index.html",
+   "first": 111,
+   "last": 114,
+   "excerpt": "el('p', {}, 'The leaking column ', el('code', { text: plantedColumns.join(', ') }), ' was planted into ', Stri",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'The leaking column '",
+    "'code'",
+    "' was planted into '",
+    "' of the '",
+    "' runs. The agent flagged it in every one of them.'"
+   ]
+  },
+  {
+   "n": 43,
+   "file": "docs/index.html",
+   "first": 115,
+   "last": 116,
+   "excerpt": "el('p', {}, 'All ', String(present.length), ' were scored. They are not repeats of ', 'one setup: they differ ",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'All '",
+    "' were scored. They are not repeats of '",
+    "'one setup: they differ in tool layer and in what the coverage tools were allowed to return.'"
+   ]
+  },
+  {
+   "n": 44,
+   "file": "docs/index.html",
+   "first": 119,
+   "last": 119,
+   "excerpt": "el('div', { class: 'figure', text: 'none of ' + keySize }),",
+   "kind": "js",
+   "units": [
+    "'div'",
+    "'figure'",
+    "'none of '"
+   ]
+  },
+  {
+   "n": 45,
+   "file": "docs/index.html",
+   "first": 120,
+   "last": 122,
+   "excerpt": "el('p', {}, 'In the other ', String(absent.length), ' runs the column was absent, and ', 'so was every one of ",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'In the other '",
+    "' runs the column was absent, and '",
+    "'so was every one of the answer key’s '",
+    "' leaking columns — none of '",
+    "'them is in the 180-feature data the agent was given.'"
+   ]
+  },
+  {
+   "n": 46,
+   "file": "docs/index.html",
+   "first": 123,
+   "last": 125,
+   "excerpt": "el('p', {}, 'No correct flag was reachable in those runs. ', String(absentScored.length), ' were scored and ',",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'No correct flag was reachable in those runs. '",
+    "' were scored and '",
+    "' were refused as unfinished. A zero there '",
+    "'records an absence, not a miss.'"
+   ]
+  },
+  {
+   "n": 47,
+   "file": "docs/index.html",
+   "first": 129,
+   "last": 131,
+   "excerpt": "'Whether the column was present is read from each run’s manifest where it records one, and for the ' + runs.fi",
+   "kind": "js",
+   "units": [
+    "'Whether the column was present is read from each run’s manifest where it records one, and for the '",
+    "'canary'",
+    "' earliest runs from the feature count their own tool results report. Both are shown per run on the runs page.'"
+   ]
+  },
+  {
+   "n": 48,
+   "file": "docs/index.html",
+   "first": 149,
+   "last": 151,
+   "excerpt": "f.verdict === 'true_positive' ? pill('credited', 'credited') : pill('uncredited', 'not credited'), f.hard_nega",
+   "kind": "js",
+   "units": [
+    "'true_positive'",
+    "'credited'",
+    "'credited'",
+    "'uncredited'",
+    "'not credited'",
+    "'hardneg'",
+    "'hard negative'",
+    "'span'",
+    "'note'",
+    "'stated confidence: '"
+   ]
+  },
+  {
+   "n": 49,
+   "file": "docs/index.html",
+   "first": 158,
+   "last": 162,
+   "excerpt": "dl.append(el('dt', { text: 'Scored as' }), el('dd', {}, 'Mapped to its parent column ', el('code', { text: f.s",
+   "kind": "js",
+   "units": [
+    "'dt'",
+    "'Scored as'",
+    "'dd'",
+    "'Mapped to its parent column '",
+    "'code'",
+    "'), which is in '",
+    "'code'"
+   ]
+  },
+  {
+   "n": 50,
+   "file": "docs/index.html",
+   "first": 191,
+   "last": 191,
+   "excerpt": "el('p', { class: 'note' }, el('b', { text: 'Refused, not scored. ' }), s.reason));",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'note'",
+    "'b'",
+    "'Refused, not scored. '"
+   ]
+  },
+  {
+   "n": 51,
+   "file": "docs/index.html",
+   "first": 193,
+   "last": 193,
+   "excerpt": "el('summary', {}, s.label + ' — ' + (s.scored ? 'scored' : 'refused')), body));",
+   "kind": "js",
+   "units": [
+    "'summary'",
+    "'scored'",
+    "'refused'"
+   ]
+  },
+  {
+   "n": 52,
+   "file": "docs/runs.html",
+   "first": 85,
+   "last": 85,
+   "excerpt": "const shortName = w => w.startsWith('derived') ? 'derived' : 'manifest field';",
+   "kind": "js",
+   "units": [
+    "'derived'",
+    "'derived'",
+    "'manifest field'"
+   ]
+  },
+  {
+   "n": 53,
+   "file": "docs/runs.html",
+   "first": 91,
+   "last": 91,
+   "excerpt": "el('dt', {}, shortName(w) + ' — ' + covered.length + ' of ' + runs.length + ' runs'),",
+   "kind": "js",
+   "units": [
+    "'dt'",
+    "' of '",
+    "' runs'"
+   ]
+  },
+  {
+   "n": 54,
+   "file": "docs/runs.html",
+   "first": 107,
+   "last": 107,
+   "excerpt": "canary.present ? pill('present', 'present') : pill('absent', 'absent'),",
+   "kind": "js",
+   "units": [
+    "'present'",
+    "'present'",
+    "'absent'",
+    "'absent'"
+   ]
+  },
+  {
+   "n": 55,
+   "file": "docs/runs.html",
+   "first": 110,
+   "last": 121,
+   "excerpt": "shortName(canary.established_by || ''), counts ? el('span', { class: 'note', style: 'display:block' }, counts.",
+   "kind": "js",
+   "units": [
+    "'span'",
+    "'note'",
+    "'display:block'",
+    "' features seen'",
+    "'td'",
+    "'tight'",
+    "'v'",
+    "'span'",
+    "'note'",
+    "'display:block'",
+    "'populated '",
+    "'td'",
+    "'tight'",
+    "'td'",
+    "'tight'",
+    "'td'",
+    "'tight'",
+    "'td'",
+    "'tight'",
+    "'span'",
+    "'note'",
+    "'display:block'",
+    "'stop: '"
+   ]
+  },
+  {
+   "n": 56,
+   "file": "docs/runs.html",
+   "first": 123,
+   "last": 127,
+   "excerpt": "run.scorer_accepted ? pill('scored', 'scored') : pill('refused', 'refused'), run.scorer_refusal_reason ? el('s",
+   "kind": "js",
+   "units": [
+    "'scored'",
+    "'scored'",
+    "'refused'",
+    "'refused'",
+    "'span'",
+    "'note'",
+    "'span'",
+    "'note'",
+    "' flags raised'"
+   ]
+  },
+  {
+   "n": 57,
+   "file": "docs/runs.html",
+   "first": 128,
+   "last": 131,
+   "excerpt": "el('td', { class: 'num' }, String(run.turns), el('span', { class: 'note', style: 'display:block' }, 'max ' + r",
+   "kind": "js",
+   "units": [
+    "'td'",
+    "'num'",
+    "'span'",
+    "'note'",
+    "'display:block'",
+    "'max '",
+    "'td'",
+    "'num'",
+    "'span'",
+    "'note'",
+    "'display:block'",
+    "'max '"
+   ]
+  },
+  {
+   "n": 58,
+   "file": "docs/runs.html",
+   "first": 137,
+   "last": 139,
+   "excerpt": "document.getElementById('lede').textContent = runs.length + ' recorded runs. ' + scored + ' were scored and ' ",
+   "kind": "js",
+   "units": [
+    "'lede'",
+    "' recorded runs. '",
+    "' were scored and '",
+    "' were refused as unfinished. Each row opens the run’s replay, turn by turn.'"
+   ]
+  },
+  {
+   "n": 59,
+   "file": "docs/replay.html",
+   "first": 54,
+   "last": 56,
+   "excerpt": "el('h1', { text: label ? 'No such run' : 'No run chosen' }), el('p', {}, label ? el('span', {}, 'There is no r",
+   "kind": "js",
+   "units": [
+    "'h1'",
+    "'No such run'",
+    "'No run chosen'",
+    "'p'",
+    "'span'",
+    "'There is no run called '",
+    "'code'",
+    "' in this bundle.'"
+   ]
+  },
+  {
+   "n": 60,
+   "file": "docs/replay.html",
+   "first": 90,
+   "last": 91,
+   "excerpt": "facts.model, ' · ', String(facts.turns), ' turns · ', String(facts.tool_calls), ' tool calls · started ', asRe",
+   "kind": "js",
+   "units": [
+    "' turns · '",
+    "' tool calls · started '",
+    "', finished '"
+   ]
+  },
+  {
+   "n": 61,
+   "file": "docs/replay.html",
+   "first": 93,
+   "last": 95,
+   "excerpt": "canary.present ? pill('present', 'canary present') : pill('absent', 'canary absent'), ' ', facts.scorer_accept",
+   "kind": "js",
+   "units": [
+    "'present'",
+    "'canary present'",
+    "'absent'",
+    "'canary absent'",
+    "'scored'",
+    "'scored'",
+    "'refused'",
+    "'refused by the scorer'"
+   ]
+  },
+  {
+   "n": 62,
+   "file": "docs/replay.html",
+   "first": 97,
+   "last": 103,
+   "excerpt": "el('span', { class: 'note' }, 'tool layer v' + facts.tool_layer_version + ' · populated ' + facts.dictionary_p",
+   "kind": "js",
+   "units": [
+    "'span'",
+    "'note'",
+    "'tool layer v'",
+    "' · populated '",
+    "' · scopes '",
+    "'not recorded'",
+    "' · retrieval '",
+    "'not recorded'",
+    "' · caching '",
+    "'not recorded'",
+    "' · ended as '"
+   ]
+  },
+  {
+   "n": 63,
+   "file": "docs/replay.html",
+   "first": 105,
+   "last": 105,
+   "excerpt": "? el('p', { class: 'note' }, 'The planted column was ', el('code', { text: canary.column }), '.')",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'note'",
+    "'The planted column was '",
+    "'code'"
+   ]
+  },
+  {
+   "n": 64,
+   "file": "docs/replay.html",
+   "first": 109,
+   "last": 109,
+   "excerpt": "el('b', { text: 'Not scored. ' }), facts.scorer_refusal_reason) : null));",
+   "kind": "js",
+   "units": [
+    "'b'",
+    "'Not scored. '"
+   ]
+  },
+  {
+   "n": 65,
+   "file": "docs/replay.html",
+   "first": 116,
+   "last": 118,
+   "excerpt": "el('b', {}, per.tool_calls_without_results + ' tool calls in this run have no result. '), unrunCalls.why, ' Th",
+   "kind": "js",
+   "units": [
+    "'b'",
+    "' tool calls in this run have no result. '",
+    "' The last recorded message in this run has the role '"
+   ]
+  },
+  {
+   "n": 66,
+   "file": "docs/replay.html",
+   "first": 122,
+   "last": 123,
+   "excerpt": "el('b', {}, 'This run has no final answer turn. '), noFinalTurn.why, ' Every tool call it made did run and ret",
+   "kind": "js",
+   "units": [
+    "'b'",
+    "'This run has no final answer turn. '",
+    "' Every tool call it made did run and returned a result; what is missing is the turn that would have read them.'"
+   ]
+  },
+  {
+   "n": 67,
+   "file": "docs/replay.html",
+   "first": 127,
+   "last": 128,
+   "excerpt": "el('b', {}, 'The system prompt is not reproduced. '), noSystemPrompt.why, ' The manifest records it as ', Stri",
+   "kind": "js",
+   "units": [
+    "'b'",
+    "'The system prompt is not reproduced. '",
+    "' The manifest records it as '",
+    "' characters.'"
+   ]
+  },
+  {
+   "n": 68,
+   "file": "docs/replay.html",
+   "first": 132,
+   "last": 132,
+   "excerpt": "el('b', {}, 'No per-turn token usage. '), run.per_turn_usage_note || noPerTurn.why));",
+   "kind": "js",
+   "units": [
+    "'b'",
+    "'No per-turn token usage. '"
+   ]
+  },
+  {
+   "n": 69,
+   "file": "docs/replay.html",
+   "first": 141,
+   "last": 144,
+   "excerpt": "out.append(el('p', { class: 'note' }, 'Parsed from the final answer below. The verdict on each is the scorer’s",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'note'",
+    "'Parsed from the final answer below. The verdict on each is the scorer’s, unchanged. '",
+    "'A verdict of \"not credited\" means the column is not one of the answer key’s '",
+    "' leaking columns; it is not a judgement of the argument.'"
+   ]
+  },
+  {
+   "n": 70,
+   "file": "docs/replay.html",
+   "first": 152,
+   "last": 154,
+   "excerpt": "el('dd', {}, 'Mapped to its parent column ', el('code', { text: f.scored_as_parent.parent }), ' (', f.scored_a",
+   "kind": "js",
+   "units": [
+    "'dd'",
+    "'Mapped to its parent column '",
+    "'code'",
+    "'), which is in '",
+    "'code'"
+   ]
+  },
+  {
+   "n": 71,
+   "file": "docs/replay.html",
+   "first": 162,
+   "last": 164,
+   "excerpt": "f.verdict === 'true_positive' ? pill('credited', 'credited') : pill('uncredited', 'not credited'), f.hard_nega",
+   "kind": "js",
+   "units": [
+    "'true_positive'",
+    "'credited'",
+    "'credited'",
+    "'uncredited'",
+    "'not credited'",
+    "'hardneg'",
+    "'hard negative'",
+    "'span'",
+    "'note'",
+    "'stated confidence: '"
+   ]
+  },
+  {
+   "n": 72,
+   "file": "docs/replay.html",
+   "first": 169,
+   "last": 169,
+   "excerpt": "el('p', { class: 'note' }, 'None were scored. ', scored.reason));",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'note'",
+    "'None were scored. '"
+   ]
+  },
+  {
+   "n": 73,
+   "file": "docs/replay.html",
+   "first": 174,
+   "last": 178,
+   "excerpt": "out.append(el('p', { class: 'note' }, 'Messages are in the order they were recorded. Thinking blocks are summa",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'note'",
+    "'Messages are in the order they were recorded. Thinking blocks are summaries, '",
+    "'collapsed here; the API returned a summary rather than the raw reasoning. '",
+    "'A tool result appears on the call that produced it, and the turn where the '",
+    "'result was returned keeps its place in the order, pointing back at that call.'"
+   ]
+  },
+  {
+   "n": 74,
+   "file": "docs/replay.html",
+   "first": 191,
+   "last": 191,
+   "excerpt": "el('summary', { text: b.summary_empty ? 'Thinking — no summary in the record' : 'Thinking' }),",
+   "kind": "js",
+   "units": [
+    "'summary'",
+    "'Thinking — no summary in the record'",
+    "'Thinking'"
+   ]
+  },
+  {
+   "n": 75,
+   "file": "docs/replay.html",
+   "first": 193,
+   "last": 193,
+   "excerpt": "? el('p', { class: 'note', text: 'The run recorded an empty summary for this block. Nothing was dropped here b",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'note'",
+    "'The run recorded an empty summary for this block. Nothing was dropped here by the export.'"
+   ]
+  },
+  {
+   "n": 76,
+   "file": "docs/replay.html",
+   "first": 207,
+   "last": 208,
+   "excerpt": "b.result_is_error ? pill('uncredited', 'returned an error') : null, b.executed === false ? pill('hardneg', 'ne",
+   "kind": "js",
+   "units": [
+    "'uncredited'",
+    "'returned an error'",
+    "'hardneg'",
+    "'never ran'"
+   ]
+  },
+  {
+   "n": 77,
+   "file": "docs/replay.html",
+   "first": 215,
+   "last": 215,
+   "excerpt": ": 'No result is recorded for this call.';",
+   "kind": "js",
+   "units": [
+    "'No result is recorded for this call.'"
+   ]
+  },
+  {
+   "n": 78,
+   "file": "docs/replay.html",
+   "first": 221,
+   "last": 221,
+   "excerpt": "el('summary', { text: (b.result_is_error ? 'Error result' : 'Result') + ' — ' + bytes(text.length) + ' charact",
+   "kind": "js",
+   "units": [
+    "'summary'",
+    "'Error result'",
+    "'Result'",
+    "' characters'"
+   ]
+  },
+  {
+   "n": 79,
+   "file": "docs/replay.html",
+   "first": 229,
+   "last": 230,
+   "excerpt": "'The result for ', tool ? el('b', { text: tool }) : 'a call', ' was returned in this turn. It is shown on the ",
+   "kind": "js",
+   "units": [
+    "'The result for '",
+    "'b'",
+    "'a call'",
+    "' was returned in this turn. It is shown on the call itself: '"
+   ]
+  },
+  {
+   "n": 80,
+   "file": "docs/replay.html",
+   "first": 248,
+   "last": 248,
+   "excerpt": "el('p', { class: 'note' }, 'Recorded request by request for this run only.'),",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'note'",
+    "'Recorded request by request for this run only.'"
+   ]
+  },
+  {
+   "n": 81,
+   "file": "docs/replay.html",
+   "first": 255,
+   "last": 255,
+   "excerpt": "el('summary', { text: 'The console record this run wrote, unedited' }),",
+   "kind": "js",
+   "units": [
+    "'summary'",
+    "'The console record this run wrote, unedited'"
+   ]
+  },
+  {
+   "n": 82,
+   "file": "docs/scan-page.js",
+   "first": 90,
+   "last": 90,
+   "excerpt": "${path} could not be loaded (${res.status}).",
+   "kind": "js",
+   "units": [
+    "`${path} could not be loaded (${res.status}).`"
+   ]
+  },
+  {
+   "n": 83,
+   "file": "docs/scan-page.js",
+   "first": 159,
+   "last": 163,
+   "excerpt": "One credit-default model, scored the same way on the same held-out ${TEST_YEAR}  loans, with and without a sin",
+   "kind": "js",
+   "units": [
+    "`One credit-default model, scored the same way on the same held-out ${TEST_YEAR} `",
+    "`loans, with and without a single column that could only be known after `",
+    "`the loan had already gone bad. ${f.canary.test_roc_auc_text} is what `",
+    "`leakage buys you; ${f.layer1.test_roc_auc_text} is what it is actually worth. `",
+    "`That is the difference a candidate below may be hiding.`"
+   ]
+  },
+  {
+   "n": 84,
+   "file": "docs/scan-page.js",
+   "first": 173,
+   "last": 173,
+   "excerpt": "Candidate ${letter}, a credit-default model under audit",
+   "kind": "js",
+   "units": [
+    "'aria-label'",
+    "`Candidate ${letter}, a credit-default model under audit`"
+   ]
+  },
+  {
+   "n": 85,
+   "file": "docs/scan-page.js",
+   "first": 183,
+   "last": 184,
+   "excerpt": "held out not stated",
+   "kind": "js",
+   "units": [
+    "'dt'",
+    "'held out'",
+    "'dd'",
+    "'dt'",
+    "'leak'",
+    "'dd'",
+    "'not stated'"
+   ]
+  },
+  {
+   "n": 86,
+   "file": "docs/scan-page.js",
+   "first": 216,
+   "last": 216,
+   "excerpt": "— about ${money(costOf(m, rep.usage))} a run",
+   "kind": "js",
+   "units": [
+    "` — about ${money(costOf(m, rep.usage))} a run`"
+   ]
+  },
+  {
+   "n": 87,
+   "file": "docs/scan-page.js",
+   "first": 231,
+   "last": 237,
+   "excerpt": "${m.label}: $${m.price.input}/MTok in, $${m.price.output}/MTok out,  $${m.price.cacheRead}/MTok on cache hits,",
+   "kind": "js",
+   "units": [
+    "`${m.label}: $${m.price.input}/MTok in, $${m.price.output}/MTok out, `",
+    "`$${m.price.cacheRead}/MTok on cache hits, as Anthropic's pricing page listed `",
+    "`them on ${longDate(PRICES_CHECKED)}. The figure above prices `",
+    "`${rep.label}, a recorded run of this agent, at those rates — `",
+    "`${num(rep.usage.input + rep.usage.cache_creation + rep.usage.cache_read)} input `",
+    "`and ${num(rep.usage.output)} output tokens. Your run will differ. `",
+    "`You are billed by Anthropic directly.`"
+   ]
+  },
+  {
+   "n": 88,
+   "file": "docs/scan-page.js",
+   "first": 239,
+   "last": 240,
+   "excerpt": "${m.label}: $${m.price.input}/MTok in, $${m.price.output}/MTok out,  as Anthropic's pricing page listed them o",
+   "kind": "js",
+   "units": [
+    "`${m.label}: $${m.price.input}/MTok in, $${m.price.output}/MTok out, `",
+    "`as Anthropic's pricing page listed them on ${longDate(PRICES_CHECKED)}.`"
+   ]
+  },
+  {
+   "n": 89,
+   "file": "docs/scan-page.js",
+   "first": 305,
+   "last": 305,
+   "excerpt": "Restored from this tab \\u2014 the turn-by-turn view is not re-shown.",
+   "kind": "js",
+   "units": [
+    "`Restored from this tab \\u2014 the turn-by-turn view is not re-shown.`"
+   ]
+  },
+  {
+   "n": 90,
+   "file": "docs/scan-page.js",
+   "first": 307,
+   "last": 309,
+   "excerpt": "This run was kept when the page reloaded. The turn-by-turn view is not  restored, but the record is: what came",
+   "kind": "js",
+   "units": [
+    "'This run was kept when the page reloaded. The turn-by-turn view is not '",
+    "'restored, but the record is: what came of the run is on the next screen, '",
+    "'and the record can be downloaded.'"
+   ]
+  },
+  {
+   "n": 91,
+   "file": "docs/scan-page.js",
+   "first": 334,
+   "last": 334,
+   "excerpt": "set a spend ceiling between $${MIN_CEILING.toFixed(2)} and $${MAX_CEILING.toFixed(2)}",
+   "kind": "js",
+   "units": [
+    "`set a spend ceiling between $${MIN_CEILING.toFixed(2)} and $${MAX_CEILING.toFixed(2)}`"
+   ]
+  },
+  {
+   "n": 92,
+   "file": "docs/scan-page.js",
+   "first": 345,
+   "last": 345,
+   "excerpt": "check your API key — it should start with \"${KEY_PREFIX}\" and be much longer",
+   "kind": "js",
+   "units": [
+    "`check your API key — it should start with \"${KEY_PREFIX}\" and be much longer`"
+   ]
+  },
+  {
+   "n": 93,
+   "file": "docs/scan-page.js",
+   "first": 372,
+   "last": 372,
+   "excerpt": "Enter a ceiling between $${MIN_CEILING.toFixed(2)} and $${MAX_CEILING.toFixed(2)}.",
+   "kind": "js",
+   "units": [
+    "`Enter a ceiling between $${MIN_CEILING.toFixed(2)} and $${MAX_CEILING.toFixed(2)}.`"
+   ]
+  },
+  {
+   "n": 94,
+   "file": "docs/scan-page.js",
+   "first": 377,
+   "last": 378,
+   "excerpt": "A recorded run of this agent costs about ${money(typical)} at these rates,  so this is roughly ${(v / typical)",
+   "kind": "js",
+   "units": [
+    "` A recorded run of this agent costs about ${money(typical)} at these rates, `",
+    "`so this is roughly ${(v / typical).toFixed(1)}× a normal run.`"
+   ]
+  },
+  {
+   "n": 95,
+   "file": "docs/scan-page.js",
+   "first": 384,
+   "last": 388,
+   "excerpt": "Checked after every turn, before the next request is sent. A turn already  under way is always finished, so th",
+   "kind": "js",
+   "units": [
+    "`Checked after every turn, before the next request is sent. A turn already `",
+    "`under way is always finished, so the run stops at the first check where the `",
+    "`total has reached ${money(v)}, and the final figure can pass it by up to the `",
+    "`cost of that last turn. The total is an estimate, priced from the token counts `",
+    "`the API reports at the rates above. Anthropic's bill is the real figure.${compare}`"
+   ]
+  },
+  {
+   "n": 96,
+   "file": "docs/scan-page.js",
+   "first": 412,
+   "last": 412,
+   "excerpt": "Nothing was sent. First, ${missing.map(m => m.say).join(', and ')}.",
+   "kind": "js",
+   "units": [
+    "', and '",
+    "`Nothing was sent. First, ${missing.map(m => m.say).join(', and ')}.`"
+   ]
+  },
+  {
+   "n": 97,
+   "file": "docs/scan-page.js",
+   "first": 419,
+   "last": 420,
+   "excerpt": "Ready. This will send requests to Anthropic with your key,  one per turn, for at most ${count(MAX_TURNS, 'turn",
+   "kind": "js",
+   "units": [
+    "`Ready. This will send requests to Anthropic with your key, `",
+    "'turn'",
+    "`one per turn, for at most ${count(MAX_TURNS, 'turn')}.`"
+   ]
+  },
+  {
+   "n": 98,
+   "file": "docs/scan-page.js",
+   "first": 440,
+   "last": 441,
+   "excerpt": "Stopping. No further request will be sent. A request already in flight  is paid for, so it is allowed to finis",
+   "kind": "js",
+   "units": [
+    "'Stopping. No further request will be sent. A request already in flight '",
+    "'is paid for, so it is allowed to finish and be shown.'"
+   ]
+  },
+  {
+   "n": 99,
+   "file": "docs/scan-page.js",
+   "first": 447,
+   "last": 447,
+   "excerpt": "Cancelled mid-request. That turn may still be billed.",
+   "kind": "js",
+   "units": [
+    "'stop-why'",
+    "'Cancelled mid-request. That turn may still be billed.'"
+   ]
+  },
+  {
+   "n": 100,
+   "file": "docs/scan-page.js",
+   "first": 456,
+   "last": 456,
+   "excerpt": "Ends the run at the end of the current turn.",
+   "kind": "js",
+   "units": [
+    "'stop-why'",
+    "'Ends the run at the end of the current turn.'"
+   ]
+  },
+  {
+   "n": 101,
+   "file": "docs/scan-page.js",
+   "first": 544,
+   "last": 544,
+   "excerpt": "Auditing Candidate ${chosenCard}",
+   "kind": "js",
+   "units": [
+    "'run-title'",
+    "`Auditing Candidate ${chosenCard}`"
+   ]
+  },
+  {
+   "n": 102,
+   "file": "docs/scan-page.js",
+   "first": 546,
+   "last": 549,
+   "excerpt": "Auditor: ${e.model.label} · ceilings ${count(e.config.maxTurns, 'turn')},  ${count(e.config.maxToolCalls, 'too",
+   "kind": "js",
+   "units": [
+    "'turn'",
+    "`Auditor: ${e.model.label} · ceilings ${count(e.config.maxTurns, 'turn')}, `",
+    "'tool call'",
+    "`${count(e.config.maxToolCalls, 'tool call')} and ${money(e.config.maxCost)} · prompt caching `",
+    "'on'",
+    "'off'",
+    "`${e.config.cache ? 'on' : 'off'} · retrieval ${e.config.retrieval}`",
+    "' · DEV MODE, scripted replies, nothing sent'"
+   ]
+  },
+  {
+   "n": 103,
+   "file": "docs/scan-page.js",
+   "first": 611,
+   "last": 614,
+   "excerpt": "banner bad Cancelled.  The request for turn ${e.turn} was abandoned in flight. It may still be  billed by Anth",
+   "kind": "js",
+   "units": [
+    "'stream'",
+    "'div'",
+    "'banner bad'",
+    "'b'",
+    "'Cancelled. '",
+    "`The request for turn ${e.turn} was abandoned in flight. It may still be `",
+    "`billed by Anthropic.`"
+   ]
+  },
+  {
+   "n": 104,
+   "file": "docs/scan-page.js",
+   "first": 618,
+   "last": 619,
+   "excerpt": "banner bad The run stopped.",
+   "kind": "js",
+   "units": [
+    "'stream'",
+    "'div'",
+    "'banner bad'",
+    "'b'",
+    "'The run stopped. '"
+   ]
+  },
+  {
+   "n": 105,
+   "file": "docs/scan-page.js",
+   "first": 630,
+   "last": 634,
+   "excerpt": "banner bad This run’s ending could not be shown.  The page refused rather than guess: ${err.message}  Nothing ",
+   "kind": "js",
+   "units": [
+    "'stream'",
+    "'div'",
+    "'banner bad'",
+    "'b'",
+    "'This run’s ending could not be shown. '",
+    "`The page refused rather than guess: ${err.message} `",
+    "'b'",
+    "'Nothing here is a verdict on this candidate.'",
+    "'run-title'",
+    "`Candidate ${chosenCard} — ending not shown`"
+   ]
+  },
+  {
+   "n": 106,
+   "file": "docs/scan-page.js",
+   "first": 645,
+   "last": 647,
+   "excerpt": "tool call ${spentApart(e.spend, e.config.maxCost, money)} spent against a  ${money(e.config.maxCost)} ceiling",
+   "kind": "js",
+   "units": [
+    "'turn'",
+    "'tool call'",
+    "`${spentApart(e.spend, e.config.maxCost, money)} spent against a `",
+    "`${money(e.config.maxCost)} ceiling`"
+   ]
+  },
+  {
+   "n": 107,
+   "file": "docs/scan-page.js",
+   "first": 654,
+   "last": 654,
+   "excerpt": "Run finished.",
+   "kind": "js",
+   "units": [
+    "'b'",
+    "'Run finished. '"
+   ]
+  },
+  {
+   "n": 108,
+   "file": "docs/scan-page.js",
+   "first": 657,
+   "last": 658,
+   "excerpt": "${e.reason} ${bits.join(' · ')}.  Press “See how it scored” below to find out which candidate this was.",
+   "kind": "js",
+   "units": [
+    "`${e.reason} ${bits.join(' · ')}. `",
+    "'Press “See how it scored” below to find out which candidate this was.'"
+   ]
+  },
+  {
+   "n": 109,
+   "file": "docs/scan-page.js",
+   "first": 668,
+   "last": 669,
+   "excerpt": "banner bad verdictless No verdict.",
+   "kind": "js",
+   "units": [
+    "'stream'",
+    "'div'",
+    "'banner bad verdictless'",
+    "'b'",
+    "'No verdict. '"
+   ]
+  },
+  {
+   "n": 110,
+   "file": "docs/scan-page.js",
+   "first": 675,
+   "last": 676,
+   "excerpt": "Only the final answer is scored, as it was for the recorded runs, so  anything written before it, above, does ",
+   "kind": "js",
+   "units": [
+    "' Only the final answer is scored, as it was for the recorded runs, so '",
+    "'anything written before it, above, does not count.'"
+   ]
+  },
+  {
+   "n": 111,
+   "file": "docs/scan-page.js",
+   "first": 678,
+   "last": 678,
+   "excerpt": "The model never replied, so this run produced no result.",
+   "kind": "js",
+   "units": [
+    "'The model never replied, so this run produced no result.'"
+   ]
+  },
+  {
+   "n": 112,
+   "file": "docs/scan-page.js",
+   "first": 681,
+   "last": 684,
+   "excerpt": "The run did not finish, so it produced no result. Only a run the agent  ends itself is scored, as it was for t",
+   "kind": "js",
+   "units": [
+    "'The run did not finish, so it produced no result. Only a run the agent '",
+    "'ends itself is scored, as it was for the recorded runs, so nothing above '",
+    "'counts, including any findings it wrote.'",
+    "'b'",
+    "' It is not a verdict on this candidate and must not be read as one.'"
+   ]
+  },
+  {
+   "n": 113,
+   "file": "docs/scan-page.js",
+   "first": 691,
+   "last": 691,
+   "excerpt": "With no reply from the model there is nothing for the scorer to grade.",
+   "kind": "js",
+   "units": [
+    "'With no reply from the model there is nothing for the scorer to grade. '"
+   ]
+  },
+  {
+   "n": 114,
+   "file": "docs/scan-page.js",
+   "first": 693,
+   "last": 694,
+   "excerpt": "The scorer that graded the ${word(runIndex.runs.length)} recorded runs  does not score a run like this one:",
+   "kind": "js",
+   "units": [
+    "`The scorer that graded the ${word(runIndex.runs.length)} recorded runs `",
+    "`does not score a run like this one: `"
+   ]
+  },
+  {
+   "n": 115,
+   "file": "docs/scan-page.js",
+   "first": 696,
+   "last": 702,
+   "excerpt": "with no final answer there was nothing to parse,  the final answer could not be parsed,  which it calls a pars",
+   "kind": "js",
+   "units": [
+    "`with no final answer there was nothing to parse, `",
+    "`the final answer could not be parsed, `",
+    "`which it calls a parse failure, not a finding of nothing to report. `",
+    "`The scorer that graded the ${word(runIndex.runs.length)} recorded runs `",
+    "`refuses a run like this one: a partial answer is not an answer and is `",
+    "`not scored. `",
+    "`${bits.join(' · ')}.`"
+   ]
+  },
+  {
+   "n": 116,
+   "file": "docs/scan-page.js",
+   "first": 713,
+   "last": 713,
+   "excerpt": "Audited Candidate ${card}",
+   "kind": "js",
+   "units": [
+    "`Audited Candidate ${card}`"
+   ]
+  },
+  {
+   "n": 117,
+   "file": "docs/scan-page.js",
+   "first": 715,
+   "last": 717,
+   "excerpt": "Candidate ${card} — no verdict Candidate ${card} — no turn completed Candidate ${card} — audit cut off",
+   "kind": "js",
+   "units": [
+    "`Candidate ${card} — no verdict`",
+    "`Candidate ${card} — no turn completed`",
+    "`Candidate ${card} — audit cut off`"
+   ]
+  },
+  {
+   "n": 118,
+   "file": "docs/scan-page.js",
+   "first": 734,
+   "last": 739,
+   "excerpt": "The agent never got a reply to its first request, so it never looked  at anything and this run produced no res",
+   "kind": "js",
+   "units": [
+    "'The agent never got a reply to its first request, so it never looked '",
+    "'at anything and this run produced no result.'",
+    "'That was the agent’s first request, so it never got a reply, never '",
+    "'looked at anything, and this run produced no result.'",
+    "'That was before its first request was sent, so nothing was sent and '",
+    "'nothing was spent.'"
+   ]
+  },
+  {
+   "n": 119,
+   "file": "docs/scan-page.js",
+   "first": 745,
+   "last": 745,
+   "excerpt": "The cancelled request is not in that figure, and may still be billed.",
+   "kind": "js",
+   "units": [
+    "'The cancelled request is not in that figure, and may still be billed.'"
+   ]
+  },
+  {
+   "n": 120,
+   "file": "docs/scan-page.js",
+   "first": 754,
+   "last": 755,
+   "excerpt": "The run was stopped at its ceiling of ${count(c.maxTurns, 'turn')},  before it could send another request.",
+   "kind": "js",
+   "units": [
+    "'turn'",
+    "`The run was stopped at its ceiling of ${count(c.maxTurns, 'turn')}, `",
+    "`before it could send another request.`"
+   ]
+  },
+  {
+   "n": 121,
+   "file": "docs/scan-page.js",
+   "first": 760,
+   "last": 762,
+   "excerpt": "The run stopped at ${count(e.toolCalls, 'tool call')}: the model asked  for a batch that would have taken it p",
+   "kind": "js",
+   "units": [
+    "'tool call'",
+    "`The run stopped at ${count(e.toolCalls, 'tool call')}: the model asked `",
+    "`for a batch that would have taken it past the ceiling of ${c.maxToolCalls}, `",
+    "`so that batch was not run.`"
+   ]
+  },
+  {
+   "n": 122,
+   "file": "docs/scan-page.js",
+   "first": 768,
+   "last": 768,
+   "excerpt": "You stopped the run.",
+   "kind": "js",
+   "units": [
+    "'You stopped the run.'"
+   ]
+  },
+  {
+   "n": 123,
+   "file": "docs/scan-page.js",
+   "first": 770,
+   "last": 770,
+   "excerpt": "You cancelled the run while a request was in flight.",
+   "kind": "js",
+   "units": [
+    "'You cancelled the run while a request was in flight.'"
+   ]
+  },
+  {
+   "n": 124,
+   "file": "docs/scan-page.js",
+   "first": 772,
+   "last": 773,
+   "excerpt": "One turn hit the per-request output ceiling of  ${num(model.maxTokens)} tokens and was cut off mid-sentence.",
+   "kind": "js",
+   "units": [
+    "`One turn hit the per-request output ceiling of `",
+    "`${num(model.maxTokens)} tokens and was cut off mid-sentence.`"
+   ]
+  },
+  {
+   "n": 125,
+   "file": "docs/scan-page.js",
+   "first": 775,
+   "last": 775,
+   "excerpt": "The model declined to continue.",
+   "kind": "js",
+   "units": [
+    "'The model declined to continue.'"
+   ]
+  },
+  {
+   "n": 126,
+   "file": "docs/scan-page.js",
+   "first": 777,
+   "last": 777,
+   "excerpt": "The model paused the turn and the run was not resumed.",
+   "kind": "js",
+   "units": [
+    "'The model paused the turn and the run was not resumed.'"
+   ]
+  },
+  {
+   "n": 127,
+   "file": "docs/scan-page.js",
+   "first": 779,
+   "last": 779,
+   "excerpt": "The model stopped on a stop sequence.",
+   "kind": "js",
+   "units": [
+    "'The model stopped on a stop sequence.'"
+   ]
+  },
+  {
+   "n": 128,
+   "file": "docs/scan-page.js",
+   "first": 781,
+   "last": 781,
+   "excerpt": "The model stopped for a reason this page does not recognise.",
+   "kind": "js",
+   "units": [
+    "'The model stopped for a reason this page does not recognise.'"
+   ]
+  },
+  {
+   "n": 129,
+   "file": "docs/scan-page.js",
+   "first": 783,
+   "last": 783,
+   "excerpt": "The run stopped on an error, which is shown above.",
+   "kind": "js",
+   "units": [
+    "'The run stopped on an error, which is shown above.'"
+   ]
+  },
+  {
+   "n": 130,
+   "file": "docs/scan-page.js",
+   "first": 846,
+   "last": 847,
+   "excerpt": "${path} is a ${value.constructor.name}, which  Object.freeze cannot seal. Use readOnlySet, or a plain object.",
+   "kind": "js",
+   "units": [
+    "`${path} is a ${value.constructor.name}, which `",
+    "`Object.freeze cannot seal. Use readOnlySet, or a plain object.`"
+   ]
+  },
+  {
+   "n": 131,
+   "file": "docs/scan-page.js",
+   "first": 865,
+   "last": 866,
+   "excerpt": "scoring.canary holds ${columns.length} columns  (${columns.join(', ') || 'none'}). Screen 3 is written for exa",
+   "kind": "js",
+   "units": [
+    "`scoring.canary holds ${columns.length} columns `",
+    "'none'",
+    "`(${columns.join(', ') || 'none'}). Screen 3 is written for exactly one.`"
+   ]
+  },
+  {
+   "n": 132,
+   "file": "docs/scan-page.js",
+   "first": 882,
+   "last": 884,
+   "excerpt": "Expected the honest model to read no key column and the canary  model to read only ${canaryColumn}; they read ",
+   "kind": "js",
+   "units": [
+    "`Expected the honest model to read no key column and the canary `",
+    "`model to read only ${canaryColumn}; they read [${honest.join(', ')}] and `",
+    "`[${planted.join(', ')}]. Screen 3's copy is written for the first.`"
+   ]
+  },
+  {
+   "n": 133,
+   "file": "docs/scan-page.js",
+   "first": 909,
+   "last": 911,
+   "excerpt": "banner bad This run was not scored.  The page checks its own data before it scores anything, and it refused: $",
+   "kind": "js",
+   "units": [
+    "'div'",
+    "'banner bad'",
+    "'b'",
+    "'This run was not scored. '",
+    "`The page checks its own data before it scores anything, and it refused: ${err.message}`"
+   ]
+  },
+  {
+   "n": 134,
+   "file": "docs/scan-page.js",
+   "first": 924,
+   "last": 925,
+   "excerpt": "Kept in this tab, so a reload will not lose it. It goes when the tab closes. This tab will not keep the run \\u",
+   "kind": "js",
+   "units": [
+    "'Kept in this tab, so a reload will not lose it. It goes when the tab closes.'",
+    "'This tab will not keep the run \\u2014 storage is unavailable here. Download it if you want it.'"
+   ]
+  },
+  {
+   "n": 135,
+   "file": "docs/scan-page.js",
+   "first": 938,
+   "last": 938,
+   "excerpt": "A run is already going. Stop it first, below.",
+   "kind": "js",
+   "units": [
+    "'go-why'",
+    "'A run is already going. Stop it first, below.'"
+   ]
+  },
+  {
+   "n": 136,
+   "file": "docs/scan-page.js",
+   "first": 952,
+   "last": 952,
+   "excerpt": "Nothing was sent. First, ${missing.map(m => m.say).join(', and ')}.",
+   "kind": "js",
+   "units": [
+    "', and '",
+    "`Nothing was sent. First, ${missing.map(m => m.say).join(', and ')}.`"
+   ]
+  },
+  {
+   "n": 137,
+   "file": "docs/scan-page.js",
+   "first": 1027,
+   "last": 1028,
+   "excerpt": "banner bad Could not start.",
+   "kind": "js",
+   "units": [
+    "'stream'",
+    "'div'",
+    "'banner bad'",
+    "'b'",
+    "'Could not start. '"
+   ]
+  },
+  {
+   "n": 138,
+   "file": "docs/scan-page.js",
+   "first": 1043,
+   "last": 1043,
+   "excerpt": "status error This page could not load its data: ${err.message}",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'status error'",
+    "`This page could not load its data: ${err.message}`"
+   ]
+  },
+  {
+   "n": 139,
+   "file": "docs/scan.js",
+   "first": 73,
+   "last": 82,
+   "excerpt": "This page didn’t load properly. It can’t confirm all of its files are from the same version, so it won’t run. ",
+   "kind": "js",
+   "units": [
+    "'This page didn’t load properly.'",
+    "'It can’t confirm all of its files are from the same version, so it won’t run. '",
+    "'Copies of its files can be kept for up to ten minutes, so this can clear on its '",
+    "'own — come back in a few minutes and it should load.'",
+    "'This page couldn’t load one of its files.'",
+    "'Check your connection and reload.'",
+    "'This page couldn’t start.'",
+    "'One of its files failed to load, and the page can’t tell why. Some causes clear up '",
+    "'on their own and some need the site to be fixed, so coming back later may or may '",
+    "'not help.'"
+   ]
+  },
+  {
+   "n": 140,
+   "file": "docs/common.js",
+   "first": 8,
+   "last": 8,
+   "excerpt": "could not be loaded ( ).",
+   "kind": "js",
+   "units": [
+    "' could not be loaded ('"
+   ]
+  },
+  {
+   "n": 141,
+   "file": "docs/common.js",
+   "first": 97,
+   "last": 97,
+   "excerpt": "from commit",
+   "kind": "js",
+   "units": [
+    "' from commit '"
+   ]
+  },
+  {
+   "n": 142,
+   "file": "docs/common.js",
+   "first": 100,
+   "last": 100,
+   "excerpt": "Uncommitted changes in the source paths at export:",
+   "kind": "js",
+   "units": [
+    "'b'",
+    "'Uncommitted changes in the source paths at export: '"
+   ]
+  },
+  {
+   "n": 143,
+   "file": "docs/common.js",
+   "first": 105,
+   "last": 105,
+   "excerpt": "Export script SHA-256:",
+   "kind": "js",
+   "units": [
+    "'b'",
+    "'Export script SHA-256: '"
+   ]
+  },
+  {
+   "n": 144,
+   "file": "docs/common.js",
+   "first": 113,
+   "last": 113,
+   "excerpt": "bytes removed.",
+   "kind": "js",
+   "units": [
+    "' bytes removed.'"
+   ]
+  },
+  {
+   "n": 145,
+   "file": "docs/common.js",
+   "first": 119,
+   "last": 119,
+   "excerpt": "Scoring cannot be recomputed from a fresh clone",
+   "kind": "js",
+   "units": [
+    "'h4'",
+    "'Scoring cannot be recomputed from a fresh clone'"
+   ]
+  },
+  {
+   "n": 146,
+   "file": "docs/common.js",
+   "first": 138,
+   "last": 138,
+   "excerpt": "Provenance — where every figure on this page comes from",
+   "kind": "js",
+   "units": [
+    "'summary'",
+    "'Provenance — where every figure on this page comes from'"
+   ]
+  },
+  {
+   "n": 147,
+   "file": "docs/common.js",
+   "first": 146,
+   "last": 146,
+   "excerpt": "status error Provenance unavailable:",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'status error'",
+    "'Provenance unavailable: '"
+   ]
+  },
+  {
+   "n": 148,
+   "file": "docs/agent/screen3.js",
+   "first": 125,
+   "last": 126,
+   "excerpt": "You ${verb} Candidate ${record.card}. It was  the honest model. the one carrying the canary.",
+   "kind": "js",
+   "units": [
+    "'h2'",
+    "`You ${verb} Candidate ${record.card}. It was `",
+    "'the honest model.'",
+    "'the one carrying the canary.'"
+   ]
+  },
+  {
+   "n": 149,
+   "file": "docs/agent/screen3.js",
+   "first": 129,
+   "last": 132,
+   "excerpt": "Nothing was planted in it. All   columns the answer key lists as leaking  were taken out before this model was",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'Nothing was planted in it. All '",
+    "' columns the answer key lists as leaking '",
+    "'were taken out before this model was built, and none of them is among its '",
+    "' inputs. The '"
+   ]
+  },
+  {
+   "n": 150,
+   "file": "docs/agent/screen3.js",
+   "first": 134,
+   "last": 134,
+   "excerpt": "it scores on held-out ${TEST_YEAR} loans is what the model is actually worth.",
+   "kind": "js",
+   "units": [
+    "` it scores on held-out ${TEST_YEAR} loans is what the model is actually worth.`"
+   ]
+  },
+  {
+   "n": 151,
+   "file": "docs/agent/screen3.js",
+   "first": 142,
+   "last": 142,
+   "excerpt": "One column was put back:",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'One column was put back: '"
+   ]
+  },
+  {
+   "n": 152,
+   "file": "docs/agent/screen3.js",
+   "first": 144,
+   "last": 144,
+   "excerpt": "The dictionary describes it as “${tp.description}”",
+   "kind": "js",
+   "units": [
+    "` The dictionary describes it as “${tp.description}”`"
+   ]
+  },
+  {
+   "n": 153,
+   "file": "docs/agent/screen3.js",
+   "first": 146,
+   "last": 150,
+   "excerpt": "The answer key lists it at tier ${tp.tier} — ${tp.tier_label}.  The answer key lists it as leaking, without a ",
+   "kind": "js",
+   "units": [
+    "` The answer key lists it at tier ${tp.tier} — ${tp.tier_label}.`",
+    "' The answer key lists it as leaking, without a tier.'",
+    "' It is the whole of the gap you saw on the first screen — '",
+    "'b'",
+    "' with it, '",
+    "'b'",
+    "' without.'"
+   ]
+  },
+  {
+   "n": 154,
+   "file": "docs/agent/screen3.js",
+   "first": 163,
+   "last": 167,
+   "excerpt": "The model has   inputs, and not one of them  is a column the answer key scores — all   were taken out before i",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'The model has '",
+    "' inputs, and not one of them '",
+    "'is a column the answer key scores — all '",
+    "' were taken out before it was built. The key matches flags by name and does '",
+    "'not check that, so a leaking column can still be named and credited; the '",
+    "'cards below mark which of your flags the model was actually reading.'"
+   ]
+  },
+  {
+   "n": 155,
+   "file": "docs/agent/screen3.js",
+   "first": 169,
+   "last": 171,
+   "excerpt": "The model has   inputs, and one of them is a  column the key scores:  . That was the leak and the only one in ",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'The model has '",
+    "' inputs, and one of them is a '",
+    "'column the key scores: '",
+    "'code'",
+    "'. That was the leak and the only one in the model — the other '"
+   ]
+  },
+  {
+   "n": 156,
+   "file": "docs/agent/screen3.js",
+   "first": 173,
+   "last": 174,
+   "excerpt": "are in the dictionary but not in it, so the cards below mark which of your  flags the model was actually readi",
+   "kind": "js",
+   "units": [
+    "' are in the dictionary but not in it, so the cards below mark which of your '",
+    "'flags the model was actually reading.'"
+   ]
+  },
+  {
+   "n": 157,
+   "file": "docs/agent/screen3.js",
+   "first": 192,
+   "last": 195,
+   "excerpt": "— run3 flagged ${word(run3.false_positives.length)}  ${run3.false_positives.length === 1 ? 'column that is' : ",
+   "kind": "js",
+   "units": [
+    "` — run3 flagged ${word(run3.false_positives.length)} `",
+    "'column that is'",
+    "'columns that are'",
+    "`${run3.false_positives.length === 1 ? 'column that is' : 'columns that are'} `",
+    "`near-constant in the ${TEST_YEAR} window, which is a real objection to reading `",
+    "'the held-out figure as a forecast, and scored zero for it'"
+   ]
+  },
+  {
+   "n": 158,
+   "file": "docs/agent/screen3.js",
+   "first": 198,
+   "last": 201,
+   "excerpt": "The key scores one kind of problem: columns carrying information that could  only be known after the loan’s ou",
+   "kind": "js",
+   "units": [
+    "'The key scores one kind of problem: columns carrying information that could '",
+    "'only be known after the loan’s outcome. It is narrow on purpose. A flag it '",
+    "`does not credit is not automatically wrong${run3Example}. What follows is the `",
+    "'scorer’s verdict, not a ruling on whether you were right.'"
+   ]
+  },
+  {
+   "n": 159,
+   "file": "docs/agent/screen3.js",
+   "first": 205,
+   "last": 206,
+   "excerpt": "The agent reported no findings. Nothing to score, and on this candidate  that may well be the right answer.",
+   "kind": "js",
+   "units": [
+    "'The agent reported no findings. Nothing to score, and on this candidate '",
+    "'that may well be the right answer.'"
+   ]
+  },
+  {
+   "n": 160,
+   "file": "docs/agent/screen3.js",
+   "first": 220,
+   "last": 223,
+   "excerpt": "Credited — and a good catch, though not about this model. Not credited — and this is the interesting one. Not ",
+   "kind": "js",
+   "units": [
+    "'Credited — and a good catch, though not about this model.'",
+    "'Not credited — and this is the interesting one.'",
+    "'Not credited.'",
+    "'Not scored.'"
+   ]
+  },
+  {
+   "n": 161,
+   "file": "docs/agent/screen3.js",
+   "first": 257,
+   "last": 259,
+   "excerpt": "at tier A, the most explicit kind: it is the loan’s own outcome, and  “Charged Off” is the thing being predict",
+   "kind": "js",
+   "units": [
+    "' at tier A, the most explicit kind: it is the loan’s own outcome, and '",
+    "'“Charged Off” is the thing being predicted. Naming it means reading the '",
+    "'dictionary and recognising a column that could only be known after the fact.'"
+   ]
+  },
+  {
+   "n": 162,
+   "file": "docs/agent/screen3.js",
+   "first": 262,
+   "last": 264,
+   "excerpt": "without a tier. Its dictionary description carries none of the  lifecycle wording the tiers are matched on, so",
+   "kind": "js",
+   "units": [
+    "' without a tier. Its dictionary description carries none of the '",
+    "'lifecycle wording the tiers are matched on, so there was no phrase to spot. '",
+    "'Naming it means knowing what the column holds, not reading when it is filled in.'"
+   ]
+  },
+  {
+   "n": 163,
+   "file": "docs/agent/screen3.js",
+   "first": 267,
+   "last": 270,
+   "excerpt": "at tier ${tp.tier} — ${tp.tier_label}.  The dictionary describes it as “${tp.description}”  Naming it means re",
+   "kind": "js",
+   "units": [
+    "` at tier ${tp.tier} — ${tp.tier_label}.`",
+    "` The dictionary describes it as “${tp.description}”`",
+    "' Naming it means reading the dictionary and recognising a column that could '",
+    "'only be known after the fact.'"
+   ]
+  },
+  {
+   "n": 164,
+   "file": "docs/agent/screen3.js",
+   "first": 281,
+   "last": 284,
+   "excerpt": "is one of the   columns the key scores, and it is one  of this model’s inputs.  Tier ${tp.tier} — ${tp.tier_la",
+   "kind": "js",
+   "units": [
+    "'code'",
+    "' is one of the '",
+    "' columns the key scores, and it is one '",
+    "'of this model’s inputs.'",
+    "` Tier ${tp.tier} — ${tp.tier_label}.`",
+    "' The key gives it no tier.'"
+   ]
+  },
+  {
+   "n": 165,
+   "file": "docs/agent/screen3.js",
+   "first": 291,
+   "last": 291,
+   "excerpt": "is in the answer key",
+   "kind": "js",
+   "units": [
+    "'code'",
+    "' is in the answer key'"
+   ]
+  },
+  {
+   "n": 166,
+   "file": "docs/agent/screen3.js",
+   "first": 295,
+   "last": 297,
+   "excerpt": "It is not one of the model’s   inputs. It was removed before  the model was built, so reading it back does not",
+   "kind": "js",
+   "units": [
+    "'It is not one of the model’s '",
+    "' inputs. It was removed before '",
+    "'the model was built, so reading it back does not tell you anything is wrong '",
+    "'with the held-out figure — the model never had it.'"
+   ]
+  },
+  {
+   "n": 167,
+   "file": "docs/agent/screen3.js",
+   "first": 299,
+   "last": 303,
+   "excerpt": "The scorer credits it anyway, because it matches names against the key and  does not ask what the model read. ",
+   "kind": "js",
+   "units": [
+    "'The scorer credits it anyway, because it matches names against the key and '",
+    "'does not ask what the model read. Your precision of '",
+    "' includes this flag. The scoring records the '",
+    "'distinction as '",
+    "'code'",
+    "'reachable: false'",
+    "' rather than taking the credit away.'"
+   ]
+  },
+  {
+   "n": 168,
+   "file": "docs/agent/screen3.js",
+   "first": 308,
+   "last": 311,
+   "excerpt": "is one of   columns put in the key precisely because  they look like leakage without being it. Flagging one me",
+   "kind": "js",
+   "units": [
+    "'code'",
+    "' is one of '",
+    "' columns put in the key precisely because '",
+    "'they look like leakage without being it. Flagging one means the agent went '",
+    "'after the right kind of thing and landed on a column that holds up.'"
+   ]
+  },
+  {
+   "n": 169,
+   "file": "docs/agent/screen3.js",
+   "first": 313,
+   "last": 314,
+   "excerpt": "It was scored as  , the column it derives from.",
+   "kind": "js",
+   "units": [
+    "' It was scored as '",
+    "'code'",
+    "', the column it derives from.'"
+   ]
+  },
+  {
+   "n": 170,
+   "file": "docs/agent/screen3.js",
+   "first": 321,
+   "last": 325,
+   "excerpt": "is one of the model’s   inputs and is not a column the  key scores. It may still be a fair objection, but the ",
+   "kind": "js",
+   "units": [
+    "' is one of the model’s '",
+    "' inputs and is not a column the '",
+    "'key scores. It may still be a fair objection, but the key scores '",
+    "'post-outcome information only, and this earns nothing.'",
+    "' is not one of the model’s inputs and is not a column the key '",
+    "'scores. It earns nothing, and the model was not reading it either.'"
+   ]
+  },
+  {
+   "n": 171,
+   "file": "docs/agent/screen3.js",
+   "first": 336,
+   "last": 337,
+   "excerpt": "is out of scope. The key sets it  aside, and it counts neither for you nor against you.",
+   "kind": "js",
+   "units": [
+    "'code'",
+    "' is out of scope. The key sets it '",
+    "'aside, and it counts neither for you nor against you.'"
+   ]
+  },
+  {
+   "n": 172,
+   "file": "docs/agent/screen3.js",
+   "first": 339,
+   "last": 340,
+   "excerpt": "The key does record why, but in wording written for the scorer rather  than for you; it is in",
+   "kind": "js",
+   "units": [
+    "'The key does record why, but in wording written for the scorer rather '",
+    "'than for you; it is in '"
+   ]
+  },
+  {
+   "n": 173,
+   "file": "docs/agent/screen3.js",
+   "first": 358,
+   "last": 364,
+   "excerpt": "s3-canary-line na No canary here.  Nothing was planted in this candidate, so there was nothing to find, and no",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'s3-canary-line na'",
+    "'b'",
+    "'No canary here. '",
+    "'Nothing was planted in this candidate, so there was nothing to find, and not '",
+    "'finding it is the right answer. This is not a zero. The question does not '",
+    "'apply, and the scorer records it as '",
+    "'code'",
+    "'null'",
+    "' rather than '",
+    "'code'",
+    "'false'",
+    "' — a run cannot miss a test it was never set.'"
+   ]
+  },
+  {
+   "n": 174,
+   "file": "docs/agent/screen3.js",
+   "first": 368,
+   "last": 370,
+   "excerpt": "s3-canary-line na Whether a canary was planted in this candidate was not recorded, so this  run cannot be read",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'s3-canary-line na'",
+    "'Whether a canary was planted in this candidate was not recorded, so this '",
+    "'run cannot be read either way.'"
+   ]
+  },
+  {
+   "n": 175,
+   "file": "docs/agent/screen3.js",
+   "first": 377,
+   "last": 380,
+   "excerpt": "s3-canary-line found You found it.   was planted in this model and you flagged it. That is the test, and you  ",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'s3-canary-line found'",
+    "'b'",
+    "'You found it. '",
+    "'code'",
+    "' was planted in this model and you flagged it. That is the test, and you '",
+    "'passed it.'"
+   ]
+  },
+  {
+   "n": 176,
+   "file": "docs/agent/screen3.js",
+   "first": 387,
+   "last": 391,
+   "excerpt": "s3-canary-line missed You did not find it.   was among this model’s inputs and went unflagged.  It is the larg",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'s3-canary-line missed'",
+    "'b'",
+    "'You did not find it. '",
+    "'code'",
+    "' was among this model’s inputs and went unflagged.'",
+    "' It is the largest single contributor to the model’s score'",
+    "`, and taking it out costs ${drop} of held-out AUC.`"
+   ]
+  },
+  {
+   "n": 177,
+   "file": "docs/agent/screen3.js",
+   "first": 393,
+   "last": 393,
+   "excerpt": "Taking it out costs ${drop} of held-out AUC.",
+   "kind": "js",
+   "units": [
+    "` Taking it out costs ${drop} of held-out AUC.`"
+   ]
+  },
+  {
+   "n": 178,
+   "file": "docs/agent/screen3.js",
+   "first": 412,
+   "last": 413,
+   "excerpt": "s3-block s3-noverdict No verdict, so nothing to score.",
+   "kind": "js",
+   "units": [
+    "'section'",
+    "'s3-block s3-noverdict'",
+    "'h3'",
+    "'No verdict, so nothing to score.'"
+   ]
+  },
+  {
+   "n": 179,
+   "file": "docs/agent/screen3.js",
+   "first": 422,
+   "last": 425,
+   "excerpt": "Only the final answer is scored, so anything it wrote before that, on  the previous screen, does not count.  O",
+   "kind": "js",
+   "units": [
+    "' Only the final answer is scored, so anything it wrote before that, on '",
+    "'the previous screen, does not count.'",
+    "' Only the final answer is scored, so anything it wrote before that does '",
+    "'not count.'"
+   ]
+  },
+  {
+   "n": 180,
+   "file": "docs/agent/screen3.js",
+   "first": 431,
+   "last": 431,
+   "excerpt": "The run ended before the agent finished.",
+   "kind": "js",
+   "units": [
+    "'The run ended before the agent finished.'"
+   ]
+  },
+  {
+   "n": 181,
+   "file": "docs/agent/screen3.js",
+   "first": 436,
+   "last": 436,
+   "excerpt": "The cancelled request may still be billed by Anthropic.",
+   "kind": "js",
+   "units": [
+    "' The cancelled request may still be billed by Anthropic.'"
+   ]
+  },
+  {
+   "n": 182,
+   "file": "docs/agent/screen3.js",
+   "first": 439,
+   "last": 441,
+   "excerpt": "The model never replied, so there is no investigation on the previous  screen, partial or otherwise.  The mode",
+   "kind": "js",
+   "units": [
+    "' The model never replied, so there is no investigation on the previous '",
+    "'screen, partial or otherwise.'",
+    "' The model never replied, so there was no investigation, partial or otherwise.'"
+   ]
+  },
+  {
+   "n": 183,
+   "file": "docs/agent/screen3.js",
+   "first": 445,
+   "last": 448,
+   "excerpt": "Only a run the agent ends itself is scored, so nothing on the previous  screen counts, including any findings ",
+   "kind": "js",
+   "units": [
+    "' Only a run the agent ends itself is scored, so nothing on the previous '",
+    "'screen counts, including any findings it wrote.'",
+    "' Only a run the agent ends itself is scored, so nothing it wrote counts, '",
+    "'including any findings.'"
+   ]
+  },
+  {
+   "n": 184,
+   "file": "docs/agent/screen3.js",
+   "first": 455,
+   "last": 456,
+   "excerpt": "The scorer that graded the   recorded runs",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'The scorer that graded the '",
+    "' recorded runs '"
+   ]
+  },
+  {
+   "n": 185,
+   "file": "docs/agent/screen3.js",
+   "first": 458,
+   "last": 459,
+   "excerpt": "does not score a run like this one, in its own words: “the answer could  not be parsed. This is a parse failur",
+   "kind": "js",
+   "units": [
+    "'does not score a run like this one, in its own words: “the answer could '",
+    "'not be parsed. This is a parse failure, not a finding of ‘nothing to '"
+   ]
+  },
+  {
+   "n": 186,
+   "file": "docs/agent/screen3.js",
+   "first": 461,
+   "last": 462,
+   "excerpt": "refuses a run like this one, in its own words: “A partial answer is not an  answer and is not scored.”",
+   "kind": "js",
+   "units": [
+    "'refuses a run like this one, in its own words: “A partial answer is not an '",
+    "'answer and is not scored.”'"
+   ]
+  },
+  {
+   "n": 187,
+   "file": "docs/agent/screen3.js",
+   "first": 467,
+   "last": 470,
+   "excerpt": "You are told which it was because reloading deals the two candidates again,  so holding it back would buy you ",
+   "kind": "js",
+   "units": [
+    "'You are told which it was because reloading deals the two candidates again, '",
+    "'so holding it back would buy you nothing.'",
+    "'You are told which it was because you paid for the run, and because reloading '",
+    "'deals the two candidates again, so holding it back would buy you nothing.'"
+   ]
+  },
+  {
+   "n": 188,
+   "file": "docs/agent/screen3.js",
+   "first": 491,
+   "last": 493,
+   "excerpt": "Your run:  ${count(record.turns, 'turn')}, ${count(record.toolCalls, 'tool call')},  ${record.maxCost === null",
+   "kind": "js",
+   "units": [
+    "'b'",
+    "'Your run: '",
+    "'turn'",
+    "'tool call'",
+    "`${count(record.turns, 'turn')}, ${count(record.toolCalls, 'tool call')}, `",
+    "`${record.maxCost === null ? money(record.spend) : spentApart(record.spend, record.maxCost, money)}.`"
+   ]
+  },
+  {
+   "n": 189,
+   "file": "docs/agent/screen3.js",
+   "first": 497,
+   "last": 497,
+   "excerpt": "The cancelled request is not in that figure, and may still be billed.",
+   "kind": "js",
+   "units": [
+    "' The cancelled request is not in that figure, and may still be billed.'"
+   ]
+  },
+  {
+   "n": 190,
+   "file": "docs/agent/screen3.js",
+   "first": 503,
+   "last": 504,
+   "excerpt": "Of the recorded runs on the honest model, those that finished took   turns.",
+   "kind": "js",
+   "units": [
+    "'Of the recorded runs on the honest model, those that finished took '",
+    "' turns.'"
+   ]
+  },
+  {
+   "n": 191,
+   "file": "docs/agent/screen3.js",
+   "first": 507,
+   "last": 507,
+   "excerpt": "One hit a ${stopped[0].limits.max_turns}-turn ceiling and was scored as no answer at all.",
+   "kind": "js",
+   "units": [
+    "` One hit a ${stopped[0].limits.max_turns}-turn ceiling and was scored as no answer at all.`"
+   ]
+  },
+  {
+   "n": 192,
+   "file": "docs/agent/screen3.js",
+   "first": 509,
+   "last": 509,
+   "excerpt": "${count(stopped.length, 'run')} hit their turn ceilings and were scored as no answer at all.",
+   "kind": "js",
+   "units": [
+    "'run'",
+    "` ${count(stopped.length, 'run')} hit their turn ceilings and were scored as no answer at all.`"
+   ]
+  },
+  {
+   "n": 193,
+   "file": "docs/agent/screen3.js",
+   "first": 512,
+   "last": 513,
+   "excerpt": "canary run finished in   canary runs finished in   — when there is something to find, the agent finds it and s",
+   "kind": "js",
+   "units": [
+    "' The '",
+    "' canary run finished in '",
+    "' canary runs finished in '",
+    "' — when there is something to find, the agent finds it and stops.'"
+   ]
+  },
+  {
+   "n": 194,
+   "file": "docs/agent/screen3.js",
+   "first": 517,
+   "last": 518,
+   "excerpt": "tool call  are more  than any recorded run made. The previous highest was",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'Your '",
+    "'tool call'",
+    "' are more '",
+    "'than any recorded run made. The previous highest was '"
+   ]
+  },
+  {
+   "n": 195,
+   "file": "docs/agent/screen3.js",
+   "first": 529,
+   "last": 530,
+   "excerpt": "Precision ${result.precision.toFixed(2)} · Recall ${result.recall.toFixed(3)}  · F1 ${result.f1.toFixed(3)}",
+   "kind": "js",
+   "units": [
+    "`Precision ${result.precision.toFixed(2)} · Recall ${result.recall.toFixed(3)} `",
+    "`· F1 ${result.f1.toFixed(3)}`"
+   ]
+  },
+  {
+   "n": 196,
+   "file": "docs/agent/screen3.js",
+   "first": 545,
+   "last": 545,
+   "excerpt": "Precision is",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'Precision is '",
+    "' of '"
+   ]
+  },
+  {
+   "n": 197,
+   "file": "docs/agent/screen3.js",
+   "first": 549,
+   "last": 550,
+   "excerpt": "The credited flag is   The credited flags are   ${cap(word(n))} of the credited flags ${n === 1 ? 'is' : 'are'",
+   "kind": "js",
+   "units": [
+    "' The credited flag is '",
+    "' The credited flags are '",
+    "'is'",
+    "'are'",
+    "` ${cap(word(n))} of the credited flags ${n === 1 ? 'is' : 'are'} `"
+   ]
+  },
+  {
+   "n": 198,
+   "file": "docs/agent/screen3.js",
+   "first": 552,
+   "last": 552,
+   "excerpt": ", which the model never read — see ${n === 1 ? 'its card' : 'their cards'}.",
+   "kind": "js",
+   "units": [
+    "'its card'",
+    "'their cards'",
+    "`, which the model never read — see ${n === 1 ? 'its card' : 'their cards'}.`"
+   ]
+  },
+  {
+   "n": 199,
+   "file": "docs/agent/screen3.js",
+   "first": 563,
+   "last": 566,
+   "excerpt": "that one column Recall is  . The denominator is every leaking column in the key, and a flag  is credited by na",
+   "kind": "js",
+   "units": [
+    "'that one column'",
+    "`those ${word(inModel)} columns`",
+    "'p'",
+    "'Recall is '",
+    "' of '",
+    "'. The denominator is every leaking column in the key, and a flag '",
+    "'is credited by name, whether or not this model reads the column.'"
+   ]
+  },
+  {
+   "n": 200,
+   "file": "docs/agent/screen3.js",
+   "first": 568,
+   "last": 569,
+   "excerpt": "This model reads none of the  , so counted over the columns  it reads there was nothing to find.",
+   "kind": "js",
+   "units": [
+    "' This model reads none of the '",
+    "', so counted over the columns '",
+    "'it reads there was nothing to find.'"
+   ]
+  },
+  {
+   "n": 201,
+   "file": "docs/agent/screen3.js",
+   "first": 571,
+   "last": 574,
+   "excerpt": "This model reads   of the  ; counted over  , your recall is   This model reads   of the  . Which of your  cred",
+   "kind": "js",
+   "units": [
+    "' This model reads '",
+    "' of the '",
+    "'; counted over '",
+    "', your recall is '",
+    "' of '",
+    "' This model reads '",
+    "' of the '",
+    "'. Which of your '",
+    "'credited flags name them was not recorded.'"
+   ]
+  },
+  {
+   "n": 202,
+   "file": "docs/agent/screen3.js",
+   "first": 581,
+   "last": 583,
+   "excerpt": "For comparison,   flagged the one planted column, the only one there was, and scored a recall of   for it.",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'For comparison, '",
+    "'code'",
+    "'run5-canary'",
+    "' flagged the one planted column, the only one there was, and scored a recall of '",
+    "' for it.'"
+   ]
+  },
+  {
+   "n": 203,
+   "file": "docs/agent/screen3.js",
+   "first": 586,
+   "last": 588,
+   "excerpt": "That is why these three sit down here. They are the  scorer’s output, unchanged, and as a mark out of ten they",
+   "kind": "js",
+   "units": [
+    "'p'",
+    "'That is why these three sit down here. They are the '",
+    "'scorer’s output, unchanged, and as a mark out of ten they are wrong about '",
+    "'what happened.'"
+   ]
+  },
+  {
+   "n": 204,
+   "file": "docs/agent/ceilings.js",
+   "first": 28,
+   "last": 30,
+   "excerpt": "The run had spent ${spentApart(spend, ceiling, money)} when its last turn  ended, ${spend > ceiling ? 'past' :",
+   "kind": "js",
+   "units": [
+    "`The run had spent ${spentApart(spend, ceiling, money)} when its last turn `",
+    "'past'",
+    "'at'",
+    "`ended, ${spend > ceiling ? 'past' : 'at'} your ceiling of ${money(ceiling)}, so it `",
+    "`was stopped before it could send another request.`"
+   ]
+  },
+  {
+   "n": 205,
+   "file": "docs/agent/verdict.js",
+   "first": 59,
+   "last": 59,
+   "excerpt": "The agent finished, but it wrote no final answer.",
+   "kind": "js",
+   "units": [
+    "'The agent finished, but it wrote no final answer.'"
+   ]
+  },
+  {
+   "n": 206,
+   "file": "docs/agent/verdict.js",
+   "first": 61,
+   "last": 62,
+   "excerpt": "The agent finished, but its final answer began a findings block  and did not close it in the required form.",
+   "kind": "js",
+   "units": [
+    "'The agent finished, but its final answer began a findings block '",
+    "'and did not close it in the required form.'"
+   ]
+  },
+  {
+   "n": 207,
+   "file": "docs/agent/verdict.js",
+   "first": 64,
+   "last": 66,
+   "excerpt": "The agent finished, but its final answer contained a line the scorer  treats as the start of the answer, and n",
+   "kind": "js",
+   "units": [
+    "'The agent finished, but its final answer contained a line the scorer '",
+    "'treats as the start of the answer, and no findings block in the required '",
+    "'form after it.'"
+   ]
+  },
+  {
+   "n": 208,
+   "file": "docs/agent/verdict.js",
+   "first": 68,
+   "last": 70,
+   "excerpt": "The agent finished, but its final answer contained a line the scorer  treats as the start of the answer, and t",
+   "kind": "js",
+   "units": [
+    "'The agent finished, but its final answer contained a line the scorer '",
+    "'treats as the start of the answer, and the findings block after that line '",
+    "'was not closed in the required form.'"
+   ]
+  },
+  {
+   "n": 209,
+   "file": "docs/agent/verdict.js",
+   "first": 72,
+   "last": 73,
+   "excerpt": "The agent finished, but its final answer contained no findings block  in the required form.",
+   "kind": "js",
+   "units": [
+    "'The agent finished, but its final answer contained no findings block '",
+    "'in the required form.'"
+   ]
+  },
+  {
+   "n": 210,
+   "file": "docs/agent/verdict.js",
+   "first": 75,
+   "last": 75,
+   "excerpt": "No sentence for a run without a verdict of kind ${missing}.",
+   "kind": "js",
+   "units": [
+    "`No sentence for a run without a verdict of kind ${missing}.`"
+   ]
+  },
+  {
+   "n": 211,
+   "file": "docs/agent/loop.js",
+   "first": 52,
+   "last": 63,
+   "excerpt": "The agent finished and gave its answer. The agent was cut off mid-sentence: one turn hit the per-request outpu",
+   "kind": "js",
+   "units": [
+    "'The agent finished and gave its answer.'",
+    "'The agent was cut off mid-sentence: one turn hit the per-request output ceiling.'",
+    "'The model declined to continue.'",
+    "'The model paused the turn and the run was not resumed.'",
+    "'The model hit a stop sequence.'",
+    "'The model stopped for a reason this page does not recognise, so the run was ended rather than treated as finished.'",
+    "'The run hit its turn ceiling and was stopped before it could send another request.'",
+    "'The run was stopped before a batch of tool calls that would have taken it past its tool-call ceiling.'",
+    "'The run’s spend had reached or passed its ceiling when its last turn ended, so it was stopped before it could send another request.'",
+    "'You stopped the run.'",
+    "'The run was cancelled mid-request.'",
+    "'The run stopped on an error.'"
+   ]
+  },
+  {
+   "n": 212,
+   "file": "docs/agent/loop.js",
+   "first": 112,
+   "last": 112,
+   "excerpt": "The system prompt still contains ${left[0]} after rendering.",
+   "kind": "js",
+   "units": [
+    "`The system prompt still contains ${left[0]} after rendering.`"
+   ]
+  },
+  {
+   "n": 213,
+   "file": "docs/agent/loop.js",
+   "first": 165,
+   "last": 165,
+   "excerpt": "A spend ceiling was set without a way to price usage.",
+   "kind": "js",
+   "units": [
+    "'A spend ceiling was set without a way to price usage.'"
+   ]
+  },
+  {
+   "n": 214,
+   "file": "docs/agent/loop.js",
+   "first": 311,
+   "last": 311,
+   "excerpt": "The run ended (${termination}).",
+   "kind": "js",
+   "units": [
+    "`The run ended (${termination}).`"
+   ]
+  },
+  {
+   "n": 215,
+   "file": "docs/agent/provider.js",
+   "first": 40,
+   "last": 40,
+   "excerpt": "No model selected.",
+   "kind": "js",
+   "units": [
+    "'No model selected.'"
+   ]
+  },
+  {
+   "n": 216,
+   "file": "docs/agent/provider.js",
+   "first": 50,
+   "last": 50,
+   "excerpt": "Unknown request shape '${model.shape}' for ${model.id}.",
+   "kind": "js",
+   "units": [
+    "`Unknown request shape '${model.shape}' for ${model.id}.`"
+   ]
+  },
+  {
+   "n": 217,
+   "file": "docs/agent/provider.js",
+   "first": 58,
+   "last": 58,
+   "excerpt": "A cached request must end on a user turn.",
+   "kind": "js",
+   "units": [
+    "'A cached request must end on a user turn.'"
+   ]
+  },
+  {
+   "n": 218,
+   "file": "docs/agent/provider.js",
+   "first": 67,
+   "last": 67,
+   "excerpt": "The last user turn has no block to mark.",
+   "kind": "js",
+   "units": [
+    "'The last user turn has no block to mark.'"
+   ]
+  },
+  {
+   "n": 219,
+   "file": "docs/agent/provider.js",
+   "first": 80,
+   "last": 80,
+   "excerpt": "The request carries ${found} cache breakpoints; the API allows ${MAX_BREAKPOINTS}.",
+   "kind": "js",
+   "units": [
+    "`The request carries ${found} cache breakpoints; the API allows ${MAX_BREAKPOINTS}.`"
+   ]
+  },
+  {
+   "n": 220,
+   "file": "docs/agent/provider.js",
+   "first": 105,
+   "last": 106,
+   "excerpt": "The model '${modelId}' was not accepted: ${msg || 'no such model'}.  It may have been retired. Choose another ",
+   "kind": "js",
+   "units": [
+    "'no such model'",
+    "`The model '${modelId}' was not accepted: ${msg || 'no such model'}. `",
+    "`It may have been retired. Choose another model and run again.`"
+   ]
+  },
+  {
+   "n": 221,
+   "file": "docs/agent/provider.js",
+   "first": 111,
+   "last": 111,
+   "excerpt": "That API key was not accepted. Check it and try again.",
+   "kind": "js",
+   "units": [
+    "'That API key was not accepted. Check it and try again.'"
+   ]
+  },
+  {
+   "n": 222,
+   "file": "docs/agent/provider.js",
+   "first": 116,
+   "last": 116,
+   "excerpt": "The key was recognised but is not allowed to do this: ${msg}",
+   "kind": "js",
+   "units": [
+    "`The key was recognised but is not allowed to do this: ${msg}`"
+   ]
+  },
+  {
+   "n": 223,
+   "file": "docs/agent/provider.js",
+   "first": 121,
+   "last": 121,
+   "excerpt": "Rate limited by the API. Wait a moment and run again.",
+   "kind": "js",
+   "units": [
+    "'Rate limited by the API. Wait a moment and run again.'"
+   ]
+  },
+  {
+   "n": 224,
+   "file": "docs/agent/provider.js",
+   "first": 126,
+   "last": 126,
+   "excerpt": "The API returned a server error (${status}). This is not your key or your input.",
+   "kind": "js",
+   "units": [
+    "`The API returned a server error (${status}). This is not your key or your input.`"
+   ]
+  },
+  {
+   "n": 225,
+   "file": "docs/agent/provider.js",
+   "first": 130,
+   "last": 130,
+   "excerpt": "The API rejected the request: ${msg} The API returned ${status}.",
+   "kind": "js",
+   "units": [
+    "`The API rejected the request: ${msg}`",
+    "`The API returned ${status}.`"
+   ]
+  },
+  {
+   "n": 226,
+   "file": "docs/agent/provider.js",
+   "first": 154,
+   "last": 155,
+   "excerpt": "The request never reached the API. Check the connection; a blocked  request also looks like this.",
+   "kind": "js",
+   "units": [
+    "'The request never reached the API. Check the connection; a blocked '",
+    "'request also looks like this.'"
+   ]
+  },
+  {
+   "n": 227,
+   "file": "docs/agent/provider.js",
+   "first": 164,
+   "last": 164,
+   "excerpt": "The API returned a response that was not JSON.",
+   "kind": "js",
+   "units": [
+    "'parse'",
+    "'The API returned a response that was not JSON.'"
+   ]
+  },
+  {
+   "n": 228,
+   "file": "docs/agent/runfile.js",
+   "first": 90,
+   "last": 91,
+   "excerpt": "browser-${startedAt.toISOString().replace(/[:.]/g, '-')} docs/scan.html, in a visitor’s browser",
+   "kind": "js",
+   "units": [
+    "`browser-${startedAt.toISOString().replace(/[:.]/g, '-')}`",
+    "'docs/scan.html, in a visitor’s browser'"
+   ]
+  },
+  {
+   "n": 229,
+   "file": "docs/agent/runfile.js",
+   "first": 96,
+   "last": 106,
+   "excerpt": "Cost is computed from token counts against the price table in  docs/agent/models.js. It is not read from a bil",
+   "kind": "js",
+   "units": [
+    "'Cost is computed from token counts against the price table in '",
+    "'docs/agent/models.js. It is not read from a billing ledger and may '",
+    "'differ from what Anthropic actually charged.'",
+    "'Retrieval is substring-fallback over the exported dictionary. The '",
+    "'twelve recorded runs used a pgvector index over embeddings, so this '",
+    "'is not the same agent that produced them.'",
+    "'This file was produced client-side, in the browser, from data only '",
+    "'that browser saw. Nothing attests that the run happened: there is no '",
+    "'commit, no export script and no hash behind it. The twelve recorded '",
+    "'runs are exported from committed run directories and every source '",
+    "'they were built from is hashed in docs/data/bundle.json.'"
+   ]
+  },
+  {
+   "n": 230,
+   "file": "docs/agent/runfile.js",
+   "first": 118,
+   "last": 118,
+   "excerpt": "assigned by this page",
+   "kind": "js",
+   "units": [
+    "'assigned by this page'"
+   ]
+  },
+  {
+   "n": 231,
+   "file": "docs/agent/runfile.js",
+   "first": 144,
+   "last": 145,
+   "excerpt": "From the loop’s own events, one entry per request. Cost is estimated  from token counts, not billed.",
+   "kind": "js",
+   "units": [
+    "'From the loop’s own events, one entry per request. Cost is estimated '",
+    "'from token counts, not billed.'"
+   ]
+  },
+  {
+   "n": 232,
+   "file": "docs/agent/viz.js",
+   "first": 64,
+   "last": 64,
+   "excerpt": "Leaked ${leakedText} against honest ${honestText}",
+   "kind": "js",
+   "units": [
+    "'aria-label'",
+    "`Leaked ${leakedText} against honest ${honestText}`"
+   ]
+  },
+  {
+   "n": 233,
+   "file": "docs/agent/viz.js",
+   "first": 109,
+   "last": 110,
+   "excerpt": "Top ${rows.length} of ${r.ranking.length} returned; ${r.total_features} features in the model. ${r.returned} o",
+   "kind": "js",
+   "units": [
+    "`Top ${rows.length} of ${r.ranking.length} returned; ${r.total_features} features in the model.`",
+    "`${r.returned} of ${r.total_features} features. Mean absolute SHAP, log-odds.`"
+   ]
+  },
+  {
+   "n": 234,
+   "file": "docs/agent/viz.js",
+   "first": 141,
+   "last": 141,
+   "excerpt": "${drop < 0 ? 'drops' : 'changes'} ${Math.abs(drop).toFixed(4)} ROC-AUC when removed",
+   "kind": "js",
+   "units": [
+    "'drops'",
+    "'changes'",
+    "`${drop < 0 ? 'drops' : 'changes'} ${Math.abs(drop).toFixed(4)} ROC-AUC when removed`"
+   ]
+  },
+  {
+   "n": 235,
+   "file": "docs/agent/viz.js",
+   "first": 143,
+   "last": 143,
+   "excerpt": "PR-AUC without the feature ${fmt(r.pr_auc_without_feature)}, a change of ${fmt(r.delta_pr_auc)}.",
+   "kind": "js",
+   "units": [
+    "`PR-AUC without the feature ${fmt(r.pr_auc_without_feature)}, a change of ${fmt(r.delta_pr_auc)}.`"
+   ]
+  },
+  {
+   "n": 236,
+   "file": "docs/agent/viz.js",
+   "first": 203,
+   "last": 203,
+   "excerpt": "0.5 — orders nothing",
+   "kind": "js",
+   "units": [
+    "'font-family'",
+    "'var(--sans)'",
+    "'0.5 — orders nothing'"
+   ]
+  },
+  {
+   "n": 237,
+   "file": "docs/agent/viz.js",
+   "first": 223,
+   "last": 225,
+   "excerpt": "Pearson on test ${fmt(r.point_biserial_test)} ${r.n_unique_test} distinct values on test constant on test",
+   "kind": "js",
+   "units": [
+    "`Pearson on test ${fmt(r.point_biserial_test)}`",
+    "`${r.n_unique_test} distinct values on test`",
+    "'constant on test'"
+   ]
+  },
+  {
+   "n": 238,
+   "file": "docs/agent/viz.js",
+   "first": 253,
+   "last": 253,
+   "excerpt": "${r.returned} of ${r.precomputed_count} precomputed neighbours, Pearson on the test split.",
+   "kind": "js",
+   "units": [
+    "`${r.returned} of ${r.precomputed_count} precomputed neighbours, Pearson on the test split.`"
+   ]
+  },
+  {
+   "n": 239,
+   "file": "docs/agent/viz.js",
+   "first": 318,
+   "last": 318,
+   "excerpt": "${r.match_count} matched \"${r.query}\"; ${r.returned} shown.",
+   "kind": "js",
+   "units": [
+    "`${r.match_count} matched \"${r.query}\"; ${r.returned} shown.`"
+   ]
+  },
+  {
+   "n": 240,
+   "file": "docs/agent/models.js",
+   "first": 23,
+   "last": 24,
+   "excerpt": "Claude Sonnet 5 What the twelve recorded runs used. Pick this to compare like with like.",
+   "kind": "js",
+   "units": [
+    "'Claude Sonnet 5'",
+    "'What the twelve recorded runs used. Pick this to compare like with like.'"
+   ]
+  },
+  {
+   "n": 241,
+   "file": "docs/agent/models.js",
+   "first": 37,
+   "last": 38,
+   "excerpt": "Claude Haiku 4.5 Cheaper and faster. Not the model the recorded runs used.",
+   "kind": "js",
+   "units": [
+    "'Claude Haiku 4.5'",
+    "'Cheaper and faster. Not the model the recorded runs used.'"
+   ]
+  },
+  {
+   "n": 242,
+   "file": "docs/agent/models.js",
+   "first": 78,
+   "last": 79,
+   "excerpt": "${model.label} may be retired from ${model.retirementNotBefore} (${days} days). If it stops resolving, pick an",
+   "kind": "js",
+   "units": [
+    "`${model.label} may be retired from ${model.retirementNotBefore} (${days} days). If it stops resolving, pick another model.`",
+    "`${model.label} passed its earliest retirement date (${model.retirementNotBefore}). It may no longer resolve.`"
+   ]
+  }
+ ]
+}
